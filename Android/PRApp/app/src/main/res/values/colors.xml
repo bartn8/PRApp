@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ PRApp  Copyright (C) 2019  Luca Bartolomei
+  ~
+  ~ This file is part of PRApp.
+  ~
+  ~     PRApp is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     PRApp is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!-- General colors -->
+
+    <color name="black">#000000</color>
+
+
+    <!-- my colors (https://material.io/tools/color/#!/?view.left=0&view.right=0&primary.color=D4E157) -->
+    <color name="primaryColor">#d4e157</color>
+    <color name="primaryLightColor">#ffff89</color>
+    <color name="primaryDarkColor">#a0af22</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="primaryButtonColor">#DDDDDD</color>
+
+    <color name="primaryColorGrey">#eceff1</color>
+    <color name="primaryLightColorGrey">#ffffff</color>
+    <color name="primaryDarkColorGrey">#babdbe</color>
+    <color name="primaryTextColorGrey">#000000</color>
+
+    <color name="primaryColorRed">#f44336</color>
+    <color name="primaryLightColorRed">#ff7961</color>
+    <color name="primaryDarkColorRed">#ba000d</color>
+    <color name="primaryTextColorRed">#000000</color>
+
+</resources>

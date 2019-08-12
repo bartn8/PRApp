@@ -1,0 +1,371 @@
+/*
+ * PRApp  Copyright (C) 2019  Luca Bartolomei
+ *
+ * This file is part of PRApp.
+ *
+ *     PRApp is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     PRApp is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+class UiUtils extends GeneralUiUtils {
+    constructor() {
+        super();
+    }
+
+    impostaDatePickerOnClick() {
+        $("#dataDiNascita").click(function () {
+            this.apriDatePicker();
+        });
+    }
+
+    apriDatePicker() {
+        $("#dataDiNascita").datepicker();
+    }
+
+    pulisciCampi() {
+        $("#nomeCliente").val("");
+        $("#cognomeCliente").val("");
+    }
+
+    popolaTipoPrevendita(listaTipoPrevendita) {
+        var $select = $("#tipoPrevendita");
+
+        for (let index = 0; index < listaTipoPrevendita.length; index++) {
+            const tipoPrevendita = listaTipoPrevendita[index];
+
+            $select.append($('<option>', {
+                value: tipoPrevendita.id,
+                text: tipoPrevendita.nome
+            }));
+
+        }
+    }
+
+    attivaFormCreaPrevendita(onClick) {
+        $("#creaPrevenditaButton").removeClass("disabled");
+        $("#creaPrevenditaButton").click(onClick);
+    }
+
+
+    disattivaFormCreaPrevendita() {
+        $("#creaPrevenditaButton").addClass("disabled");
+        $("#creaPrevenditaButton").click(function () {
+            return false;
+        });
+    }
+
+    attivaButtonCondividiQrCode(link) {
+        var textMessage = "Ecco il tuo codice QR: " + link;
+        var encodedTextMessage = encodeURIComponent(textMessage);
+
+        $("#condividiWhatsAppButton").removeClass("disabled");
+        $("#condividiWhatsAppButton").attr("href", "whatsapp://send?text=" + encodedTextMessage);
+    }
+
+    disattivaButtonCondividiQrCode() {
+        $("#condividiWhatsAppButton").addClass("disabled");
+        $("#condividiWhatsAppButton").attr("href", "#");
+        $("#condividiWhatsAppButton").attr("data-href", "#");
+    }
+
+    impostaLink(link) {
+        var copyText = document.getElementById("myLink");
+        copyText.value = link;
+    }
+
+
+    disegnaCanvas(idPrevendita, idEvento, nome, cognome, data, codice, nomeTipoPrevendita, image) {
+        var myPerson = nome + " " + cognome + " - " + data;
+        var myPrevendita = idPrevendita + " - " + idEvento + " - " + codice;
+
+        $("#myCanvas").clearCanvas();
+
+        $("#myCanvas").drawImage({
+            source: image,
+            x: 160, y: 160,
+            fromCenter: true,
+            load: function () {
+                //Disegno le scritte dopo il caricamento.
+                $("#myCanvas").drawText({
+                    fillStyle: '#000',
+                    strokeStyle: '#000',
+                    strokeWidth: 0,
+                    x: 150, y: 330,
+                    fontSize: 12,
+                    fontFamily: 'Verdana, sans-serif',
+                    text: myPerson
+                }).drawText({
+                    fillStyle: '#000',
+                    strokeStyle: '#000',
+                    strokeWidth: 1,
+                    x: 150, y: 350,
+                    fontSize: 12,
+                    fontFamily: 'Verdana, sans-serif',
+                    text: 'RICORDATI UN DOCUMENTO VALIDO'
+                }).drawText({
+                    fillStyle: '#000',
+                    strokeStyle: '#000',
+                    strokeWidth: 0,
+                    x: 150, y: 370,
+                    fontSize: 13,
+                    fontFamily: 'Verdana, sans-serif',
+                    text: myPrevendita
+                }).drawText({
+                    fillStyle: '#000',
+                    strokeStyle: '#000',
+                    strokeWidth: 0,
+                    x: 150, y: 390,
+                    fontSize: 13,
+                    fontFamily: 'Verdana, sans-serif',
+                    text: nomeTipoPrevendita
+                });
+            }
+        });
+    }
+
+    /*
+    scaricaCanvas(){
+        return $("#myCanvas").getCanvasImage('jpeg', 1);
+    }
+    */
+}
+
+var generaLink = function (idPrevendita, idEvento, nome, cognome, data, codice, nomeTipoPrevendita) {
+    //Vecchio formato
+    //var url_string = "https://prapp.altervista.org/qrCode.html?idPrevendita=1&idEvento=1&nome=Nome&cognome=Cognome&data=02%2F05%2F1990&codice=ifg453";
+    //Nuovo formato
+    //var url_string = "https://prapp.altervista.org/qrCode.html?idPrev=1&idEv=1&nome=Nome&cognome=Cognome&data=02%2F05%2F1990&cod=ifg453&nTipoP=OMAGGIO";
+
+    var defaultUrl = "https://prapp.altervista.org/qrCode.html";
+
+    var idPrevenditaEncoded = encodeURIComponent(idPrevendita);
+    var idEventoEncoded = encodeURIComponent(idEvento);
+    var nomeEncoded = encodeURIComponent(nome);
+    var cognomeEncoded = encodeURIComponent(cognome);
+    var dataEncoded = encodeURIComponent(data);
+    var codiceEncoded = encodeURIComponent(codice);
+    var nomeTipoPrevenditaEncoded = encodeURIComponent(nomeTipoPrevendita);
+
+    return defaultUrl + "?idPrev=" + idPrevenditaEncoded + "&idEv=" + idEventoEncoded + "&nome=" + nomeEncoded + "&cognome=" + cognomeEncoded + "&data=" + dataEncoded + "&cod=" + codiceEncoded + "&nTipoP=" + nomeTipoPrevenditaEncoded;
+}
+
+var onCopiaLinkClick = function () {
+    /*
+    var $myHiddenInput = $("#myHiddenInput");
+    $myHiddenInput.attr("value", link);
+    $myHiddenInput.select();
+    document.execCommand("copy");
+    */
+
+    /* Get the text field */
+    var copyText = document.getElementById("myLink");
+
+    /* Select the text field */
+    copyText.select();
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+
+    /* Alert the copied text */
+    alert("Link copiato: " + copyText.value);
+};
+
+//https://stackoverflow.com/questions/13459866/javascript-change-date-into-format-of-dd-mm-yyyy
+var convertiData = function (inputFormat) {
+    function pad(s) { return (s < 10) ? '0' + s : s; }
+    var d = new Date(inputFormat);
+    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
+};
+
+var uiUtils = new UiUtils();
+var ajax = new AjaxRequest();
+
+var loginToken = function () {
+    //Devo verificare lo stato di login:
+    var token = Cookies.get('token');
+
+    if (token !== undefined && token !== null) {
+        //Esiste il token: vedo se è scaduto oppure no.
+        ajax.loginToken(token, function (response) {
+            console.log("Login token ok");
+
+            //Renew del token.
+            ajax.renewToken(function (response2) {
+                Cookies.set("token", response2.results[0].token, { expires: 7 });
+                console.log("Renew token ok");
+            }, function (response2) {
+                console.log("Renew token failed: " + response2.exceptions[0].msg);
+                Cookies.remove("token");
+            });
+
+            //Sono loggato.
+            //uiUtils.impostaScritta("Devi scegliere un evento per continuare.");
+            //uiUtils.impostaLogout();
+            //uiUtils.attivaMenu();
+
+            funzionePrincipale();
+
+        }, function (response) {
+            console.log("Login token failed: " + response.exceptions[0].msg);
+            //Devo effettuare il login normale.
+            uiUtils.impostaErrore("Devi effettuare l'accesso per continuare.");
+            uiUtils.impostaLogin();
+        });
+    }
+    else {
+        //Devo effettuare il login normale.
+        uiUtils.impostaErrore("Devi effettuare l'accesso per continuare.");
+        uiUtils.impostaLogin();
+    }
+};
+
+var funzionePrincipale = function () {
+    uiUtils.impostaLogout();
+    uiUtils.attivaMenu();
+
+    if (ajax.isEventoSelected()) {
+        uiUtils.impostaScritta("Aggiungi una prevendita");
+
+
+        //Carico le prevenidite.
+        ajax.getListaTipoPrevenditaEvento(function (response) {
+
+            //popolo il select
+            uiUtils.popolaTipoPrevendita(response.results);
+
+            //Posso attivare il form
+            uiUtils.attivaFormCreaPrevendita(creaPrevenditaButtonClick);
+
+        }, function (response) {
+            console.log("Error: " + response.exceptions[0].msg);
+            uiUtils.impostaErrore("Impossibile recuperare i tipi prevendita.");
+
+        });
+    } else {
+        uiUtils.impostaErrore("Devi scegliere un evento per continuare.");
+    }
+};
+
+var creaPrevenditaButtonClick = function () {
+    var nomeCliente = $("#nomeCliente").val();
+
+    //Check 
+    if (nomeCliente == "") {
+        nomeCliente = "Genitore";
+    }
+
+    var cognomeCliente = $("#cognomeCliente").val();
+
+    //Check 
+    if (cognomeCliente == "") {
+        cognomeCliente = "Uno";
+    }
+
+    var dataDiNascita = $("#dataDiNascita").val();
+
+    //Check 
+    if (dataDiNascita == "") {
+        dataDiNascita = "1970-01-01T00:00:00.000Z";
+    }
+
+    var idTipoPrevendita = $("#tipoPrevendita").val();
+    var nomeTipoPrevendita = $("#tipoPrevendita").children("option:selected").text();
+    var codice = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
+    var stato = $("#statoPrevendita").val();
+
+    ajax.aggiungiCliente(nomeCliente, cognomeCliente, dataDiNascita, function (response) {
+        console.log("add cliente ok: " + JSON.stringify(response.results[0]));
+
+        //Posso ricavare il cliente e aggiungere la prevendita:
+        var idCliente = response.results[0].id;
+
+        ajax.aggiungiPrevendita(idCliente, idTipoPrevendita, codice, stato, function (response2) {
+            //ho aggiunto la prevendita, pulisco i campi.
+            uiUtils.pulisciCampi();
+
+            //Imposto un messaggio:
+            uiUtils.impostaScritta("Prevendita aggiunta: " + nomeCliente + " " + cognomeCliente);
+
+            //Creo le info per il qr.
+            var prevendita = response2.results[0];
+            var myIdPrevendita = parseInt(prevendita.id);
+            var myIdEvento = parseInt(prevendita.idEvento);
+            var netWEntrata = { idPrevendita: myIdPrevendita, idEvento: myIdEvento, codiceAccesso: codice };
+
+            //Creo il qr code.
+            var typeNumber = 4;
+            var errorCorrectionLevel = 'L';
+            var qr = qrcode(typeNumber, errorCorrectionLevel);
+            qr.addData(JSON.stringify(netWEntrata));
+            qr.make();
+
+            var myDataDiNascita = convertiData(dataDiNascita);
+
+            uiUtils.disegnaCanvas(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita, qr.createDataURL(8, 36));
+
+            //Attivo i pulsanti di qr code.
+            var link = generaLink(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita);
+
+            uiUtils.attivaButtonCondividiQrCode(link);
+            uiUtils.impostaLink(link);
+
+            console.log("add prevendita ok: " + JSON.stringify(prevendita));
+        }, function (response2) {
+            console.log("error: " + JSON.stringify(response2.exceptions));
+            uiUtils.impostaErrore("Errore:" + response2.exceptions[0].msg);
+        });
+
+    }, function (response) {
+        console.log("error: " + JSON.stringify(response.exceptions));
+        uiUtils.impostaErrore("Errore:" + response.exceptions[0].msg);
+    });
+};
+
+if (typeof (Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+
+    //Ricavo l'oggetto AjaxRequest.
+    ajax.initFromSessionStorage();
+
+    //Quando la pagina è pronta:
+    $(document).ready(function () {
+
+        //Disattivo i pulsanti di qr code.
+        uiUtils.disattivaButtonCondividiQrCode();
+
+        //Disattivo temporaneamente i menu e il form.
+        uiUtils.disattivaMenu();
+        uiUtils.disattivaFormCreaPrevendita();
+
+        //Se sono loggato allora disattivo il login e attivo le altre pagine.
+        if (ajax.isLogged()) {
+            //uiUtils.impostaLogout();
+            //uiUtils.attivaMenu();
+            funzionePrincipale();
+
+        } else {
+            loginToken();
+        }
+    });
+} else {
+    $(document).ready(function () {
+        //Il browser non supporta il local storage:
+        uiUtils.disattivaTuttiMenu();
+        uiUtils.disattivaFormCreaPrevendita();
+
+        uiUtils.disattivaButtonCondividiQrCode();
+
+        //Invio un messaggio.
+        uiUtils.impostaErrore("Il tuo browser non supporta l'applicazione.");
+    });
+}

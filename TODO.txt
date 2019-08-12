@@ -1,0 +1,6 @@
+TODO:
+Revisione PHP wrapper: gli array_key_exists vanno modificati per cose optional
+Le view delle statistiche vanno modificate in modo da escludere le tabelle pr e cassiere: se un utente non fa più parte dello staff si perdono le statistiche.
+DirittiUtente->DirittiMembro.
+
+ANDROID:

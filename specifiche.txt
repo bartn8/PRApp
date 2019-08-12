@@ -1,0 +1,85 @@
+---PROGETTO PRApp---
+
+[Funzionamento generale]
+-STAFF-
+Rappresenta un gruppo di utenti che gestisce una serie di eventi.
+-UTENTE-
+Una volta effettuata la registrazione, si possiede un account.
+Un account é UNICO per la persona.
+Un account può creare uno staff: diventerà automaticamente un amministatore dello staff.
+Un account può accedere a più staff, basta che sia in possesso del codice d'entrata.
+Una volta dentro allo staff l'utente non ha diritti. Spetta ad un amministatore assegnare dei diritti all'utente.
+
+Esistono diversi diritti:
+	-PR: L'utente ha il diritto di esercitare il lavori di PR. Può vendere prevendite.
+	-Cassiere: L'utente ha il diritto di esercitare il lavori di Cassiere. Può convalidare prevendite.
+	-Amministratore: L'utente ha il diritto di esercitare il lavori di Amministratore. Ha la possibilità di aggiungere, modificare e ANNULLARE* un evento.
+
+*Non é possibile rimuovere un evento: e se fossero già state vendute prevendite? Spariscono??
+	
+-NUOVO EVENTO-
+Un amministratore crea un nuovo evento: l'evento verrà salvato su database. Ogni membro può accedere all'evento e solo i PR possono aggiungere prevendite. La prevendita é tracciata: si può risalire al pr e al cliente. 
+L'amministatore che ha creato l'evento viene registrato nell'evento.
+Un evento possiede informazioni a riguardo:
+	-periodo dell'evento: data di inizio e fine(teorica).
+	-luogo dell'evento.
+	-descrizione.
+	-nome.
+
+Queste informazioni sono modificabili da un amministratore dello staff.
+ 
+-PREVENDITA-
+Ogni evento ha una o più tipologie di prevendita. Ogni tipologia ha diverse caratteristiche:
+	-Descrizione: "VIP", "SUPER BACKSTAGE" etc.
+	-Data di apertura: segna la data in cui la prevedita é vendibile. **
+	-Data di chiusura: segna la data in cui la prevendita non é più vendibile. **
+	-Prezzo della prevendita.
+	
+La prevendita é vendibile fino alla data di chiusura assegnata. Ogni tentativo di vendita successiva sarà vano.
+
+**Ovviamente la data prevede anche ora precisa.
+
+-STATI EVENTO-
+Un evento possiede uno stato:
+	-VALIDO: l'evento è valido,
+	-ANNULLATO: l'evento é stato annullato per qualche ragione.
+	-ANNULLATO E RIMBORSATO: salta fuori se l'evento é annullato e TUTTE le prevendite sono state rimborsate.
+
+-STATI PREVENDITA-
+Una prevendita possiede uno stato:
+	-CONSEGNATA: la prevendita é stata consegnata al cliente.
+	-CONSEGNATA E PAGATA: la prevendita é stata anche pagata.
+	-ANNULLATA: la prevendita é stata annullata per qualche motivo.
+	-ANNULLATA E RIMBORSATA: la prevendita é anche stata rimborsata.
+
+[Modalità di vendita e verifica]
+-VENDITA-
+La vendita avviene tramite PR: esso genera tramite l'app una prevendita valida, come da richiesta del cliente (ES: "Voglio la prevendita super figa da 399€!").
+Un cliente può acquistare una sola prevendita per un evento. Se deve comprarla anche per la fidanzatina, si registra anche la fidanzatina e si associa la prevendita a lei.
+-PREVENDITA DIGITALE-
+La prevendita viene rappresentata da una serie di dati:
+	-Identificativo cliente.
+	-Codice prevendita.
+	-Tipo prevendita.
+	-Data di vendita.
+
+Consegnare una prevendita consiste nel consegnare i dati associati.
+Per comodità viene generato un codice QR per la verifica automatica del codice.
+
+Modalità di consegna:
+	-SMS: viene inviato con un messaggio i dati della prevendita (NO QR Code!) ***
+	-WhatsApp: Viene inviato il QR code e i dati della prevendita. ***
+	-Telegram: Vedi WhatsApp. ***
+	-Foto del cliente: Il cliente fa una foto al QR generato dall'app.
+
+*** Si può allegare un messaggio oltre ai dati della prevendita.
+
+-VERIFICA PREVENDITA-
+L'App include un lettore QR per la verifica della prevendita: quando viene scannerizzata, la prevendita viene convalidata ed é validato l'ingresso.
+In caso di problemi nella lettura del QR associato (o se non consegnato), il cliente deve mostrare il codice, per poter procedere con l'inserimento manuale.
+In caso di dimenticanza di vario genere, si può scorrere la lista delle prevendite effettuate, magari con qualche filtro (PR che ti ha venduto la prevendita).
+Se non presente in lista, puoi mandare il cliente a quel paese.
+
+L'App é disponibile solo per ANDROID 4.4 e superiori: non so programmare per Apple mi disp.
+Probabilmente non sarà uno splendore, ma spero che faccia quello che deve fare.
+Tutte le informazioni delle prevendite, eventi etc, sono salvate su un server web, quindi serve un server... (basta aprire un sito web GRATIS, ci penso io).

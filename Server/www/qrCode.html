@@ -1,0 +1,178 @@
+<!--
+/*
+ * PRApp  Copyright (C) 2019  Luca Bartolomei
+ *
+ * This file is part of PRApp.
+ *
+ *     PRApp is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     PRApp is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <style>
+        #myCanvas {
+            /*
+            width: 320px;
+            height: 410px;*/
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="myCanvas" width="320" height="410"></canvas>
+
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/qrcode-generator/qrcode.js"></script>
+    <script type="text/javascript" src="node_modules/jcanvas/dist/min/jcanvas.min.js"></script>
+
+    <script type="text/javascript">
+
+        var disegnaCanvas = function (idPrevendita, idEvento, nome, cognome, data, codice, nomeTipoPrevendita, image) {
+            var myPerson = nome + " " + cognome + " - " + data;
+            var myPrevendita = idPrevendita + " - " + idEvento + " - " + codice;
+
+            $("#myCanvas").clearCanvas();
+
+            $("#myCanvas").drawImage({
+                source: image,
+                x: 160, y: 160,
+                fromCenter: true,
+                load: function () {
+                    //Disegno le scritte dopo il caricamento.
+                    $("#myCanvas").drawText({
+                        fillStyle: '#000',
+                        strokeStyle: '#000',
+                        strokeWidth: 0,
+                        x: 150, y: 330,
+                        fontSize: 12,
+                        fontFamily: 'Verdana, sans-serif',
+                        text: myPerson
+                    }).drawText({
+                        fillStyle: '#000',
+                        strokeStyle: '#000',
+                        strokeWidth: 1,
+                        x: 150, y: 350,
+                        fontSize: 12,
+                        fontFamily: 'Verdana, sans-serif',
+                        text: 'RICORDATI UN DOCUMENTO VALIDO'
+                    }).drawText({
+                        fillStyle: '#000',
+                        strokeStyle: '#000',
+                        strokeWidth: 0,
+                        x: 150, y: 370,
+                        fontSize: 13,
+                        fontFamily: 'Verdana, sans-serif',
+                        text: myPrevendita
+                    }).drawText({
+                        fillStyle: '#000',
+                        strokeStyle: '#000',
+                        strokeWidth: 0,
+                        x: 150, y: 390,
+                        fontSize: 13,
+                        fontFamily: 'Verdana, sans-serif',
+                        text: nomeTipoPrevendita
+                    });
+                }
+            });
+        }
+
+        var disegnaCanvasErrore = function () {
+            $("#myCanvas").drawText({
+                fillStyle: '#000',
+                strokeStyle: '#000',
+                strokeWidth: 0,
+                x: 150, y: 150,
+                fontSize: 12,
+                fontFamily: 'Verdana, sans-serif',
+                text: "Controlla i dati in ingresso!"
+            })
+        };
+
+        $(document).ready(function () {
+            //https://stackoverflow.com/questions/979975/how-to-get-the-value-from-the-get-parameters
+            //Vecchio formato
+            //var url_string = "https://prapp.altervista.org/qrCode.html?idPrevendita=1&idEvento=1&nome=Nome&cognome=Cognome&data=02%2F05%2F1990&codice=ifg453";
+            //Nuovo formato
+            //var url_string = "https://prapp.altervista.org/qrCode.html?idPrev=1&idEv=1&nome=Nome&cognome=Cognome&data=02%2F05%2F1990&cod=ifg453&nTipoP=OMAGGIO";
+
+            var url_string = window.location.href;
+
+            //Recupero dati GET.
+            var url = new URL(url_string);
+            var idPrevendita = decodeURIComponent(url.searchParams.get("idPrev"));
+            var idEvento = decodeURIComponent(url.searchParams.get("idEv"));
+            var nome = decodeURIComponent(url.searchParams.get("nome"));
+            var cognome = decodeURIComponent(url.searchParams.get("cognome"));
+            var data = decodeURIComponent(url.searchParams.get("data"));
+            var codice = decodeURIComponent(url.searchParams.get("cod"));
+            var nomeTipoPrevendita = decodeURIComponent(url.searchParams.get("nTipoP"));
+
+            //Compatibilità
+            var idPrevenditaLegacy = decodeURIComponent(url.searchParams.get("idPrevendita"));
+            var idEventoLegacy = decodeURIComponent(url.searchParams.get("idEvento"));
+            var codiceLegacy = decodeURIComponent(url.searchParams.get("codice"));
+
+
+            if(idPrevenditaLegacy !== 'null' && idEventoLegacy !== 'null' && codiceLegacy !== 'null')
+            {
+                //Modalità legacy
+                idPrevendita = idPrevenditaLegacy; 
+                idEvento = idEventoLegacy;
+                codice = codiceLegacy;
+                nomeTipoPrevendita = "";
+            }
+
+            //Casting
+            idPrevendita = parseInt(idPrevendita);
+            idEvento = parseInt(idEvento);
+
+            //Checks
+            idPrevendita = isNaN(idPrevendita) ? -1 : idPrevendita;
+            idEvento = isNaN(idEvento) ? -1 : idEvento;
+            nome = nome === 'null' ? 'ND' : nome;
+            cognome = cognome === 'null' ? 'ND' : cognome;
+            data = data === 'null' ? 'ND' : data;
+            codice = codice === 'null' ? 'ND' : codice;
+            nomeTipoPrevendita = nomeTipoPrevendita === 'null' ? 'ND' : nomeTipoPrevendita;
+            
+            //Generazione QR
+            var netWEntrata = { idPrevendita: idPrevendita, idEvento: idEvento, codiceAccesso: codice };
+
+            //Creo il qr code.
+            var typeNumber = 4;
+            var errorCorrectionLevel = 'L';
+            var qr = qrcode(typeNumber, errorCorrectionLevel);
+            qr.addData(JSON.stringify(netWEntrata));
+            qr.make();
+
+            disegnaCanvas(idPrevendita, idEvento, nome, cognome, data, codice, nomeTipoPrevendita, qr.createDataURL(8, 36));
+        });
+
+    </script>
+
+</body>
+
+</html>

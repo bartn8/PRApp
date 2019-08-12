@@ -1,0 +1,73 @@
+[Progetto logico]
+//Tabella staff: ha un codice hash + salt per l'entrata.
+//NON si può eliminare uno STAFF!!!!! Al limite rimane vuoto....
+staff(id, nome timestampCreazione, codice, salt)
+PRIMARY KEY: id
+
+//Tabella utente: 
+//NON si può ELIMINARE un utente: si deve sempre sapere chi ha fatto cosa.... Al limite non usa più l'account oppure contatta l'amministatore  del server se proprio vuole elimiare l'account.
+utente(id, nome, cognome, telefono, username, password, salt, timestampRegistrazione)
+PRIMARY KEY: id
+
+membro(seq, idUtente, idStaff)
+PRIMARY KEY: seq
+UNIQUE: (idUtente, idStaff)
+
+pr(seq, idUtente, idStaff)
+PRIMARY KEY: seq
+UNIQUE: (idUtente, idStaff)
+
+cassiere(seq, idUtente, idStaff)
+PRIMARY KEY: seq
+UNIQUE: (idUtente, idStaff)
+
+amministratore(seq, idUtente, idStaff)
+PRIMARY KEY: seq
+UNIQUE: (idUtente, idStaff)
+
+//Giustamente il cliente è di uno specifico staff.
+cliente(id, idStaff, nome, cognome, telefono, dataDiNascita, codiceFiscale)
+PRIMARY KEY: id
+FOREIGN KEY
+UNIQUE: (idStaff, codiceFiscale)
+
+//Per la modifica viene registrata solo la data e chi ha effettuato l'ultima modifica.
+//Si può modificare stato, inizio, fine, descrizione evento.
+//Per inizio e fine basta un normalissimo datetime: i fusi orari non modificano l'evento.
+//NON si può ELIMINARE un evento!!!
+evento(id, idStaff, idCreatore, idModificatore, timestampUltimaModifica, statoEvento(ENUM), inzio, fine, nome, descrizione, indirizzo, città, provincia, stato)
+PRIMARY KEY: id
+FK: idStaff, idCreatore(utente), idModificatore(utente)
+UNIQUE: (idStaff, inizio, fine, nome, indirizzo, città, provincia, stato)
+
+//Per l'apertura e la chiusura delle vendite si utilizza il fuso orario: timestamp
+tipoPrevendita(id, idEvento, nome, descrizione, prezzo, aperturaVendite, chiusuraVendite)
+PRIMARY KEY: id
+FK: idEvento
+UNIQUE: (idEvento, nome)
+
+//Se il cliente decide di eliminare i propri dati dal database, la prevendita rimane.
+prevendita(id, idEvento, idPR, idCliente, idTipoPrevendita, dataCreazione, codice, stato(ENUM))
+PRIMARY KEY: id
+FK: idEvento, idPR, idCliente, idTipoPrevendita
+//Si tratta di uno PSEUDO-UNIQUE, in quanto quando un cliente decide di eliminare i propri dati dal database viene messo a null.
+UNIQUE: (idEvento, idCliente)
+
+//La data di ingresso è fuori dal concetto di fuso orario: non penso che ci sia un evento talmente grosso da occupare due aree con fusi orari diversi...
+entrata(seq, idCassiere, idPrevendita, datetimeEntrata)
+PRIMARY KEY: seq
+FK: idPrevendita, idCassiere
+UNIQUE: (idPrevendita) //Registra un'unica entrata.
+
+//RIMOSSO
+//Permette l'assegnazione di personale specifico.
+assegnazionePersonale(seq, idEvento, idUtente)
+FK: idEvento, idUtente
+PRIMARY KEY: seq
+UNIQUE: (idEvento, idUtente)
+
+[Views di supporto]
+View per capire i diritti di un utente (amministatore, cassiere, pr, ...)
+View per le statistiche del pr. Prevendite totali e ricavo totale per evento.
+View per le statistiche del cassiere. Numero totali di passate per evento.
+View per l'andamento dell'evento. Totale prevendite vendute e ricavo totale dell'evento.

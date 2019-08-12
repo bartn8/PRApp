@@ -1,0 +1,169 @@
+<!--
+  ~ PRApp  Copyright (C) 2019  Luca Bartolomei
+  ~
+  ~ This file is part of PRApp.
+  ~
+  ~     PRApp is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     PRApp is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">PRApp</string>
+
+    <!--APPLICATION PREFERENCES-->
+    <string name="app_package">com.prapp</string>
+
+    <!-- GENERAL -->
+    <string name="no_login">Non sei loggato</string>
+    <string name="no_login_or_staff">Non sei loggato oppure non hai scelto lo staff</string>
+
+    <!-- SPLASH SCREEN -->
+    <string name="invalid_token">Token non valido</string>
+    <string name="no_token">Nessun Token</string>
+
+    <!-- SELECT STAFF -->
+    <string name="select_staff_title">Seleziona Staff</string>
+
+
+    <!-- SELECT EVENTO -->
+    <string name="select_evento_title">Seleziona Evento</string>
+
+    <!--LOGIN -->
+    <string name="title_activity_login">Entra</string>
+    <string name="prompt_email">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Accedi</string>
+    <string name="action_sign_in_short">Accedi</string>
+    <string name="welcome">"Ciao! "</string>
+    <string name="invalid_username">Username non valido</string>
+    <string name="invalid_password">Password non valida</string>
+    <string name="login_failed">"Accesso Fallito"</string>
+
+    <!-- WStaff List Item -->
+    <string name="wstaff_list_item_nome">Staff</string>
+    <string name="wstaff_list_item_data">01-01-1970</string>
+
+    <!-- WUtente List Item -->
+    <string name="wutente_list_item_telefono">+39123456789</string>
+    <string name="wutente_list_item_cognome">Cognome</string>
+    <string name="wutente_list_item_nome">Nome</string>
+
+    <!-- WUEvento List Item -->
+    <string name="wevento_list_item_nome">Nome</string>
+    <string name="wevento_list_item_descrizione">Descrizione</string>
+    <string name="wevento_list_item_periodo">Periodo</string>
+
+    <!-- WPrevendita+ List Item -->
+    <string name="wprevendita_plus_list_item_nomeEvento_label">Evento:</string>
+    <string name="wprevendita_plus_list_item_nomeEvento">ND</string>
+    <string name="wprevendita_plus_list_item_nomePR_label">PR:</string>
+    <string name="wprevendita_plus_list_item_nomePR">ND</string>
+    <string name="wprevendita_plus_list_item_nomePR_formatted">
+        <xliff:g example="Piero" id="nome">%1$s</xliff:g>
+        <xliff:g example="Pasquale" id="cognome">%2$s</xliff:g>
+    </string>
+    <string name="wprevendita_plus_list_item_nomeCliente_label">Cliente:</string>
+    <string name="wprevendita_plus_list_item_nomeCliente">ND</string>
+    <string name="wprevendita_plus_list_item_nomeCliente_formatted">
+        <xliff:g example="Piero" id="nome">%1$s</xliff:g>
+        <xliff:g example="Pasquale" id="cognome">%2$s</xliff:g>
+    </string>
+    <string name="wprevendita_plus_list_item_nomeTipoPrevendita_label">Tipo Prevendita:</string>
+    <string name="wprevendita_plus_list_item_nomeTipoPrevendita">ND</string>
+    <string name="wprevendita_plus_list_item_prezzoTipoPrevendita_label">Prezzo:</string>
+    <string name="wprevendita_plus_list_item_prezzoTipoPrevendita">ND</string>
+    <string name="wprevendita_plus_list_item_statoPrevendita_label">Stato:</string>
+    <string name="wprevendita_plus_list_item_statoPrevendita">ND</string>
+    <string name="wprevendita_plus_list_item_errore_label">ERRORE:</string>
+    <string name="wprevendita_plus_list_item_errore">ND</string>
+
+    <!-- Statistiche Membro List Item -->
+
+    <string name="statistichemembro_list_item_nomeMembro">Nome</string>
+    <string name="statistichemembro_list_item_cognomeMembro">Cognome</string>
+    <string name="statistichemembro_list_item_label_pr">PR)</string>
+    <string name="statistichemembro_list_item_label_cassiere">Cassiere)</string>
+    <string name="statistichemembro_list_item_label_entrateCassiere">Entrate:</string>
+    <string name="statistichemembro_list_item_entrateCassiere">0</string>
+
+    <string name="statistichemembro_sub_list_pr_item_label_tipoPrevendita">Tipo Prevendita:</string>
+    <string name="statistichemembro_sub_list_pr_item_tipoPrevendita">Tipo</string>
+    <string name="statistichemembro_sub_list_pr_item_label_prevenditeVendute">P. Vendute:</string>
+    <string name="statistichemembro_sub_list_pr_item_prevenditeVendute">0</string>
+    <string name="statistichemembro_sub_list_pr_item_label_ricavo">Ricavo:</string>
+    <string name="statistichemembro_sub_list_pr_item_ricavo">0€</string>
+
+    <!-- MAIN ACTIVITY -->
+    <string name="title_activity_main">PRApp</string>
+    <string name="title_utente">Utente</string>
+    <string name="title_membro">Membro</string>
+    <string name="title_pr">PR</string>
+    <string name="title_cassiere">Cassiere</string>
+    <string name="title_amministratore">Amministratore</string>
+
+    <string name="show_camera_permission_granted">Accesso alla camera acconsentito</string>
+    <string name="show_camera_permission_denied">Ao mo non puoi fare il cassiere</string>
+
+    <!-- FRAGMENT UTENTE -->
+    <string name="fragment_utente_nome">Nome</string>
+    <string name="fragment_utente_cognome">Cognome</string>
+    <string name="fragment_utente_telefono">Telefono</string>
+    <string name="fragment_utente_logout">Logout</string>
+    <string name="fragment_utente_nome_staff">Nome staff</string>
+    <string name="fragment_utente_diritti_label">Diritti:  </string>
+    <string name="fragment_utente_diritti">[]</string>
+    <string name="fragment_utente_nomeEvento">Nome</string>
+    <string name="fragment_utente_descrizioneEvento">Descrizione</string>
+    <string name="fragment_utente_periodoEvento">Periodo</string>
+
+
+    <!-- FRAGMENT MEMBRO -->
+    <string name="fragment_membro_title_membri">Membri dello Staff</string>
+    <string name="fragment_membro_title_eventi">Eventi</string>
+
+    <!-- FRAGMENT PR -->
+    <string name="fragment_pr_image_desc">Stefano Lavori</string>
+    <string name="fragment_pr_desc">Colpa di Stefano Lavori</string>
+
+    <!-- FRAGMENT CASSIERE -->
+
+    <string name="fragment_cassiere_entrata_label">Effettua Entrata</string>
+
+    <string name="fragment_cassiere_btn_inizio_scansione">Scansiona QR</string>
+    <string name="fragment_cassiere_btn_fine_scansione">Fine Scansione</string>
+    <string name="fragment_cassiere_btn_flash">FLASH</string>
+
+    <string name="fragment_cassiere_entrata_manuale_label">Effettua Entrata Manuale</string>
+    <string name="fragment_cassiere_entrata_manuale_idPrevendita_label">Numero Prevendita:</string>
+    <string name="fragment_cassiere_entrata_manuale_codice_label">Codice:</string>
+    <string name="fragment_cassiere_entrata_manuale_idEvento_label">Numero Evento:</string>
+
+    <string name="fragment_cassiere_approva_label">APPROVA</string>
+    <string name="fragment_cassiere_annulla_label">ANNULLA</string>
+
+    <string name="fragment_cassiere_toast_errore_formatted">
+        Errore: <xliff:g id="errore">%1$s</xliff:g>
+    </string>
+    <string name="fragment_cassiere_toast_approvata_formatted">
+        APPROVATA! (<xliff:g id="time">%1$s</xliff:g>)
+    </string>
+    <string name="fragment_cassiere_toast_annullata_label">ANNULLATA!</string>
+
+
+    <!-- FRAGMENT AMMINISTRATORE -->
+
+    <string name="fragment_amministratore_statistiche_label">Statistiche Evento</string>
+    <string name="fragment_cassiere_btn_entrataManuale">Entrata Manuale</string>
+
+
+</resources>

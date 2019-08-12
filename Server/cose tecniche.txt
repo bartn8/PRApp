@@ -1,0 +1,6 @@
+Gestione del fuso orario:
+Il client deve adattare le datetime che sono influenzate dal fuso orario con il fuso orario del server.
+Il fuso orario del server deve essere trasmesso tramite comando apposito.
+
+Standard per la comunicazione: JSON
+Standard di comunicazione per il tempo: ISO8061

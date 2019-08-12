@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function(){
+		
+			$btn = $("#btn");
+			$btn.click(function(){
+		
+				$cmd = $("#cmd");
+				$args = $("#args");
+				$response = $("#response");
+			
+				var myData = new Object();
+				
+				//[{name:"login", type:"CustomWLogin", value: {username: "geppo", password: "geppo"}}]
+				
+				myData['command'] = parseInt($cmd.val(), 10);	
+				myData['args'] = $args.val();
+			
+			
+				$.ajax({
+					type: "POST",
+					url: "ajax.php",
+					data: myData,
+					success: function (response) {
+						$response.text("Status: " + response.status + "\n" + "Response: " + JSON.stringify(response.results) + "\n" + "Exceptions: " + JSON.stringify(response.exceptions) + "\n");
+					},
+					dataType: "json"
+				});
+			});
+		});
+		</script>
+		
+		<style>
+		.block{
+			margin-left: auto;
+			margin-right: auto;
+			border: 1px solid black;
+			padding: 5px;
+			width: 500px;
+			height: 750px;
+		}
+		
+		h2{
+			text-align: center;
+		}
+		
+		#cmd{
+			margin-left: 170px;
+		}
+		
+		#args{
+			margin-left: 100px;
+			margin-bottom: 50px;
+			width: 300px;
+			height: 150px;
+		}
+
+		
+		#response	{
+			margin-left: 100px;
+			margin-bottom: 50px;
+			width: 300px;
+			height: 150px;
+		}
+		
+		#btn{
+			margin-left: 240px;
+		}
+		
+		</style>
+	</head>
+	<body>
+		<div class="block">
+			<h2>Comando</h2>
+			<br>
+			<input type="text" id="cmd" />
+			<br>
+			<h2>Args</h2>
+			<br>
+			<textarea id="args"></textarea>
+			<br>
+			<input type="button" id="btn" value="OK" />
+			<br>
+			<h2>Risposta</h2>
+			<br>
+			<textarea id="response"></textarea>
+		</div>
+	</body>
+</html>

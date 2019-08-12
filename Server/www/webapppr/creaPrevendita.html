@@ -1,0 +1,153 @@
+<!--
+/*
+ * PRApp  Copyright (C) 2019  Luca Bartolomei
+ *
+ * This file is part of PRApp.
+ *
+ *     PRApp is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     PRApp is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet">
+
+    <style>
+        #myCanvas {
+            /*
+            width: 320px;
+            height: 410px;*/
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- A grey horizontal navbar that becomes vertical on small screens -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item" id="homepage">
+                <a class="nav-link active" href="index.html">PRApp</a>
+            </li>
+            <li class="nav-item" id="login_logout">
+                <a class="nav-link" href="#">Accedi/Logout</a>
+            </li>
+            <li class="nav-item" id="scegliStaff">
+                <a class="nav-link" href="#">Scegli Staff</a>
+            </li>
+            <li class="nav-item" id="scegliEvento">
+                <a class="nav-link" href="#">Scegli Evento</a>
+            </li>
+            <li class="nav-item" id="creaPrevendita">
+                <a class="nav-link" href="#">Crea Prevendita</a>
+            </li>
+            <li class="nav-item" id="listaPrevendite">
+                <a class="nav-link" href="#">Lista Prevendite</a>
+            </li>
+        </ul>
+
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h1>PRApp</h1>
+                <p id="text">Effettua il login.</p>
+
+
+                <div class="form-group">
+                    <label for="nomeCliente">Nome Cliente:</label>
+                    <input type="text" class="form-control" id="nomeCliente">
+                </div>
+                <div class="form-group">
+                    <label for="cognomeCliente">Cognome Cliente:</label>
+                    <input type="text" class="form-control" id="cognomeCliente">
+                </div>
+                <div class="form-group">
+                    <label for="dataDiNascita">Data Di Nascita:</label>
+                    <input type="text" data-provide="datepicker" class="form-control" id="dataDiNascita">
+                </div>
+                <div class="form-group">
+                    <label for="tipoPrevendita">Tipo Prevendita:</label>
+                    <select class="form-control" id="tipoPrevendita"></select>
+                </div>
+                <div class="form-group">
+                    <label for="statoPrevendita">Stato Prevendita:</label>
+                    <select class="form-control" id="statoPrevendita">
+                        <option value="0">CONSEGNATA</option>
+                        <option value="1" selected="selected">PAGATA</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary btn-block" id="creaPrevenditaButton">Aggiungi
+                    Prevendita</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <canvas id="myCanvas" width="320" height="410"></canvas>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <a href="#" class="btn btn-success btn-block" id="condividiWhatsAppButton">Condividi via WhatsApp</a>
+                <!--https://kriskbx.github.io/whatsapp-sharing/-->
+                <!--<a href="whatsapp://send"  data-href="https://prapp.altervista.org/qrCode.html" class="wa_btn wa_btn_s" style="display:none">Condividi</a>-->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="myLink">Link:</label>
+                    <input type="text" class="form-control" id="myLink" readonly>
+                </div>
+                <button class="btn btn-info btn-block" onclick="onCopiaLinkClick()">Copia Link</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../node_modules/popper.js/dist/popper.min.js"></script>
+    <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+        src="../node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="../node_modules/qrcode-generator/qrcode.js"></script>
+    <script type="text/javascript" src="../node_modules/jcanvas/dist/min/jcanvas.min.js"></script>
+    <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
+
+    <!-- JS di supporto. -->
+    <script type="text/javascript" src="js/AjaxRequest.js?1208191154"></script>
+    <script type="text/javascript" src="js/GeneralUiUtils.js?1208191154"></script>
+    <script type="text/javascript" src="js/creaPrevendita.js?1208191154"></script>
+
+
+</body>
+
+</html>

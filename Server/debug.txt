@@ -1,0 +1,56 @@
+-Utente-
+Registrazione(1): [{"name":"utente", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWUtente", "value": {"username": "ciao", "password": "ciao1234", "nome":"Luccese", "cognome":"Di Roma", "telefono":"+398745854"}}]
+Login(2): [{"name":"login", "type":"com\\model\\net\\wrapper\\NetWLogin", "value": {"username": "username", "password": "mypswd"}}]
+Logout(3)
+Crea Staff(4): [{"name":"staff", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWStaff", "value": {"nome": "staffTest", "codiceAccesso": "1234"}}]
+Accedi Staff(5): [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWStaffAccess", "value":{"idStaff": 4, "codiceAccesso":"123456"}}]
+Restituisci lista staff(6)
+Restituisci lista staff membri(7)
+Renew Token(8)
+Get Token(9)
+Login Token(10): [{"name":"token", "type":"com\\model\\net\\wrapper\\NetWToken", "value":{"token": "xfKcdN6dauiGPr2QMu778K3IQfpjgiZD"}}]
+
+-Membro-
+
+Lista Utenti Staff(102) : [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Diritti personali Staff(103) : [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Diritti utente Staff(104) : [{"name":"utente", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}, {"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Lista eventi staff(105) : [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Lista tipi prevendita evento(106) : [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}]
+Lista clienti staff(107) : [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+
+-PR-
+
+Aggiungi cliente(202) : [{"name":"cliente", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWCliente", "value":{"idStaff":4, "nome":"Nome Test", "cognome":"Cognome Test", "telefono":"+39888777666", "dataDiNascita":"1997-02-02", "codiceFiscale":"CFEWQE98A11A944S"}}]
+Aggiungi prevendita(203) : [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWPrevendita", "value":{"idEvento":3, "idPR":1, "idCliente":16, "idTipoPrevendita":6, "codice":"123", "stato":1}}]
+Modifica prevendita(204) : [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\update\\UpdateNetWPrevendita", "value":{"id": 14, "stato": 2}}]
+Restituisci prevendite(205) : [{"name":"filtri", "type":"com\\model\\net\\wrapper\\NetWFiltriStatoPrevendita", "value": {"filtri": [1]}}]
+Restituisci statistiche pr(206) 
+Restituisci statistiche pr staff(207): [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 4}}]
+Restituisci statistiche pr evento(208): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+
+-Cassiere-
+
+Timbra entrata(302) : [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\NetWEntrata", "value":{"idPrevendita":1, "idEvento":2, "codiceAccesso":"123"}}]
+Restituisci dati cliente(303): [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Restituisci statistiche cassiere totali(304) 
+Restituisci statistiche cassiere staff(305): [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}] 
+Restituisci statistiche cassiere evento(306): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}] 
+Restituisci entrate svolte evento(307): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}]
+Restituisci prevendite evento(308): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}]
+Restituisci informazioni prevendita(309): [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+
+-Amministratore-
+Rimuovi cliente(402): [{"name":"cliente", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Aggiungi evento(403): [{"name":"evento", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWEvento", "value":{"idStaff": 1, "nome": "Evento Uno", "descrizione": "Piacevole ma non troppo...", "inizio": "2019-07-14T00:00Z", "fine": "2019-07-12T23:00Z", "indirizzo": "Via della domenica, 2", "stato": 0}}]
+Modifica evento(404): [{"name":"evento", "type":"com\\model\\net\\wrapper\\update\\UpdateNetWEvento", "value":{"id": 1, "descrizione": "Piacevole ma non troppo...", "inizio": "2018-09-23 21:00:00", "fine": "2018-09-23 23:30:00", "indirizzo": "Via della domenica, 2", "stato": 0}}]
+Aggiungi tipo prevendita(405): [{"name":"tipoPrevendita", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWTipoPrevendita", "value":{"idEvento": 1, "nome": "Prevendita per Evento Uno", "descrizione": "Piacevole ma non troppo...", "aperturaPrevendite": "2019-07-14T21:25:00+02:00", "chiusuraPrevendite": "2019-07-14T22:00:00+02:00", "prezzo": 12.22}}]
+Modifica tipo prevendita(406): [{"name":"tipoPrevendita", "type":"com\\model\\net\\wrapper\\update\\UpdateNetWTipoPrevendita", "value":{"id": 1, "nome": "Prevendita per Evento Uno", "descrizione": "Piacevole ma non troppo...", "aperturaPrevendite": "2019-07-16T00:25:00+02:00", "chiusuraPrevendite": "2019-07-16T15:00:00+02:00", "prezzo": 12.22}}]
+Elimina tipo prevendita(407): [{"name":"tipoPrevendita", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Modifica diritti utente(408): [{"name":"dirittiUtente", "type":"com\\model\\net\\wrapper\\update\\UpdateNetWDirittiUtente", "value":{"idUtente": 2, "idStaff": 3, "diritti": [0,1]}}]
+Restituisci statistiche PR(409): [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}, {"name":"pr", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Restituisci statistiche Cassiere(410): [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}, {"name":"cassiere", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Restituisci statistiche Evento(411): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}]
+Restituisci prevendite Evento(412): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}]
+Rimuovi membro(413): [{"name":"membro", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}},{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Modifica codice accesso(414): [{"name":"staff", "type":"com\\model\\net\\wrapper\\update\\UpdateNetWStaff", "value":{"idStaff": 2, "codiceAccesso":"ciao"}}]

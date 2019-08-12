@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ PRApp  Copyright (C) 2019  Luca Bartolomei
+  ~
+  ~ This file is part of PRApp.
+  ~
+  ~     PRApp is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     PRApp is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_utente"
+        android:icon="@drawable/ic_navbar_utente"
+        android:title="@string/title_utente" />
+
+    <item
+        android:id="@+id/navigation_membro"
+        android:icon="@drawable/ic_navbar_membro"
+        android:title="@string/title_membro" />
+
+    <item
+        android:id="@+id/navigation_pr"
+        android:icon="@drawable/ic_navbar_pr"
+        android:title="@string/title_pr" />
+
+    <item
+        android:id="@+id/navigation_cassiere"
+        android:icon="@drawable/ic_navbar_cassiere"
+        android:title="@string/title_cassiere" />
+
+    <item
+        android:id="@+id/navigation_amministratore"
+        android:icon="@drawable/ic_navbar_amministratore"
+        android:title="@string/title_amministratore" />
+
+</menu>
