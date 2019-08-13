@@ -22,6 +22,8 @@
 
 namespace com\control;
 
+use com\model\db\exception\NotAvailableOperationException;
+use com\model\Context;
 use com\model\db\table\Utente;
 use \InvalidArgumentException;
 use com\view\printer\Printer;
@@ -55,6 +57,8 @@ class ControllerUtente extends Controller
 
     public const CMD_LOGIN_TOKEN = 10;
     public const CMD_LOGIN_TOKEN_ARG_0 = "token";
+
+    public const CMD_RESTITUISCI_UTENTE = 11;
 
     public function __construct($printer, $retriver)
     {
@@ -106,6 +110,10 @@ class ControllerUtente extends Controller
                 $this->cmd_login_token($command);
                 break;
             
+            case ControllerUtente::CMD_RESTITUISCI_UTENTE:
+                $this->cmd_restituisci_utente($command);
+                break;
+
             default:
                 break;
         }
@@ -122,6 +130,7 @@ class ControllerUtente extends Controller
             case ControllerUtente::CMD_RENEW_TOKEN:
             case ControllerUtente::CMD_GET_TOKEN:
             case ControllerUtente::CMD_LOGIN_TOKEN:
+            case ControllerUtente::CMD_RESTITUISCI_UTENTE:
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
             
@@ -205,6 +214,18 @@ class ControllerUtente extends Controller
         }
 
         parent::getPrinter()->addResult(Utente::loginToken($command->getArgs()[ControllerUtente::CMD_LOGIN_TOKEN_ARG_0]->getValue()));
+    }
+
+    private function cmd_restituisci_utente($command)
+    {
+        $context = Context::getContext();
+
+        if(!$context->isValid())
+        {
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        parent::getPrinter()->addResult($context->getUtente());
     }
 }
 

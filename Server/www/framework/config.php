@@ -11,8 +11,12 @@ $GLOBALS["scadenzaTokenGiorni"] = 1;
 $GLOBALS["serverURL"] = "localhost";
 $GLOBALS['databaseType'] = "mysql";
 
-$GLOBALS['databaseName'] = "prapp";
-$GLOBALS['username'] = "root";
+//$GLOBALS['databaseName'] = "prapp";
+//$GLOBALS['username'] = "root";
+
+$GLOBALS['databaseName'] = "my_prapp";
+$GLOBALS['username'] = "prapp";
+
 
 $GLOBALS['password'] = "";
 $GLOBALS['charset'] = "utf8";

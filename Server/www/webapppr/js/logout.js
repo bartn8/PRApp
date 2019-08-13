@@ -51,7 +51,7 @@ var funzionePrincipale = function () {
     });
 };
 
-var loginToken = function () {
+var loginToken = function (needRenew) {
     //Devo verificare lo stato di login:
     var token = Cookies.get('token');
 
@@ -60,14 +60,16 @@ var loginToken = function () {
         ajax.loginToken(token, function (response) {
             console.log("Login token ok");
 
-            //Renew del token.
-            ajax.renewToken(function (response2) {
-                Cookies.set("token", response2.results[0].token, { expires: 7 });
-                console.log("Renew token ok");
-            }, function (response2) {
-                console.log("Renew token failed: " + response2.exceptions[0].msg);
-                Cookies.remove("token");
-            });
+            if (needRenew) {
+                //Renew del token.
+                ajax.renewToken(function (response2) {
+                    Cookies.set("token", response2.results[0].token, { expires: 7 });
+                    console.log("Renew token ok");
+                }, function (response2) {
+                    console.log("Renew token failed: " + response2.exceptions[0].msg);
+                    Cookies.remove("token");
+                });
+            }
 
             //Sono loggato.
             funzionePrincipale();
@@ -105,14 +107,14 @@ if (typeof (Storage) !== "undefined") {
             funzionePrincipale();
         }
         else {
-            loginToken();
-
-
-            //Devo verificare lo stato di login:
-            //Evito il token: solo la pagina principale lo controlla.
-            //Devo effettuare il login normale.
-            //uiUtils.impostaScritta("Devi effettuare l'accesso per continuare.");
-            //uiUtils.impostaLogin();   
+            //Prima controllo se c'è un problema di sessione:
+            ajax.restituisciUtente(function (response) {
+                //Siamo loggati:
+                funzionePrincipale();
+            }, function (response) {
+                //Probabilmente non siamo veramente loggati:
+                loginToken(false);
+            });
         }
     });
 } else {

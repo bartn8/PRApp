@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity  {
         //Inizializzo il view model e applico gli observer.
         mainViewModel = ViewModelProviders.of(this, new MainViewModelFactory(getApplicationContext())).get(MainViewModel.class);
 
+
         uiUtils = UiUtils.getInstance(getApplicationContext());
 
         //Recupero i diritti dell'utente.
@@ -166,6 +167,43 @@ public class MainActivity extends AppCompatActivity  {
         }
 
     }
+
+    //Serviva per fare il logout dalla webapp.
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        //super.onActivityResult(requestCode, resultCode, data);
+//
+//        if(resultCode != RESULT_OK)
+//            return;
+//
+//
+//        switch (requestCode)
+//        {
+//            case PRFragment.REQUEST_CODE_WEBAPP:
+//                String stringUri = MyContext.DEFAULT_WEBAPP_LOGOUT_ADDRESS;
+//                Uri uri = Uri.parse(stringUri);
+//
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+//                startActivity(browserIntent);
+//                break;
+//
+//            default:
+//                break;
+//        }
+//    }
+
+    //Back button method.
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
+        //Chiudo direttamente l'applicazione.
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    //Camera permission methods.
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

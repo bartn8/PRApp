@@ -114,8 +114,8 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
     @BindView(R.id.fragment_cassiere_entrata_manuale_idPrevendita)
     public EditText editTextIdPrevendita;
 
-    @BindView(R.id.fragment_cassiere_entrata_manuale_idEvento)
-    public EditText editTextIdEvento;
+//    @BindView(R.id.fragment_cassiere_entrata_manuale_idEvento)
+//    public EditText editTextIdEvento;
 
     @BindView(R.id.fragment_cassiere_entrata_manuale_codice)
     public EditText editTextCodice;
@@ -406,7 +406,8 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
     @OnClick(R.id.buttonEntrataManuale)
     public void onEntrataManualeClick() {
         Integer idPrevendita = Integer.parseInt(editTextIdPrevendita.getText().toString());
-        Integer idEvento = Integer.parseInt(editTextIdEvento.getText().toString());
+        //Integer idEvento = Integer.parseInt(editTextIdEvento.getText().toString());
+        Integer idEvento = mainViewModel.getEvento().getId();
         String codice = editTextCodice.getText().toString();
 
         NetWEntrata netWEntrata = new NetWEntrata(idPrevendita, idEvento, codice);

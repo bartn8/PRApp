@@ -190,7 +190,7 @@ var convertiData = function (inputFormat) {
 var uiUtils = new UiUtils();
 var ajax = new AjaxRequest();
 
-var loginToken = function () {
+var loginToken = function (needRenew) {
     //Devo verificare lo stato di login:
     var token = Cookies.get('token');
 
@@ -199,14 +199,16 @@ var loginToken = function () {
         ajax.loginToken(token, function (response) {
             console.log("Login token ok");
 
-            //Renew del token.
-            ajax.renewToken(function (response2) {
-                Cookies.set("token", response2.results[0].token, { expires: 7 });
-                console.log("Renew token ok");
-            }, function (response2) {
-                console.log("Renew token failed: " + response2.exceptions[0].msg);
-                Cookies.remove("token");
-            });
+            if (needRenew) {
+                //Renew del token.
+                ajax.renewToken(function (response2) {
+                    Cookies.set("token", response2.results[0].token, { expires: 7 });
+                    console.log("Renew token ok");
+                }, function (response2) {
+                    console.log("Renew token failed: " + response2.exceptions[0].msg);
+                    Cookies.remove("token");
+                });
+            }
 
             //Sono loggato.
             //uiUtils.impostaScritta("Devi scegliere un evento per continuare.");
@@ -354,7 +356,14 @@ if (typeof (Storage) !== "undefined") {
             funzionePrincipale();
 
         } else {
-            loginToken();
+            //Prima controllo se c'è un problema di sessione:
+            ajax.restituisciUtente(function (response) {
+                //Siamo loggati:
+                funzionePrincipale();
+            }, function (response) {
+                //Probabilmente non siamo veramente loggati:
+                loginToken(false);
+            });
         }
     });
 } else {

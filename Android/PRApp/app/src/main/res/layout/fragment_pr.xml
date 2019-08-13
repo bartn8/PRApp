@@ -18,16 +18,18 @@
   ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.fragment.PRFragment">
 
+    <!--
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/fragment_pr_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/stefano_lavori"
@@ -37,14 +39,35 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/fragment_pr_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/fragment_pr_desc"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_pr_image"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
+    <Button
+        android:id="@+id/fragment_pr_linkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_pr_linkButton"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_pr_desc"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    -->
+
+    <!-- Utilizzo una webview per mostrare la web app. -->
+
+    <WebView
+        android:id="@+id/fragment_pr_webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+</androidx.core.widget.NestedScrollView>

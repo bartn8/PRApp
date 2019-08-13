@@ -30,25 +30,11 @@ import com.prapp.model.net.exceptions.CheckException;
 import com.prapp.model.util.functional.Consumer;
 import com.prapp.model.util.functional.Predicate;
 
-import java.net.CookieHandler;
-import java.net.CookieManager;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Manager {
-
-    private static boolean setCookieManager = false;
-
-    static
-    {
-        if(!setCookieManager)
-        {
-            CookieManager manager = new CookieManager();
-            CookieHandler.setDefault(manager);
-            setCookieManager = true;
-        }
-    }
 
     protected class ResponseErrorDefaultListener implements Response.ErrorListener
     {

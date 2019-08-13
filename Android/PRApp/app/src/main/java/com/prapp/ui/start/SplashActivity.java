@@ -220,6 +220,9 @@ public class SplashActivity extends AppCompatActivity {
         splashViewModel.getGetInfoUtenteResult().observe(this, getInfoUtenteResultObserver);
         splashViewModel.getRenewTokenResult().observe(this, renewTokenResultObserver);
 
+        //Da fare solo qua all'inizio.
+        splashViewModel.initCookieManager();
+
         //Non serve setContentLayout: c'è il tema.
         verificaToken();
     }

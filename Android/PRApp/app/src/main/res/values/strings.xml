@@ -164,6 +164,7 @@
 
     <string name="fragment_amministratore_statistiche_label">Statistiche Evento</string>
     <string name="fragment_cassiere_btn_entrataManuale">Entrata Manuale</string>
+    <string name="fragment_pr_linkButton">Web App</string>
 
 
 </resources>

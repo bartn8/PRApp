@@ -20,14 +20,25 @@
 package com.prapp.ui.main.fragment;
 
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.prapp.R;
+import com.prapp.model.MyContext;
+import com.prapp.ui.main.MainViewModel;
+import com.prapp.ui.main.MyWebViewClient;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +46,19 @@ import com.prapp.R;
  * create an instance of this fragment.
  */
 public class PRFragment extends Fragment {
+
+    public static final int REQUEST_CODE_WEBAPP = 1;
+
+    private MainViewModel mainViewModel;
+
+//    @BindView(R.id.fragment_pr_linkButton)
+//    public Button buttonLink;
+
+    @BindView(R.id.fragment_pr_webView)
+    public WebView webView;
+
+    private Unbinder unbinder;
+
 
     public PRFragment() {
         // Required empty public constructor
@@ -57,7 +81,55 @@ public class PRFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pr, container, false);
+        View view = inflater.inflate(R.layout.fragment_pr, container, false);
+
+        unbinder = ButterKnife.bind(this, view);
+
+        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        mainViewModel.acceptThirdPartyCookies(webView);
+
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        webView.setWebViewClient(new MyWebViewClient(getContext()));
+
+        startWebApp();
+
+        return view;
     }
+
+    private void startWebApp()
+    {
+        webView.loadUrl(getUri().toString());
+    }
+
+    private Uri getUri(){
+        String stringUri = MyContext.DEFAULT_WEBAPP_ADDRESS;
+
+        //Non serve il cookie manager ha salvato il token utilizzato precedentemente.
+//        try {
+//            stringUri += "?token=" + URLEncoder.encode(mainViewModel.getToken(), "UTF-8");
+//        } catch (UnsupportedEncodingException e) {
+//
+//        }
+
+        Uri uri = Uri.parse(stringUri);
+
+        return uri;
+    }
+
+
+//    @OnClick(R.id.fragment_pr_linkButton)
+//    public void onButtonLinkClick(){
+//        Uri uri = getUri();
+//
+//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+//        startActivity(browserIntent);
+//
+//        //Serviva per fare il logout dalla webapp.
+//        //startActivityForResult(browserIntent, REQUEST_CODE_WEBAPP);
+//    }
+
+
 
 }

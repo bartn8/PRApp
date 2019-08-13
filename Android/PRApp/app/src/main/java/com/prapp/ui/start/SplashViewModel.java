@@ -38,6 +38,8 @@ import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
 import java.io.UnsupportedEncodingException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 
 public class SplashViewModel extends AbstractViewModel {
 
@@ -60,6 +62,13 @@ public class SplashViewModel extends AbstractViewModel {
 
     public LiveData<Result<WToken,Void>> getRenewTokenResult() {
         return renewTokenResult;
+    }
+
+    public void initCookieManager(){
+        //Devo eliminare i cookie: Rimane PHPSESSID.
+        CookieManager manager = new CookieManager();
+        CookieHandler.setDefault(manager);
+        manager.getCookieStore().removeAll();
     }
 
     public void loginToken()

@@ -17,25 +17,25 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class UiUtils extends GeneralUiUtils{
-    constructor(){
+class UiUtils extends GeneralUiUtils {
+    constructor() {
         super();
     }
 
-    attivaFormLogin(onClick){
+    attivaFormLogin(onClick) {
         $("#loginButton").removeClass("disabled");
         $("#loginButton").click(onClick);
     }
-    
 
-    disattivaFormLogin(){
+
+    disattivaFormLogin() {
         $("#loginButton").addClass("disabled");
-        $("#loginButton").click(function() {
+        $("#loginButton").click(function () {
             return false;
         });
     }
 
-    effettuaSubmit(){
+    effettuaSubmit() {
         $('#loginForm').submit();
     }
 }
@@ -43,116 +43,131 @@ class UiUtils extends GeneralUiUtils{
 var uiUtils = new UiUtils();
 var ajax = new AjaxRequest();
 
-var loginButtonClick = function(){
+var loginButtonClick = function () {
     var username = $("#username").val();
     var password = $("#password").val();
 
-    ajax.login(username, password, function(response){
+    ajax.login(username, password, function (response) {
         console.log("Login ok");
 
         //Renew del token.
-        ajax.renewToken(function(response2){
+        ajax.renewToken(function (response2) {
             Cookies.set("token", response2.results[0].token, { expires: 7 });
             console.log("Renew token ok");
-        }, function(response2){
+        }, function (response2) {
             console.log("Renew token failed: " + response2.exceptions[0].msg);
         });
 
-        if(ajax.isLogged())
-        {
+        if (ajax.isLogged()) {
             uiUtils.impostaScritta("Complimenti! sei loggato: Scegli un'opzione");
             uiUtils.impostaLogout();
             uiUtils.attivaMenu();
             uiUtils.disattivaFormLogin();
             uiUtils.effettuaSubmit();
         }
-        else
-        {
+        else {
             console.log("BUG LOGIN");
         }
-    }, function(response){
+    }, function (response) {
         uiUtils.impostaErrore("Errore:" + response.exceptions[0].msg);
     });
 };
 
-var loginToken = function(){
+var setTokenGET = function () {
+    var url_string = window.location.href;
+
+    //Recupero dati GET.
+    var url = new URL(url_string);
+    var token = decodeURIComponent(url.searchParams.get("token"));
+
+    if (token !== 'null') {
+        Cookies.set("token", token, { expires: 7 });
+        return true;
+    }
+
+    return false;
+};
+
+var loginToken = function (needRenew) {
     //Devo verificare lo stato di login:
     var token = Cookies.get('token');
 
-    if(token !== undefined && token !== null)
-    {
+    if (token !== undefined && token !== null) {
         //Esiste il token: vedo se è scaduto oppure no.
-        ajax.loginToken(token, function(response){
+        ajax.loginToken(token, function (response) {
             console.log("Login token ok");
 
-            //Renew del token.
-            ajax.renewToken(function(response2){
-                Cookies.set("token", response2.results[0].token, { expires: 7 });
-                console.log("Renew token ok");
-            }, function(response2){
-                console.log("Renew token failed: " + response2.exceptions[0].msg);
-                Cookies.remove("token");
-            });
+            if (needRenew) {
+                //Renew del token.
+                ajax.renewToken(function (response2) {
+                    Cookies.set("token", response2.results[0].token, { expires: 7 });
+                    console.log("Renew token ok");
+                }, function (response2) {
+                    console.log("Renew token failed: " + response2.exceptions[0].msg);
+                    Cookies.remove("token");
+                });
+            }
 
             //Sono loggato.
             uiUtils.impostaScritta("Complimenti! sei loggato: Scegli un'opzione");
             uiUtils.impostaLogout();
             uiUtils.attivaMenu();
             uiUtils.disattivaFormLogin();
-            
 
-        }, function(response){
+
+        }, function (response) {
             console.log("Login token failed: " + response.exceptions[0].msg);
             //Devo effettuare il login normale.
-            uiUtils.impostaErrore("Devi effettuare l'accesso per continuare.");
-            uiUtils.impostaLogin(); 
+            uiUtils.impostaErrore("login con token fallito: " + response.exceptions[0].msg);
+            uiUtils.impostaLogin();
             uiUtils.attivaFormLogin(loginButtonClick);
         });
     }
-    else
-    {
+    else {
         //Devo effettuare il login normale.
         uiUtils.impostaErrore("Devi effettuare l'accesso per continuare.");
-        uiUtils.impostaLogin();   
+        uiUtils.impostaLogin();
         uiUtils.attivaFormLogin(loginButtonClick);
     }
 };
 
 
-if (typeof(Storage) !== "undefined") {
+if (typeof (Storage) !== "undefined") {
     // Code for localStorage/sessionStorage.
 
     //Ricavo l'oggetto AjaxRequest.
     ajax.initFromSessionStorage();
 
     //Quando la pagina è pronta:
-    $(document).ready(function(){
+    $(document).ready(function () {
 
         //Disattivo temporaneamente i menu.
         uiUtils.disattivaMenu();
 
         //Se sono loggato allora disattivo il login e attivo le altre pagine.
-        if(ajax.isLogged())
-        {
+        if (ajax.isLogged()) {
             uiUtils.impostaScritta("Complimenti! sei loggato: Scegli un'opzione");
             uiUtils.impostaLogout();
             uiUtils.attivaMenu();
             uiUtils.disattivaFormLogin();
         }
-        else
-        {
-            loginToken();
-
-            //Devo verificare lo stato di login:
-            //Evito il token: solo la pagina principale lo controlla.
-            //Devo effettuare il login normale.
-            //uiUtils.impostaScritta("Devi effettuare l'accesso per continuare.");
-            //uiUtils.impostaLogin();   
-            //uiUtils.attivaFormLogin(loginButtonClick);
+        else {
+            //Prima controllo se c'è un problema di sessione:
+            ajax.restituisciUtente(function(response){
+                //Siamo loggati:
+                uiUtils.impostaScritta("Complimenti! sei loggato: Scegli un'opzione");
+                uiUtils.impostaLogout();
+                uiUtils.attivaMenu();
+                uiUtils.disattivaFormLogin();
+            }, function(response){
+                //Probabilmente non siamo veramente loggati:
+                setTokenGET();
+                loginToken(false);
+            });
         }
     });
-  } else {
-    $(document).ready(function(){
+} else {
+    $(document).ready(function () {
         //Il browser non supporta il local storage:
         uiUtils.disattivaTuttiMenu();
         uiUtils.disattivaFormLogin();

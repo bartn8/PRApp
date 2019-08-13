@@ -303,6 +303,42 @@ class AjaxRequest {
         });
     }
 
+    restituisciUtente(onSuccess, onError) {
+        var data = {
+            command: 11,
+            args: JSON.stringify([])
+        };
+
+        var context = {
+            context: this,
+            onSuccess: onSuccess,
+            onError: onError
+        };
+
+        $.ajax({
+            type: "POST",
+            url: this.url,
+            data: data,
+            context: context,
+            success: function (response) {
+                switch (response.status) {
+                    case 0:
+                        //Imposto l'utente corrente.
+                        this.context.utente = response.results[0];
+                        this.context.saveToSessionStorage();
+                        this.onSuccess(response);
+                        break;
+                    case 2:
+                        this.onError(response);
+                        break;
+                    default:
+                        break;
+                }
+            },
+            dataType: "json"
+        });
+    }
+
     getListaEventiStaff(onSuccess, onError) {
         //Devo essere loggato.
         if(this.utente.id === 0)
