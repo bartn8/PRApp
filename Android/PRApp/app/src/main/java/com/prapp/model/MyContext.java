@@ -37,12 +37,17 @@ public class MyContext {
     public static final String ALTERVISTA_HOST = "prapp.altervista.org";
     public static final String DEFAULT_HOST = ALTERVISTA_HOST;
 
+    public static final String LOCAL_ADDRESS = "http://192.168.1.51";//10.0.0.2
+    public static final String ALTERVISTA_ADDRESS = "https://prapp.altervista.org";
+    public static final String DEFAULT_ADDRESS = ALTERVISTA_ADDRESS;
+
     public static final String LOCAL_FRAMEWORK_ADDRESS = "http://192.168.1.51/framework/ajax.php";//10.0.0.2
     public static final String ALTERVISTA_FRAMEWORK_ADDRESS = "https://prapp.altervista.org/framework/ajax.php";
     public static final String DEFAULT_FRAMEWORK_ADDRESS = ALTERVISTA_FRAMEWORK_ADDRESS;
 
     public static final String LOCAL_WEBAPP_ADDRESS = "http://192.168.1.51/webapppr/index.html";
-    public static final String ALTERVISTA_WEBAPP_ADDRESS = "https://prapp.altervista.org/webapppr/index.html";
+    public static final String ALTERVISTA_WEBAPP_ADDRESS = "https://prapp.altervista.org/webapppr/login.html";
+    //public static final String ALTERVISTA_WEBAPP_ADDRESS = "https://prapp.altervista.org/showCookies.html";
     public static final String DEFAULT_WEBAPP_ADDRESS = ALTERVISTA_WEBAPP_ADDRESS;
 
 
@@ -106,6 +111,11 @@ public class MyContext {
     public void logout()
     {
         clearUtente();
+        clearStaff();
+        clearEvento();
+    }
+
+    public void clearSelected(){
         clearStaff();
         clearEvento();
     }

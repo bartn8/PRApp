@@ -31,6 +31,7 @@ import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
+import com.prapp.model.net.MyCookieManager;
 import com.prapp.model.net.manager.ManagerMembro;
 import com.prapp.model.net.manager.ManagerUtente;
 import com.prapp.model.preferences.ApplicationPreferences;
@@ -38,8 +39,6 @@ import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
 import java.io.UnsupportedEncodingException;
-import java.net.CookieHandler;
-import java.net.CookieManager;
 
 public class SplashViewModel extends AbstractViewModel {
 
@@ -65,10 +64,24 @@ public class SplashViewModel extends AbstractViewModel {
     }
 
     public void initCookieManager(){
-        //Devo eliminare i cookie: Rimane PHPSESSID.
-        CookieManager manager = new CookieManager();
-        CookieHandler.setDefault(manager);
-        manager.getCookieStore().removeAll();
+        MyCookieManager.getSingleton(getContext()).initCookieManager();
+    }
+
+//    public void copyCookiesFromPreferences(){
+//        MyCookieManager.getSingleton(getContext()).copyCookiesFromPreferences();
+//    }
+//
+//    public void copyCookiesFromCookieHandler(){
+//        MyCookieManager.getSingleton(getContext()).copyCookiesFromCookieHandler();
+//    }
+
+    public void clearSelected(){
+        //Pulizia di staff e evento scelto.
+        MyContext myContext = getMyContext();
+        ApplicationPreferences preferences = getPreferences();
+
+        myContext.clearSelected();
+        preferences.clearSelected();
     }
 
     public void loginToken()
@@ -113,7 +126,6 @@ public class SplashViewModel extends AbstractViewModel {
     public void getInfoUtente()
     {
         MyContext myContext = getMyContext();
-        ApplicationPreferences preferences = getPreferences();
 
         if(myContext.isLoggato() && myContext.isStaffScelto())
         {

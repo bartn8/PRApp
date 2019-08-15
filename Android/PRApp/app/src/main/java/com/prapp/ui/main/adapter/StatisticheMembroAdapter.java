@@ -237,6 +237,8 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
 
         List<WStatistichePREvento> statistichePR = wrapper.getStatistichePR();
 
+
+
         if(statistichePR != null)
         {
             if(!statistichePR.isEmpty())
@@ -245,9 +247,12 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
 
                 holder.recyclerViewStatistichePR.setNestedScrollingEnabled(false);
                 holder.recyclerViewStatistichePR.setHasFixedSize(true);
-                holder.recyclerViewStatistichePR.setLayoutManager(new LinearLayoutManager(parentContex));
-                holder.recyclerViewStatistichePR.setAdapter(new StatistichePRAdapter(statistichePR));
 
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(parentContex, LinearLayoutManager.HORIZONTAL, false);
+
+                holder.recyclerViewStatistichePR.setLayoutManager(linearLayoutManager);
+
+                holder.recyclerViewStatistichePR.setAdapter(new StatistichePRAdapter(statistichePR));
             }
         }
 

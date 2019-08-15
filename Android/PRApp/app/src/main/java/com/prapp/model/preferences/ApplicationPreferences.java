@@ -91,6 +91,11 @@ public class ApplicationPreferences {
         clearEvento();
     }
 
+    public void clearSelected(){
+        clearStaff();
+        clearEvento();
+    }
+
     public void clearToken() {
         setTokenSaved(false);
         passwordStorage.remove(TOKEN_KEY);

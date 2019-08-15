@@ -20,7 +20,6 @@
 package com.prapp.ui.main;
 
 import android.content.Context;
-import android.webkit.CookieManager;
 import android.webkit.WebView;
 
 import androidx.lifecycle.LiveData;
@@ -37,6 +36,7 @@ import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WStatisticheCassiereEvento;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
 import com.prapp.model.db.wrapper.WUtente;
+import com.prapp.model.net.MyCookieManager;
 import com.prapp.model.net.manager.ManagerAmministratore;
 import com.prapp.model.net.manager.ManagerCassiere;
 import com.prapp.model.net.manager.ManagerMembro;
@@ -113,20 +113,20 @@ public class MainViewModel extends AbstractViewModel {
         return mapEntrata.remove(idPrevendita);
     }
 
-    public boolean acceptThirdPartyCookies(WebView view)
-    {
-        CookieManager cookieManager = CookieManager.getInstance();
-        return cookieManager.acceptThirdPartyCookies(view);
+    public void acceptThirdPartyCookies(WebView view) {
+        MyCookieManager.getSingleton(getContext()).acceptThirdPartyCookies(view);
     }
 
-    public String getToken(){
+    public String getToken() {
         ApplicationPreferences preferences = getPreferences();
         String token = "";
+
         try {
             token = preferences.getLastStoredToken().getToken();
         } catch (UnsupportedEncodingException e) {
 
         }
+
         return token;
     }
 

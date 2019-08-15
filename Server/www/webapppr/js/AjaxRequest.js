@@ -91,6 +91,14 @@ class AjaxRequest {
         return this.evento;
     }
 
+    getDefaultEvento(){
+        return Object.assign({}, this.defaultEvento);
+    }
+
+    getDefaultStaff(){
+        return Object.assign({}, this.defaultStaff);
+    }
+
     isLogged(){
         return this.utente.id !== 0;
     }

@@ -36,6 +36,9 @@ import com.prapp.model.MyContext;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.MyWebViewClient;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -106,12 +109,16 @@ public class PRFragment extends Fragment {
     private Uri getUri(){
         String stringUri = MyContext.DEFAULT_WEBAPP_ADDRESS;
 
-        //Non serve il cookie manager ha salvato il token utilizzato precedentemente.
-//        try {
-//            stringUri += "?token=" + URLEncoder.encode(mainViewModel.getToken(), "UTF-8");
-//        } catch (UnsupportedEncodingException e) {
-//
-//        }
+
+        try {
+            stringUri += "?token=" + URLEncoder.encode(mainViewModel.getToken(), "UTF-8");
+            stringUri += "&idEvento=" + URLEncoder.encode(mainViewModel.getEvento().getId() + "", "UTF-8");
+            stringUri += "&nomeEvento=" + URLEncoder.encode(mainViewModel.getEvento().getNome(), "UTF-8");
+            stringUri += "&idStaff=" + URLEncoder.encode(mainViewModel.getStaff().getId() + "", "UTF-8");
+            stringUri += "&nomeStaff=" + URLEncoder.encode(mainViewModel.getStaff().getNome(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+
+        }
 
         Uri uri = Uri.parse(stringUri);
 

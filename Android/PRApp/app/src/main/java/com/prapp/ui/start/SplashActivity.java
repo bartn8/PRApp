@@ -239,6 +239,13 @@ public class SplashActivity extends AppCompatActivity {
                 //Creo il token.
                 creaToken();
 
+                //Devo riselezionare staff ed evento: Se ho cambiato username?
+                splashViewModel.clearSelected();
+
+                //Posso condividere il token.
+                //splashViewModel.copyCookiesFromPreferences();
+                //splashViewModel.copyCookiesFromCookieHandler();
+
                 if(!splashViewModel.isStaffScelto())
                 {
                     passaggioAllaPaginaDiSceltaStaff();

@@ -49,14 +49,18 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CAMERA = 0;
+    private static final String CURRENT_FRAGMENT_KEY = "CURFRAG";
+
 
     private MainViewModel mainViewModel;
 
     private UiUtils uiUtils;
     private Set<Diritto> diritti;
+
+    private int currentFragment = 0;
 
     private UtenteFragment utenteFragment = UtenteFragment.newInstance();
     private MembroFragment membroFragment = MembroFragment.newInstance();
@@ -75,41 +79,85 @@ public class MainActivity extends AppCompatActivity  {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_utente:
-                    if(!utenteFragment.isInLayout())
-                        cambiaFragment(utenteFragment);
+                    currentFragment = 0;
+                    cambiaTab(false);
                     return true;
+
                 case R.id.navigation_membro:
-                    if(!membroFragment.isInLayout())
-                        cambiaFragment(membroFragment);
+                    currentFragment = 1;
+                    cambiaTab(false);
                     return true;
+
                 case R.id.navigation_pr:
-                    if(!prFragment.isInLayout())
-                        cambiaFragment(prFragment);
+                    currentFragment = 2;
+                    cambiaTab(false);
                     return true;
 
                 case R.id.navigation_cassiere:
-                    if(!cassiereFragment.isInLayout())
-                        cambiaFragment(cassiereFragment);
+                    currentFragment = 3;
+                    cambiaTab(false);
                     return true;
 
                 case R.id.navigation_amministratore:
-                    if(!amminisratoreFragment.isInLayout())
-                        cambiaFragment(amminisratoreFragment);
+                    currentFragment = 4;
+                    cambiaTab(false);
                     return true;
             }
+
             return false;
         }
     };
 
-    private void aggiungiFragment(Fragment nuovoFragment)
-    {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.nav_container, nuovoFragment).commit();
+    private void cambiaTab(boolean setBottomNavigationBar) {
+        switch (currentFragment) {
+            case 0:
+                if (!utenteFragment.isInLayout())
+                    cambiaFragment(utenteFragment);
+
+                if(setBottomNavigationBar)
+                    navView.setSelectedItemId(R.id.navigation_utente);
+                break;
+            case 1:
+                if (!membroFragment.isInLayout())
+                    cambiaFragment(membroFragment);
+
+                if(setBottomNavigationBar)
+                    navView.setSelectedItemId(R.id.navigation_membro);
+                break;
+            case 2:
+                if (!prFragment.isInLayout())
+                    cambiaFragment(prFragment);
+
+                if(setBottomNavigationBar)
+                    navView.setSelectedItemId(R.id.navigation_pr);
+                break;
+            case 3:
+                if (!cassiereFragment.isInLayout())
+                    cambiaFragment(cassiereFragment);
+
+                if(setBottomNavigationBar)
+                    navView.setSelectedItemId(R.id.navigation_cassiere);
+                break;
+            case 4:
+                if (!amminisratoreFragment.isInLayout())
+                    cambiaFragment(amminisratoreFragment);
+
+                if(setBottomNavigationBar)
+                    navView.setSelectedItemId(R.id.navigation_amministratore);
+                break;
+
+            default:
+                if (!utenteFragment.isInLayout())
+                    cambiaFragment(utenteFragment);
+
+                if(setBottomNavigationBar)
+                    navView.setSelectedItemId(R.id.navigation_utente);
+                break;
+        }
     }
 
     //https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group
-    private void cambiaFragment(Fragment nuovoFragment)
-    {
+    private void cambiaFragment(Fragment nuovoFragment) {
         // Create new transaction
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -140,10 +188,15 @@ public class MainActivity extends AppCompatActivity  {
 
         diritti = dirittiUtente.getDiritti();
 
-        //Imposto la schermata selezionata
-        navView.setSelectedItemId(R.id.navigation_utente);
+        //Controllo se era presente un fragment precedente.
+        //https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
 
-        cambiaFragment(utenteFragment);
+        if (savedInstanceState != null) {
+            currentFragment = savedInstanceState.getInt(CURRENT_FRAGMENT_KEY);
+        }
+
+        //Imposto la schermata selezionata
+        cambiaTab(true);
 
         //Imposto le schermate in base ai diritti posseduti.
 
@@ -168,29 +221,17 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    //Serviva per fare il logout dalla webapp.
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        //super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(resultCode != RESULT_OK)
-//            return;
-//
-//
-//        switch (requestCode)
-//        {
-//            case PRFragment.REQUEST_CODE_WEBAPP:
-//                String stringUri = MyContext.DEFAULT_WEBAPP_LOGOUT_ADDRESS;
-//                Uri uri = Uri.parse(stringUri);
-//
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-//                startActivity(browserIntent);
-//                break;
-//
-//            default:
-//                break;
-//        }
-//    }
+    //https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        //Devo salvare il fragment selezionato.
+        savedInstanceState.putInt(CURRENT_FRAGMENT_KEY, currentFragment);
+    }
+
+
 
     //Back button method.
 
@@ -219,15 +260,6 @@ public class MainActivity extends AppCompatActivity  {
                 Menu menu = navView.getMenu();
                 menu.findItem(R.id.navigation_cassiere).setEnabled(diritti.contains(Diritto.CASSIERE));
 
-            } else {
-                // Permission request was denied.
-
-                //Disattivo l'entrata con QR. Inserimento manuale valido.
-
-                //uiUtils.makeToast(R.string.show_camera_permission_denied);
-
-                //Menu menu = navView.getMenu();
-                //menu.findItem(R.id.navigation_cassiere).setEnabled(false);
             }
         }
         // END_INCLUDE(onRequestPermissionsResult)
@@ -239,32 +271,6 @@ public class MainActivity extends AppCompatActivity  {
      * a SnackBar that includes additional information.
      */
     private void requestCameraPermission() {
-        /*
-        // Permission has not been granted and must be requested.
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA)) {
-            // Provide an additional rationale to the user if the permission was not granted
-            // and the user would benefit from additional context for the use of the permission.
-            // Display a SnackBar with cda button to request the missing permission.
-            Snackbar.make(mLayout, R.string.camera_access_required,
-                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Request the permission
-                    ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[]{Manifest.permission.CAMERA},
-                            PERMISSION_REQUEST_CAMERA);
-                }
-            }).show();
-
-        } else {
-            Snackbar.make(mLayout, R.string.camera_unavailable, Snackbar.LENGTH_SHORT).show();
-            // Request the permission. The result will be received in onRequestPermissionResult().
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
-        }
-        */
-
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
     }

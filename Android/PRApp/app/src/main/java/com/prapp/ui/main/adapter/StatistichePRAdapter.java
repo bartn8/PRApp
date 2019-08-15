@@ -92,6 +92,12 @@ public class StatistichePRAdapter extends RecyclerView.Adapter<StatistichePRAdap
         return new StatistichePRViewHolder(view);
     }
 
+    public void setDataset(List<WStatistichePREvento> dataset)
+    {
+        this.dataset = dataset;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull StatistichePRViewHolder holder, int position) {
         WStatistichePREvento statistichePREvento = dataset.get(position);

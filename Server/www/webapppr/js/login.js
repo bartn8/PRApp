@@ -73,19 +73,53 @@ var loginButtonClick = function () {
     });
 };
 
-var setTokenGET = function () {
+var getParameters = function () {
+    var myReturn = false;
+
     var url_string = window.location.href;
 
     //Recupero dati GET.
     var url = new URL(url_string);
     var token = decodeURIComponent(url.searchParams.get("token"));
+    var idEvento = decodeURIComponent(url.searchParams.get("idEvento"));
+    var nomeEvento = decodeURIComponent(url.searchParams.get("nomeEvento"));
+    var idStaff = decodeURIComponent(url.searchParams.get("idStaff"));
+    var nomeStaff = decodeURIComponent(url.searchParams.get("nomeStaff"));
+    
+
 
     if (token !== 'null') {
         Cookies.set("token", token, { expires: 7 });
-        return true;
+        myReturn = true;
     }
 
-    return false;
+    if (idEvento !== 'null' && nomeEvento !== 'null') {
+        var idEventoInteger = parseInt(idEvento);
+
+        if(idEventoInteger != NaN) {
+            var myEvento = ajax.getDefaultEvento();
+            myEvento.id =idEventoInteger;
+            myEvento.nome = nomeEvento;
+
+            ajax.setEvento(myEvento);
+        }
+        //myReturn = true;
+    }
+
+    if (idStaff !== 'null' && nomeStaff !== 'null') {
+        var idStaffInteger = parseInt(idStaff);
+
+        if(idStaffInteger != NaN) {
+            var myStaff = ajax.getDefaultStaff();
+            myStaff.id =idStaffInteger;
+            myStaff.nome = nomeStaff;
+
+            ajax.setStaff(myStaff);
+        }
+        //myReturn = true;
+    }
+
+    return myReturn;
 };
 
 var loginToken = function (needRenew) {
@@ -161,7 +195,7 @@ if (typeof (Storage) !== "undefined") {
                 uiUtils.disattivaFormLogin();
             }, function(response){
                 //Probabilmente non siamo veramente loggati:
-                setTokenGET();
+                getParameters();
                 loginToken(false);
             });
         }
