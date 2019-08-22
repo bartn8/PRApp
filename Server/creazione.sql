@@ -375,16 +375,19 @@ FOR EACH ROW BEGIN
         SET MESSAGE_TEXT = 'Data non valida: inizio in una data passata!';
 	ELSEIF (NEW.stato = 'PAGATO' AND OLD.stato <> 'VALIDO') THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: l\'evento può essere solo VALIDO!";
-	ELSEIF (NEW.stato = 'PAGATO' AND OLD.stato <> 'VALIDO') THEN
-		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = "Stato non valido: un evento è PAGATO solo se prima era VALIDO!";
-	ELSEIF (NEW.stato = 'ANNULLATO' AND OLD.stato <> 'VALIDO') THEN
+	ELSEIF (NEW.stato = 'ANNULLATO' AND (OLD.stato <> 'VALIDO' AND OLD.stato <> 'PAGATO')) THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento è ANNULLATO solo se prima era VALIDO!";
-	ELSEIF (NEW.stato <> 'RIMBORSATO' AND OLD.stato = 'ANNULLATO') THEN
+        SET MESSAGE_TEXT = "Stato non valido: un evento è ANNULLATO solo se prima era VALIDO o PAGATO!";
+	ELSEIF (NEW.stato = 'RIMBORSATO' AND (OLD.stato <> 'ANNULLATO' AND OLD.stato <> 'PAGATO')) THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento ANNULLATO può essere solo RIMBORSATO!";
+        SET MESSAGE_TEXT = "Stato non valido: un evento è RIMBORSATO solo se prima era ANNULLATO o PAGATO!";
+	ELSEIF (NEW.stato = 'VALIDO' AND OLD.stato <> 'VALIDO') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = "Stato non valido: un evento NON VALIDO rimane tale";
+	ELSEIF (NEW.stato <> 'RIMBORSATO' AND OLD.stato = 'RIMBORSATO') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = "Stato non valido: un evento RIMBORSATO rimane tale";
     END IF;
 END$$
 
@@ -484,6 +487,7 @@ Verifica che la prevendita appena inserita sia effettivamente vendibile, cioè:
   1)I dati devono essere congruenti: evento e tipo prevendita compatibile. Cliente dello giusto staff.
   2)La data della vendita deve rientrare nel periodo di vendita.
   3)L'evento deve essere VALIDO.
+  4)La prevendita deve essere consegnata o pagata.
 */
 
 DELIMITER $$
@@ -515,6 +519,9 @@ FOR EACH ROW BEGIN
     ELSEIF (statoEvento <> 'VALIDO') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Evento non valido!';    
+	ELSEIF (NEW.stato <> 'CONSEGNATA' AND NEW.stato <> 'PAGATA') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = 'La prevendita deve essere pagata o consegnata!';    
     END IF;
 END$$
 
@@ -553,23 +560,43 @@ FOR EACH ROW BEGIN
 	ELSEIF (statoEvento <> 'ANNULLATO' AND (NEW.stato = 'ANNULLATA' OR NEW.stato = 'RIMBORSATA'))  THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = "Stato non valido: la prevendita deve essere ANNULLATA o RIMBORSATA quando l\'evento è ANNULLATO!";
-	ELSEIF (OLD.stato = 'PAGATA' AND NEW.stato <> 'RIMBORSATA') THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita PAGATA può essere solo RIMBORSATA!';
 	ELSEIF (NEW.stato = 'ANNULLATA' AND OLD.stato <> 'CONSEGNATA') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Stato non valido: una prevendita si può annullare solo se nello stato CONSEGNATA!';
+	ELSEIF (NEW.stato = 'RIMBORSATA' AND OLD.stato <> 'PAGATA') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita PAGATA può essere solo RIMBORSATA!';
 	ELSEIF (NEW.stato = 'PAGATA' AND OLD.stato <> 'CONSEGNATA') THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: impossibile annullare una prevendita che non sia nello stato CONSEGNATA!';
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita può andare in PAGATA solo se in CONSEGNATA.';
+	ELSEIF (NEW.stato <> 'ANNULLATA' AND OLD.stato = 'ANNULLATA') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita ANNULLATA rimane tale.';
+	ELSEIF (NEW.stato = 'CONSEGNATA' AND OLD.stato <> 'CONSEGNATA') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita NON CONSEGNATA rimane tale.';
+	ELSEIF (NEW.stato <> 'RIMBORSATA' AND OLD.stato = 'RIMBORSATA') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita RIMBORSATA rimane tale.';
     END IF;
 END$$
 
 DELIMITER ;
 
 /*
-Se un evento è annullato, lo porto automaticamente in rimborsato
+Se un evento è ANNULLATO, lo porto automaticamente in RIMBORSATO
   se tutte le prevendite sono state rimborsate o annullate.
+*/
+
+/*
+Se un evento è VALIDO e tutte le prevendite sono pagate
+  lo porto automaticamente in PAGATO.
+*/
+
+
+/*
+Se un evento è PAGATO e tutte le prevendite non sono pagate
+  lo porto automaticamente in VALIDO.
 */
 
 DELIMITER $$
@@ -587,7 +614,7 @@ FOR EACH ROW BEGIN
 	SELECT COUNT(id) INTO conteggioTotale FROM prevendita WHERE idEvento = NEW.idEvento;
 	SELECT COUNT(id) INTO conteggioRimborsate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'RIMBORSATA';
 	SELECT COUNT(id) INTO conteggioAnnullate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'ANNULLATA';
-	SELECT COUNT(id) INTO conteggioConsegnate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'CONSEGNATA';
+	/*SELECT COUNT(id) INTO conteggioConsegnate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'CONSEGNATA';*/
 	SELECT COUNT(id) INTO conteggioPagate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'PAGATA';
     SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
 	
@@ -598,8 +625,12 @@ FOR EACH ROW BEGIN
 		UPDATE evento SET stato = 'ANNULLATO' WHERE id = NEW.idEvento AND conteggioTotale <> (conteggioAnnullate + conteggioRimborsate);
 */
 	ELSEIF (statoEvento = 'VALIDO') THEN
-		UPDATE evento SET stato = 'PAGATO' WHERE id = NEW.idEvento AND conteggioTotale = (conteggioPagate + conteggioAnnullate + conteggioRimborsate) AND inizio < CURRENT_TIMESTAMP;	
+		UPDATE evento SET stato = 'PAGATO' WHERE id = NEW.idEvento AND conteggioTotale = (conteggioPagate + conteggioAnnullate + conteggioRimborsate);	
+		
+	ELSEIF (statoEvento = 'PAGATO') THEN
+		UPDATE evento SET stato = 'VALIDO' WHERE id = NEW.idEvento AND conteggioTotale <> (conteggioPagate + conteggioAnnullate + conteggioRimborsate);	
     END IF;
 END$$
 
 DELIMITER ;
+

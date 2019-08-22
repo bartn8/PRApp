@@ -130,7 +130,7 @@ public class SelectEventoViewModel extends AbstractViewModel {
         }
         else
         {
-            listEventiResult.setValue(new Result<>(R.string.no_login_or_staff));
+            listEventiResult.setValue(new Result<>(R.string.no_staff));
         }
     }
 

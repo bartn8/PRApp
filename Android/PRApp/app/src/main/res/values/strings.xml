@@ -25,7 +25,9 @@
 
     <!-- GENERAL -->
     <string name="no_login">Non sei loggato</string>
-    <string name="no_login_or_staff">Non sei loggato oppure non hai scelto lo staff</string>
+    <string name="no_staff">Non hai scelto lo staff</string>
+    <string name="no_evento">Non hai scelto l\'evento</string>
+    <string name="empty_string" />
 
     <!-- SPLASH SCREEN -->
     <string name="invalid_token">Token non valido</string>
@@ -33,7 +35,6 @@
 
     <!-- SELECT STAFF -->
     <string name="select_staff_title">Seleziona Staff</string>
-
 
     <!-- SELECT EVENTO -->
     <string name="select_evento_title">Seleziona Evento</string>
@@ -94,14 +95,23 @@
     <string name="statistichemembro_list_item_label_pr">PR)</string>
     <string name="statistichemembro_list_item_label_cassiere">Cassiere)</string>
     <string name="statistichemembro_list_item_label_entrateCassiere">Entrate:</string>
-    <string name="statistichemembro_list_item_entrateCassiere">0</string>
+    <string name="statistichemembro_list_item_entrateCassiere">ND</string>
 
     <string name="statistichemembro_sub_list_pr_item_label_tipoPrevendita">Tipo Prevendita:</string>
     <string name="statistichemembro_sub_list_pr_item_tipoPrevendita">Tipo</string>
     <string name="statistichemembro_sub_list_pr_item_label_prevenditeVendute">P. Vendute:</string>
-    <string name="statistichemembro_sub_list_pr_item_prevenditeVendute">0</string>
+    <string name="statistichemembro_sub_list_pr_item_prevenditeVendute">ND</string>
     <string name="statistichemembro_sub_list_pr_item_label_ricavo">Ricavo:</string>
-    <string name="statistichemembro_sub_list_pr_item_ricavo">0€</string>
+    <string name="statistichemembro_sub_list_pr_item_ricavo">ND</string>
+
+    <!-- Statistiche Evento List Item -->
+
+    <string name="wstatisticheevento_list_item_nomeTipoPrevendita_label">Nome Tipo Prevendita:</string>
+    <string name="wstatisticheevento_list_item_nomeTipoPrevendita">Nome</string>
+    <string name="wstatisticheevento_list_item_prevenditeVendute_label">Prevendite Vendute:</string>
+    <string name="wstatisticheevento_list_item_prevenditeVendute">ND</string>
+    <string name="wstatisticheevento_list_item_ricavo_label">Ricavo:</string>
+    <string name="wstatisticheevento_list_item_ricavo">ND</string>
 
     <!-- MAIN ACTIVITY -->
     <string name="title_activity_main">PRApp</string>
@@ -134,6 +144,7 @@
     <!-- FRAGMENT PR -->
     <string name="fragment_pr_image_desc">Stefano Lavori</string>
     <string name="fragment_pr_desc">Colpa di Stefano Lavori</string>
+    <string name="fragment_pr_linkButton">Web App</string>
 
     <!-- FRAGMENT CASSIERE -->
 
@@ -159,12 +170,13 @@
     </string>
     <string name="fragment_cassiere_toast_annullata_label">ANNULLATA!</string>
 
+    <string name="fragment_cassiere_btn_entrataManuale">Entrata Manuale</string>
+
 
     <!-- FRAGMENT AMMINISTRATORE -->
 
-    <string name="fragment_amministratore_statistiche_label">Statistiche Evento</string>
-    <string name="fragment_cassiere_btn_entrataManuale">Entrata Manuale</string>
-    <string name="fragment_pr_linkButton">Web App</string>
+    <string name="fragment_amministratore_statistiche_evento_label">Statistiche Evento</string>
+    <string name="fragment_amministratore_statistiche_membri_label">Statistiche Membri</string>
 
 
 </resources>

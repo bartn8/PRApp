@@ -190,6 +190,10 @@ var convertiData = function (inputFormat) {
 var uiUtils = new UiUtils();
 var ajax = new AjaxRequest();
 
+//Roba per ricordare il cliente precedente.
+var nomeClientePrecedente = "";
+var cognomeClientePrecedente = "";
+
 var loginToken = function (needRenew) {
     //Devo verificare lo stato di login:
     var token = Cookies.get('token');
@@ -285,6 +289,19 @@ var creaPrevenditaButtonClick = function () {
     var codice = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
     var stato = $("#statoPrevendita").val();
 
+
+    //Prima controllo che si siano inseriti nome e cognome diversi:
+    //Se uguali invio un messaggio di conferma:
+    if(nomeCliente == nomeClientePrecedente && cognomeCliente == cognomeClientePrecedente){
+        var conferma = confirm("La prevendita in creazione ha gli stessi dati di quella precedente ("+ nomeCliente + " " + cognomeCliente + ") Continuo?");
+
+        //Se l'utente preme annulla non faccio la prevendita.
+        if(!conferma){
+            alert("PREVENDITA ANNULLATA");
+            return;
+        }
+    }
+
     ajax.aggiungiCliente(nomeCliente, cognomeCliente, dataDiNascita, function (response) {
         console.log("add cliente ok: " + JSON.stringify(response.results[0]));
 
@@ -321,7 +338,13 @@ var creaPrevenditaButtonClick = function () {
             uiUtils.attivaButtonCondividiQrCode(link);
             uiUtils.impostaLink(link);
 
+            //Messaggio di log.
             console.log("add prevendita ok: " + JSON.stringify(prevendita));
+
+            //Aggiorno i clienti precedenti.
+            nomeClientePrecedente = nomeCliente;
+            cognomeClientePrecedente = cognomeCliente;
+
         }, function (response2) {
             console.log("error: " + JSON.stringify(response2.exceptions));
             uiUtils.impostaErrore("Errore:" + response2.exceptions[0].msg);

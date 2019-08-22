@@ -34,12 +34,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WStatisticheCassiereEvento;
+import com.prapp.model.db.wrapper.WStatisticheEvento;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
 import com.prapp.ui.UiUtils;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.StatisticheMembroAdapter;
+import com.prapp.ui.main.adapter.WStatisticheEventoAdapter;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -67,8 +69,33 @@ public class AmministratoreFragment extends Fragment {
 
     private StatisticheMembroAdapter adapter;
 
-    @BindView(R.id.statisticheRecyclerView)
-    public RecyclerView statisticheRecyclerView;
+    @BindView(R.id.statisticheEventoRecyclerView)
+    public RecyclerView statisticheEventoRecyclerView;
+
+    @BindView(R.id.statisticheMembriRecyclerView)
+    public RecyclerView statisticheMembriRecyclerView;
+
+    private Observer<Result<List<WStatisticheEvento>, Void>> statisticheEventoResultObserver = new Observer<Result<List<WStatisticheEvento>, Void>>() {
+        @Override
+        public void onChanged(Result<List<WStatisticheEvento>, Void> listResult) {
+            if (listResult == null) {
+                return;
+            }
+
+            Integer integerError = listResult.getIntegerError();
+            List<Exception> error = listResult.getError();
+            List<WStatisticheEvento> success = listResult.getSuccess();
+
+            if (integerError != null)
+                uiUtils.showError(integerError);
+
+            else if (error != null)
+                uiUtils.showError(error);
+
+            else if(success != null)
+                statisticheEventoRecyclerView.setAdapter(new WStatisticheEventoAdapter(success));
+        }
+    };
 
     private Observer<Result<List<WUtente>, Void>> membriStaffResultObserver = new Observer<Result<List<WUtente>, Void>>() {
         @Override
@@ -91,7 +118,7 @@ public class AmministratoreFragment extends Fragment {
             {
                 //Ora che ho la lista dei membri posso fare l'adapter.
                 adapter = new StatisticheMembroAdapter(success);
-                statisticheRecyclerView.setAdapter(adapter);
+                statisticheMembriRecyclerView.setAdapter(adapter);
 
                 //Faccio partire la ricerca delle statistiche.
                 for(WUtente membro: success)
@@ -123,9 +150,14 @@ public class AmministratoreFragment extends Fragment {
 
             else if(success != null && listResult.isExtraPresent())
             {
-                //Log.d(TAG, "Statistiche PR: " + " " + success.size() + " " + listResult.getExtra());
-                if(!success.isEmpty())
+                if(!success.isEmpty()){
+//                    Log.d(TAG, "Statistiche PR: " + " " + success.size() + " " + listResult.getExtra());
+//
+//                    for(WStatistichePREvento statistica : success)
+//                        Log.d(TAG, statistica.getNomeTipoPrevendita());
+
                     adapter.addStatistichePR(listResult.getExtra(), success);
+                }
             }
         }
     };
@@ -187,17 +219,22 @@ public class AmministratoreFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         //Imposto il recyler view. Quello che fa vedere le entrate.
-        statisticheRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        statisticheRecyclerView.setHasFixedSize(true);
-        statisticheRecyclerView.setNestedScrollingEnabled(false);
-        //statisticheRecyclerView.setAdapter(recyclerAdapter);
+        statisticheMembriRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        statisticheMembriRecyclerView.setHasFixedSize(true);
+        statisticheMembriRecyclerView.setNestedScrollingEnabled(false);
+
+        statisticheEventoRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        statisticheEventoRecyclerView.setHasFixedSize(true);
+        statisticheEventoRecyclerView.setNestedScrollingEnabled(false);
 
         //View model per richiamare il server.
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        mainViewModel.getStatisticheEventoResult().observe(this, statisticheEventoResultObserver);
         mainViewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
         mainViewModel.getStatistichePREventoResult().observe(this, statistichePREventoResultObserver);
         mainViewModel.getStatisticheCassiereEventoResult().observe(this, statisticheCassiereEventoResultObserver);
 
+        mainViewModel.getStatisticheEvento();
         mainViewModel.getMembriStaff();
 
         return view;

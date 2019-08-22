@@ -850,8 +850,8 @@ EOT;
 
         //Query ALTERVISTA:
         $query = <<<EOT
-        SELECT T.idEvento, T.idTipoPrevendita, T.prevenditeVendute, T.ricavo 
-        FROM (SELECT evento.id AS idEvento, prevendita.idTipoPrevendita AS idTipoPrevendita, COUNT(prevendita.id) AS prevenditeVendute, SUM(tipoPrevendita.prezzo) AS ricavo 
+        SELECT T.idEvento, T.idTipoPrevendita, T.nomeTipoPrevendita, T.prevenditeVendute, T.ricavo 
+        FROM (SELECT evento.id AS idEvento, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, COUNT(prevendita.id) AS prevenditeVendute, SUM(tipoPrevendita.prezzo) AS ricavo 
             FROM evento 
             INNER JOIN prevendita ON prevendita.idEvento = evento.id 
             INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita 
@@ -859,7 +859,7 @@ EOT;
         WHERE T.idEvento = :idEvento
 EOT;
 
-        $stmtSelezione = $conn->prepare("SELECT idEvento, idTipoPrevendita, prevenditeVendute, ricavo FROM statisticheEvento WHERE idEvento = :idEvento");
+        $stmtSelezione = $conn->prepare($query);
         $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
         $stmtSelezione->execute();
 

@@ -22,6 +22,8 @@
 namespace com\model\db\table;
 
 use com\model\Context;
+use com\model\db\enum\StatoPrevendita;
+use com\model\db\enum\StatoEvento;
 use com\model\db\exception\AuthorizationException;
 use com\model\db\exception\InsertUpdateException;
 use com\model\db\exception\NotAvailableOperationException;
@@ -178,7 +180,8 @@ class Cassiere extends Table
         // Controllo che sia l'evento giusto e che sia ancora aperto
 
         // Devo verificare il codice della prevendita.
-        $stmtVerifica = $conn->prepare("SELECT codice, idEvento FROM prevendita WHERE id = :idPrevendita");
+        // Devo anche verificare che la prevendita sia valida oppure consegnata.
+        $stmtVerifica = $conn->prepare("SELECT codice, idEvento, stato FROM prevendita WHERE id = :idPrevendita");
         $stmtVerifica->bindValue(":idPrevendita", $entrata->getIdPrevendita(), PDO::PARAM_INT);
         $stmtVerifica->execute();
 
@@ -194,8 +197,19 @@ class Cassiere extends Table
             throw new InsertUpdateException("Prevendita non valida: Codice non valido.");
         }
 
+        $statoPrevendita = StatoPrevendita::parse($fetch["stato"]);
+
+        //Considero anche lo stato CONSEGNATA: il PR comunque ha consegnato la prevendita.
+        //PHP e enum non vanno d'accordo.
+        if($statoPrevendita == StatoPrevendita::of(StatoPrevendita::RIMBORSATA) || $statoPrevendita == StatoPrevendita::of(StatoPrevendita::ANNULLATA) )
+        {
+            $conn = NULL;
+            throw new InsertUpdateException("Prevendita annullata.");
+        }        
+
         // Verifico la data di timbratura.
-        $stmtVerificaTempo = $conn->prepare("SELECT inizio, fine FROM evento WHERE id = :idEvento");
+        //Verifico anche che l'evento sia valido.
+        $stmtVerificaTempo = $conn->prepare("SELECT inizio, fine, stato FROM evento WHERE id = :idEvento");
         $stmtVerificaTempo->bindValue(":idEvento", $fetch["idEvento"], PDO::PARAM_INT);
         $stmtVerificaTempo->execute();
 
@@ -204,10 +218,19 @@ class Cassiere extends Table
         $inizio = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $fetch["inizio"]));
         $fine = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $fetch["fine"]));
 
+        $statoEvento = StatoEvento::parse($fetch["stato"]);
+
         if ($ora < $inizio->getDateTimeImmutable() || $ora > $fine->getDateTimeImmutable()) {
             $conn = NULL;
             //throw new InsertUpdateException("Prevendita non valida: Evento finito o non ancora iniziato. (".$inizio->getDateTimeImmutable()->format(\DateTime::ATOM)." < ".$ora->format(\DateTime::ATOM)." < ".$fine->getDateTimeImmutable()->format(\DateTime::ATOM).")");
             throw new InsertUpdateException("Prevendita non valida: Evento finito o non ancora iniziato.");
+        }
+
+        //PHP e enum non vanno d'accordo.
+        if($statoEvento != StatoEvento::of(StatoEvento::VALIDO))
+        {
+            $conn = NULL;
+            throw new InsertUpdateException("Evento annullato!");
         }
 
         // Ora che ho verificato il codice posso TIMBRARE la prevendita.

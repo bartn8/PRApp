@@ -34,6 +34,7 @@ import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WStatisticheCassiereEvento;
+import com.prapp.model.db.wrapper.WStatisticheEvento;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.model.net.MyCookieManager;
@@ -61,6 +62,8 @@ public class MainViewModel extends AbstractViewModel {
     private MutableLiveData<Result<WDirittiUtente, Integer>> dirittiMembroResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WStatistichePREvento>, Integer>> statistichePREventoResult = new MutableLiveData<>();
     private MutableLiveData<Result<WStatisticheCassiereEvento, Integer>> statisticheCassiereEventoResult = new MutableLiveData<>();
+    private MutableLiveData<Result<List<WStatisticheEvento>, Void>> statisticheEventoResult = new MutableLiveData<>();
+
 
 
     private Map<Integer, NetWEntrata> mapEntrata = new HashMap<>();
@@ -99,6 +102,10 @@ public class MainViewModel extends AbstractViewModel {
 
     public LiveData<Result<WStatisticheCassiereEvento, Integer>> getStatisticheCassiereEventoResult() {
         return statisticheCassiereEventoResult;
+    }
+
+    public LiveData<Result<List<WStatisticheEvento>, Void>> getStatisticheEventoResult() {
+        return statisticheEventoResult;
     }
 
     public NetWEntrata get(Integer idPrevendita) {
@@ -171,7 +178,7 @@ public class MainViewModel extends AbstractViewModel {
                 membriStaffResult.setValue(new Result<>(e));
             }
         } else {
-            membriStaffResult.setValue(new Result<>(R.string.no_login_or_staff));
+            membriStaffResult.setValue(new Result<>(R.string.no_staff));
         }
     }
 
@@ -189,7 +196,7 @@ public class MainViewModel extends AbstractViewModel {
                 eventiStaffResult.setValue(new Result<>(e));
             }
         } else {
-            eventiStaffResult.setValue(new Result<>(R.string.no_login_or_staff));
+            eventiStaffResult.setValue(new Result<>(R.string.no_staff));
         }
     }
 
@@ -248,14 +255,31 @@ public class MainViewModel extends AbstractViewModel {
                 dirittiMembroResult.setValue(new Result<>(e));
             }
         } else {
-            dirittiMembroResult.setValue(new Result<>(R.string.no_login_or_staff));
+            dirittiMembroResult.setValue(new Result<>(R.string.no_staff));
+        }
+    }
+
+    public void getStatisticheEvento() {
+        MyContext myContext = getMyContext();
+
+        if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
+            ManagerAmministratore managerAmministratore = getManagerAmministratore();
+            Integer idEvento = myContext.getEvento().getId();
+
+            try {
+                managerAmministratore.resitituisciStatisticheEvento(idEvento, new DefaultSuccessListener<>(statisticheEventoResult), new DefaultExceptionListener<>(statisticheEventoResult));
+            } catch (UnsupportedEncodingException e) {
+                statisticheEventoResult.setValue(new Result<>(e));
+            }
+        } else {
+            statisticheEventoResult.setValue(new Result<>(R.string.no_login));
         }
     }
 
     public void getStatistichePREvento(Integer idPR) {
         MyContext myContext = getMyContext();
 
-        if (myContext.isLoggato()) {
+        if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerAmministratore managerAmministratore = getManagerAmministratore();
             Integer idEvento = myContext.getEvento().getId();
 
@@ -265,14 +289,14 @@ public class MainViewModel extends AbstractViewModel {
                 statistichePREventoResult.setValue(new Result<>(e));
             }
         } else {
-            statistichePREventoResult.setValue(new Result<>(R.string.no_login_or_staff));
+            statistichePREventoResult.setValue(new Result<>(R.string.no_evento));
         }
     }
 
     public void getStatisticheCassiereEvento(Integer idCassiere) {
         MyContext myContext = getMyContext();
 
-        if (myContext.isLoggato()) {
+        if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerAmministratore managerAmministratore = getManagerAmministratore();
             Integer idEvento = myContext.getEvento().getId();
 
@@ -282,7 +306,7 @@ public class MainViewModel extends AbstractViewModel {
                 statisticheCassiereEventoResult.setValue(new Result<>(e));
             }
         } else {
-            statisticheCassiereEventoResult.setValue(new Result<>(R.string.no_login_or_staff));
+            statisticheCassiereEventoResult.setValue(new Result<>(R.string.no_evento));
         }
     }
 

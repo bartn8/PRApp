@@ -236,24 +236,31 @@ public class SplashActivity extends AppCompatActivity {
         {
             case REQUEST_CODE_LOGIN:
             {
-                //Creo il token.
-                creaToken();
+                if(splashViewModel.isLoggato()){
+                    //Login effettuato.
 
-                //Devo riselezionare staff ed evento: Se ho cambiato username?
-                splashViewModel.clearSelected();
+                    //Creo il token.
+                    creaToken();
 
-                //Posso condividere il token.
-                //splashViewModel.copyCookiesFromPreferences();
-                //splashViewModel.copyCookiesFromCookieHandler();
+                    //Devo riselezionare staff ed evento: Se ho cambiato username?
+                    splashViewModel.clearSelected();
 
-                if(!splashViewModel.isStaffScelto())
-                {
-                    passaggioAllaPaginaDiSceltaStaff();
-                    break;
+                    //Posso condividere il token.
+                    //splashViewModel.copyCookiesFromPreferences();
+                    //splashViewModel.copyCookiesFromCookieHandler();
+
+                    if(!splashViewModel.isStaffScelto())
+                    {
+                        passaggioAllaPaginaDiSceltaStaff();
+                        break;
+                    }
+
+                    recuperoInformazioniUtente();
                 }
-
-                recuperoInformazioniUtente();
-
+                else{
+                    //Login fallito ritorno al login.
+                    passaggioAllaPaginaDiLogin();
+                }
                 break;
             }
 

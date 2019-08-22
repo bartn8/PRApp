@@ -107,7 +107,7 @@ public abstract class Manager {
             {
                 case STATORISPOSTA_OK:
                     if (!isSizeValid.predict(response.getRisultati().size())) {
-                        errorListener.onErrorResponse(new VolleyError((new CheckException("Il numero di risultati non corrisponde: " + response.getStatoRisposta()))));
+                        errorListener.onErrorResponse(new VolleyError((new CheckException("Il numero di risultati non corrisponde: " + response.getRisultati().size()))));
                         return;
                     }
 

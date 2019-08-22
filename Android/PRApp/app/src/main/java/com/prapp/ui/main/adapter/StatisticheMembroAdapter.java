@@ -228,32 +228,52 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
 
         WStatisticheCassiereEvento statisticheCassiere = wrapper.getStatisticheCassiere();
 
+        //Bug Risolto:
+        //Non c'era l'else: la view veniva riciclata e veniva lascita ciò che c'era prima.
+        //https://stackoverflow.com/questions/42688223/recycler-view-showing-wrong-data-when-scrolled-fast-have-added-images-for-the-sa
         if(statisticheCassiere != null)
         {
             holder.textViewLabelCassiere.setText(R.string.statistichemembro_list_item_label_cassiere);
             holder.textViewLabelEntrateCassiere.setText(R.string.statistichemembro_list_item_label_entrateCassiere);
             holder.textViewEntrateCassiere.setText(LOCAL_NUMBER_FORMAT.format(statisticheCassiere.getEntrate()));
         }
+        else
+        {
+            holder.textViewLabelCassiere.setText(R.string.empty_string);
+            holder.textViewLabelEntrateCassiere.setText(R.string.empty_string);
+            holder.textViewEntrateCassiere.setText(R.string.empty_string);
+        }
 
         List<WStatistichePREvento> statistichePR = wrapper.getStatistichePR();
 
 
+        //Bug Risolto:
+        //Non c'era l'else: la view veniva riciclata e veniva lascita ciò che c'era prima.
+        //https://stackoverflow.com/questions/42688223/recycler-view-showing-wrong-data-when-scrolled-fast-have-added-images-for-the-sa
+
+        holder.recyclerViewStatistichePR.setNestedScrollingEnabled(false);
+        holder.recyclerViewStatistichePR.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(parentContex, LinearLayoutManager.HORIZONTAL, false);
+        holder.recyclerViewStatistichePR.setLayoutManager(linearLayoutManager);
 
         if(statistichePR != null)
         {
             if(!statistichePR.isEmpty())
             {
                 holder.textViewLabelPR.setText(R.string.statistichemembro_list_item_label_pr);
-
-                holder.recyclerViewStatistichePR.setNestedScrollingEnabled(false);
-                holder.recyclerViewStatistichePR.setHasFixedSize(true);
-
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(parentContex, LinearLayoutManager.HORIZONTAL, false);
-
-                holder.recyclerViewStatistichePR.setLayoutManager(linearLayoutManager);
-
                 holder.recyclerViewStatistichePR.setAdapter(new StatistichePRAdapter(statistichePR));
             }
+            else
+            {
+                holder.textViewLabelPR.setText(R.string.empty_string);
+                holder.recyclerViewStatistichePR.setAdapter(new StatistichePRAdapter(new ArrayList<>()));
+            }
+        }
+        else
+        {
+            holder.textViewLabelPR.setText(R.string.empty_string);
+            holder.recyclerViewStatistichePR.setAdapter(new StatistichePRAdapter(new ArrayList<>()));
         }
 
     }

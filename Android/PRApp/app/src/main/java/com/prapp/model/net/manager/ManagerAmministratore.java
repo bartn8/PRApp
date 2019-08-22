@@ -453,12 +453,13 @@ public class ManagerAmministratore extends Manager {
         ResponseListener listener = new ResponseListener(comando, new Predicate<Integer>() {
             @Override
             public boolean predict(Integer element) {
-                return element.intValue() == 1;
+                return element.intValue() == 0 || element.intValue() == 1;
             }
         }, new Consumer<List<Risultato>>() {
             @Override
             public void supply(List<Risultato> element) {
-                onSuccess.onResponse(element.get(0).castRisultato(WStatisticheCassiereEvento.class));
+                if(!element.isEmpty())
+                    onSuccess.onResponse(element.get(0).castRisultato(WStatisticheCassiereEvento.class));
             }
         }, onException, errorListener);
 

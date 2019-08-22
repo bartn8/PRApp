@@ -269,7 +269,7 @@ class ControllerAmministratore extends Controller
             throw new InvalidArgumentException("Argomenti non validi");
         }
         
-        parent::getPrinter()->addResult(Amministratore::getStatisticheEvento($command->getArgs()['evento']->getValue()));
+        parent::getPrinter()->addResults(Amministratore::getStatisticheEvento($command->getArgs()['evento']->getValue()));
     }
 
     private function cmd_restituisci_prevendite($command)

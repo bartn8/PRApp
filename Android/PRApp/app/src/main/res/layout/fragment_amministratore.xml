@@ -32,7 +32,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Vista stastistiche utenti -->
+        <!-- Vista stastistiche evento -->
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/fragment_amministratore_statistiche_label"
+                    android:text="@string/fragment_amministratore_statistiche_evento_label"
                     android:textColor="@color/primaryTextColor"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textAlignment="center"/>
@@ -59,12 +59,46 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Qui ci sparo le statistiche. -->
+        <!-- Qui ci sparo le statistiche dell'evento. -->
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/statisticheRecyclerView"
+            android:id="@+id/statisticheEventoRecyclerView"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/primaryColorGrey"
+            android:layout_marginBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/fragment_amministratore_statistiche_membri_label"
+                    android:textColor="@color/primaryTextColor"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Qui ci sparo le statistiche degli utenti. -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/statisticheMembriRecyclerView"
             android:clipToPadding="false"
             android:scrollbars="vertical"/>
 

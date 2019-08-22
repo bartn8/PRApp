@@ -148,7 +148,7 @@ public class SplashViewModel extends AbstractViewModel {
         }
         else
         {
-            getInfoUtenteResult.setValue(new Result<>(R.string.no_login_or_staff));
+            getInfoUtenteResult.setValue(new Result<>(R.string.no_staff));
         }
     }
 

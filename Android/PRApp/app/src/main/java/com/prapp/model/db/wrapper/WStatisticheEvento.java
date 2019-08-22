@@ -30,7 +30,7 @@ public class WStatisticheEvento implements  DatabaseWrapper, Twinned, JSONSerial
 
     public WStatisticheEvento getEmpty()
     {
-        return new WStatisticheEvento(0,0,0,0.00f);
+        return new WStatisticheEvento(0,0, "", 0,0.00f);
     }
 
     @SerializedName("idEvento")
@@ -39,21 +39,29 @@ public class WStatisticheEvento implements  DatabaseWrapper, Twinned, JSONSerial
     @SerializedName("idTipoPrevendita")
     private Integer idTipoPrevendita;
 
+    @SerializedName("nomeTipoPrevendita")
+    private String nomeTipoPrevendita;
+
     @SerializedName("prevenditeVendute")
     private Integer prevenditeVendute;
 
     @SerializedName("ricavo")
     private float ricavo;
 
-    public WStatisticheEvento(Integer idEvento, Integer idTipoPrevendita, Integer prevenditeVendute, float ricavo) {
+    public WStatisticheEvento(Integer idEvento, Integer idTipoPrevendita, String nomeTipoPrevendita, Integer prevenditeVendute, float ricavo) {
         this.idEvento = idEvento;
         this.idTipoPrevendita = idTipoPrevendita;
+        this.nomeTipoPrevendita = nomeTipoPrevendita;
         this.prevenditeVendute = prevenditeVendute;
         this.ricavo = ricavo;
     }
 
     public Integer getIdTipoPrevendita() {
         return idTipoPrevendita;
+    }
+
+    public String getNomeTipoPrevendita() {
+        return nomeTipoPrevendita;
     }
 
     public Integer getPrevenditeVendute() {

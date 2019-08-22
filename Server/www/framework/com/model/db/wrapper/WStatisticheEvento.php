@@ -33,7 +33,7 @@ class WStatisticheEvento implements DatabaseWrapper
      *
      * @param array $array
      * @throws InvalidArgumentException i dati dell'array non sono validi oppure l'array stesso non è valido
-     * @return WStatisticheCassiereTotali wrapper convertito
+     * @return WStatisticheEvento wrapper convertito
      */
     public static function of($array)
     {
@@ -46,13 +46,16 @@ class WStatisticheEvento implements DatabaseWrapper
         if (! array_key_exists("idTipoPrevendita", $array))
             throw new InvalidArgumentException("Dato idTipoPrevendita non trovato.");
         
+        if (! array_key_exists("nomeTipoPrevendita", $array))
+            throw new InvalidArgumentException("Dato nomeTipoPrevendita non trovato.");
+
         if (! array_key_exists("prevenditeVendute", $array))
             throw new InvalidArgumentException("Dato prevenditeVendute non trovato.");
         
         if (! array_key_exists("ricavo", $array))
             throw new InvalidArgumentException("Dato ricavo non trovato.");
         
-        return self::make((int) $array["idEvento"], (int) $array["idTipoPrevendita"], (int) $array["prevenditeVendute"], (float) $array["ricavo"]);
+        return self::make((int) $array["idEvento"], (int) $array["idTipoPrevendita"], $array["nomeTipoPrevendita"], (int) $array["prevenditeVendute"], (float) $array["ricavo"]);
     }
 
     /**
@@ -60,17 +63,18 @@ class WStatisticheEvento implements DatabaseWrapper
      *
      * @param int $idEvento
      * @param int $idTipoPrevendita
+     * @param string $nomeTipoPrevendita
      * @param int $prevenditeVendute
      * @param float $ricavo
      * @throws InvalidArgumentException
-     * @return \com\model\db\wrapper\WStatisticheCassiereTotali
+     * @return WStatisticheEvento
      */
-    public static function make($idEvento, $idTipoPrevendita, $prevenditeVendute, $ricavo)
+    public static function make($idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo)
     {
-        if (is_null($idEvento) || is_null($idTipoPrevendita) || is_null($prevenditeVendute) || is_null($ricavo))
+        if (is_null($idEvento) || is_null($idTipoPrevendita) || is_null($nomeTipoPrevendita) || is_null($prevenditeVendute) || is_null($ricavo))
             throw new InvalidArgumentException("Uno o più parametri nulli");
         
-        if (! is_int($idEvento) || ! is_int($idTipoPrevendita) || ! is_int($prevenditeVendute) || ! is_float($ricavo))
+        if (! is_int($idEvento) || ! is_int($idTipoPrevendita) || !is_string($nomeTipoPrevendita) || ! is_int($prevenditeVendute) || ! is_float($ricavo))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
         
         if ($idEvento <= 0)
@@ -82,7 +86,7 @@ class WStatisticheEvento implements DatabaseWrapper
         if ($prevenditeVendute < 0)
             throw new InvalidArgumentException("Prevendite vendute non valido");
         
-        return new WStatisticheEvento($idEvento, $idTipoPrevendita, $prevenditeVendute, $ricavo);
+        return new WStatisticheEvento($idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo);
     }
 
     /**
@@ -101,6 +105,13 @@ class WStatisticheEvento implements DatabaseWrapper
     private $idTipoPrevendita;
 
     /**
+     * Nome del tipo prevendita.
+     *
+     * @var string
+     */
+    private $nomeTipoPrevendita;
+
+    /**
      * Numero di prevendite vendute.
      *
      * @var int
@@ -114,10 +125,11 @@ class WStatisticheEvento implements DatabaseWrapper
      */
     private $ricavo;
 
-    protected function __construct($idEvento, $idTipoPrevendita, $prevenditeVendute, $ricavo)
+    protected function __construct($idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo)
     {
         $this->idEvento = $idEvento;
         $this->idTipoPrevendita = $idTipoPrevendita;
+        $this->nomeTipoPrevendita = $nomeTipoPrevendita;
         $this->prevenditeVendute = $prevenditeVendute;
         $this->ricavo = $ricavo;
     }
@@ -156,6 +168,15 @@ class WStatisticheEvento implements DatabaseWrapper
         return $this->idTipoPrevendita;
     }
 
+    /**
+     *
+     * @return string
+     */
+    public function getNomeTipoPrevendita()
+    {
+        return $this->nomeTipoPrevendita;
+    }
+    
     /**
      *
      * @return number

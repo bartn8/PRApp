@@ -32,7 +32,7 @@ Restituisci statistiche pr evento(208): [{"name":"evento", "type":"com\\model\\n
 
 -Cassiere-
 
-Timbra entrata(302) : [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\NetWEntrata", "value":{"idPrevendita":1, "idEvento":2, "codiceAccesso":"123"}}]
+Timbra entrata(302) : [{"name":"entrata", "type":"com\\model\\net\\wrapper\\NetWEntrata", "value":{"idPrevendita":1, "idEvento":2, "codiceAccesso":"123"}}]
 Restituisci dati cliente(303): [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
 Restituisci statistiche cassiere totali(304) 
 Restituisci statistiche cassiere staff(305): [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}] 
