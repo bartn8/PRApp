@@ -29,6 +29,7 @@ Restituisci prevendite(205) : [{"name":"filtri", "type":"com\\model\\net\\wrappe
 Restituisci statistiche pr(206) 
 Restituisci statistiche pr staff(207): [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 4}}]
 Restituisci statistiche pr evento(208): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
+Restituisci prevendite evento(209): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
 
 -Cassiere-
 

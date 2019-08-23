@@ -23,7 +23,20 @@ class UiUtils extends GeneralUiUtils {
     }
 
     popolaLista(listaPrevendite) {
-        var $lista = $("#listaPrevenditeVendute");
+        var $listaConsegnate = $("#listaPrevenditeConsegnate");
+        var $listaPagate = $("#listaPrevenditePagate");
+        var $listaAnnullate = $("#listaPrevenditeAnnullate");
+        var $listaRimborsate = $("#listaPrevenditeRimborsate");
+
+        var $textConsegnate = $("#textConsegnate");
+        var $textPagate = $("#textPagate");
+        var $textAnnullate = $("#textAnnullate");
+        var $textRimborsate = $("#textRimborsate");
+
+        var counterConsegnate = 0;
+        var counterPagate = 0;
+        var counterAnnullate = 0;
+        var counterRimborsate = 0;
 
         for (let index = 0; index < listaPrevendite.length; index++) {
             const prevendita = listaPrevendite[index];
@@ -46,8 +59,41 @@ class UiUtils extends GeneralUiUtils {
 
             var $elemento = $("<li class=\"list-group-item\"> <a href=\"" + link + "\" target=\"_blank\">" + scritta + "</a></li>");
 
-            $lista.append($elemento);
+            //Smisto le prevendite in base allo stato della prevendita.
+            switch(prevendita.stato)
+            {
+                //CONSEGNATA
+                case 0:
+                    counterConsegnate++;
+                    $listaConsegnate.append($elemento);
+                break;
+
+                //PAGATA
+                case 1:
+                    counterPagate++;
+                    $listaPagate.append($elemento);
+                break;
+
+                //ANNULLATA
+                case 2:
+                    counterAnnullate++;
+                    $listaAnnullate.append($elemento);
+                break;
+
+                //RIMBORSATA
+                case 3:
+                    counterRimborsate++;
+                    $listaRimborsate.append($elemento);
+                break;
+                default: break;
+            }
         }
+
+        //Scrivo un messaggio di riassunto per ogni stato.
+        $textConsegnate.text("Ci sono "+ counterConsegnate + " prevendite consegnate.");
+        $textPagate.text("Ci sono "+ counterPagate + " prevendite pagate.");
+        $textAnnullate.text("Ci sono "+ counterAnnullate + " prevendite annullate.");
+        $textRimborsate.text("Ci sono "+ counterRimborsate + " prevendite rimborsate.");
     }
 }
 
@@ -82,7 +128,7 @@ var funzionePrincipale = function () {
         uiUtils.popolaLista(response.results);
 
         //Imposto un messaggio.
-        uiUtils.impostaScritta("Hai venduto: " + response.results.length + " prevendite");
+        uiUtils.impostaScritta("Totale: " + response.results.length + " prevendite");
 
     }, function (response) {
         uiUtils.impostaErrore("Errore: " + response.exceptions[0].msg);

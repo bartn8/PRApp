@@ -403,7 +403,7 @@ EOT;
     /**
      * Restituisce la lista delle prevendite prodotte dall'utente.
      *
-     * @param NetWFiltriStatoPrevendita $filtri
+     * @param NetWFiltriStatoPrevendita|NULL $filtri
      * @throws InvalidArgumentException parametri nulli o non validi
      * @throws NotAvailableOperationException non si è loggati nel sistema
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
@@ -411,8 +411,8 @@ EOT;
      */
     public static function getPrevendite(NetWFiltriStatoPrevendita $filtri): array
     {
-        if (! is_null($filtri) && ! ($filtri instanceof NetWFiltriStatoPrevendita))
-            throw new InvalidArgumentException("Parametro filtro non valido.");
+        if (is_null($filtri) || ! ($filtri instanceof NetWFiltriStatoPrevendita))
+            throw new InvalidArgumentException("Parametro filtri non valido.");
 
         // Verifico che si è loggati nel sistema.
         if (! Context::getContext()->isValid())
@@ -434,21 +434,23 @@ EOT;
 EOT;
 */        
 
-        if (count($filtri->getFiltri()) > 0) {
-            $query .= " AND (";
-
-            $i = 0;
-
-            foreach ($filtri->getFiltri() as $filtro) {
-                $query .= "stato = :stato";
-                $query .= $i;
-                $query .= " OR ";
-
-                $i ++;
+        //if(!is_null($filtri)){
+            if (count($filtri->getFiltri()) > 0) {
+                $query .= " AND (";
+    
+                $i = 0;
+    
+                foreach ($filtri->getFiltri() as $filtro) {
+                    $query .= "stato = :stato";
+                    $query .= $i;
+                    $query .= " OR ";
+    
+                    $i ++;
+                }
+    
+                $query .= " 0)";
             }
-
-            $query .= " 0)";
-        }
+        //}
 
         $conn = parent::getConnection();
 
@@ -457,14 +459,16 @@ EOT;
         $stmtSelezione->bindValue(":idPR", Context::getContext()->getUtente()
             ->getId(), PDO::PARAM_INT);
 
-        if (count($filtri->getFiltri()) > 0) {
-            $i = 0;
+        //if(!is_null($filtri)){
+            if (count($filtri->getFiltri()) > 0) {
+                $i = 0;
 
-            foreach ($filtri->getFiltri() as $filtro) {
-                $stmtSelezione->bindValue(":stato" . $i, $filtro->toString(), PDO::PARAM_STR);
-                $i ++;
+                foreach ($filtri->getFiltri() as $filtro) {
+                    $stmtSelezione->bindValue(":stato" . $i, $filtro->toString(), PDO::PARAM_STR);
+                    $i ++;
+                }
             }
-        }
+        //}
         
         $stmtSelezione->execute();
 
@@ -625,7 +629,7 @@ EOT;
             INNER JOIN evento ON evento.idStaff = pr.idStaff
             INNER JOIN prevendita ON prevendita.idEvento = evento.id AND prevendita.idPR = pr.idUtente
             INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita
-            WHERE prevendita.stato = 'PAGATA'
+            WHERE prevendita.stato IN ('PAGATA')
             GROUP BY pr.idUtente, pr.idStaff, prevendita.idEvento, prevendita.idTipoPrevendita) AS T
         WHERE T.idUtente = :idUtente AND T.idEvento = :idEvento
 EOT;
