@@ -201,11 +201,11 @@ class Cassiere extends Table
 
         //Considero anche lo stato CONSEGNATA: il PR comunque ha consegnato la prevendita.
         //PHP e enum non vanno d'accordo.
-        if($statoPrevendita == StatoPrevendita::of(StatoPrevendita::RIMBORSATA) || $statoPrevendita == StatoPrevendita::of(StatoPrevendita::ANNULLATA) )
-        {
-            $conn = NULL;
-            throw new InsertUpdateException("Prevendita annullata.");
-        }        
+        // if($statoPrevendita == StatoPrevendita::of(StatoPrevendita::RIMBORSATA) || $statoPrevendita == StatoPrevendita::of(StatoPrevendita::ANNULLATA) )
+        // {
+        //     $conn = NULL;
+        //     throw new InsertUpdateException("Prevendita annullata.");
+        // }        
 
         // Verifico la data di timbratura.
         //Verifico anche che l'evento sia valido.
@@ -220,18 +220,19 @@ class Cassiere extends Table
 
         $statoEvento = StatoEvento::parse($fetch["stato"]);
 
-        if ($ora < $inizio->getDateTimeImmutable() || $ora > $fine->getDateTimeImmutable()) {
-            $conn = NULL;
-            //throw new InsertUpdateException("Prevendita non valida: Evento finito o non ancora iniziato. (".$inizio->getDateTimeImmutable()->format(\DateTime::ATOM)." < ".$ora->format(\DateTime::ATOM)." < ".$fine->getDateTimeImmutable()->format(\DateTime::ATOM).")");
-            throw new InsertUpdateException("Prevendita non valida: Evento finito o non ancora iniziato.");
-        }
+        // if ($ora < $inizio->getDateTimeImmutable() || $ora > $fine->getDateTimeImmutable()) {
+        //     $conn = NULL;
+        //     //throw new InsertUpdateException("Prevendita non valida: Evento finito o non ancora iniziato. (".$inizio->getDateTimeImmutable()->format(\DateTime::ATOM)." < ".$ora->format(\DateTime::ATOM)." < ".$fine->getDateTimeImmutable()->format(\DateTime::ATOM).")");
+        //     throw new InsertUpdateException("Prevendita non valida: Evento finito o non ancora iniziato.");
+        // }
 
         //PHP e enum non vanno d'accordo.
-        if($statoEvento != StatoEvento::of(StatoEvento::VALIDO))
-        {
-            $conn = NULL;
-            throw new InsertUpdateException("Evento annullato!");
-        }
+        
+        // if($statoEvento != StatoEvento::of(StatoEvento::VALIDO) && $statoEvento != StatoEvento::of(StatoEvento::PAGATO))
+        // {
+        //     $conn = NULL;
+        //     throw new InsertUpdateException("Evento annullato!");
+        // }
 
         // Ora che ho verificato il codice posso TIMBRARE la prevendita.
         $stmtTimbro = $conn->prepare("INSERT INTO entrata (idCassiere, idPrevendita) VALUES (:idCassiere, :idPrevendita)");
@@ -248,6 +249,9 @@ class Cassiere extends Table
 
             if ($ex->getCode() == Cassiere::UNIQUE_CODE || $ex->getCode() == Cassiere::INTEGRITY_CODE) // Codice di integrità.
                 throw new InsertUpdateException("Prevendita già timbrata.");
+
+                if ($ex->getCode() == Cassiere::DATA_NON_VALIDA_CODE || $ex->getCode() == Cassiere::STATO_NON_VALIDO_CODE) // Codice di integrità.
+                throw new InsertUpdateException($ex->getMessage());
 
             throw $ex;
         }
