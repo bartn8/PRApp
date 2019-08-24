@@ -75,7 +75,8 @@ abstract class Table
 
     protected static function getConnection($syncTimezone = TRUE/*$args=NULL*/) : PDO
     {
-        $tmp = new PDO(Table::$databaseType . ":host=" . Table::$serverURL . ";dbname=" . Table::$databaseName . ";charset=utf8", Table::$username, Table::$password);
+        //$tmp = new PDO(Table::$databaseType . ":host=" . Table::$serverURL . ";dbname=" . Table::$databaseName . ";charset=utf8", Table::$username, Table::$password);
+        $tmp = new PDO(Table::$databaseType . ":host=" . Table::$serverURL . ";dbname=" . Table::$databaseName . ";charset=" . Table::$charset, Table::$username, Table::$password);
         $tmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         //TODO: forse meglio assegnare al database UTC?
