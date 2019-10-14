@@ -267,14 +267,14 @@ var creaPrevenditaButtonClick = function () {
 
     //Check 
     if (nomeCliente == "") {
-        nomeCliente = "Genitore";
+        nomeCliente = null;
     }
 
     var cognomeCliente = $("#cognomeCliente").val();
 
     //Check 
     if (cognomeCliente == "") {
-        cognomeCliente = "Uno";
+        cognomeCliente = null;
     }
 
     var dataDiNascita = $("#dataDiNascita").val();

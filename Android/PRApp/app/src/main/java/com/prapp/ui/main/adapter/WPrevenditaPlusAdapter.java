@@ -171,10 +171,18 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
     private List<WPrevenditaPlusWrapper> datasetPrevendita;
     private Context parentContex;
 
+    //Utilizzato per indicare quanti elementi devo mostare contemporaneamente.
+    private int maxShownItems;
+
 
     public WPrevenditaPlusAdapter(ButtonListener mOnClickListener) {
+        this(mOnClickListener, -1);
+    }
+
+    public WPrevenditaPlusAdapter(ButtonListener mOnClickListener, int maxShownItems) {
         this.datasetPrevendita = new ArrayList<>();
         this.mOnClickListener = mOnClickListener;
+        this.maxShownItems = maxShownItems;
     }
 
     public void add(WPrevenditaPlus wPrevenditaPlus) {
@@ -267,7 +275,12 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
 
     @Override
     public int getItemCount() {
-        return datasetPrevendita.size();
+        int size = datasetPrevendita.size();
+
+        if(maxShownItems <= 0)
+            return size;
+        else
+            return size < maxShownItems ? size : maxShownItems;
     }
 
 }

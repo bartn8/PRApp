@@ -20,12 +20,14 @@
 package com.prapp.ui.main;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
@@ -51,6 +53,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String NEEDED_PERMISSION = Manifest.permission.CAMERA;
     private static final int PERMISSION_REQUEST_CAMERA = 0;
     private static final String CURRENT_FRAGMENT_KEY = "CURFRAG";
 
@@ -160,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
     private void cambiaFragment(Fragment nuovoFragment) {
         // Create new transaction
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack if needed
@@ -212,12 +216,8 @@ public class MainActivity extends AppCompatActivity {
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navView.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
 
-
         //Controllo permessi camera
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            requestCameraPermission();
-        }
+        checkCameraPermission();
 
     }
 
@@ -270,8 +270,24 @@ public class MainActivity extends AppCompatActivity {
      * If an additional rationale should be displayed, the user has to launch the request from
      * a SnackBar that includes additional information.
      */
-    private void requestCameraPermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+    private void checkCameraPermission() {
+        if (ActivityCompat.checkSelfPermission(this, NEEDED_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, NEEDED_PERMISSION)) {
+                new AlertDialog.Builder(this)
+                        .setMessage(R.string.show_camera_permission_request)
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[]{NEEDED_PERMISSION},
+                                        PERMISSION_REQUEST_CAMERA);
+                            }
+                        })
+                        .show();
+            }else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+            }
+        }
     }
 }

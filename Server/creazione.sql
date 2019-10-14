@@ -54,8 +54,8 @@ CREATE TABLE amministratore (
 CREATE TABLE cliente (
   id int NOT NULL AUTO_INCREMENT,
   idStaff int NOT NULL,
-  nome varchar(150) NOT NULL,
-  cognome varchar(150) NOT NULL,
+  nome varchar(150), /* Nome e cognome diviene opzionale */
+  cognome varchar(150),
   telefono varchar(80),
   dataDiNascita date NOT NULL,
   codiceFiscale varchar(16),

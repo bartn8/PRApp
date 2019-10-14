@@ -58,7 +58,7 @@ La vendita avviene tramite PR: esso genera tramite l'app una prevendita valida, 
 Un cliente può acquistare una sola prevendita per un evento. Se deve comprarla anche per la fidanzatina, si registra anche la fidanzatina e si associa la prevendita a lei.
 -PREVENDITA DIGITALE-
 La prevendita viene rappresentata da una serie di dati:
-	-Identificativo cliente.
+	-Identificativo cliente. (OPZIONALE)
 	-Codice prevendita.
 	-Tipo prevendita.
 	-Data di vendita.

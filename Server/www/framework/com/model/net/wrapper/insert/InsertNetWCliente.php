@@ -38,10 +38,12 @@ class InsertNetWCliente implements NetWrapper
             throw new InvalidArgumentException("Dato idStaff non trovato.");
 
         if (! array_key_exists("nome", $array))
-            throw new InvalidArgumentException("Dato nome non trovato.");
+            $array["nome"] = null;
+            //throw new InvalidArgumentException("Dato nome non trovato.");
 
         if (! array_key_exists("cognome", $array))
-            throw new InvalidArgumentException("Dato cognome non trovato.");
+            $array["cognome"] = null;
+            //throw new InvalidArgumentException("Dato cognome non trovato.");
 
         if (! array_key_exists("telefono", $array))
             $array["telefono"] = null;
@@ -74,10 +76,10 @@ class InsertNetWCliente implements NetWrapper
      */
     private static function make($idStaff, $nome, $cognome, $telefono, $dataDiNascita, $codiceFiscale)
     {
-        if (is_null($nome) || is_null($cognome) || is_null($idStaff) || is_null($dataDiNascita))
+        if (/* is_null($nome) || is_null($cognome) || */ is_null($idStaff) || is_null($dataDiNascita))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($idStaff) || ! is_string($nome) || ! is_string($cognome) || ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON))
+        if (! is_int($idStaff) || (!is_null($nome) && ! is_string($nome)) ||  (! is_null($cognome) && ! is_string($cognome)) || ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if (! is_null($telefono)) {
@@ -99,10 +101,10 @@ class InsertNetWCliente implements NetWrapper
 				throw new InvalidArgumentException("Codice fiscale non valido (MAX)");
 		}
             
-        if (strlen($nome) > WCliente::NOME_MAX)
+        if (strlen($nome) > WCliente::NOME_MAX && !is_null($nome))
             throw new InvalidArgumentException("Nome non valido (MAX)");
 
-        if (strlen($cognome) > WCliente::COGNOME_MAX)
+        if (strlen($cognome) > WCliente::COGNOME_MAX && !is_null($cognome))
             throw new InvalidArgumentException("Cognome non valido (MAX)");
 
         if ($idStaff <= 0)
@@ -119,13 +121,13 @@ class InsertNetWCliente implements NetWrapper
 
     /**
      *
-     * @var string
+     * @var string|NULL
      */
     private $nome;
 
     /**
      *
-     * @var string
+     * @var string|NULL
      */
     private $cognome;
 

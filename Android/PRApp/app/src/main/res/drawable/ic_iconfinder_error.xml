@@ -1,0 +1,28 @@
+<!--
+  ~ PRApp  Copyright (C) 2019  Luca Bartolomei
+  ~
+  ~ This file is part of PRApp.
+  ~
+  ~     PRApp is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     PRApp is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="612"
+    android:viewportHeight="792">
+  <path
+      android:pathData="M562,396c0,-141.4 -114.6,-256 -256,-256S50,254.6 50,396s114.6,256 256,256S562,537.4 562,396L562,396zM356.8,396L475,514.2L424.2,565L306,446.8L187.8,565L137,514.2L255.2,396L137,277.8l50.8,-50.8L306,345.2L424.2,227l50.8,50.8L356.8,396L356.8,396z"
+      android:fillColor="#E44061"/>
+</vector>

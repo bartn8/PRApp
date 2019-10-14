@@ -32,6 +32,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Qui ci sparo le entrate. -->
+        <!-- Dopo l'evento è risultato poco utile la serie di entrate: meglio una sola. -->
+        <!-- Lascio il recycler view, però ci saranno dei vincoli lato java -->
+        <!-- Ho spostato sopra questa parte per migliore utilizzo. -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/entrateRecyclerView"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"/>
+
         <!-- Vista per entrata QR -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -54,38 +66,41 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textAlignment="center"/>
 
-                <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                <!-- Rimpiazzato da Google Play services -->
+                <!--<com.journeyapps.barcodescanner.DecoratedBarcodeView
                     android:id="@+id/zxing_barcode_scanner"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     app:zxing_scanner_layout="@layout/custom_barcode_scanner">
-                </com.journeyapps.barcodescanner.DecoratedBarcodeView>
+                </com.journeyapps.barcodescanner.DecoratedBarcodeView>-->
+
+                <SurfaceView
+                    android:id="@+id/scanner_surfaceview"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    style="?android:attr/buttonBarStyle">
+                    android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/buttonScansioneQR"
+                    <ToggleButton
+                        android:id="@+id/scansioneQRSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:layout_weight="1"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:background="@color/primaryColorRed"
-                        android:text="@string/fragment_cassiere_btn_inizio_scansione" />
+                        android:textOff="@string/fragment_cassiere_switch_scansione_off"
+                        android:textOn="@string/fragment_cassiere_switch_scansione_on" />
 
-                    <Button
-                        android:id="@+id/buttonFlash"
+                    <ToggleButton
+                        android:id="@+id/flashlightSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:background="@color/primaryButtonColor"
-                        android:text="@string/fragment_cassiere_btn_flash" />
+                        android:textOff="@string/fragment_cassiere_switch_flash_off"
+                        android:textOn="@string/fragment_cassiere_switch_flash_on" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -126,6 +141,8 @@
                         android:text="@string/fragment_cassiere_entrata_manuale_idPrevendita_label"
                         android:textColor="@color/primaryTextColor"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+                    <!-- TODO: aggiungere autofillHints a tutti gli EditText -->
 
                     <EditText
                         android:id="@+id/fragment_cassiere_entrata_manuale_idPrevendita"
@@ -194,7 +211,7 @@
 
                     <Button
                         android:id="@+id/buttonEntrataManuale"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:layout_weight="1"
@@ -206,15 +223,6 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
-        <!-- Qui ci sparo le entrate. -->
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/entrateRecyclerView"
-            android:clipToPadding="false"
-            android:scrollbars="vertical"/>
 
     </LinearLayout>
 

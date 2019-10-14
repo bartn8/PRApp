@@ -52,7 +52,7 @@
 
     <!-- WStaff List Item -->
     <string name="wstaff_list_item_nome">Staff</string>
-    <string name="wstaff_list_item_data">01-01-1970</string>
+    <string name="wstaff_list_item_data">01\-01\-1970</string>
 
     <!-- WUtente List Item -->
     <string name="wutente_list_item_telefono">+39123456789</string>
@@ -121,6 +121,7 @@
     <string name="title_cassiere">Cassiere</string>
     <string name="title_amministratore">Amministratore</string>
 
+    <string name="show_camera_permission_request">L\'applicazione ha bisogno dell\'autorizzazione alla fotocamera per scannerizzare. Acconsenti?</string>
     <string name="show_camera_permission_granted">Accesso alla camera acconsentito</string>
     <string name="show_camera_permission_denied">Ao mo non puoi fare il cassiere</string>
 
@@ -150,9 +151,10 @@
 
     <string name="fragment_cassiere_entrata_label">Effettua Entrata</string>
 
-    <string name="fragment_cassiere_btn_inizio_scansione">Scansiona QR</string>
-    <string name="fragment_cassiere_btn_fine_scansione">Fine Scansione</string>
-    <string name="fragment_cassiere_btn_flash">FLASH</string>
+    <string name="fragment_cassiere_switch_scansione_on">Scansione Attiva</string>
+    <string name="fragment_cassiere_switch_scansione_off">Scansione Disattivata</string>
+    <string name="fragment_cassiere_switch_flash_off">FLASH Spento</string>
+    <string name="fragment_cassiere_switch_flash_on">FLASH Acceso</string>
 
     <string name="fragment_cassiere_entrata_manuale_label">Effettua Entrata Manuale</string>
     <string name="fragment_cassiere_entrata_manuale_idPrevendita_label">Numero Prevendita:</string>
@@ -162,16 +164,30 @@
     <string name="fragment_cassiere_approva_label">APPROVA</string>
     <string name="fragment_cassiere_annulla_label">ANNULLA</string>
 
+
     <string name="fragment_cassiere_toast_errore_formatted">
         Errore: <xliff:g id="errore">%1$s</xliff:g>
     </string>
+
     <string name="fragment_cassiere_toast_approvata_formatted">
         APPROVATA! (<xliff:g id="time">%1$s</xliff:g>)
     </string>
+
     <string name="fragment_cassiere_toast_annullata_label">ANNULLATA!</string>
 
     <string name="fragment_cassiere_btn_entrataManuale">Entrata Manuale</string>
 
+    <string name="fragment_cassiere_popup_image_description">Esito Entrata</string>
+
+    <string name="fragment_cassiere_popup_success">Può entrare!</string>
+
+    <string name="fragment_cassiere_popup_errore_formatted">
+        Errore: <xliff:g id="errore">%1$s</xliff:g>
+    </string>
+
+    <string name="fragment_cassiere_impossibile_avviare_scanner">Impossibile avviare lo scanner!</string>
+
+    <string name="fragment_cassiere_impossibile_fare_flash">Impossibile avviare il flash!</string>
 
     <!-- FRAGMENT AMMINISTRATORE -->
 

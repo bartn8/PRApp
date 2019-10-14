@@ -58,10 +58,12 @@ class WCliente implements DatabaseWrapper
             throw new InvalidArgumentException("Dato idStaff non trovato.");
 
         if (! array_key_exists("nome", $array))
-            throw new InvalidArgumentException("Dato nome non trovato.");
+            $array["nome"] = null;
+            //throw new InvalidArgumentException("Dato nome non trovato.");
 
         if (! array_key_exists("cognome", $array))
-            throw new InvalidArgumentException("Dato cognome non trovato.");
+            $array["cognome"] = null;
+            //throw new InvalidArgumentException("Dato cognome non trovato.");
 
         if (! array_key_exists("telefono", $array))
 			$array["telefono"] = null;
@@ -96,10 +98,10 @@ class WCliente implements DatabaseWrapper
      */
     public static function make($id, $idStaff, $nome, $cognome, $telefono, $dataDiNascita, $codiceFiscale, $timestampInserimento)
     {
-        if (is_null($id) || is_null($nome) || is_null($cognome) || is_null($idStaff) || is_null($dataDiNascita) || is_null($timestampInserimento))
+        if (is_null($id) || /* is_null($nome) || is_null($cognome) || */ is_null($idStaff) || is_null($dataDiNascita) || is_null($timestampInserimento))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) || ! is_int($idStaff) || ! is_string($nome) || ! is_string($cognome) || ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON) || ! ($timestampInserimento instanceof DateTimeImmutableAdapterJSON))
+        if (! is_int($id) || ! is_int($idStaff) || (!is_null($nome) && ! is_string($nome)) ||  (! is_null($cognome) && ! is_string($cognome)) || ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON) || ! ($timestampInserimento instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if (! is_null($telefono)) {
@@ -121,10 +123,10 @@ class WCliente implements DatabaseWrapper
                 throw new InvalidArgumentException("Codice fiscale non valido (MAX)");
         }
 
-        if (strlen($nome) > self::NOME_MAX)
+        if (strlen($nome) > self::NOME_MAX && !is_null($nome))
             throw new InvalidArgumentException("Nome non valido (MAX)");
 
-        if (strlen($cognome) > self::COGNOME_MAX)
+        if (strlen($cognome) > self::COGNOME_MAX && !is_null($cognome))
             throw new InvalidArgumentException("Cognome non valido (MAX)");
 
         if ($id <= 0)
@@ -163,14 +165,14 @@ class WCliente implements DatabaseWrapper
     /**
      * Nome del cliente.
      *
-     * @var string
+     * @var string|NULL
      */
     private $nome;
 
     /**
      * Cognome del cliente.
      *
-     * @var string
+     * @var string|NULL
      */
     private $cognome;
 
