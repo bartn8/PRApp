@@ -20,19 +20,21 @@
 package com.prapp.ui.main.fragment;
 
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
+import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -45,13 +47,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.samples.vision.barcodereader.ui.camera.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -89,6 +93,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     private static final String TAG = CassiereFragment.class.getSimpleName();
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormat.shortTime();
 
+    private static final String NEEDED_PERMISSION = Manifest.permission.CAMERA;
 
     /**
      * Use this factory method to create a new instance of
@@ -115,12 +120,6 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     private Dialog popupEsito;
 
     //ROBA PER SCANNER--------------------------------------------------
-
-    //Vecchia API deprecata
-//    private Camera camera = Camera.open();
-
-    //Nuova API
-//    private CameraManager cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
 
     private boolean isScanOn = false;
     private boolean isFlashOn = false;
@@ -196,13 +195,6 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
                     //Non verrà aggiunta la lettura.
                 }
 
-                //Se succede qualcosa di strano mando il codice in esecuzione sul thread principale.
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                    }
-//                });
             }
 
         }
@@ -232,6 +224,11 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         }
     };
 
+    /**
+     * Observer del risultato di un tentativo di entrata:
+     *   In caso di errore: mostro un popup negativo con errore.
+     *   In caso di successo: mostro un popup positivo + doppia vibrazione.
+     */
     private Observer<Result<WEntrata, WPrevenditaPlus>> timbraEntrataObserver = new Observer<Result<WEntrata, WPrevenditaPlus>>() {
         @Override
         public void onChanged(Result<WEntrata, WPrevenditaPlus> wEntrataResult) {
@@ -280,42 +277,20 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         }
     };
 
-    //https://stackoverflow.com/questions/13950338/how-to-make-an-android-device-vibrate
-    //https://gist.github.com/nieldeokar/e05fffe4d639dfabf0d57e96cb8055e2
-
-    private void vibraSingolo() {
-        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 500 milliseconds
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            //deprecated in API 26
-            vibrator.vibrate(200);
-        }
-    }
-
-    private void vibraDoppio() {
-        // Get instance of Vibrator from current Context
-        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-
-        // Start without a delay
-        // Each element then alternates between vibrate, sleep, vibrate, sleep...
-        long[] pattern = {0, 200, 200, 200, 0};
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            VibrationEffect waveform = VibrationEffect.createWaveform(pattern, -1);
-            vibrator.vibrate(waveform);
-        } else {
-            //deprecated in API 26
-            // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
-            vibrator.vibrate(pattern, -1);
-        }
-    }
-
     public CassiereFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.cassiere_menu, menu);
     }
 
     @Override
@@ -367,7 +342,10 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         // istanziamo un oggetto CameraSource collegata al detector
         cameraSource = new CameraSource
                 .Builder(getContext(), detector)
-                .setAutoFocusEnabled(true)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
+                //.setRequestedPreviewSize(scannerSurfaceView.getWidth(), scannerSurfaceView.getHeight())
+                .setRequestedFps(15.0f)
+                .setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO)
                 .build();
 
         scannerSurfaceView.getHolder().addCallback(surfaceCallback);
@@ -380,42 +358,11 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         return view;
     }
 
-    /**
-     * Check if the device's camera has a Flashlight.
-     *
-     * @return true if there is Flashlight, otherwise false.
-     */
-    private boolean hasFlash() {
-        return getContext().getPackageManager()
-                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-    }
-
-    private void turnFlash(boolean isOn) {
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            // only for 25 and newer versions
-            CameraManager cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
-            String cameraId = null;
-            try {
-                cameraId = cameraManager.getCameraIdList()[0];
-                cameraManager.setTorchMode(cameraId, isOn);
-            } catch (CameraAccessException e) {
-                //Faccio un toast di errore
-                uiUtils.makeToast(R.string.fragment_cassiere_impossibile_fare_flash);
-            }
-        } else {
-            //Evito di usare la vecchia API.
-            //Mi lamento dicendo di aggironare android.
-            uiUtils.makeToast(R.string.fragment_cassiere_impossibile_fare_flash);
-        }
-
-        isFlashOn = isOn;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
 
+        //Quando il fragment viene ripreso devo disattivare la scansione.
         if (isScanOn) {
             turnScanOff();
             turnFlash(false);
@@ -424,6 +371,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
 
     @Override
     public void onPause() {
+        //Quando il fragment viene sospeso devo disattivare la scansione.
         if (isScanOn) {
             turnScanOff();
             turnFlash(false);
@@ -434,24 +382,26 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
 
     @Override
     public void onDestroyView() {
+        //Rimuvo il binding di ButterKnife
         unbinder.unbind();
         super.onDestroyView();
     }
 
-
+    /**
+     * Quando faccio il click sul pulsante flash faccio il toggle del flash.
+     *
+     * @param view non usato
+     */
     @OnClick(R.id.flashlightSwitch)
     public void onClickFlash(View view) {
-        if (isScanOn) {
-            if (isFlashOn) {
-                turnFlash(false);
-            } else {
-                turnFlash(true);
-            }
-        } else {
-            turnFlash(false);
-        }
+        turnFlash(!isFlashOn);
     }
 
+    /**
+     * Quando faccio il click sul pulsante scansione faccio il toggle della scansione QR.
+     *
+     * @param view non usata
+     */
     @OnClick(R.id.scansioneQRSwitch)
     public void onClickScansioneQR(View view) {
         if (isScanOn) {
@@ -462,22 +412,11 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         }
     }
 
-    private void turnScanOff() {
-        cameraSource.stop();
-        scansioneQRSwitch.setChecked(false);
-        isScanOn = false;
-    }
-
-    private void turnScanOn() {
-        try {
-            cameraSource.start(scannerSurfaceView.getHolder());
-            scansioneQRSwitch.setChecked(true);
-            isScanOn = true;
-        } catch (IOException e) {
-            uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
-        }
-    }
-
+    /**
+     * Quando clicco su approva dico al View-Model di provare ad accettare la prevendita.
+     *
+     * @param prevendita Wrapper con la prevendita
+     */
     @Override
     public void onApprovaClick(WPrevenditaPlusAdapter.WPrevenditaPlusWrapper prevendita) {
         //Faccio partire l'entrata. Levo temporaneamente dal recycler la prevendita:
@@ -489,6 +428,13 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         recyclerAdapter.remove(prevendita);
     }
 
+    /**
+     * Quando clicco su annulla faccio finta di non aver scannerizzato la prevendita.
+     * Devo comunque dirlo al View-Model il quale ha una struttra interna per salvarsi le prevendite.
+     * Al livello server non viene visto nulla.
+     *
+     * @param prevendita prevendita da rimuovere.
+     */
     @Override
     public void onAnnullaClick(WPrevenditaPlusAdapter.WPrevenditaPlusWrapper prevendita) {
         uiUtils.makeToast(R.string.fragment_cassiere_toast_annullata_label);
@@ -498,23 +444,40 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         recyclerAdapter.remove(prevendita);
     }
 
+    /**
+     * Handler del pulsante di entrata manuale:
+     * Cerca di fare il parsing degli argomenti inseriti e
+     * prova a popolare la lista delle prevendite da approvare con quella inserita.
+     */
     @OnClick(R.id.buttonEntrataManuale)
     public void onEntrataManualeClick() {
-        Integer idPrevendita = Integer.parseInt(editTextIdPrevendita.getText().toString());
-        //Integer idEvento = Integer.parseInt(editTextIdEvento.getText().toString());
-        Integer idEvento = mainViewModel.getEvento().getId();
-        String codice = editTextCodice.getText().toString();
+        try{
+            Integer idPrevendita = Integer.parseInt(editTextIdPrevendita.getText().toString());
+            //Integer idEvento = Integer.parseInt(editTextIdEvento.getText().toString());
+            Integer idEvento = mainViewModel.getEvento().getId();
+            String codice = editTextCodice.getText().toString();
 
-        NetWEntrata netWEntrata = new NetWEntrata(idPrevendita, idEvento, codice);
+            NetWEntrata netWEntrata = new NetWEntrata(idPrevendita, idEvento, codice);
 
-        mainViewModel.getInformazioniPrevendita(netWEntrata);
+            mainViewModel.getInformazioniPrevendita(netWEntrata);
 
-        //Pulisco i campi
-        editTextIdPrevendita.getText().clear();
-        editTextCodice.getText().clear();
+            //Pulisco i campi
+            editTextIdPrevendita.getText().clear();
+            editTextCodice.getText().clear();
+        }catch (NumberFormatException ex){
+            uiUtils.makeToast(R.string.fragment_cassiere_entrata_manuale_dati_non_validi);
+        }
     }
 
     //https://www.awsrh.com/2017/10/custom-pop-up-window-with-android-studio.html
+
+    /**
+     * Mostra un popup personalizzato.
+     *
+     * @param imageResId ID immagine da visualizzare
+     * @param textResId ID testo da visualizzare
+     * @param text Testo custom da visualizzare (come arg di textResId)
+     */
     private void showPopup(int imageResId, int textResId, String text) {
         ImageView esitoImage;
         TextView esitoText;
@@ -554,12 +517,112 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         esitoImage.animate();
     }
 
-    public void showSuccessPopup() {
+    /**
+     * Mostra un popup di successo.
+     */
+    private void showSuccessPopup() {
         showPopup(R.drawable.ic_iconfinder_success, R.string.fragment_cassiere_popup_success, null);
     }
 
-    public void showErrorPopup(String error) {
+    /**
+     * Mostra un popup di errore.
+     * @param error stringa con l'errore da mostrare.
+     */
+    private void showErrorPopup(String error) {
         showPopup(R.drawable.ic_iconfinder_error, R.string.fragment_cassiere_popup_errore_formatted, error);
+    }
+
+    /**
+     * Disabilita la scansione del QR.
+     */
+    private void turnScanOff() {
+        cameraSource.stop();
+        scansioneQRSwitch.setChecked(false);
+        isScanOn = false;
+    }
+
+    /**
+     * Abilita la scansione dei QR.
+     * Prima controlla se ho i permessi.
+     */
+    private void turnScanOn() {
+        if (ActivityCompat.checkSelfPermission(getContext(), NEEDED_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+            try {
+                cameraSource.start(scannerSurfaceView.getHolder());
+                scansioneQRSwitch.setChecked(true);
+                isScanOn = true;
+            } catch (IOException e) {
+                uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
+            }
+        }else{
+            uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
+        }
+    }
+
+    /**
+     * Check if the device's camera has a Flashlight.
+     *
+     * @return true if there is Flashlight, otherwise false.
+     */
+    private boolean hasFlash() {
+        return getContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    /**
+     * Imposta il flash.
+     * @param isOn true se si vuole accendere il flash
+     */
+    private void turnFlash(boolean isOn) {
+        //Verifico che la scansione sia attiva, altrimenti disattivo il flash.
+        if(!isScanOn && isOn){
+            flashlightSwitch.setChecked(false);
+            isFlashOn = false;
+            return;
+        }
+
+        cameraSource.setFlashMode(isOn ? Camera.Parameters.FLASH_MODE_TORCH : Camera.Parameters.FLASH_MODE_OFF);
+        isFlashOn = isOn;
+    }
+
+    //https://stackoverflow.com/questions/13950338/how-to-make-an-android-device-vibrate
+    //https://gist.github.com/nieldeokar/e05fffe4d639dfabf0d57e96cb8055e2
+
+    /**
+     * Fa vibrare il telefono una volta.
+     */
+    private void vibraSingolo() {
+        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            vibrator.vibrate(200);
+        }
+    }
+
+    /**
+     * Fa vibrare il telefono due volte.
+     */
+    private void vibraDoppio() {
+        // Get instance of Vibrator from current Context
+        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+
+        // Start without a delay
+        // Each element then alternates between vibrate, sleep, vibrate, sleep...
+        long[] pattern = {0, 200, 200, 200, 0};
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            VibrationEffect waveform = VibrationEffect.createWaveform(pattern, -1);
+            vibrator.vibrate(waveform);
+        } else {
+            //deprecated in API 26
+            // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+            vibrator.vibrate(pattern, -1);
+        }
     }
 
 }

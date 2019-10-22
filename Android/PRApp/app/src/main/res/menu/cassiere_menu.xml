@@ -18,23 +18,7 @@
   ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.fragment.PRFragment">
-
-    <!-- Utilizzo una webview per mostrare la web app. -->
-
-    <WebView
-        android:id="@+id/fragment_pr_webView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-
-</androidx.core.widget.NestedScrollView>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/autoApprova"
+        android:title="@string/fragment_cassiere_menu_autoApprova"/>
+</menu>

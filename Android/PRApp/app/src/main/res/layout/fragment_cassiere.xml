@@ -66,14 +66,6 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textAlignment="center"/>
 
-                <!-- Rimpiazzato da Google Play services -->
-                <!--<com.journeyapps.barcodescanner.DecoratedBarcodeView
-                    android:id="@+id/zxing_barcode_scanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    app:zxing_scanner_layout="@layout/custom_barcode_scanner">
-                </com.journeyapps.barcodescanner.DecoratedBarcodeView>-->
-
                 <SurfaceView
                     android:id="@+id/scanner_surfaceview"
                     android:layout_width="match_parent"
@@ -142,7 +134,6 @@
                         android:textColor="@color/primaryTextColor"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
-                    <!-- TODO: aggiungere autofillHints a tutti gli EditText -->
 
                     <EditText
                         android:id="@+id/fragment_cassiere_entrata_manuale_idPrevendita"
@@ -153,32 +144,6 @@
                         android:inputType="number" />
 
                 </LinearLayout>
-
-                <!-- Teoricamente l'evento l'ho già.
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/fragment_cassiere_entrata_manuale_idEvento_label"
-                        android:textColor="@color/primaryTextColor"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
-                    <EditText
-                        android:id="@+id/fragment_cassiere_entrata_manuale_idEvento"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="number" />
-
-                </LinearLayout>
-                -->
-
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -9,13 +9,22 @@
     "jcanvas": "^21.0.1",
     "jquery": "^3.4.1",
     "js-cookie": "^2.2.0",
+    "npx": "^10.2.0",
     "popper.js": "^1.15.0",
-    "qrcode-generator": "^1.4.3"
+    "qrcode-generator": "^1.4.3",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "typescript": "^3.6.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/react": "^16.9.6",
+    "@types/react-dom": "^16.9.2",
+    "parcel-bundler": "^1.12.4"
+  },
   "scripts": {
+    "dev": "parcel webapp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Luca Bartolomei",
+  "license": "GPLv3"
 }

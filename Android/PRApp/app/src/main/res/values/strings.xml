@@ -149,6 +149,8 @@
 
     <!-- FRAGMENT CASSIERE -->
 
+    <string name="fragment_cassiere_menu_autoApprova">Auto-Approva</string>
+
     <string name="fragment_cassiere_entrata_label">Effettua Entrata</string>
 
     <string name="fragment_cassiere_switch_scansione_on">Scansione Attiva</string>
@@ -160,6 +162,7 @@
     <string name="fragment_cassiere_entrata_manuale_idPrevendita_label">Numero Prevendita:</string>
     <string name="fragment_cassiere_entrata_manuale_codice_label">Codice:</string>
     <string name="fragment_cassiere_entrata_manuale_idEvento_label">Numero Evento:</string>
+    <string name="fragment_cassiere_entrata_manuale_dati_non_validi">Hai inserito dati non validi</string>
 
     <string name="fragment_cassiere_approva_label">APPROVA</string>
     <string name="fragment_cassiere_annulla_label">ANNULLA</string>
@@ -186,8 +189,8 @@
     </string>
 
     <string name="fragment_cassiere_impossibile_avviare_scanner">Impossibile avviare lo scanner!</string>
-
     <string name="fragment_cassiere_impossibile_fare_flash">Impossibile avviare il flash!</string>
+    <string name="fragment_cassiere_impossibile_fare_flash_old_android">Impossibile avviare il flash! Android troppo vecchio</string>
 
     <!-- FRAGMENT AMMINISTRATORE -->
 
@@ -196,3 +199,4 @@
 
 
 </resources>
+
