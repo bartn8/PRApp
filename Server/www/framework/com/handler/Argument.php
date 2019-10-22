@@ -35,7 +35,7 @@ class Argument
             throw new InvalidArgumentException("Errore argomento non è stringa");
         }
 
-        $decoded = json_decode($arg, true);
+        $decoded = \json_decode($arg, true, 512, \JSON_UNESCAPED_UNICODE);
 
         if ($decoded === NULL || $decoded === TRUE || $decoded === FALSE) {
             throw new InvalidArgumentException("Errore argomento non è JSON");
@@ -72,7 +72,7 @@ class Argument
         if($args === "")
             return array();
             
-        $decoded = json_decode($args, true);
+        $decoded = \json_decode($args, true, 512, \JSON_UNESCAPED_UNICODE);
 
         if ($decoded === NULL || $decoded === TRUE || $decoded === FALSE)
             throw new InvalidArgumentException("Errore argomento non è JSON");

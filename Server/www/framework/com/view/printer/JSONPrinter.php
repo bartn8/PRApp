@@ -99,7 +99,7 @@ class JsonPrinter implements Printer
     {
         //Faccio una piccola verifica per evitare scitture inutili.
         if($obj !== NULL)
-            array_push($this->resultsCache, $obj);
+            \array_push($this->resultsCache, $obj);
     }
     
     public function addResults($array)
@@ -110,7 +110,7 @@ class JsonPrinter implements Printer
     public function addException($ex)
     {
         //Line e file aggiunti per deubg.
-        array_push($this->exceptionsCache, array("file" => $ex->getFile(), "line" => $ex->getLine(), "type" => get_class($ex), 'msg'=>utf8_encode($ex->getMessage())));
+        \array_push($this->exceptionsCache, array("file" => $ex->getFile(), "line" => $ex->getLine(), "type" => get_class($ex), 'msg'=>$ex->getMessage()));
     }
     
     public function flush()
@@ -120,8 +120,7 @@ class JsonPrinter implements Printer
         $this->cache[Printer::DATO_RISULTATI] = $this->resultsCache;
         $this->cache[Printer::DATO_ECCEZIONI] = $this->exceptionsCache;
         
-        //TODO: BUG!! Si impappina con i caratteri speciali.
-        echo json_encode($this->cache, JSON_UNESCAPED_UNICODE);
+        echo \json_encode($this->cache, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
     }
     
 }

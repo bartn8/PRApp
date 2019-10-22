@@ -44,7 +44,7 @@ class AjaxRequest {
         {
             if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "")
             {
-                this.initFromJson(requestUtente, requestStaff, requestUtente);
+                this.initFromJson(requestUtente, requestStaff, requestEvento);
             }
         }
     }
@@ -61,7 +61,7 @@ class AjaxRequest {
         {
             if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "")
             {
-                this.initFromJson(requestUtente, requestStaff, requestUtente);
+                this.initFromJson(requestUtente, requestStaff, requestEvento);
             }
         }
     }

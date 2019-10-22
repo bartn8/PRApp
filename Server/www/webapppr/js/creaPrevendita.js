@@ -64,8 +64,11 @@ class UiUtils extends GeneralUiUtils {
         });
     }
 
-    attivaButtonCondividiQrCode(link) {
-        var textMessage = "Ecco il tuo codice QR: " + link;
+    attivaButtonCondividiQrCode(idPrevendita, nome, cognome, codice, link) {
+        var textMessage = "Ciao " + nome + " " + cognome + "\n" +
+            "IdPrevendita: " + idPrevendita + "\n" +
+            "Codice: " + codice + "\n" +
+            "Ecco il tuo codice QR: " + link;
         var encodedTextMessage = encodeURIComponent(textMessage);
 
         $("#condividiWhatsAppButton").removeClass("disabled");
@@ -76,6 +79,18 @@ class UiUtils extends GeneralUiUtils {
         $("#condividiWhatsAppButton").addClass("disabled");
         $("#condividiWhatsAppButton").attr("href", "#");
         $("#condividiWhatsAppButton").attr("data-href", "#");
+    }
+
+    attivaButtonScaricaQrCode(idPrevendita, nome, cognome, image){
+        $("#scaricaQRCodeButton").removeClass("disabled");
+        $("#scaricaQRCodeButton").attr("download", idPrevendita+"_"+nome+"_"+cognome+".png");
+        $("#scaricaQRCodeButton").attr("href", image);
+    }
+
+    disattivaButtonScaricaQrCode() {
+        $("#scaricaQRCodeButton").addClass("disabled");
+        $("#scaricaQRCodeButton").attr("href", "#");
+        $("#scaricaQRCodeButton").attr("data-href", "#");
     }
 
     impostaLink(link) {
@@ -133,11 +148,13 @@ class UiUtils extends GeneralUiUtils {
         });
     }
 
-    /*
     scaricaCanvas(){
-        return $("#myCanvas").getCanvasImage('jpeg', 1);
+        var imageURL = $("#myCanvas").getCanvasImage();
+        return imageURL;
     }
-    */
+
+
+    
 }
 
 var generaLink = function (idPrevendita, idEvento, nome, cognome, data, codice, nomeTipoPrevendita) {
@@ -293,11 +310,11 @@ var creaPrevenditaButtonClick = function () {
 
     //Prima controllo che si siano inseriti nome e cognome diversi:
     //Se uguali invio un messaggio di conferma:
-    if(nomeCliente == nomeClientePrecedente && cognomeCliente == cognomeClientePrecedente){
-        var conferma = confirm("La prevendita in creazione ha gli stessi dati di quella precedente ("+ nomeCliente + " " + cognomeCliente + ") Continuo?");
+    if (nomeCliente == nomeClientePrecedente && cognomeCliente == cognomeClientePrecedente) {
+        var conferma = confirm("La prevendita in creazione ha gli stessi dati di quella precedente (" + nomeCliente + " " + cognomeCliente + ") Continuo?");
 
         //Se l'utente preme annulla non faccio la prevendita.
-        if(!conferma){
+        if (!conferma) {
             alert("PREVENDITA ANNULLATA");
             return;
         }
@@ -330,14 +347,21 @@ var creaPrevenditaButtonClick = function () {
             qr.make();
 
             var myDataDiNascita = convertiData(dataDiNascita);
+            var qrCodeImage = qr.createDataURL(8, 36);
 
-            uiUtils.disegnaCanvas(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita, qr.createDataURL(8, 36));
+            uiUtils.disegnaCanvas(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita, qrCodeImage);
 
             //Attivo i pulsanti di qr code.
             var link = generaLink(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita);
 
-            uiUtils.attivaButtonCondividiQrCode(link);
+            uiUtils.attivaButtonCondividiQrCode(myIdPrevendita, nomeCliente, cognomeCliente, codice, link);
             uiUtils.impostaLink(link);
+
+            //Non posso inserire qua il link: prima devo generare il canvas
+            //Aggiorno il pulsante dopo timeout (2sec).
+            setTimeout(function(){
+                uiUtils.attivaButtonScaricaQrCode(myIdPrevendita, nomeCliente, cognomeCliente, uiUtils.scaricaCanvas());
+            }, 2000);
 
             //Messaggio di log.
             console.log("add prevendita ok: " + JSON.stringify(prevendita));
@@ -369,6 +393,7 @@ if (navigator.cookieEnabled) {
 
         //Disattivo i pulsanti di qr code.
         uiUtils.disattivaButtonCondividiQrCode();
+        uiUtils.disattivaButtonScaricaQrCode();
 
         //Disattivo temporaneamente i menu e il form.
         uiUtils.disattivaMenu();

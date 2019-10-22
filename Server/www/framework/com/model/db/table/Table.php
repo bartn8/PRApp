@@ -73,11 +73,14 @@ abstract class Table
             Table::$charset = $GLOBALS['charset'];
     }
 
-    protected static function getConnection($syncTimezone = TRUE/*$args=NULL*/) : PDO
+    protected static function getConnection($syncTimezone = TRUE) : PDO
     {
-        //$tmp = new PDO(Table::$databaseType . ":host=" . Table::$serverURL . ";dbname=" . Table::$databaseName . ";charset=utf8", Table::$username, Table::$password);
         $tmp = new PDO(Table::$databaseType . ":host=" . Table::$serverURL . ";dbname=" . Table::$databaseName . ";charset=" . Table::$charset, Table::$username, Table::$password);
         $tmp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        //http://forum.it.altervista.org/php-mysql-e-apache-htaccess/277724-problema-pdo-con-utf8.html
+        $tmp->query('SET character_set_results = utf8;'); 
+        $tmp->query('SET CHARACTER SET utf8');
 
         //TODO: forse meglio assegnare al database UTC?
         if ($syncTimezone) {
@@ -86,11 +89,7 @@ abstract class Table
             $tmp->exec("SET time_zone='$tz';");
             
         }
-        /*
-         * if(is_array($args))
-         * foreach($args as $key => $value)
-         * $tmp->setAttribute($key, $value);
-         */
+
         return $tmp;
     }
 }
