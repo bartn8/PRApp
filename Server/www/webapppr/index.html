@@ -21,57 +21,72 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">        
-    </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <body>
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="css/main.css" rel="stylesheet">
 
-        <!-- A grey horizontal navbar that becomes vertical on small screens -->
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+</head>
 
-        <!-- Links -->
-        <ul class="navbar-nav">
-            <li class="nav-item" id="homepage">
-                <a class="nav-link active" href="index.html">PRApp</a>
-              </li>
-          <li class="nav-item" id="login_logout">
-            <a class="nav-link" href="#">Accedi/Logout</a>
-          </li>
-          <li class="nav-item" id="scegliStaff">
-            <a class="nav-link" href="#">Scegli Staff</a>
-          </li>
-          <li class="nav-item" id="scegliEvento">
-              <a class="nav-link" href="#">Scegli Evento</a>
-            </li>
-          <li class="nav-item" id="creaPrevendita">
-            <a class="nav-link" href="#">Crea Prevendita</a>
-          </li>
-          <li class="nav-item" id="listaPrevendite">
-            <a class="nav-link" href="#">Lista Prevendite</a>
-          </li>
-        </ul>
-      
-      </nav>
+<body class="primaryColorBackground">
 
-      <div class="container-fluid">
-            <h1>PRApp</h1>
-            <p id="text">Scegli un'opzione.</p> 
-      </div>
+  <!-- A grey horizontal navbar that becomes vertical on small screens -->
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 
-      <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-      <script type="text/javascript" src="../node_modules/popper.js/dist/popper.min.js"></script>
-      <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-      <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
+    <a class="navbar-brand" id="homepage" href="index.html">PRApp</a>
 
-      <!-- my JS -->
-      <script type="text/javascript" src="js/AjaxRequest.js?1308192103"></script>
-      <script type="text/javascript" src="js/GeneralUiUtils.js?1308192103"></script>
-      <script type="text/javascript" src="js/index.js?1308192103"></script>
+    <!-- Pulsante login/logout -->
+    <ul class="navbar-nav">
+      <li class="nav-item" id="login_logout"> 
+        <a class="nav-link" href="#" >Accedi/Logout</a>
+      </li>
+    </ul>
+
+    <!-- Toggler/collapsibe Button -->
+    <!-- Pulsante per attivare il menu -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav">
+        <li class="nav-item" id="scegliStaff">
+          <a class="nav-link" href="#">Scegli Staff</a>
+        </li>
+        <li class="nav-item" id="scegliEvento">
+          <a class="nav-link" href="#">Scegli Evento</a>
+        </li>
+        <li class="nav-item" id="creaPrevendita">
+          <a class="nav-link" href="#">Crea Prevendita</a>
+        </li>
+        <li class="nav-item" id="listaPrevendite">
+          <a class="nav-link" href="#">Lista Prevendite</a>
+        </li>
+      </ul>
+    </div>
+
+  </nav>
+
+  <div class="container">
+    <img src="../logo.png" class="img-fluid mx-auto d-block" alt="logo">
+    <p id="text">Scegli un'opzione.</p>
+  </div>
+
+  <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="../node_modules/popper.js/dist/popper.min.js"></script>
+  <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
+
+  <!-- my JS -->
+  <script type="text/javascript" src="js/AjaxRequest.js?1308192103"></script>
+  <script type="text/javascript" src="js/GeneralUiUtils.js?1308192103"></script>
+  <script type="text/javascript" src="js/index.js?1308192103"></script>
 
 
-    </body>
+</body>
+
 </html>

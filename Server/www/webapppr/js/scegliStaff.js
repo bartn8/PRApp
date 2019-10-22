@@ -102,11 +102,12 @@ var loginToken = function () {
     }
 };
 
-if (typeof (Storage) !== "undefined") {
-    // Code for localStorage/sessionStorage.
+//Ora funziona con cookies.
+if (navigator.cookieEnabled) {
 
-    //Ricavo l'oggetto AjaxRequest.    
-    ajax.initFromSessionStorage();
+    //Ricavo l'oggetto AjaxRequest.
+    //Ora funziona con cookies.
+    ajax.initFromCookies();
 
     //Quando la pagina è pronta:
     $(document).ready(function () {
@@ -131,9 +132,9 @@ if (typeof (Storage) !== "undefined") {
     });
 } else {
     $(document).ready(function () {
-        //Il browser non supporta il local storage:
+        //Il browser non supporta i cookies:
         uiUtils.disattivaTuttiMenu();
         //Invio un messaggio.
-        uiUtils.impostaErrore("Il tuo browser non supporta l'applicazione.");
+        uiUtils.impostaErrore("Attiva i cookies per usare l'applicazione.");
     });
 }

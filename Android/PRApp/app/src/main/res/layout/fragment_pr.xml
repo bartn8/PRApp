@@ -24,7 +24,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.fragment.PRFragment">
+    tools:context=".ui.main.fragment.pr.PRFragment">
 
     <!-- Utilizzo una webview per mostrare la web app. -->
 

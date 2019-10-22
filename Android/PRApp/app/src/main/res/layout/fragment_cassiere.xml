@@ -25,12 +25,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
-    tools:context=".ui.main.fragment.CassiereFragment">
+    tools:context=".ui.main.fragment.cassiere.CassiereFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <!-- Messaggio per dire che c'è l'auto approva. -->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/autoApprovaWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/primaryLightColor"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/fragment_cassiere_autoApprova_attivo"
+                    android:textColor="@color/primaryColorRed"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <!-- Qui ci sparo le entrate. -->
         <!-- Dopo l'evento è risultato poco utile la serie di entrate: meglio una sola. -->

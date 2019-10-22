@@ -17,7 +17,7 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.prapp.ui.main.fragment;
+package com.prapp.ui.main.fragment.amministratore;
 
 
 import android.content.Context;

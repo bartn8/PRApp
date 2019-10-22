@@ -286,7 +286,8 @@ var creaPrevenditaButtonClick = function () {
 
     var idTipoPrevendita = $("#tipoPrevendita").val();
     var nomeTipoPrevendita = $("#tipoPrevendita").children("option:selected").text();
-    var codice = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
+    //Riduco il codice a soli 3 caratteri
+    var codice = Math.random().toString(36).substring(2, 5);
     var stato = $("#statoPrevendita").val();
 
 
@@ -356,11 +357,12 @@ var creaPrevenditaButtonClick = function () {
     });
 };
 
-if (typeof (Storage) !== "undefined") {
-    // Code for localStorage/sessionStorage.
+//Ora funziona con cookies.
+if (navigator.cookieEnabled) {
 
     //Ricavo l'oggetto AjaxRequest.
-    ajax.initFromSessionStorage();
+    //Ora funziona con cookies.
+    ajax.initFromCookies();
 
     //Quando la pagina è pronta:
     $(document).ready(function () {
@@ -391,13 +393,13 @@ if (typeof (Storage) !== "undefined") {
     });
 } else {
     $(document).ready(function () {
-        //Il browser non supporta il local storage:
+        //Il browser non supporta i cookies:
         uiUtils.disattivaTuttiMenu();
         uiUtils.disattivaFormCreaPrevendita();
 
         uiUtils.disattivaButtonCondividiQrCode();
 
         //Invio un messaggio.
-        uiUtils.impostaErrore("Il tuo browser non supporta l'applicazione.");
+        uiUtils.impostaErrore("Attiva i cookies per usare l'applicazione.");
     });
 }

@@ -1,0 +1,165 @@
+<!--
+/*
+ * PRApp  Copyright (C) 2019  Luca Bartolomei
+ *
+ * This file is part of PRApp.
+ *
+ *     PRApp is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     PRApp is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+  <!-- My CSS -->
+  <link href="css/main.css" rel="stylesheet">
+
+</head>
+
+<body class="primaryColorBackground">
+
+  <!-- A grey horizontal navbar that becomes vertical on small screens -->
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+
+    <a class="navbar-brand" href="index.html">PRApp</a>
+
+    <!-- Pulsante login/logout -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Accedi/Logout</a>
+      </li>
+    </ul>
+
+    <!-- Toggler/collapsibe Button -->
+    <!-- Pulsante per attivare il menu -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+    <!-- Navbar links -->
+    <!-- Mi serve un sotto menu (Dropdown) per utente, membro, pr, cassiere, amministratore -->
+
+    <!-- Utente -->
+    <!-- Informazioni sullo staff e sull'evento selezionato -->
+
+    <!-- Membro -->
+    <!-- Info sui membri dello staff -->
+    <!-- Lista clienti -->
+    <!-- Lista tipo prevendite -->
+
+    <!-- PR -->
+    <!-- Aggiungi prevendita -->
+    <!-- Modifica prevendita -->
+    <!-- Lista prevendite -->
+    <!-- Statistiche evento -->
+
+    <!-- Cassiere -->
+    <!-- Timbra entrata manuale -->
+    <!-- Lista gente entrata -->
+    <!-- Lista gente che deve entrare -->
+    <!-- Statistiche evento -->
+
+    <!-- Amministratore -->
+    <!-- Rimuovi cliente -->
+    <!-- Aggiungi tipo prevendita -->
+    <!-- Modifica tipo prevendita -->
+    <!-- Elimina tipo prevendita -->
+    <!-- Statistiche evento -->
+    <!-- Rimuovi membro -->
+    <!-- Cambia codice accesso -->
+
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropUtente" data-toggle="dropdown">
+            Utente
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="utente_info.html">Informazioni utente</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropMembro" data-toggle="dropdown">
+            Membro
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="membro_info_membri.html">Informazioni membri</a>
+            <a class="dropdown-item" href="membro_lista_clienti.html">Lista clienti</a>
+            <a class="dropdown-item" href="membro_lista_tipo_prevendite.html">Lista tipo prevendite</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropPR" data-toggle="dropdown">
+            PR
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="pr_aggiungi_prevendita.html">Aggiungi prevendita</a>
+            <a class="dropdown-item" href="pr_modifica_prevendita.html">Modifica prevendita</a>
+            <a class="dropdown-item" href="pr_lista_prevendite.html">Lista prevendite</a>
+            <a class="dropdown-item" href="pr_statistiche_evento.html">Statistiche evento</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropCassiere" data-toggle="dropdown">
+            Cassiere
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="cassiere_timbra_entrata_manuale.html">Timbra entrata manuale</a>
+            <a class="dropdown-item" href="cassiere_lista_gente_entrata.html">Lista gente entrata</a>
+            <a class="dropdown-item" href="cassiere_lista_gente_non_entrata.html">Lista gente non entrata</a>
+            <a class="dropdown-item" href="cassiere_statistiche_evento.html">Statistiche evento</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropAmministratore" data-toggle="dropdown">
+            Amministratore
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="amm_rimuovi_cliente.html">Rimuovi cliente</a>
+            <a class="dropdown-item" href="amm_aggiungi_tipo_prevendita.html">Aggiungi tipo prevendita</a>
+            <a class="dropdown-item" href="amm_modifica_tipo_prevendita.html">Modifica tipo prevendita</a>
+            <a class="dropdown-item" href="amm_elimina_tipo_prevendita.html">Elimina tipo prevendita</a>
+            <a class="dropdown-item" href="amm_statistiche_evento.html">Statistiche evento</a>
+            <a class="dropdown-item" href="amm_rimuovi_membro.html">Rimuovi membro</a>
+            <a class="dropdown-item" href="amm_cambia_codice_accesso.html">Cambia codice accesso</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <img src="../logo.png" class="img-fluid mx-auto d-block" alt="logo">
+  </div>
+
+
+  <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="../node_modules/popper.js/dist/popper.min.js"></script>
+  <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
+
+  <!-- my JS -->
+
+
+</body>
+
+</html>

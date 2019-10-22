@@ -40,11 +40,11 @@ import com.prapp.R;
 import com.prapp.model.db.enums.Diritto;
 import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.ui.UiUtils;
-import com.prapp.ui.main.fragment.AmministratoreFragment;
-import com.prapp.ui.main.fragment.CassiereFragment;
-import com.prapp.ui.main.fragment.MembroFragment;
-import com.prapp.ui.main.fragment.PRFragment;
-import com.prapp.ui.main.fragment.UtenteFragment;
+import com.prapp.ui.main.fragment.amministratore.AmministratoreFragment;
+import com.prapp.ui.main.fragment.cassiere.CassiereFragment;
+import com.prapp.ui.main.fragment.membro.MembroFragment;
+import com.prapp.ui.main.fragment.pr.PRFragment;
+import com.prapp.ui.main.fragment.utente.UtenteFragment;
 
 import java.util.Set;
 

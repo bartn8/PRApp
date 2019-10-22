@@ -31,19 +31,58 @@ class AjaxRequest {
         this.evento = Object.assign({}, this.defaultEvento);
     }
 
+    /**
+     * Inizializza l'oggetto a partire dalla Session Storage del browser.
+     * DEPRECATO: usiamo i cookies.
+     */
     initFromSessionStorage(){
-        if(sessionStorage.ajaxRequestEvento !== undefined && sessionStorage.ajaxRequestUtente !== undefined && sessionStorage.ajaxRequestStaff !== undefined)
+        var requestUtente = sessionStorage.ajaxRequestUtente;
+        var requestStaff = sessionStorage.ajaxRequestStaff;
+        var requestEvento = sessionStorage.ajaxRequestEvento;
+
+        if(requestUtente !== undefined && requestStaff !== undefined && requestEvento !== undefined)
         {
-            this.initFromJson(sessionStorage.ajaxRequestUtente, sessionStorage.ajaxRequestStaff, sessionStorage.ajaxRequestEvento);
+            if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "")
+            {
+                this.initFromJson(requestUtente, requestStaff, requestUtente);
+            }
         }
     }
 
+    /**
+     * Inizializza l'oggetto a partire dai cookies.
+     */
+    initFromCookies(){
+        var requestUtente = Cookies.get("ajaxRequestUtente");
+        var requestStaff = Cookies.get("ajaxRequestStaff");
+        var requestEvento = Cookies.get("ajaxRequestEvento");
+
+        if(requestUtente !== undefined && requestStaff !== undefined && requestEvento !== undefined)
+        {
+            if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "")
+            {
+                this.initFromJson(requestUtente, requestStaff, requestUtente);
+            }
+        }
+    }
+
+    /**
+     * Inizializza da stringhe
+     * 
+     * @param {string} myUtente 
+     * @param {string} myStaff 
+     * @param {string} myEvento 
+     */
     initFromJson(myUtente, myStaff, myEvento){
         this.utente = JSON.parse(myUtente);
         this.staff = JSON.parse(myStaff);
         this.evento = JSON.parse(myEvento);
     }
 
+    /**
+     * Salva l'oggetto sul session storage.
+     * Deprecato: usare i cookies.
+     */
     saveToSessionStorage()
     {
         sessionStorage.ajaxRequestUtente = JSON.stringify(this.utente);
@@ -51,32 +90,46 @@ class AjaxRequest {
         sessionStorage.ajaxRequestEvento = JSON.stringify(this.evento);
     }
 
+    /**
+     * Salva l'oggetto sui cookies.
+     */
+    saveToCookies(){
+        Cookies.set("ajaxRequestUtente", JSON.stringify(this.utente), { expires: 7 });
+        Cookies.set("ajaxRequestStaff", JSON.stringify(this.staff), { expires: 7 });
+        Cookies.set("ajaxRequestEvento", JSON.stringify(this.evento), { expires: 7 });
+    }
+
     restoreDefaultUtente()
     {
         this.utente = Object.assign({}, this.defaultUtente);
-        this.saveToSessionStorage();
+        //this.saveToSessionStorage();
+        this.saveToCookies();
     }
 
     restoreDefaultStaff()
     {
         this.staff = Object.assign({}, this.defaultStaff);
-        this.saveToSessionStorage();
+        //this.saveToSessionStorage();
+        this.saveToCookies();
     }
 
     restoreDefaultEvento()
     {
         this.evento = Object.assign({}, this.defaultEvento);
-        this.saveToSessionStorage();
+        //this.saveToSessionStorage();
+        this.saveToCookies();
     }
 
     setStaff(myStaff){
         this.staff = myStaff;
-        this.saveToSessionStorage();
+        //this.saveToSessionStorage();
+        this.saveToCookies();
     }
 
     setEvento(myEvento){
         this.evento = myEvento;
-        this.saveToSessionStorage();
+        //this.saveToSessionStorage();
+        this.saveToCookies();
     }
 
     getUtente(){

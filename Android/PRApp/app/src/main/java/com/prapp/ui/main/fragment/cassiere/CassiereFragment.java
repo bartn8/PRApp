@@ -17,7 +17,7 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.prapp.ui.main.fragment;
+package com.prapp.ui.main.fragment.cassiere;
 
 
 import android.Manifest;
@@ -35,6 +35,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -48,6 +49,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -108,16 +110,32 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         return fragment;
     }
 
+    /**
+     * View-Model per interfacciarsi con il server.
+     */
     private MainViewModel mainViewModel;
+
+    /**
+     * Robo per discollegarsi dalle view.
+     */
     private Unbinder unbinder;
+
+    /**
+     * Utilty per la grafica
+     */
     private UiUtils uiUtils;
+
+    /**
+     * Adattatore per far vedere nella recycler view le prevendite che si vogliono approvare.
+     */
     private WPrevenditaPlusAdapter recyclerAdapter = new WPrevenditaPlusAdapter(this, 1);//Imposto al massimo un elemento per volta.
 
-
-    //private Collection<BarcodeFormat> formats = Collections.singletonList(BarcodeFormat.QR_CODE);
-
-    //Oggetto per il popup animato che dice l'esito dell'entrata.
+    /**
+     * Oggetto per il popup animato che dice l'esito dell'entrata.
+     */
     private Dialog popupEsito;
+
+    private boolean isAutoApprovaOn = false;
 
     //ROBA PER SCANNER--------------------------------------------------
 
@@ -136,14 +154,10 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     @BindView(R.id.flashlightSwitch)
     public ToggleButton flashlightSwitch;
 
-
     //-----------------------------------------------------------
 
     @BindView(R.id.fragment_cassiere_entrata_manuale_idPrevendita)
     public EditText editTextIdPrevendita;
-
-//    @BindView(R.id.fragment_cassiere_entrata_manuale_idEvento)
-//    public EditText editTextIdEvento;
 
     @BindView(R.id.fragment_cassiere_entrata_manuale_codice)
     public EditText editTextCodice;
@@ -154,6 +168,12 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     @BindView(R.id.entrateRecyclerView)
     public RecyclerView entrateRecyclerView;
 
+    @BindView(R.id.autoApprovaWarning)
+    public CardView autoApprovaWarning;
+
+    /**
+     * Callback usato per rilasciare la camera quando si distrugge la view che mostra la camera.
+     */
     private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -171,6 +191,11 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         }
     };
 
+    /**
+     * Callback usata quando il processore di QR ne trova uno:
+     * Cerco di decodificare il codice QR tramite il formato JSON.
+     * Poi lo passo al View-Model che ricava altre informazioni tramite server.
+     */
     private Detector.Processor<Barcode> detectorProcessor = new Detector.Processor<Barcode>() {
         @Override
         public void release() {
@@ -200,6 +225,13 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         }
     };
 
+    /**
+     * Quando il server restituisce le informazioni della prevendita scannerizzata
+     * lo mando all'adapter e vibro singolo.
+     * In caso di errore mostro un toast. Il popup viene usato solo in caso di approvazione.
+     *
+     * NOTA: Se è attivo l'auto approva, passo direttamente ad approvazione.
+     */
     private Observer<Result<WPrevenditaPlus, Void>> getInfoPrevenditaObserver = new Observer<Result<WPrevenditaPlus, Void>>() {
         @Override
         public void onChanged(Result<WPrevenditaPlus, Void> wPrevenditaPlusResult) {
@@ -218,8 +250,14 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
                 uiUtils.showError(error);
 
             else if (success != null) {
-                recyclerAdapter.add(success);
-                vibraSingolo();
+                //Devo controllare se attivo Auto-Approva: in caso positivo approvo direttamente
+                if(isAutoApprovaOn){
+                    mainViewModel.timbraEntrata(success);
+                }else{
+                    recyclerAdapter.add(success);
+                    vibraSingolo();
+                }
+
             }
         }
     };
@@ -287,11 +325,36 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         setHasOptionsMenu(true);
     }
 
+    //ROBA MENU------------------------------------------------------------------------------
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.cassiere_menu, menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.autoApprova:
+                //Toggle dello stato
+                isAutoApprovaOn = !isAutoApprovaOn;
+
+                //Devo aggiornare la ui.
+                toggleAutoApprovaWarning();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void toggleAutoApprovaWarning(){
+        autoApprovaWarning.setVisibility(isAutoApprovaOn ? View.VISIBLE : View.GONE);
+    }
+
+    //--------------------------------------------------------------------------------------
 
     @Override
     public void onAttach(Context context) {

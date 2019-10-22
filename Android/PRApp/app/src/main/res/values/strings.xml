@@ -151,6 +151,8 @@
 
     <string name="fragment_cassiere_menu_autoApprova">Auto-Approva</string>
 
+    <string name="fragment_cassiere_autoApprova_attivo">Auto-Approva Attivato!</string>
+
     <string name="fragment_cassiere_entrata_label">Effettua Entrata</string>
 
     <string name="fragment_cassiere_switch_scansione_on">Scansione Attiva</string>

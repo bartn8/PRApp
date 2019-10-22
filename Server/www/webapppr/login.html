@@ -27,39 +27,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/main.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="primaryColorBackground">
 
-    <!-- A grey horizontal navbar that becomes vertical on small screens -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 
-        <!-- Links -->
+        <a class="navbar-brand" id="homepage" href="index.html">PRApp</a>
+    
+        <!-- Pulsante login/logout -->
         <ul class="navbar-nav">
-            <li class="nav-item" id="homepage">
-                <a class="nav-link active" href="index.html">PRApp</a>
-            </li>
-            <li class="nav-item" id="login_logout">
-                <a class="nav-link" href="#">Accedi/Logout</a>
-            </li>
+          <li class="nav-item" id="login_logout"> 
+            <a class="nav-link" href="#" >Accedi/Logout</a>
+          </li>
+        </ul>
+    
+        <!-- Toggler/collapsibe Button -->
+        <!-- Pulsante per attivare il menu -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav">
             <li class="nav-item" id="scegliStaff">
-                <a class="nav-link" href="#">Scegli Staff</a>
+              <a class="nav-link" href="#">Scegli Staff</a>
             </li>
             <li class="nav-item" id="scegliEvento">
-                <a class="nav-link" href="#">Scegli Evento</a>
+              <a class="nav-link" href="#">Scegli Evento</a>
             </li>
             <li class="nav-item" id="creaPrevendita">
-                <a class="nav-link" href="#">Crea Prevendita</a>
+              <a class="nav-link" href="#">Crea Prevendita</a>
             </li>
             <li class="nav-item" id="listaPrevendite">
-                <a class="nav-link" href="#">Lista Prevendite</a>
+              <a class="nav-link" href="#">Lista Prevendite</a>
             </li>
-        </ul>
+          </ul>
+        </div>
+    
+      </nav>
 
-    </nav>
-
-    <div class="container-fluid">
-        <h1>PRApp</h1>
+    <div class="container">
+        <img src="../logo.png" class="img-fluid mx-auto d-block" alt="logo">
         <p id="text">Effettua il login.</p>
 
         <form action="index.html" method="POST" id="loginForm">

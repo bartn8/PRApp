@@ -1,4 +1,3 @@
-<?php header("Location: https://prapp.altervista.org/webapppr/"); ?>
 
 <!doctype html>
 <html>
@@ -6,6 +5,7 @@
         <title>PRApp</title>
     </head>
     <body>
-        <a href="https://prapp.altervista.org/webapppr/">Web App PR</a>
+        <a href="./webapppr/index.html">Web App PR</a>
+		<a href="./webapp/index.html">Web App</a>
     </body>
 </html>
