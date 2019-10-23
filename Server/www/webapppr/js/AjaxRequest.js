@@ -31,9 +31,35 @@ class AjaxRequest {
         this.evento = Object.assign({}, this.defaultEvento);
     }
 
+    isStorageEnabled(){
+        return typeof (Storage) !== "undefined";
+    }
+
+    isCookiesEnabled(){
+        return navigator.cookieEnabled;
+    }
+
+    /**
+     * Inizializza l'oggeto a partire dalla Session Storage e dalla LocalStorage del browser.
+     * Utente dalla sessione e gli altri dal local storage:
+     * L'utente va di pari passo con la sessione di PHP.
+     */
+    initFromMixedStorage(){
+        var requestUtente = sessionStorage.ajaxRequestUtente;
+        var requestStaff = localStorage.ajaxRequestStaff;
+        var requestEvento = localStorage.ajaxRequestEvento;
+
+        if(requestUtente !== undefined && requestStaff !== undefined && requestEvento !== undefined)
+        {
+            if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "")
+            {
+                this.initFromJson(requestUtente, requestStaff, requestEvento);
+            }
+        }
+    }
+
     /**
      * Inizializza l'oggetto a partire dalla Session Storage del browser.
-     * DEPRECATO: usiamo i cookies.
      */
     initFromSessionStorage(){
         var requestUtente = sessionStorage.ajaxRequestUtente;
@@ -99,37 +125,49 @@ class AjaxRequest {
         Cookies.set("ajaxRequestEvento", JSON.stringify(this.evento), { expires: 7 });
     }
 
+    saveToMixedStorage(){
+        sessionStorage.ajaxRequestUtente = JSON.stringify(this.utente);
+        localStorage.ajaxRequestStaff = JSON.stringify(this.staff);
+        localStorage.ajaxRequestEvento = JSON.stringify(this.evento);
+    }
+
     restoreDefaultUtente()
     {
         this.utente = Object.assign({}, this.defaultUtente);
         //this.saveToSessionStorage();
-        this.saveToCookies();
+        //this.saveToCookies();
+        this.saveToMixedStorage();
     }
 
     restoreDefaultStaff()
     {
         this.staff = Object.assign({}, this.defaultStaff);
         //this.saveToSessionStorage();
-        this.saveToCookies();
+        //this.saveToCookies();
+        this.saveToMixedStorage();
     }
 
     restoreDefaultEvento()
     {
         this.evento = Object.assign({}, this.defaultEvento);
         //this.saveToSessionStorage();
-        this.saveToCookies();
+        //this.saveToCookies();
+        this.saveToMixedStorage();
     }
 
     setStaff(myStaff){
         this.staff = myStaff;
         //this.saveToSessionStorage();
-        this.saveToCookies();
+        //this.saveToCookies();
+        //this.saveToMixedStorage();
+        this.saveToMixedStorage();
     }
 
     setEvento(myEvento){
         this.evento = myEvento;
         //this.saveToSessionStorage();
-        this.saveToCookies();
+        //this.saveToCookies();
+        this.saveToMixedStorage();
     }
 
     getUtente(){

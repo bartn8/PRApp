@@ -381,12 +381,11 @@ var creaPrevenditaButtonClick = function () {
     });
 };
 
-//Ora funziona con cookies.
-if (navigator.cookieEnabled) {
+if (ajax.isStorageEnabled()) {
 
     //Ricavo l'oggetto AjaxRequest.
-    //Ora funziona con cookies.
-    ajax.initFromCookies();
+    //Ora funziona con mixed.
+    ajax.initFromMixedStorage();
 
     //Quando la pagina è pronta:
     $(document).ready(function () {
