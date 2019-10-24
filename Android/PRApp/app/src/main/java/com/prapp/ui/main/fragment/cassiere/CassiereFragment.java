@@ -23,6 +23,7 @@ package com.prapp.ui.main.fragment.cassiere;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -49,6 +50,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -69,6 +71,8 @@ import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.model.net.wrapper.NetWEntrata;
 import com.prapp.ui.Result;
 import com.prapp.ui.UiUtils;
+import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.WPrevenditaPlusAdapter;
 
@@ -90,12 +94,13 @@ import butterknife.Unbinder;
  * create an instance of this fragment.
  */
 //https://github.com/journeyapps/zxing-android-embedded/blob/master/sample/src/main/java/example/zxing/CustomScannerActivity.java
-public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter.ButtonListener {
+public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter.ButtonListener, InterfaceHolder<MainActivityInterface> {
 
     private static final String TAG = CassiereFragment.class.getSimpleName();
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormat.shortTime();
 
     private static final String NEEDED_PERMISSION = Manifest.permission.CAMERA;
+    private static final int PERMISSION_REQUEST_CAMERA = 0;
 
     /**
      * Use this factory method to create a new instance of
@@ -126,9 +131,24 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     private UiUtils uiUtils;
 
     /**
+     * Interfaccia usata per comunicare con l'activity madre.
+     */
+    private MainActivityInterface mainActivityInterface;
+
+    @Override
+    public void holdInterface(MainActivityInterface mainActivityInterface){
+        this.mainActivityInterface = mainActivityInterface;
+    }
+
+    @Override
+    public boolean isInterfaceSet(){
+        return this.mainActivityInterface != null;
+    }
+
+    /**
      * Adattatore per far vedere nella recycler view le prevendite che si vogliono approvare.
      */
-    private WPrevenditaPlusAdapter recyclerAdapter = new WPrevenditaPlusAdapter(this, 1);//Imposto al massimo un elemento per volta.
+    private WPrevenditaPlusAdapter recyclerAdapter = new WPrevenditaPlusAdapter(this, 1, true, true);//Imposto al massimo un elemento per volta.
 
     /**
      * Oggetto per il popup animato che dice l'esito dell'entrata.
@@ -165,7 +185,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     @BindView(R.id.buttonEntrataManuale)
     public Button entrataManualeButton;
 
-    @BindView(R.id.entrateRecyclerView)
+    @BindView(R.id.fragment_cassiere_recyclerView)
     public RecyclerView entrateRecyclerView;
 
     @BindView(R.id.autoApprovaWarning)
@@ -322,7 +342,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);    //Opzione menu
     }
 
     //ROBA MENU------------------------------------------------------------------------------
@@ -337,12 +357,23 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.autoApprova:
+            case R.id.cassiere_autoApprovaItem:
                 //Toggle dello stato
                 isAutoApprovaOn = !isAutoApprovaOn;
 
                 //Devo aggiornare la ui.
                 toggleAutoApprovaWarning();
+
+                return true;
+            case R.id.cassiere_genteEntrataItem:
+                //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite approvate.
+                mainActivityInterface.cambiaFragment(CassiereSubFragmentLista.newInstance(CassiereSubFragmentLista.MODE_LIST_TIMBRATE));
+                return true;
+            case R.id.cassiere_genteNonEntrataItem:
+                //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite non approvate.
+                mainActivityInterface.cambiaFragment(CassiereSubFragmentLista.newInstance(CassiereSubFragmentLista.MODE_LIST_NON_TIMBRATE));
+                return true;
+            case R.id.cassiere_statisticheEventoItem:
 
                 return true;
             default:
@@ -369,6 +400,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cassiere, container, false);
 
+        //Mitico butterknife per fare il collegamento tra XML e oggetti.
         unbinder = ButterKnife.bind(this, view);
 
         //View model per richiamare il server.
@@ -427,7 +459,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
 
         //Quando il fragment viene ripreso devo disattivare la scansione.
         if (isScanOn) {
-            turnScanOff();
+            turnScan(false);
             turnFlash(false);
         }
     }
@@ -436,7 +468,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     public void onPause() {
         //Quando il fragment viene sospeso devo disattivare la scansione.
         if (isScanOn) {
-            turnScanOff();
+            turnScan(false);
             turnFlash(false);
         }
 
@@ -468,10 +500,10 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     @OnClick(R.id.scansioneQRSwitch)
     public void onClickScansioneQR(View view) {
         if (isScanOn) {
-            turnScanOff();
+            turnScan(false);
             turnFlash(false);
         } else {
-            turnScanOn();
+            turnScan(true);
         }
     }
 
@@ -595,30 +627,32 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         showPopup(R.drawable.ic_iconfinder_error, R.string.fragment_cassiere_popup_errore_formatted, error);
     }
 
-    /**
-     * Disabilita la scansione del QR.
-     */
-    private void turnScanOff() {
-        cameraSource.stop();
-        scansioneQRSwitch.setChecked(false);
-        isScanOn = false;
-    }
 
     /**
-     * Abilita la scansione dei QR.
+     * Abilita/Disabilita la scansione dei QR.
      * Prima controlla se ho i permessi.
+     * @param how vero se si vuole attivare la scansione.
      */
-    private void turnScanOn() {
-        if (ActivityCompat.checkSelfPermission(getContext(), NEEDED_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
-            try {
-                cameraSource.start(scannerSurfaceView.getHolder());
-                scansioneQRSwitch.setChecked(true);
-                isScanOn = true;
-            } catch (IOException e) {
-                uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
+    private void turnScan(boolean how) {
+        if(how){
+            if (ActivityCompat.checkSelfPermission(getContext(), NEEDED_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    cameraSource.start(scannerSurfaceView.getHolder());
+                    scansioneQRSwitch.setChecked(true);
+                    isScanOn = true;
+                } catch (IOException e) {
+                    uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
+                }
+            }else{
+                //uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
+                checkCameraPermission();
+                scansioneQRSwitch.setChecked(false);
+                isScanOn = false;
             }
         }else{
-            uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
+            cameraSource.stop();
+            scansioneQRSwitch.setChecked(false);
+            isScanOn = false;
         }
     }
 
@@ -685,6 +719,47 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
             //deprecated in API 26
             // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
             vibrator.vibrate(pattern, -1);
+        }
+    }
+
+    //Camera permission methods.
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        // BEGIN_INCLUDE(onRequestPermissionsResult)
+        if (requestCode == PERMISSION_REQUEST_CAMERA) {
+            // Request for camera permission.
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                uiUtils.makeToast(R.string.show_camera_permission_granted);
+            }
+        }
+        // END_INCLUDE(onRequestPermissionsResult)
+    }
+
+    /**
+     * Requests the {@link android.Manifest.permission#CAMERA} permission.
+     * If an additional rationale should be displayed, the user has to launch the request from
+     * a SnackBar that includes additional information.
+     */
+    private void checkCameraPermission() {
+        if (ActivityCompat.checkSelfPermission(getContext(), NEEDED_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), NEEDED_PERMISSION)) {
+                new AlertDialog.Builder(getContext())
+                        .setMessage(R.string.show_camera_permission_request)
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{NEEDED_PERMISSION},
+                                        PERMISSION_REQUEST_CAMERA);
+                            }
+                        })
+                        .show();
+            }else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+            }
         }
     }
 

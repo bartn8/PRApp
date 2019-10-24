@@ -23,9 +23,13 @@ package com.prapp.ui.main.fragment.membro;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -36,6 +40,8 @@ import com.prapp.R;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
 import com.prapp.ui.UiUtils;
+import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.WUtenteAdapter;
 
@@ -48,7 +54,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MembroFragment extends Fragment {
+public class MembroFragment extends Fragment implements InterfaceHolder<MainActivityInterface> {
 
     /**
      * Use this factory method to create a new instance of
@@ -67,11 +73,23 @@ public class MembroFragment extends Fragment {
     private UiUtils uiUtils;
     private Unbinder unbinder;
 
+    /**
+     * Interfaccia usata per comunicare con l'activity madre.
+     */
+    private MainActivityInterface mainActivityInterface;
+
+    @Override
+    public void holdInterface(MainActivityInterface mainActivityInterface){
+        this.mainActivityInterface = mainActivityInterface;
+    }
+
+    @Override
+    public boolean isInterfaceSet(){
+        return this.mainActivityInterface != null;
+    }
+
     @BindView(R.id.membriRecyclerView)
     RecyclerView membriRecyclerView;
-
-//    @BindView(R.id.eventiRecyclerView)
-//    RecyclerView eventiRecyclerView;
 
     private Observer<Result<List<WUtente>,Void>> membriStaffResultObserver = new Observer<Result<List<WUtente>,Void>>() {
         @Override
@@ -98,37 +116,35 @@ public class MembroFragment extends Fragment {
         }
     };
 
-    /*
-    private Observer<Result<List<WEvento>,Void>> eventiStaffResultObserver = new Observer<Result<List<WEvento>,Void>>() {
-        @Override
-        public void onChanged(Result<List<WEvento>,Void> listResult) {
-            if (listResult == null) {
-                return;
-            }
-
-            Integer integerError = listResult.getIntegerError();
-            List<Exception> error = listResult.getError();
-            List<WEvento> success = listResult.getSuccess();
-
-            if (integerError != null)
-                uiUtils.showError(integerError);
-
-            else if (error != null)
-                uiUtils.showError(error);
-
-            else if(success != null)
-            {
-                WEventoAdapter myAdapter = new WEventoAdapter(success);
-                eventiRecyclerView.setAdapter(myAdapter);
-            }
-        }
-    };
-    */
-
 
     public MembroFragment() {
         // Required empty public constructor
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);    //Opzione menu
+    }
+
+    //ROBA MENU------------------------------------------------------------------------------
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.membro_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //--------------------------------------------------------------------------------------
 
     @Override
     public void onAttach(Context context) {

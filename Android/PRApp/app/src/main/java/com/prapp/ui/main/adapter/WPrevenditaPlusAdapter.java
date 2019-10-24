@@ -154,12 +154,14 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
 
         @OnClick(R.id.wprevendita_plus_list_item_approva)
         public void onApprovaClick(View view) {
-            mOnClickListener.onApprovaClick(referencePrevendita);
+            if(mOnClickListener != null)
+                mOnClickListener.onApprovaClick(referencePrevendita);
         }
 
         @OnClick(R.id.wprevendita_plus_list_item_annulla)
         public void onAnnullaClick(View view) {
-            mOnClickListener.onAnnullaClick(referencePrevendita);
+            if(mOnClickListener != null)
+                mOnClickListener.onAnnullaClick(referencePrevendita);
         }
     }
 
@@ -174,19 +176,35 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
     //Utilizzato per indicare quanti elementi devo mostare contemporaneamente.
     private int maxShownItems;
 
+    //Indica se mostrare i pulsanti.
+    private boolean showButtons;
+    //Indica se mostrare l'errore.
+    private boolean showError;
 
     public WPrevenditaPlusAdapter(ButtonListener mOnClickListener) {
-        this(mOnClickListener, -1);
+        this(mOnClickListener, -1, false, false);
     }
 
-    public WPrevenditaPlusAdapter(ButtonListener mOnClickListener, int maxShownItems) {
+    public WPrevenditaPlusAdapter(ButtonListener mOnClickListener, int maxShownItems, boolean showButtons, boolean showError) {
         this.datasetPrevendita = new ArrayList<>();
         this.mOnClickListener = mOnClickListener;
         this.maxShownItems = maxShownItems;
+        this.showButtons = showButtons;
+        this.showError = showError;
     }
 
     public void add(WPrevenditaPlus wPrevenditaPlus) {
         add(wPrevenditaPlus, null);
+    }
+
+    public void add(List<WPrevenditaPlus> list){
+        for(WPrevenditaPlus wPrevenditaPlus : list){
+            WPrevenditaPlusWrapper wPrevenditaPlusWrapper = new WPrevenditaPlusWrapper(wPrevenditaPlus);
+            wPrevenditaPlusWrapper.setErrore(null);
+            datasetPrevendita.add(wPrevenditaPlusWrapper);
+        }
+
+        notifyDataSetChanged();
     }
 
     public void add(WPrevenditaPlus wPrevenditaPlus, String errore) {
@@ -253,15 +271,36 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
         holder.textViewStatoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_statoPrevendita_label);
         holder.textViewStatoPrevendita.setText(prevenditaPlus.getStato().getNome());
 
-        if(prevenditaPlusWrapper.isErroreSet())
-        {
-            holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
-            holder.textViewErrore.setText(prevenditaPlusWrapper.getErrore());
+        if(showError){
+            holder.textViewErroreLabel.setVisibility(View.VISIBLE);
+            holder.textViewErrore.setVisibility(View.VISIBLE);
+
+            if(prevenditaPlusWrapper.isErroreSet())
+            {
+                holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
+                holder.textViewErrore.setText(prevenditaPlusWrapper.getErrore());
+            }
+            else
+            {
+                holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
+                holder.textViewErrore.setText(R.string.wprevendita_plus_list_item_errore);
+            }
+        }else{
+            holder.textViewErroreLabel.setVisibility(View.GONE);
+            holder.textViewErrore.setVisibility(View.GONE);
         }
-        else
-        {
-            holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
-            holder.textViewErrore.setText(R.string.wprevendita_plus_list_item_errore);
+
+        //Mostro i pulsanti solo se showButton abilitato
+        if(showButtons){
+            holder.buttonApprova.setEnabled(true);
+            holder.buttonApprova.setVisibility(View.VISIBLE);
+            holder.buttonAnnulla.setEnabled(true);
+            holder.buttonAnnulla.setVisibility(View.VISIBLE);
+        }else{
+            holder.buttonApprova.setEnabled(false);
+            holder.buttonApprova.setVisibility(View.GONE);
+            holder.buttonAnnulla.setEnabled(false);
+            holder.buttonAnnulla.setVisibility(View.GONE);
         }
 
         holder.id = prevenditaPlus.getId();

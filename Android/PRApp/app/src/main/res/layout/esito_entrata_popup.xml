@@ -28,7 +28,7 @@
 
     <ImageView
         android:id="@+id/esitoEntrataImage"
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_gravity="center"
         android:contentDescription="@string/fragment_cassiere_popup_image_description"/>

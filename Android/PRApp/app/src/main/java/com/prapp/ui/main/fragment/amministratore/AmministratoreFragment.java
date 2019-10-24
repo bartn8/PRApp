@@ -23,9 +23,13 @@ package com.prapp.ui.main.fragment.amministratore;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -39,6 +43,8 @@ import com.prapp.model.db.wrapper.WStatistichePREvento;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
 import com.prapp.ui.UiUtils;
+import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.StatisticheMembroAdapter;
 import com.prapp.ui.main.adapter.WStatisticheEventoAdapter;
@@ -57,7 +63,7 @@ import butterknife.Unbinder;
  * Use the {@link AmministratoreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AmministratoreFragment extends Fragment {
+public class AmministratoreFragment extends Fragment implements InterfaceHolder<MainActivityInterface> {
 
     private static final String TAG = AmministratoreFragment.class.getSimpleName();
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormat.shortTime();
@@ -67,6 +73,24 @@ public class AmministratoreFragment extends Fragment {
     private UiUtils uiUtils;
     private Unbinder unbinder;
 
+    /**
+     * Interfaccia usata per comunicare con l'activity madre.
+     */
+    private MainActivityInterface mainActivityInterface;
+
+    @Override
+    public void holdInterface(MainActivityInterface mainActivityInterface){
+        this.mainActivityInterface = mainActivityInterface;
+    }
+
+    @Override
+    public boolean isInterfaceSet(){
+        return this.mainActivityInterface != null;
+    }
+
+    /**
+     * Adattatore per dare impasto le statistiche al recycler view.
+     */
     private StatisticheMembroAdapter adapter;
 
     @BindView(R.id.statisticheEventoRecyclerView)
@@ -151,11 +175,6 @@ public class AmministratoreFragment extends Fragment {
             else if(success != null && listResult.isExtraPresent())
             {
                 if(!success.isEmpty()){
-//                    Log.d(TAG, "Statistiche PR: " + " " + success.size() + " " + listResult.getExtra());
-//
-//                    for(WStatistichePREvento statistica : success)
-//                        Log.d(TAG, statistica.getNomeTipoPrevendita());
-
                     adapter.addStatistichePR(listResult.getExtra(), success);
                 }
             }
@@ -205,6 +224,34 @@ public class AmministratoreFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+
+        setHasOptionsMenu(true);    //Opzione menu
+    }
+
+    //ROBA MENU------------------------------------------------------------------------------
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.amministratore_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //--------------------------------------------------------------------------------------
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         uiUtils = UiUtils.getInstance(context);
@@ -229,12 +276,12 @@ public class AmministratoreFragment extends Fragment {
 
         //View model per richiamare il server.
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        mainViewModel.getStatisticheEventoResult().observe(this, statisticheEventoResultObserver);
+        mainViewModel.getStatisticheAmministratoreEventoResult().observe(this, statisticheEventoResultObserver);
         mainViewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
         mainViewModel.getStatistichePREventoResult().observe(this, statistichePREventoResultObserver);
         mainViewModel.getStatisticheCassiereEventoResult().observe(this, statisticheCassiereEventoResultObserver);
 
-        mainViewModel.getStatisticheEvento();
+        mainViewModel.getStatisticheAmministratoreEvento();
         mainViewModel.getMembriStaff();
 
         return view;

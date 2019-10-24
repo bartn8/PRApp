@@ -19,12 +19,10 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/cassiere_autoApprovaItem"
-        android:title="@string/fragment_cassiere_menu_autoApprovaItem"/>
-    <item android:id="@+id/cassiere_genteEntrataItem"
-        android:title="@string/fragment_cassiere_menu_genteEntrataItem"/>
-    <item android:id="@+id/cassiere_genteNonEntrataItem"
-        android:title="@string/fragment_cassiere_menu_genteNonEntrataItem"/>
-    <item android:id="@+id/cassiere_statisticheEventoItem"
-        android:title="@string/fragment_cassiere_menu_statisticheEventoItem"/>
+    <item android:id="@+id/membro_listaMembriItem"
+        android:title="@string/fragment_membro_menu_listaMembriItem"/>
+    <item android:id="@+id/membro_listaClientiItem"
+        android:title="@string/fragment_membro_menu_listaClientiItem"/>
+    <item android:id="@+id/membro_listaTipoPrevenditaItem"
+        android:title="@string/fragment_membro_menu_listaTipoPrevenditaItem"/>
 </menu>

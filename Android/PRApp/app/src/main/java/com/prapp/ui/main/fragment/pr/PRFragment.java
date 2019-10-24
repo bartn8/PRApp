@@ -23,16 +23,22 @@ package com.prapp.ui.main.fragment.pr;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.prapp.R;
 import com.prapp.model.MyContext;
+import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.MyWebViewClient;
 
@@ -48,20 +54,28 @@ import butterknife.Unbinder;
  * Use the {@link PRFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PRFragment extends Fragment {
-
-    public static final int REQUEST_CODE_WEBAPP = 1;
+public class PRFragment extends Fragment implements InterfaceHolder<MainActivityInterface> {
 
     private MainViewModel mainViewModel;
+    private Unbinder unbinder;
 
-//    @BindView(R.id.fragment_pr_linkButton)
-//    public Button buttonLink;
+    /**
+     * Interfaccia usata per comunicare con l'activity madre.
+     */
+    private MainActivityInterface mainActivityInterface;
+
+    @Override
+    public void holdInterface(MainActivityInterface mainActivityInterface){
+        this.mainActivityInterface = mainActivityInterface;
+    }
+
+    @Override
+    public boolean isInterfaceSet(){
+        return this.mainActivityInterface != null;
+    }
 
     @BindView(R.id.fragment_pr_webView)
     public WebView webView;
-
-    private Unbinder unbinder;
-
 
     public PRFragment() {
         // Required empty public constructor
@@ -79,6 +93,37 @@ public class PRFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);    //Opzione menu
+    }
+
+    @Override
+    public void onDestroyView() {
+        unbinder.unbind();
+        super.onDestroyView();
+    }
+
+    //ROBA MENU------------------------------------------------------------------------------
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.pr_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //--------------------------------------------------------------------------------------
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,19 +171,5 @@ public class PRFragment extends Fragment {
 
         return uri;
     }
-
-
-//    @OnClick(R.id.fragment_pr_linkButton)
-//    public void onButtonLinkClick(){
-//        Uri uri = getUri();
-//
-//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-//        startActivity(browserIntent);
-//
-//        //Serviva per fare il logout dalla webapp.
-//        //startActivityForResult(browserIntent, REQUEST_CODE_WEBAPP);
-//    }
-
-
 
 }

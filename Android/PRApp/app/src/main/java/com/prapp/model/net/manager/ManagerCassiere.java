@@ -55,6 +55,8 @@ public class ManagerCassiere extends Manager {
     public static final String ENTRATE_SVOLTE_ARG_EVENTO = "evento";
     public static final String RESTITUISCI_PREVENDTITE_ARG_EVENTO = "evento";
     public static final String RESTITUISCI_INFORMAZIONI_PREVENDITA_ARG_RPEVENDITA = "prevendita";
+    public static final String RESTITUISCI_LISTA_PREVENDITE_TIMBRATE_ARG_EVENTO = "evento";
+    public static final String RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE_ARG_EVENTO = "evento";
 
 
     private static ManagerCassiere singleton;
@@ -267,6 +269,68 @@ public class ManagerCassiere extends Manager {
             @Override
             public void supply(List<Risultato> element) {
                 onSuccess.onResponse(element.get(0).castRisultato(WPrevenditaPlus.class));
+            }
+        }, onException, errorListener);
+
+        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
+
+        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+    }
+
+    public void restituisciListaPrevenditeTimbrate(int idPrevendita, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+        Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_LISTA_PREVENDITE_TIMBRATE;
+        final Richiesta richiesta = new Richiesta(comando);
+        NetWId netWId = new NetWId(idPrevendita);
+        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_LISTA_PREVENDITE_TIMBRATE_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
+
+
+        ResponseListener listener = new ResponseListener(comando, new Predicate<Integer>() {
+            @Override
+            public boolean predict(Integer element) {
+                return true;
+            }
+        }, new Consumer<List<Risultato>>() {
+            @Override
+            public void supply(List<Risultato> element) {
+                List<WPrevenditaPlus> myList = new ArrayList<>();
+
+                for (Risultato risultato:element)
+                {
+                    myList.add(risultato.castRisultato(WPrevenditaPlus.class));
+                }
+
+                onSuccess.onResponse(myList);
+            }
+        }, onException, errorListener);
+
+        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
+
+        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+    }
+
+    public void restituisciListaPrevenditeNonTimbrate(int idPrevendita, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+        Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE;
+        final Richiesta richiesta = new Richiesta(comando);
+        NetWId netWId = new NetWId(idPrevendita);
+        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
+
+
+        ResponseListener listener = new ResponseListener(comando, new Predicate<Integer>() {
+            @Override
+            public boolean predict(Integer element) {
+                return true;
+            }
+        }, new Consumer<List<Risultato>>() {
+            @Override
+            public void supply(List<Risultato> element) {
+                List<WPrevenditaPlus> myList = new ArrayList<>();
+
+                for (Risultato risultato:element)
+                {
+                    myList.add(risultato.castRisultato(WPrevenditaPlus.class));
+                }
+
+                onSuccess.onResponse(myList);
             }
         }, onException, errorListener);
 

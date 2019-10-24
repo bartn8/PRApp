@@ -62,7 +62,8 @@ public class MainViewModel extends AbstractViewModel {
     private MutableLiveData<Result<WDirittiUtente, Integer>> dirittiMembroResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WStatistichePREvento>, Integer>> statistichePREventoResult = new MutableLiveData<>();
     private MutableLiveData<Result<WStatisticheCassiereEvento, Integer>> statisticheCassiereEventoResult = new MutableLiveData<>();
-    private MutableLiveData<Result<List<WStatisticheEvento>, Void>> statisticheEventoResult = new MutableLiveData<>();
+    private MutableLiveData<Result<List<WStatisticheEvento>, Void>> statisticheAmministratoreEventoResult = new MutableLiveData<>();
+    private MutableLiveData<Result<List<WPrevenditaPlus>, Void>> prevenditeResult = new MutableLiveData<>();
 
 
 
@@ -104,8 +105,12 @@ public class MainViewModel extends AbstractViewModel {
         return statisticheCassiereEventoResult;
     }
 
-    public LiveData<Result<List<WStatisticheEvento>, Void>> getStatisticheEventoResult() {
-        return statisticheEventoResult;
+    public LiveData<Result<List<WStatisticheEvento>, Void>> getStatisticheAmministratoreEventoResult() {
+        return statisticheAmministratoreEventoResult;
+    }
+
+    public LiveData<Result<List<WPrevenditaPlus>, Void>> getPrevenditeResult() {
+        return prevenditeResult;
     }
 
     public NetWEntrata get(Integer idPrevendita) {
@@ -259,7 +264,7 @@ public class MainViewModel extends AbstractViewModel {
         }
     }
 
-    public void getStatisticheEvento() {
+    public void getStatisticheAmministratoreEvento() {
         MyContext myContext = getMyContext();
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
@@ -267,12 +272,12 @@ public class MainViewModel extends AbstractViewModel {
             Integer idEvento = myContext.getEvento().getId();
 
             try {
-                managerAmministratore.resitituisciStatisticheEvento(idEvento, new DefaultSuccessListener<>(statisticheEventoResult), new DefaultExceptionListener<>(statisticheEventoResult));
+                managerAmministratore.resitituisciStatisticheEvento(idEvento, new DefaultSuccessListener<>(statisticheAmministratoreEventoResult), new DefaultExceptionListener<>(statisticheAmministratoreEventoResult));
             } catch (UnsupportedEncodingException e) {
-                statisticheEventoResult.setValue(new Result<>(e));
+                statisticheAmministratoreEventoResult.setValue(new Result<>(e));
             }
         } else {
-            statisticheEventoResult.setValue(new Result<>(R.string.no_login));
+            statisticheAmministratoreEventoResult.setValue(new Result<>(R.string.no_login));
         }
     }
 
@@ -310,6 +315,39 @@ public class MainViewModel extends AbstractViewModel {
         }
     }
 
+    public void getListaPrevenditeTimbrateEvento() {
+        MyContext myContext = getMyContext();
+
+        if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
+            ManagerCassiere managerCassiere = getManagerCassiere();
+            Integer idEvento = myContext.getEvento().getId();
+
+            try {
+                managerCassiere.restituisciListaPrevenditeTimbrate(idEvento, new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
+            } catch (UnsupportedEncodingException e) {
+                prevenditeResult.setValue(new Result<>(e));
+            }
+        } else {
+            prevenditeResult.setValue(new Result<>(R.string.no_login));
+        }
+    }
+
+    public void getListaPrevenditeNonTimbrateEvento() {
+        MyContext myContext = getMyContext();
+
+        if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
+            ManagerCassiere managerCassiere = getManagerCassiere();
+            Integer idEvento = myContext.getEvento().getId();
+
+            try {
+                managerCassiere.restituisciListaPrevenditeNonTimbrate(idEvento, new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
+            } catch (UnsupportedEncodingException e) {
+                prevenditeResult.setValue(new Result<>(e));
+            }
+        } else {
+            prevenditeResult.setValue(new Result<>(R.string.no_login));
+        }
+    }
 
 }
 

@@ -19,18 +19,13 @@
 
 package com.prapp.ui.main;
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
@@ -39,7 +34,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.prapp.R;
 import com.prapp.model.db.enums.Diritto;
 import com.prapp.model.db.wrapper.WDirittiUtente;
-import com.prapp.ui.UiUtils;
 import com.prapp.ui.main.fragment.amministratore.AmministratoreFragment;
 import com.prapp.ui.main.fragment.cassiere.CassiereFragment;
 import com.prapp.ui.main.fragment.membro.MembroFragment;
@@ -51,16 +45,21 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityInterface {
 
-    private static final String NEEDED_PERMISSION = Manifest.permission.CAMERA;
-    private static final int PERMISSION_REQUEST_CAMERA = 0;
+
     private static final String CURRENT_FRAGMENT_KEY = "CURFRAG";
+
+    public static final int ID_FRAGMENT_UTENTE = 0;
+    public static final int ID_FRAGMENT_MEMBRO = 1;
+    public static final int ID_FRAGMENT_PR = 2;
+    public static final int ID_FRAGMENT_CASSIERE = 3;
+    public static final int ID_FRAGMENT_AMMINISTRATORE = 4;
+
 
 
     private MainViewModel mainViewModel;
 
-    private UiUtils uiUtils;
     private Set<Diritto> diritti;
 
     private int currentFragment = 0;
@@ -82,27 +81,27 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_utente:
-                    currentFragment = 0;
+                    currentFragment = ID_FRAGMENT_UTENTE;
                     cambiaTab(false);
                     return true;
 
                 case R.id.navigation_membro:
-                    currentFragment = 1;
+                    currentFragment = ID_FRAGMENT_MEMBRO;
                     cambiaTab(false);
                     return true;
 
                 case R.id.navigation_pr:
-                    currentFragment = 2;
+                    currentFragment = ID_FRAGMENT_PR;
                     cambiaTab(false);
                     return true;
 
                 case R.id.navigation_cassiere:
-                    currentFragment = 3;
+                    currentFragment = ID_FRAGMENT_CASSIERE;
                     cambiaTab(false);
                     return true;
 
                 case R.id.navigation_amministratore:
-                    currentFragment = 4;
+                    currentFragment = ID_FRAGMENT_AMMINISTRATORE;
                     cambiaTab(false);
                     return true;
             }
@@ -111,37 +110,43 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Cambia il fragment solamente in campo del navigatore di sotto.
+     * Per esempio se CassiereFragment attiva un sotto fragment, non si usa questo metodo.
+     *
+     * @param setBottomNavigationBar
+     */
     private void cambiaTab(boolean setBottomNavigationBar) {
         switch (currentFragment) {
-            case 0:
+            case ID_FRAGMENT_UTENTE:
                 if (!utenteFragment.isInLayout())
                     cambiaFragment(utenteFragment);
 
                 if(setBottomNavigationBar)
                     navView.setSelectedItemId(R.id.navigation_utente);
                 break;
-            case 1:
+            case ID_FRAGMENT_MEMBRO:
                 if (!membroFragment.isInLayout())
                     cambiaFragment(membroFragment);
 
                 if(setBottomNavigationBar)
                     navView.setSelectedItemId(R.id.navigation_membro);
                 break;
-            case 2:
+            case ID_FRAGMENT_PR:
                 if (!prFragment.isInLayout())
                     cambiaFragment(prFragment);
 
                 if(setBottomNavigationBar)
                     navView.setSelectedItemId(R.id.navigation_pr);
                 break;
-            case 3:
+            case ID_FRAGMENT_CASSIERE:
                 if (!cassiereFragment.isInLayout())
                     cambiaFragment(cassiereFragment);
 
                 if(setBottomNavigationBar)
                     navView.setSelectedItemId(R.id.navigation_cassiere);
                 break;
-            case 4:
+            case ID_FRAGMENT_AMMINISTRATORE:
                 if (!amminisratoreFragment.isInLayout())
                     cambiaFragment(amminisratoreFragment);
 
@@ -160,9 +165,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //https://stackoverflow.com/questions/5658675/replacing-a-fragment-with-another-fragment-inside-activity-group
-    private void cambiaFragment(Fragment nuovoFragment) {
+
+    @Override
+    public void cambiaFragment(Fragment nuovoFragment) {
         // Create new transaction
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        //Animazione Up-Down
         transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -181,11 +189,11 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        //Inizializzo i fragment
+        amminisratoreFragment.holdInterface(this);
+
         //Inizializzo il view model e applico gli observer.
         mainViewModel = ViewModelProviders.of(this, new MainViewModelFactory(getApplicationContext())).get(MainViewModel.class);
-
-
-        uiUtils = UiUtils.getInstance(getApplicationContext());
 
         //Recupero i diritti dell'utente.
         WDirittiUtente dirittiUtente = mainViewModel.getDirittiUtente();
@@ -217,7 +225,8 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.setBehavior(new BottomNavigationBehavior());
 
         //Controllo permessi camera
-        checkCameraPermission();
+        //Il controllo dei permessi camera viene effettuato a livello cassiere.
+        //checkCameraPermission();
 
     }
 
@@ -232,9 +241,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     //Back button method.
-
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
@@ -244,50 +251,4 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    //Camera permission methods.
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        // BEGIN_INCLUDE(onRequestPermissionsResult)
-        if (requestCode == PERMISSION_REQUEST_CAMERA) {
-            // Request for camera permission.
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                uiUtils.makeToast(R.string.show_camera_permission_granted);
-
-                //Riattivo nel caso cassiere.
-                Menu menu = navView.getMenu();
-                menu.findItem(R.id.navigation_cassiere).setEnabled(diritti.contains(Diritto.CASSIERE));
-
-            }
-        }
-        // END_INCLUDE(onRequestPermissionsResult)
-    }
-
-    /**
-     * Requests the {@link android.Manifest.permission#CAMERA} permission.
-     * If an additional rationale should be displayed, the user has to launch the request from
-     * a SnackBar that includes additional information.
-     */
-    private void checkCameraPermission() {
-        if (ActivityCompat.checkSelfPermission(this, NEEDED_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, NEEDED_PERMISSION)) {
-                new AlertDialog.Builder(this)
-                        .setMessage(R.string.show_camera_permission_request)
-                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ActivityCompat.requestPermissions(MainActivity.this,
-                                        new String[]{NEEDED_PERMISSION},
-                                        PERMISSION_REQUEST_CAMERA);
-                            }
-                        })
-                        .show();
-            }else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
-            }
-        }
-    }
 }

@@ -142,24 +142,41 @@
     <string name="fragment_membro_title_membri">Membri dello Staff</string>
     <string name="fragment_membro_title_eventi">Eventi</string>
 
+    <!-- MENU -->
+    <string name="fragment_membro_menu_listaMembriItem">Lista membri</string>
+    <string name="fragment_membro_menu_listaClientiItem">Lista clienti</string>
+    <string name="fragment_membro_menu_listaTipoPrevenditaItem">Lista tipo prevendita</string>
+
     <!-- FRAGMENT PR -->
     <string name="fragment_pr_image_desc">Stefano Lavori</string>
     <string name="fragment_pr_desc">Colpa di Stefano Lavori</string>
     <string name="fragment_pr_linkButton">Web App</string>
 
+    <!-- MENU -->
+    <string name="fragment_pr_menu_aggiungiPrevenditaItem">Aggiungi Prevendita</string>
+    <string name="fragment_pr_menu_listaPrevenditeItem">Lista prevendite</string>
+    <string name="fragment_pr_menu_statisticheEventoItem">Statistiche evento</string>
+
     <!-- FRAGMENT CASSIERE -->
 
-    <string name="fragment_cassiere_menu_autoApprova">Auto-Approva</string>
+    <!-- MENU -->
+    <string name="fragment_cassiere_menu_autoApprovaItem">Auto-Approva</string>
+    <string name="fragment_cassiere_menu_genteEntrataItem">Prevendite entrate</string>
+    <string name="fragment_cassiere_menu_genteNonEntrataItem">Prevendite non entrate</string>
+    <string name="fragment_cassiere_menu_statisticheEventoItem">Statistiche evento</string>
 
     <string name="fragment_cassiere_autoApprova_attivo">Auto-Approva Attivato!</string>
 
+    <!-- Card View Title -->
     <string name="fragment_cassiere_entrata_label">Effettua Entrata</string>
 
+    <!-- Card View Scansione -->
     <string name="fragment_cassiere_switch_scansione_on">Scansione Attiva</string>
     <string name="fragment_cassiere_switch_scansione_off">Scansione Disattivata</string>
     <string name="fragment_cassiere_switch_flash_off">FLASH Spento</string>
     <string name="fragment_cassiere_switch_flash_on">FLASH Acceso</string>
 
+    <!-- Card View Entrata Manuale -->
     <string name="fragment_cassiere_entrata_manuale_label">Effettua Entrata Manuale</string>
     <string name="fragment_cassiere_entrata_manuale_idPrevendita_label">Numero Prevendita:</string>
     <string name="fragment_cassiere_entrata_manuale_codice_label">Codice:</string>
@@ -169,14 +186,7 @@
     <string name="fragment_cassiere_approva_label">APPROVA</string>
     <string name="fragment_cassiere_annulla_label">ANNULLA</string>
 
-
-    <string name="fragment_cassiere_toast_errore_formatted">
-        Errore: <xliff:g id="errore">%1$s</xliff:g>
-    </string>
-
-    <string name="fragment_cassiere_toast_approvata_formatted">
-        APPROVATA! (<xliff:g id="time">%1$s</xliff:g>)
-    </string>
+    <!-- Toast + Popup entrata -->
 
     <string name="fragment_cassiere_toast_annullata_label">ANNULLATA!</string>
 
@@ -190,14 +200,34 @@
         Errore: <xliff:g id="errore">%1$s</xliff:g>
     </string>
 
+    <!-- Toast vari -->
+
     <string name="fragment_cassiere_impossibile_avviare_scanner">Impossibile avviare lo scanner!</string>
     <string name="fragment_cassiere_impossibile_fare_flash">Impossibile avviare il flash!</string>
     <string name="fragment_cassiere_impossibile_fare_flash_old_android">Impossibile avviare il flash! Android troppo vecchio</string>
+
+    <string name="fragment_cassiere_toast_errore_formatted">
+        Errore: <xliff:g id="errore">%1$s</xliff:g>
+    </string>
+
+    <string name="fragment_cassiere_toast_approvata_formatted">
+        APPROVATA! (<xliff:g id="time">%1$s</xliff:g>)
+    </string>
+
+    <!-- Sub Fragment Lista Cassiere -->
+
+    <string name="subfragment_lista_cassiere_listaTimbrate_label">Prevendite timbrate</string>
+    <string name="subfragment_lista_cassiere_listaNonTimbrate_label">Prevendite non timbrate</string>
 
     <!-- FRAGMENT AMMINISTRATORE -->
 
     <string name="fragment_amministratore_statistiche_evento_label">Statistiche Evento</string>
     <string name="fragment_amministratore_statistiche_membri_label">Statistiche Membri</string>
+
+    <!-- MENU -->
+    <string name="fragment_amministratore_menu_aggiungiTipoPrevenditaItem">Aggiungi tipo prevendita</string>
+    <string name="fragment_amministratore_menu_cambiaCodiceAccessoItem">Cambia codice accesso</string>
+    <string name="fragment_amministratore_menu_statisticheEventoItem">Statistiche evento</string>
 
 
 </resources>

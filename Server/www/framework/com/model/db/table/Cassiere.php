@@ -118,30 +118,6 @@ class Cassiere extends Table
         return $count === 1;
     }
 
-    // /**
-    // * Verifica se l'utente è un cassiere dello staff.
-    // *
-    // * @param WStaff $staff
-    // * @throws InvalidArgumentException parametri nulli o non validi
-    // * @throws NotAvailableOperationException non si è loggati nel sistema
-    // * @throws PDOException problemi del database (errore di connessione, errore nel database)
-    // * @return boolean
-    // */
-    // public static function isCassiere(WStaff $staff) : bool
-    // {
-    // if (is_null($staff))
-    // throw new InvalidArgumentException("Parametri nulli.");
-
-    // if (! ($staff instanceof WStaff))
-    // throw new InvalidArgumentException("Parametri non validi.");
-
-    // // Verifico che si è loggati nel sistema.
-    // if (!Context::getContext()->isValid())
-    // throw new NotAvailableOperationException("Utente non loggato.");
-
-    // return self::_isCassiere($staff->getId());
-    // }
-
     /**
      * Timbra una prevendita.
      *
@@ -197,15 +173,7 @@ class Cassiere extends Table
             throw new InsertUpdateException("Prevendita non valida: Codice non valido.");
         }
 
-        $statoPrevendita = StatoPrevendita::parse($fetch["stato"]);
-
-        //Considero anche lo stato CONSEGNATA: il PR comunque ha consegnato la prevendita.
-        //PHP e enum non vanno d'accordo.
-        // if($statoPrevendita == StatoPrevendita::of(StatoPrevendita::RIMBORSATA) || $statoPrevendita == StatoPrevendita::of(StatoPrevendita::ANNULLATA) )
-        // {
-        //     $conn = NULL;
-        //     throw new InsertUpdateException("Prevendita annullata.");
-        // }        
+        $statoPrevendita = StatoPrevendita::parse($fetch["stato"]);  
 
         // Verifico la data di timbratura.
         //Verifico anche che l'evento sia valido.
@@ -219,20 +187,6 @@ class Cassiere extends Table
         $fine = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $fetch["fine"]));
 
         $statoEvento = StatoEvento::parse($fetch["stato"]);
-
-        // if ($ora < $inizio->getDateTimeImmutable() || $ora > $fine->getDateTimeImmutable()) {
-        //     $conn = NULL;
-        //     //throw new InsertUpdateException("Prevendita non valida: Evento finito o non ancora iniziato. (".$inizio->getDateTimeImmutable()->format(\DateTime::ATOM)." < ".$ora->format(\DateTime::ATOM)." < ".$fine->getDateTimeImmutable()->format(\DateTime::ATOM).")");
-        //     throw new InsertUpdateException("Prevendita non valida: Evento finito o non ancora iniziato.");
-        // }
-
-        //PHP e enum non vanno d'accordo.
-        
-        // if($statoEvento != StatoEvento::of(StatoEvento::VALIDO) && $statoEvento != StatoEvento::of(StatoEvento::PAGATO))
-        // {
-        //     $conn = NULL;
-        //     throw new InsertUpdateException("Evento annullato!");
-        // }
 
         // Ora che ho verificato il codice posso TIMBRARE la prevendita.
         $stmtTimbro = $conn->prepare("INSERT INTO entrata (idCassiere, idPrevendita) VALUES (:idCassiere, :idPrevendita)");
@@ -622,6 +576,104 @@ EOT;
 
         if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
             $result = WPrevenditaPlus::of($riga);
+        }
+
+        $conn = NULL;
+
+        return $result;
+    }
+
+    public static function getListaPrevenditeEntrate(NetWId $evento) : array
+    {
+        // Verifico i parametri
+        if (is_null($evento))
+            throw new InvalidArgumentException("Parametri nulli.");
+
+        if (! ($evento instanceof NetWId))
+            throw new InvalidArgumentException("Parametri non validi.");
+
+        // Verifico che si è loggati nel sistema.
+        if (! Context::getContext()->isValid())
+            throw new NotAvailableOperationException("Utente non loggato.");
+
+        // Verifico che l'utente sia cassiere dello staff.
+        if (! self::_isCassiereByEvento($evento->getId()))
+            throw new AuthorizationException("L'utente non è cassiere dello staff.");
+
+        $conn = parent::getConnection();
+
+        //Query: 
+        $query = <<<EOT
+        SELECT prevendita.id AS id, prevendita.idEvento AS idEvento, evento.nome AS nomeEvento, prevendita.idPR AS idPR, 
+        utente.nome AS nomePR, utente.cognome AS cognomePR, prevendita.idCliente AS idCliente, cliente.nome AS nomeCliente, 
+        cliente.cognome AS cognomeCliente, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, 
+        tipoPrevendita.prezzo AS prezzoTipoPrevendita, prevendita.codice AS codice, prevendita.stato AS stato 
+        FROM prevendita 
+        LEFT JOIN cliente ON cliente.id = prevendita.idCliente 
+        INNER JOIN evento ON evento.id = prevendita.idEvento 
+        INNER JOIN utente ON utente.id = prevendita.idPR 
+        INNER JOIN tipoPrevendita ON tipoPrevendita.id = prevendita.idTipoPrevendita 
+        INNER JOIN entrata ON entrata.idPrevendita = prevendita.id
+        WHERE evento.id = :idEvento 
+        ORDER BY entrata.timestampEntrata ASC
+EOT;
+
+        $stmtSelezione = $conn->prepare($query);
+        $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
+        $stmtSelezione->execute();
+
+        $result = array();
+
+        while (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
+            $result[] = WPrevenditaPlus::of($riga);
+        }
+
+        $conn = NULL;
+
+        return $result;
+    }
+
+    public static function getListaPrevenditeNonEntrate(NetWId $evento) : array
+    {
+        // Verifico i parametri
+        if (is_null($evento))
+            throw new InvalidArgumentException("Parametri nulli.");
+
+        if (! ($evento instanceof NetWId))
+            throw new InvalidArgumentException("Parametri non validi.");
+
+        // Verifico che si è loggati nel sistema.
+        if (! Context::getContext()->isValid())
+            throw new NotAvailableOperationException("Utente non loggato.");
+
+        // Verifico che l'utente sia cassiere dello staff.
+        if (! self::_isCassiereByEvento($evento->getId()))
+            throw new AuthorizationException("L'utente non è cassiere dello staff.");
+
+        $conn = parent::getConnection();
+
+        //Query: 
+        $query = <<<EOT
+        SELECT prevendita.id AS id, prevendita.idEvento AS idEvento, evento.nome AS nomeEvento, prevendita.idPR AS idPR, 
+        utente.nome AS nomePR, utente.cognome AS cognomePR, prevendita.idCliente AS idCliente, cliente.nome AS nomeCliente, 
+        cliente.cognome AS cognomeCliente, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, 
+        tipoPrevendita.prezzo AS prezzoTipoPrevendita, prevendita.codice AS codice, prevendita.stato AS stato 
+        FROM prevendita 
+        LEFT JOIN cliente ON cliente.id = prevendita.idCliente 
+        INNER JOIN evento ON evento.id = prevendita.idEvento 
+        INNER JOIN utente ON utente.id = prevendita.idPR 
+        INNER JOIN tipoPrevendita ON tipoPrevendita.id = prevendita.idTipoPrevendita 
+        WHERE evento.id = :idEvento AND prevendita.id NOT IN (SELECT entrata.idPrevendita FROM entrata)
+EOT;
+
+        $stmtSelezione = $conn->prepare($query);
+        $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
+        $stmtSelezione->execute();
+
+        $result = array();
+
+        while (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
+            $result[] = WPrevenditaPlus::of($riga);
         }
 
         $conn = NULL;

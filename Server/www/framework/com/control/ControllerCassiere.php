@@ -30,7 +30,6 @@ class ControllerCassiere extends Controller
 {
 
     // Divisione dei comandi: (1-100 utente) (101-200 membro) (201-300 pr) (301-400 cassiere) (401-500 amministratore)
-//     const CMD_IS_CASSIERE = 301;
 
     const CMD_TIMBRA_ENTRATA = 302;
 
@@ -48,6 +47,11 @@ class ControllerCassiere extends Controller
 
     const CMD_RESTITUISCI_INFORMAZIONI_PREVENDITA = 309;
 
+    const CMD_RESTITUISCI_LISTA_PREVENDITE_TIMBRATE = 310;
+
+    const CMD_RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE = 311;
+
+
     public function __construct($printer, $retriver)
     {
         parent::__construct($printer, $retriver);
@@ -56,10 +60,6 @@ class ControllerCassiere extends Controller
     public function handle($command)
     {
         switch ($command->getCommand()) {
-//             case ControllerCassiere::CMD_IS_CASSIERE:
-//                 $this->cmd_is_cassiere($command);
-//                 break;
-            
             case ControllerCassiere::CMD_TIMBRA_ENTRATA:
                 $this->cmd_timbra_entrata($command);
                 break;
@@ -92,6 +92,14 @@ class ControllerCassiere extends Controller
                 $this->cmd_restituisci_informazioni_prevendita($command);
                 break;
 
+            case ControllerCassiere::CMD_RESTITUISCI_LISTA_PREVENDITE_TIMBRATE:
+                $this->cmd_restituisci_lista_prevendite_entrate($command);
+                break;
+
+            case ControllerCassiere::CMD_RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE:
+                $this->cmd_restituisci_lista_prevendite_non_entrate($command);
+                break;
+
             default:
                 break;
         }
@@ -114,16 +122,6 @@ class ControllerCassiere extends Controller
                 break;
         }
     }
-
-//     private function cmd_is_cassiere($command)
-//     {
-//         if(!array_key_exists("staff", $command->getArgs()))
-//         {
-//             throw new InvalidArgumentException("Argomenti non validi");
-//         }
-        
-//         parent::getPrinter()->addResult(Cassiere::isCassiere($command->getArgs()['staff']->getValue()));
-//     }
 
     private function cmd_timbra_entrata($command)
     {
@@ -198,6 +196,24 @@ class ControllerCassiere extends Controller
         }
         
         parent::getPrinter()->addResult(Cassiere::getInformazioniPrevendita($command->getArgs()['prevendita']->getValue()));
+    }
+
+    private function cmd_restituisci_lista_prevendite_entrate($command){
+        if(!array_key_exists("evento", $command->getArgs()))
+        {
+            throw new InvalidArgumentException("Argomenti non validi");
+        }
+
+        parent::getPrinter()->addResults(Cassiere::getListaPrevenditeEntrate($command->getArgs()['evento']->getValue()));
+    }
+
+    private function cmd_restituisci_lista_prevendite_non_entrate($command){
+        if(!array_key_exists("evento", $command->getArgs()))
+        {
+            throw new InvalidArgumentException("Argomenti non validi");
+        }
+
+        parent::getPrinter()->addResults(Cassiere::getListaPrevenditeNonEntrate($command->getArgs()['evento']->getValue()));
     }
 
 }

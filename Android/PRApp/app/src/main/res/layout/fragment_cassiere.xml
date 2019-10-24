@@ -69,7 +69,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/entrateRecyclerView"
+            android:id="@+id/fragment_cassiere_recyclerView"
             android:clipToPadding="false"
             android:scrollbars="vertical"/>
 

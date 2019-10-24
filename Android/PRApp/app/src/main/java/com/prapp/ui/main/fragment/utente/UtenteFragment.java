@@ -23,12 +23,16 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -39,6 +43,8 @@ import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
+import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.start.SplashActivity;
 
@@ -60,12 +66,27 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link UtenteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UtenteFragment extends Fragment {
+public class UtenteFragment extends Fragment implements InterfaceHolder<MainActivityInterface> {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.shortDateTime();
 
     private MainViewModel mainViewModel;
     private Unbinder unbinder;
+
+    /**
+     * Interfaccia usata per comunicare con l'activity madre.
+     */
+    private MainActivityInterface mainActivityInterface;
+
+    @Override
+    public void holdInterface(MainActivityInterface mainActivityInterface){
+        this.mainActivityInterface = mainActivityInterface;
+    }
+
+    @Override
+    public boolean isInterfaceSet(){
+        return this.mainActivityInterface != null;
+    }
 
     @BindView(R.id.fragment_utente_nome)
     TextView textViewNome;
@@ -152,6 +173,31 @@ public class UtenteFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);    //Opzione menu
+    }
+
+    //ROBA MENU------------------------------------------------------------------------------
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.utente_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //--------------------------------------------------------------------------------------
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
