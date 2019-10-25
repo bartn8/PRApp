@@ -219,8 +219,7 @@ class Cassiere extends Table
     /**
      * Restituisce i dati del cliente associati alla prevendita inserita.
      *
-     * @param
-     *            NetWId prevendita
+     * @param NetWId prevendita
      * @throws InvalidArgumentException parametri nulli o non validi
      * @throws NotAvailableOperationException l'utente non è loggato nel sistema.
      * @throws AuthorizationException l'utente non è cassiere per lo staff
