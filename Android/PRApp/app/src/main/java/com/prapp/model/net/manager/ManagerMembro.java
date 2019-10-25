@@ -53,14 +53,18 @@ public class ManagerMembro extends Manager {
     public static final String RESTITUISCI_TIPI_PREVENDITA_ARG_EVENTO = "evento";
     public static final String RESTITUISCI_LISTA_CLIENTI_ARG_STAFF = "staff";
 
-    private static ManagerMembro singleton;
 
-    public static synchronized ManagerMembro getInstance(Context context)
+    //Istanza singleton produce memory leak
+//    private static ManagerMembro singleton;
+
+    public static synchronized ManagerMembro newInstance(Context context)
     {
-        if(singleton == null)
-            singleton = new ManagerMembro(context);
+        ManagerMembro tmp = null;
 
-        return singleton;
+        if(tmp == null)
+            tmp = new ManagerMembro(context);
+
+        return tmp;
     }
 
     public ManagerMembro(Context context) {
@@ -99,7 +103,7 @@ public class ManagerMembro extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciDirittiPersonaliStaff(int idStaff, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -123,7 +127,7 @@ public class ManagerMembro extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciDirittiUtenteStaff(int idUtente, int idStaff, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -149,7 +153,7 @@ public class ManagerMembro extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciListaEventiStaff(int idStaff, final Response.Listener<List<WEvento>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -180,7 +184,7 @@ public class ManagerMembro extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciListaTipiPrevenditaEvento(int idEvento, final Response.Listener<List<WTipoPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -211,7 +215,7 @@ public class ManagerMembro extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciListaClientiStaff(int idStaff, final Response.Listener<List<WCliente>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -242,7 +246,7 @@ public class ManagerMembro extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
 }

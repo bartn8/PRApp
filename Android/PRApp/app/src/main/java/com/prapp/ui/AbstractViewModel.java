@@ -112,12 +112,12 @@ public abstract class AbstractViewModel extends ViewModel {
         this.myContext = MyContext.getSingleton();
         this.preferences = ApplicationPreferences.getInstance(context);
 
-        this.managerUtente = ManagerUtente.getInstance(context);
-        this.managerMembro = ManagerMembro.getInstance(context);
-        this.managerPR = ManagerPR.getInstance(context);
-        this.managerCassiere = ManagerCassiere.getInstance(context);
-        this.managerAmministratore = ManagerAmministratore.getInstance(context);
-        this.managerManutenzione = ManagerManutenzione.getInstance(context);
+        this.managerUtente = ManagerUtente.newInstance(context);
+        this.managerMembro = ManagerMembro.newInstance(context);
+        this.managerPR = ManagerPR.newInstance(context);
+        this.managerCassiere = ManagerCassiere.newInstance(context);
+        this.managerAmministratore = ManagerAmministratore.newInstance(context);
+        this.managerManutenzione = ManagerManutenzione.newInstance(context);
     }
 
     public WDirittiUtente getDirittiUtente() {

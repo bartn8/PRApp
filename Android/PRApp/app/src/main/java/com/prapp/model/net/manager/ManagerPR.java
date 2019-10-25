@@ -57,14 +57,17 @@ public class ManagerPR extends Manager {
     public static final String RESTITUISCI_STATISTICHE_EVENTO_ARG_EVENTO = "evento";
 
 
-    private static ManagerPR singleton;
+    //Istanza singleton produce memory leak
+//    private static ManagerPR singleton;
 
-    public static synchronized ManagerPR getInstance(Context context)
+    public static synchronized ManagerPR newInstance(Context context)
     {
-        if(singleton == null)
-            singleton = new ManagerPR(context);
+        ManagerPR tmp = null;
 
-        return singleton;
+        if(tmp == null)
+            tmp = new ManagerPR(context);
+
+        return tmp;
     }
 
     public ManagerPR(Context context) {
@@ -95,7 +98,7 @@ public class ManagerPR extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void aggiungiPrevendita(InsertNetWPrevendita newPrevendita, final Response.Listener<WPrevendita> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -118,7 +121,7 @@ public class ManagerPR extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void modificaPrevendita(UpdateNetWPrevendita updatePrevendita, final Response.Listener<WPrevendita> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -141,7 +144,7 @@ public class ManagerPR extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciListaPrevendite(NetWFiltriStatoPrevendita filtri, final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -171,7 +174,7 @@ public class ManagerPR extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void resitituisciStatisticheTotali(final Response.Listener<WStatistichePRTotali> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -192,7 +195,7 @@ public class ManagerPR extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void resitituisciStatisticheStaff(int idStaff, final Response.Listener<WStatistichePRStaff> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -215,7 +218,7 @@ public class ManagerPR extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void resitituisciStatisticheEvento(int idEvento, final Response.Listener<WStatistichePREvento> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -238,7 +241,7 @@ public class ManagerPR extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
 }

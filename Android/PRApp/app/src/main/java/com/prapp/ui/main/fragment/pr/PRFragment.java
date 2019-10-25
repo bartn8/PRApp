@@ -65,12 +65,12 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     private MainActivityInterface mainActivityInterface;
 
     @Override
-    public void holdInterface(MainActivityInterface mainActivityInterface){
+    public void holdInterface(MainActivityInterface mainActivityInterface) {
         this.mainActivityInterface = mainActivityInterface;
     }
 
     @Override
-    public boolean isInterfaceSet(){
+    public boolean isInterfaceSet() {
         return this.mainActivityInterface != null;
     }
 
@@ -147,13 +147,11 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     }
 
 
-
-    private void startWebApp()
-    {
+    private void startWebApp() {
         webView.loadUrl(getUri().toString());
     }
 
-    private Uri getUri(){
+    private Uri getUri() {
         String stringUri = MyContext.DEFAULT_WEBAPP_ADDRESS;
 
 

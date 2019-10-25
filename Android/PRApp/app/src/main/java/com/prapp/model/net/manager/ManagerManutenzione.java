@@ -42,14 +42,17 @@ import java.util.List;
 
 public class ManagerManutenzione extends Manager {
 
-    private static ManagerManutenzione singleton;
+    //Istanza singleton produce memory leak
+//    private static ManagerManutenzione singleton;
 
-    public static synchronized ManagerManutenzione getInstance(Context context)
+    public static synchronized ManagerManutenzione newInstance(Context context)
     {
-        if(singleton == null)
-            singleton = new ManagerManutenzione(context);
+        ManagerManutenzione tmp = null;
 
-        return singleton;
+        if(tmp == null)
+            tmp = new ManagerManutenzione(context);
+
+        return tmp;
     }
 
     public ManagerManutenzione(Context context) {
@@ -78,7 +81,7 @@ public class ManagerManutenzione extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciDateTimeServer(final Response.Listener<DateTime> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -100,7 +103,7 @@ public class ManagerManutenzione extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
 }

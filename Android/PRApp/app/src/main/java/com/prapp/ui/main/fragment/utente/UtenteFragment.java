@@ -79,12 +79,12 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
     private MainActivityInterface mainActivityInterface;
 
     @Override
-    public void holdInterface(MainActivityInterface mainActivityInterface){
+    public void holdInterface(MainActivityInterface mainActivityInterface) {
         this.mainActivityInterface = mainActivityInterface;
     }
 
     @Override
-    public boolean isInterfaceSet(){
+    public boolean isInterfaceSet() {
         return this.mainActivityInterface != null;
     }
 
@@ -115,10 +115,10 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
     @BindView(R.id.fragment_utente_logout)
     Button buttonLogout;
 
-    private Observer<Result<Void,Void>> logoutResultObserver = new Observer<Result<Void,Void>>() {
+    private Observer<Result<Void, Void>> logoutResultObserver = new Observer<Result<Void, Void>>() {
 
         @Override
-        public void onChanged(Result<Void,Void> logoutResult) {
+        public void onChanged(Result<Void, Void> logoutResult) {
             if (logoutResult == null) {
                 return;
             }
@@ -132,8 +132,7 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
             else if (error != null)
                 showError(error);
 
-            else
-            {
+            else {
                 //Logout effettuato: devo ritornare allo splash.
                 startActivity(new Intent(getActivity(), SplashActivity.class));
                 getActivity().setResult(RESULT_OK);
@@ -209,16 +208,14 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         mainViewModel.getLogoutResult().observe(this, logoutResultObserver);
 
-        if(mainViewModel.isLoggato())
-        {
+        if (mainViewModel.isLoggato()) {
             WUtente utente = mainViewModel.getUtente();
 
             textViewNome.setText(utente.getNome());
             textViewCognome.setText(utente.getCognome());
             textViewTelefono.setText(utente.getTelefono());
 
-            if(mainViewModel.isStaffScelto())
-            {
+            if (mainViewModel.isStaffScelto()) {
                 WStaff staff = mainViewModel.getStaff();
                 WDirittiUtente dirittiUtente = mainViewModel.getDirittiUtente();
 
@@ -226,8 +223,7 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
                 textViewDiritti.setText(dirittiUtente.getDiritti().toString());
             }
 
-            if(mainViewModel.isEventoScelto())
-            {
+            if (mainViewModel.isEventoScelto()) {
                 WEvento evento = mainViewModel.getEvento();
                 textViewNomeEvento.setText(evento.getNome());
                 textViewDescrizioneEvento.setText(evento.getDescrizione());

@@ -79,21 +79,21 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
     private MainActivityInterface mainActivityInterface;
 
     @Override
-    public void holdInterface(MainActivityInterface mainActivityInterface){
+    public void holdInterface(MainActivityInterface mainActivityInterface) {
         this.mainActivityInterface = mainActivityInterface;
     }
 
     @Override
-    public boolean isInterfaceSet(){
+    public boolean isInterfaceSet() {
         return this.mainActivityInterface != null;
     }
 
     @BindView(R.id.membriRecyclerView)
     RecyclerView membriRecyclerView;
 
-    private Observer<Result<List<WUtente>,Void>> membriStaffResultObserver = new Observer<Result<List<WUtente>,Void>>() {
+    private Observer<Result<List<WUtente>, Void>> membriStaffResultObserver = new Observer<Result<List<WUtente>, Void>>() {
         @Override
-        public void onChanged(Result<List<WUtente>,Void> listResult) {
+        public void onChanged(Result<List<WUtente>, Void> listResult) {
             if (listResult == null) {
                 return;
             }
@@ -108,8 +108,7 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
             else if (error != null)
                 uiUtils.showError(error);
 
-            else if(success != null)
-            {
+            else if (success != null) {
                 WUtenteAdapter myAdapter = new WUtenteAdapter(success);
                 membriRecyclerView.setAdapter(myAdapter);
             }
@@ -163,15 +162,9 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
         membriRecyclerView.setHasFixedSize(true);
         membriRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-//        eventiRecyclerView.setHasFixedSize(true);
-//        eventiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
         mainViewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
-        //mainViewModel.getEventiStaffResult().observe(this, eventiStaffResultObserver);
         mainViewModel.getMembriStaff();
-        //mainViewModel.getEventiStaff();
-
         return view;
     }
 

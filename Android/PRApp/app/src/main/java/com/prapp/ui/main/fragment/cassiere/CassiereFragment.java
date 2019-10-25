@@ -351,6 +351,9 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.cassiere_menu, menu);
+
+        //Disattivo l'opzione scansiona
+        menu.removeItem(R.id.cassiere_scansionaItem);
     }
 
     @Override
@@ -367,11 +370,21 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
                 return true;
             case R.id.cassiere_genteEntrataItem:
                 //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite approvate.
-                mainActivityInterface.cambiaFragment(CassiereSubFragmentLista.newInstance(CassiereSubFragmentLista.MODE_LIST_TIMBRATE));
+                if(isInterfaceSet()){
+                    CassiereSubFragmentLista cassiereSubFragment = CassiereSubFragmentLista.newInstance(CassiereSubFragmentLista.MODE_LIST_TIMBRATE);
+                    cassiereSubFragment.holdInterface(mainActivityInterface);
+                    mainActivityInterface.cambiaFragment(cassiereSubFragment);
+                }
+
                 return true;
             case R.id.cassiere_genteNonEntrataItem:
                 //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite non approvate.
-                mainActivityInterface.cambiaFragment(CassiereSubFragmentLista.newInstance(CassiereSubFragmentLista.MODE_LIST_NON_TIMBRATE));
+                if(isInterfaceSet()){
+                    CassiereSubFragmentLista cassiereSubFragment = CassiereSubFragmentLista.newInstance(CassiereSubFragmentLista.MODE_LIST_NON_TIMBRATE);
+                    cassiereSubFragment.holdInterface(mainActivityInterface);
+                    mainActivityInterface.cambiaFragment(cassiereSubFragment);
+                }
+
                 return true;
             case R.id.cassiere_statisticheEventoItem:
 

@@ -47,14 +47,17 @@ public class ManagerUtente extends Manager {
     public static final String LOGIN_ARG_LOGIN = "login";
     public static final String LOGIN_TOKEN_ARG_TOKEN = "token";
 
-    private static ManagerUtente singleton;
+    //Istanza singleton produce memory leak
+//    private static ManagerPR singleton;
 
-    public static synchronized ManagerUtente getInstance(Context context)
+    public static synchronized ManagerUtente newInstance(Context context)
     {
-        if(singleton == null)
-            singleton = new ManagerUtente(context);
+        ManagerUtente tmp = null;
 
-        return singleton;
+        if(tmp == null)
+            tmp = new ManagerUtente(context);
+
+        return tmp;
     }
 
     public ManagerUtente(Context context) {
@@ -103,7 +106,7 @@ public class ManagerUtente extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void logout(final Response.Listener<Void> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -123,7 +126,7 @@ public class ManagerUtente extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciListaStaff(final Response.Listener<List<WStaff>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -150,7 +153,7 @@ public class ManagerUtente extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void restituisciListaStaffMembri(final Response.Listener<List<WStaff>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -177,7 +180,7 @@ public class ManagerUtente extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void renewToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -199,7 +202,7 @@ public class ManagerUtente extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void getToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -221,7 +224,7 @@ public class ManagerUtente extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
     public void loginWithToken(String token, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -245,7 +248,7 @@ public class ManagerUtente extends Manager {
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.getInstance(context).addToRequestQueue(richiestaVolley);
+        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
     }
 
 }

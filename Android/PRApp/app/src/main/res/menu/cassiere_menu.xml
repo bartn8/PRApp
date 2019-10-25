@@ -19,6 +19,8 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/cassiere_scansionaItem"
+        android:title="@string/fragment_cassiere_menu_scansionaItem"/>
     <item android:id="@+id/cassiere_autoApprovaItem"
         android:title="@string/fragment_cassiere_menu_autoApprovaItem"/>
     <item android:id="@+id/cassiere_genteEntrataItem"

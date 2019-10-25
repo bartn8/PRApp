@@ -126,7 +126,7 @@ public class MainViewModel extends AbstractViewModel {
     }
 
     public void acceptThirdPartyCookies(WebView view) {
-        MyCookieManager.getSingleton(getContext()).acceptThirdPartyCookies(view);
+        MyCookieManager.acceptThirdPartyCookies(view);
     }
 
     public String getToken() {

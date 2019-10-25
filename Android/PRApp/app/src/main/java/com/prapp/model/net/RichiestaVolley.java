@@ -36,8 +36,8 @@ import java.io.UnsupportedEncodingException;
 public class RichiestaVolley extends JsonRequest<Risposta> {
 
     private static final String PROTOCOL_CONTENT_TYPE = "application/x-www-form-urlencoded; charset=utf-8";
+    private static final Gson GSON = new Gson();
 
-    private Gson gson = new Gson();//TODO: leva
     private Richiesta request;
 
     public RichiestaVolley(String url, @NotNull Richiesta request, Response.Listener<Risposta> listener, @Nullable Response.ErrorListener errorListener) throws UnsupportedEncodingException {
@@ -58,7 +58,7 @@ public class RichiestaVolley extends JsonRequest<Risposta> {
                     HttpHeaderParser.parseCharset(response.headers));
 
             return Response.success(
-                    gson.fromJson(jsonResponse, Risposta.class),
+                    GSON.fromJson(jsonResponse, Risposta.class),
                     HttpHeaderParser.parseCacheHeaders(response));
 
         } catch (UnsupportedEncodingException e) {

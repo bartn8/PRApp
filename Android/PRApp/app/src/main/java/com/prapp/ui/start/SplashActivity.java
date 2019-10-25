@@ -52,13 +52,12 @@ import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static void addDefaultErrorListener(Context context)
-    {
-        ManagerUtente.getInstance(context).addDefaultErrorListener();
-        ManagerMembro.getInstance(context).addDefaultErrorListener();
-        ManagerCassiere.getInstance(context).addDefaultErrorListener();
-        ManagerPR.getInstance(context).addDefaultErrorListener();
-        ManagerAmministratore.getInstance(context).addDefaultErrorListener();
+    private static void addDefaultErrorListener(Context context) {
+        ManagerUtente.newInstance(context).addDefaultErrorListener();
+        ManagerMembro.newInstance(context).addDefaultErrorListener();
+        ManagerCassiere.newInstance(context).addDefaultErrorListener();
+        ManagerPR.newInstance(context).addDefaultErrorListener();
+        ManagerAmministratore.newInstance(context).addDefaultErrorListener();
     }
 
 
@@ -69,10 +68,10 @@ public class SplashActivity extends AppCompatActivity {
     private SplashViewModel splashViewModel;
     private UiUtils uiUtils;
 
-    private Observer<Result<WUtente,Void>> loginTokenResultObserver = new Observer<Result<WUtente,Void>>() {
+    private Observer<Result<WUtente, Void>> loginTokenResultObserver = new Observer<Result<WUtente, Void>>() {
 
         @Override
-        public void onChanged(Result<WUtente,Void> loginTokenResult) {
+        public void onChanged(Result<WUtente, Void> loginTokenResult) {
             if (loginTokenResult == null) {
                 return;
             }
@@ -81,14 +80,12 @@ public class SplashActivity extends AppCompatActivity {
             List<Exception> error = loginTokenResult.getError();
             WUtente success = loginTokenResult.getSuccess();
 
-            if (integerError != null)
-            {
+            if (integerError != null) {
                 uiUtils.showError(integerError);
                 passaggioAllaPaginaDiLogin();
             }
 
-            if (error != null)
-            {
+            if (error != null) {
                 uiUtils.showError(error);
                 passaggioAllaPaginaDiLogin();
             }
@@ -96,9 +93,9 @@ public class SplashActivity extends AppCompatActivity {
             if (success != null) {
                 showLoginSuccess(success);
 
-                if(!splashViewModel.isStaffScelto())
+                if (!splashViewModel.isStaffScelto())
                     passaggioAllaPaginaDiSceltaStaff();
-                else if(!splashViewModel.isEventoScelto())
+                else if (!splashViewModel.isEventoScelto())
                     passaggioAllaPaginaDiSceltaEvento();
                 else
                     recuperoInformazioniUtente();
@@ -106,9 +103,9 @@ public class SplashActivity extends AppCompatActivity {
         }
     };
 
-    private Observer<Result<WDirittiUtente,Void>> getInfoUtenteResultObserver = new Observer<Result<WDirittiUtente,Void>>() {
+    private Observer<Result<WDirittiUtente, Void>> getInfoUtenteResultObserver = new Observer<Result<WDirittiUtente, Void>>() {
         @Override
-        public void onChanged(Result<WDirittiUtente,Void> getInfoUtenteResult) {
+        public void onChanged(Result<WDirittiUtente, Void> getInfoUtenteResult) {
             if (getInfoUtenteResult == null) {
                 return;
             }
@@ -130,9 +127,9 @@ public class SplashActivity extends AppCompatActivity {
         }
     };
 
-    private Observer<Result<WToken,Void>> renewTokenResultObserver = new Observer<Result<WToken,Void>>() {
+    private Observer<Result<WToken, Void>> renewTokenResultObserver = new Observer<Result<WToken, Void>>() {
         @Override
-        public void onChanged(Result<WToken,Void> renewTokenResult) {
+        public void onChanged(Result<WToken, Void> renewTokenResult) {
             if (renewTokenResult == null) {
                 return;
             }
@@ -158,8 +155,7 @@ public class SplashActivity extends AppCompatActivity {
         uiUtils.makeToast(welcome);
     }
 
-    private void creaToken()
-    {
+    private void creaToken() {
         splashViewModel.renewToken();
     }
 
@@ -167,32 +163,27 @@ public class SplashActivity extends AppCompatActivity {
         splashViewModel.loginToken();
     }
 
-    private void recuperoInformazioniUtente()
-    {
+    private void recuperoInformazioniUtente() {
         splashViewModel.getInfoUtente();
     }
 
-    private void passaggioAllaPaginaDiLogin()
-    {
+    private void passaggioAllaPaginaDiLogin() {
         startActivityForResult(new Intent(this, LoginActivity.class), REQUEST_CODE_LOGIN);
     }
 
-    private void passaggioAllaPaginaDiSceltaStaff()
-    {
+    private void passaggioAllaPaginaDiSceltaStaff() {
         Intent intent = new Intent(this, SelectStaffActivity.class);
         intent.putExtra(SelectStaffActivity.SEARCH_PREFERENCES_MESSAGE, true);
         startActivityForResult(intent, REQUEST_CODE_SELECT_STAFF);
     }
 
-    private void passaggioAllaPaginaDiSceltaEvento()
-    {
+    private void passaggioAllaPaginaDiSceltaEvento() {
         Intent intent = new Intent(this, SelectEventoActivity.class);
         intent.putExtra(SelectStaffActivity.SEARCH_PREFERENCES_MESSAGE, true);
         startActivityForResult(intent, REQUEST_CODE_SELECT_EVENTO);
     }
 
-    private void passaggioAllaPaginaPrincipale()
-    {
+    private void passaggioAllaPaginaPrincipale() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 
@@ -229,14 +220,12 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode != RESULT_OK)
+        if (resultCode != RESULT_OK)
             return;
 
-        switch (requestCode)
-        {
-            case REQUEST_CODE_LOGIN:
-            {
-                if(splashViewModel.isLoggato()){
+        switch (requestCode) {
+            case REQUEST_CODE_LOGIN: {
+                if (splashViewModel.isLoggato()) {
                     //Login effettuato.
 
                     //Creo il token.
@@ -245,45 +234,26 @@ public class SplashActivity extends AppCompatActivity {
                     //Devo riselezionare staff ed evento: Se ho cambiato username?
                     splashViewModel.clearSelected();
 
-                    //Posso condividere il token.
-                    //splashViewModel.copyCookiesFromPreferences();
-                    //splashViewModel.copyCookiesFromCookieHandler();
-
-                    if(!splashViewModel.isStaffScelto())
-                    {
+                    if (!splashViewModel.isStaffScelto()) {
                         passaggioAllaPaginaDiSceltaStaff();
                         break;
                     }
 
                     recuperoInformazioniUtente();
-                }
-                else{
+                } else {
                     //Login fallito ritorno al login.
                     passaggioAllaPaginaDiLogin();
                 }
                 break;
             }
 
-            case REQUEST_CODE_SELECT_STAFF:
-            {
+            case REQUEST_CODE_SELECT_STAFF: {
                 //Ocio: devo rifare la sccelta dell'evento: se staff diverso?
-                /*
-                if(!splashViewModel.isEventoScelto())
-                {
-                    passaggioAllaPaginaDiSceltaEvento();
-                    break;
-                }
-
-                recuperoInformazioniUtente();
-                */
-
-
                 passaggioAllaPaginaDiSceltaEvento();
                 break;
             }
 
-            case REQUEST_CODE_SELECT_EVENTO:
-            {
+            case REQUEST_CODE_SELECT_EVENTO: {
                 recuperoInformazioniUtente();
                 break;
             }

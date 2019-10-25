@@ -160,6 +160,7 @@
     <!-- FRAGMENT CASSIERE -->
 
     <!-- MENU -->
+    <string name="fragment_cassiere_menu_scansionaItem">Scansiona QR</string>
     <string name="fragment_cassiere_menu_autoApprovaItem">Auto-Approva</string>
     <string name="fragment_cassiere_menu_genteEntrataItem">Prevendite entrate</string>
     <string name="fragment_cassiere_menu_genteNonEntrataItem">Prevendite non entrate</string>
@@ -218,6 +219,8 @@
 
     <string name="subfragment_lista_cassiere_listaTimbrate_label">Prevendite timbrate</string>
     <string name="subfragment_lista_cassiere_listaNonTimbrate_label">Prevendite non timbrate</string>
+    <!-- Toast -->
+    <string name="subfragment_lista_cassiere_lista_vuota_toast">Lista vuota</string>
 
     <!-- FRAGMENT AMMINISTRATORE -->
 

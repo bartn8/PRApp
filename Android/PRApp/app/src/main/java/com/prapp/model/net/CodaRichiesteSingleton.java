@@ -27,24 +27,11 @@ import com.android.volley.toolbox.Volley;
 
 public class CodaRichiesteSingleton {
 
-    private static CodaRichiesteSingleton instance;
+    //Modificata per memory leak sul Context.
 
-    public static synchronized CodaRichiesteSingleton getInstance(Context context) {
-        if (instance == null) {
-            instance = new CodaRichiesteSingleton(context);
-        }
-        return instance;
-    }
+    private static RequestQueue requestQueue;
 
-    private RequestQueue requestQueue;
-    private Context context;
-
-    public CodaRichiesteSingleton(Context context) {
-        this.context = context;
-        requestQueue = getRequestQueue();
-    }
-
-    public RequestQueue getRequestQueue() {
+    public static RequestQueue getRequestQueue(Context context) {
         if (requestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
@@ -53,7 +40,7 @@ public class CodaRichiesteSingleton {
         return requestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
+    public static <T> void addToRequestQueue(Request<T> req, Context context) {
+        getRequestQueue(context).add(req);
     }
 }

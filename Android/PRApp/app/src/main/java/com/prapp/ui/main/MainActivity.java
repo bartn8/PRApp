@@ -183,6 +183,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     }
 
     @Override
+    public Fragment getNavFragment(int id) {
+        switch (id){
+            case ID_FRAGMENT_UTENTE: return utenteFragment;
+            case ID_FRAGMENT_MEMBRO: return membroFragment;
+            case ID_FRAGMENT_PR: return prFragment;
+            case ID_FRAGMENT_CASSIERE: return cassiereFragment;
+            case ID_FRAGMENT_AMMINISTRATORE: return amminisratoreFragment;
+            default: return null;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -224,9 +236,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navView.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
 
-        //Controllo permessi camera
-        //Il controllo dei permessi camera viene effettuato a livello cassiere.
-        //checkCameraPermission();
+        utenteFragment.holdInterface(this);
+        membroFragment.holdInterface(this);
+        prFragment.holdInterface(this);
+        cassiereFragment.holdInterface(this);
+        amminisratoreFragment.holdInterface(this);
 
     }
 

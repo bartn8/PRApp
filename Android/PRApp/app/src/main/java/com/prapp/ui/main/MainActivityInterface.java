@@ -29,4 +29,6 @@ public interface MainActivityInterface {
      * @param nuovoFragment Fragment da impostare.
      */
     public void cambiaFragment(Fragment nuovoFragment);
+
+    public Fragment getNavFragment(int id);
 }

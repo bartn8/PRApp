@@ -42,40 +42,31 @@ import java.io.UnsupportedEncodingException;
 
 public class SplashViewModel extends AbstractViewModel {
 
-    private MutableLiveData<Result<WUtente,Void>> loginResult = new MutableLiveData<>();
-    private MutableLiveData<Result<WDirittiUtente,Void>> getInfoUtenteResult = new MutableLiveData<>();
-    private MutableLiveData<Result<WToken,Void>> renewTokenResult = new MutableLiveData<>();
+    private MutableLiveData<Result<WUtente, Void>> loginResult = new MutableLiveData<>();
+    private MutableLiveData<Result<WDirittiUtente, Void>> getInfoUtenteResult = new MutableLiveData<>();
+    private MutableLiveData<Result<WToken, Void>> renewTokenResult = new MutableLiveData<>();
 
     public SplashViewModel(Context context) {
         super(context);
     }
 
-    public LiveData<Result<WUtente,Void>> getLoginResult()
-    {
+    public LiveData<Result<WUtente, Void>> getLoginResult() {
         return loginResult;
     }
 
-    public LiveData<Result<WDirittiUtente,Void>> getGetInfoUtenteResult() {
+    public LiveData<Result<WDirittiUtente, Void>> getGetInfoUtenteResult() {
         return getInfoUtenteResult;
     }
 
-    public LiveData<Result<WToken,Void>> getRenewTokenResult() {
+    public LiveData<Result<WToken, Void>> getRenewTokenResult() {
         return renewTokenResult;
     }
 
-    public void initCookieManager(){
-        MyCookieManager.getSingleton(getContext()).initCookieManager();
+    public void initCookieManager() {
+        MyCookieManager.initCookieManager();
     }
 
-//    public void copyCookiesFromPreferences(){
-//        MyCookieManager.getSingleton(getContext()).copyCookiesFromPreferences();
-//    }
-//
-//    public void copyCookiesFromCookieHandler(){
-//        MyCookieManager.getSingleton(getContext()).copyCookiesFromCookieHandler();
-//    }
-
-    public void clearSelected(){
+    public void clearSelected() {
         //Pulizia di staff e evento scelto.
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
@@ -84,19 +75,16 @@ public class SplashViewModel extends AbstractViewModel {
         preferences.clearSelected();
     }
 
-    public void loginToken()
-    {
+    public void loginToken() {
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
 
-        if(preferences.isTokenSaved())
-        {
+        if (preferences.isTokenSaved()) {
             try {
                 WToken token = preferences.getLastStoredToken();
 
                 //Prima di procedere verifico che sia ancora valido.
-                if(token.isTokenValid())
-                {
+                if (token.isTokenValid()) {
                     ManagerUtente managerUtente = getManagerUtente();
                     managerUtente.loginWithToken(token.getToken(), new Response.Listener<WUtente>() {
                         @Override
@@ -105,8 +93,7 @@ public class SplashViewModel extends AbstractViewModel {
                             loginResult.setValue(new Result<>(response, null));
                         }
                     }, new DefaultExceptionListener<>(loginResult));
-                }
-                else {
+                } else {
                     //Token non valido lo elimino.
                     preferences.clearToken();
 
@@ -116,19 +103,15 @@ public class SplashViewModel extends AbstractViewModel {
             } catch (UnsupportedEncodingException e) {
                 loginResult.setValue(new Result<>(e));
             }
-        }
-        else
-        {
+        } else {
             loginResult.setValue(new Result<>(R.string.no_token));
         }
     }
 
-    public void getInfoUtente()
-    {
+    public void getInfoUtente() {
         MyContext myContext = getMyContext();
 
-        if(myContext.isLoggato() && myContext.isStaffScelto())
-        {
+        if (myContext.isLoggato() && myContext.isStaffScelto()) {
             WStaff staff = myContext.getStaff();
 
             ManagerMembro managerMembro = getManagerMembro();
@@ -145,20 +128,16 @@ public class SplashViewModel extends AbstractViewModel {
                 getInfoUtenteResult.setValue(new Result<>(e));
             }
 
-        }
-        else
-        {
+        } else {
             getInfoUtenteResult.setValue(new Result<>(R.string.no_staff));
         }
     }
 
-    public void renewToken()
-    {
+    public void renewToken() {
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
 
-        if(myContext.isLoggato())
-        {
+        if (myContext.isLoggato()) {
             ManagerUtente managerUtente = getManagerUtente();
 
             try {
@@ -176,9 +155,7 @@ public class SplashViewModel extends AbstractViewModel {
             } catch (UnsupportedEncodingException e) {
                 renewTokenResult.setValue(new Result<>(e));
             }
-        }
-        else
-        {
+        } else {
             renewTokenResult.setValue(new Result<>(R.string.no_login));
         }
     }

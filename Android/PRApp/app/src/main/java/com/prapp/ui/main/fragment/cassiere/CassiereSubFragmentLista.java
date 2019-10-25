@@ -41,6 +41,7 @@ import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.ui.Result;
 import com.prapp.ui.UiUtils;
 import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.main.MainActivity;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.WPrevenditaPlusAdapter;
@@ -68,8 +69,8 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
      *
      * @return A new instance of fragment CassiereSubFragmentLista.
      */
-    public static CassiereFragment newInstance(int mode) {
-        CassiereFragment fragment = new CassiereFragment();
+    public static CassiereSubFragmentLista newInstance(int mode) {
+        CassiereSubFragmentLista fragment = new CassiereSubFragmentLista();
         Bundle args = new Bundle();
         args.putInt(MODE_KEY, mode);
         fragment.setArguments(args);
@@ -144,8 +145,12 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
                 uiUtils.showError(error);
 
             else if (success != null) {
-                //Applico al recycler view i dati.
-                recyclerAdapter.add(success);
+                if(success.isEmpty()){
+                    uiUtils.makeToast(R.string.subfragment_lista_cassiere_lista_vuota_toast);
+                }else{
+                    //Applico al recycler view i dati.
+                    recyclerAdapter.add(success);
+                }
             }
         }
     };
@@ -155,8 +160,12 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);    //Opzione menu
 
-        //Recupero bundle.
-        mode = savedInstanceState.getInt(MODE_KEY);
+        //Recupero argomenti.
+        Bundle args = getArguments();
+
+        if(args != null){
+            mode = args.getInt(MODE_KEY);
+        }
     }
 
     //ROBA MENU------------------------------------------------------------------------------
@@ -178,6 +187,10 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+            case R.id.cassiere_scansionaItem:
+                //Ritorno al fragment cassiere.
+                mainActivityInterface.cambiaFragment(mainActivityInterface.getNavFragment(MainActivity.ID_FRAGMENT_CASSIERE));
+                return true;
             case R.id.cassiere_genteEntrataItem:
                 //Non è il mio campo
                 if(mode == MODE_LIST_TIMBRATE) return super.onOptionsItemSelected(item);
@@ -233,8 +246,14 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         mainViewModel.getPrevenditeResult().observe(this, this.getPrevenditeResultObserver);
 
         //Richiedo al server i dati.
-        if(mode == MODE_LIST_TIMBRATE) mainViewModel.getListaPrevenditeTimbrateEvento();
-        else if (mode == MODE_LIST_NON_TIMBRATE) mainViewModel.getListaPrevenditeNonTimbrateEvento();
+        if(mode == MODE_LIST_TIMBRATE){
+            label.setText(R.string.subfragment_lista_cassiere_listaTimbrate_label);
+            mainViewModel.getListaPrevenditeTimbrateEvento();
+        }
+        else if (mode == MODE_LIST_NON_TIMBRATE){
+            label.setText(R.string.subfragment_lista_cassiere_listaNonTimbrate_label);
+            mainViewModel.getListaPrevenditeNonTimbrateEvento();
+        }
 
 
         return view;
