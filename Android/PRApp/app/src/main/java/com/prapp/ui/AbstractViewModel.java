@@ -46,6 +46,8 @@ import java.util.List;
 
 public abstract class AbstractViewModel extends ViewModel {
 
+    private static final boolean NETWORK_DEBUG = false;
+
     protected class DefaultSuccessListener<T, K> implements Response.Listener<T>
     {
         private MutableLiveData<Result<T, K>> result;
@@ -118,6 +120,15 @@ public abstract class AbstractViewModel extends ViewModel {
         this.managerCassiere = ManagerCassiere.newInstance(context);
         this.managerAmministratore = ManagerAmministratore.newInstance(context);
         this.managerManutenzione = ManagerManutenzione.newInstance(context);
+
+        if(NETWORK_DEBUG){
+            this.managerUtente.addDefaultErrorListener();
+            this.managerMembro.addDefaultErrorListener();
+            this.managerPR.addDefaultErrorListener();
+            this.managerCassiere.addDefaultErrorListener();
+            this.managerAmministratore.addDefaultErrorListener();
+            this.managerManutenzione.addDefaultErrorListener();
+        }
     }
 
     public WDirittiUtente getDirittiUtente() {

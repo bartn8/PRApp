@@ -38,11 +38,8 @@ public class RichiestaVolley extends JsonRequest<Risposta> {
     private static final String PROTOCOL_CONTENT_TYPE = "application/x-www-form-urlencoded; charset=utf-8";
     private static final Gson GSON = new Gson();
 
-    private Richiesta request;
-
     public RichiestaVolley(String url, @NotNull Richiesta request, Response.Listener<Risposta> listener, @Nullable Response.ErrorListener errorListener) throws UnsupportedEncodingException {
         super(Method.POST, url, request.generatePOSTQuery(), listener,  errorListener);
-        this.request = request;
     }
 
     @Override

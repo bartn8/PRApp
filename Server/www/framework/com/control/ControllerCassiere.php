@@ -105,7 +105,6 @@ class ControllerCassiere extends Controller
         }
         
         switch ($command->getCommand()) {
-//             case ControllerCassiere::CMD_IS_CASSIERE:
             case ControllerCassiere::CMD_TIMBRA_ENTRATA:
             case ControllerCassiere::CMD_RESTITUISCI_DATI_CLIENTE:
             case ControllerCassiere::CMD_RESTITUISCI_STATISTICHE_CASSIERE_TOTALI:
@@ -114,6 +113,8 @@ class ControllerCassiere extends Controller
             case ControllerCassiere::CMD_RESTITUISCI_ENTRATE_SVOLTE:
             case ControllerCassiere::CMD_RESTITUISCI_PREVENDITE_EVENTO:
             case ControllerCassiere::CMD_RESTITUISCI_INFORMAZIONI_PREVENDITA:
+            case ControllerCassiere::CMD_RESTITUISCI_LISTA_PREVENDITE_TIMBRATE:
+            case ControllerCassiere::CMD_RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE:
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
             

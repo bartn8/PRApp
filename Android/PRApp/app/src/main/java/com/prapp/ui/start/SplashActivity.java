@@ -52,15 +52,6 @@ import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static void addDefaultErrorListener(Context context) {
-        ManagerUtente.newInstance(context).addDefaultErrorListener();
-        ManagerMembro.newInstance(context).addDefaultErrorListener();
-        ManagerCassiere.newInstance(context).addDefaultErrorListener();
-        ManagerPR.newInstance(context).addDefaultErrorListener();
-        ManagerAmministratore.newInstance(context).addDefaultErrorListener();
-    }
-
-
     public static final int REQUEST_CODE_LOGIN = 1;
     public static final int REQUEST_CODE_SELECT_STAFF = 2;
     public static final int REQUEST_CODE_SELECT_EVENTO = 3;
@@ -201,9 +192,6 @@ public class SplashActivity extends AppCompatActivity {
         JodaTimeAndroid.init(getApplicationContext());
 
         uiUtils = UiUtils.getInstance(getApplicationContext());
-
-        //DEBUG ONLY
-        //addDefaultErrorListener(getApplicationContext());
 
         //Inizializzo il view model e applico gli observer.
         splashViewModel = ViewModelProviders.of(this, new SplashViewModelFactory(getApplicationContext())).get(SplashViewModel.class);

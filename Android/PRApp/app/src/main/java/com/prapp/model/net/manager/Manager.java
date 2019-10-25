@@ -34,52 +34,46 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: trasformare le classi manager in statiche se possibile.
+
 public abstract class Manager {
 
-    protected class ResponseErrorDefaultListener implements Response.ErrorListener
-    {
+    protected class ResponseErrorDefaultListener implements Response.ErrorListener {
         @Override
         public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
         }
     }
 
-    protected class ResponseErrorMultipleListener implements Response.ErrorListener
-    {
+    protected class ResponseErrorMultipleListener implements Response.ErrorListener {
         private List<Response.ErrorListener> set = new ArrayList<>();
         private ResponseErrorDefaultListener defaultListener = new ResponseErrorDefaultListener();
 
-        public void addDefaultErrorListener()
-        {
+        public void addDefaultErrorListener() {
             set.add(defaultListener);
         }
 
-        public void removeDefaultErrorListener()
-        {
+        public void removeDefaultErrorListener() {
             set.remove(defaultListener);
         }
 
-        public void addListener(Response.ErrorListener listener)
-        {
+        public void addListener(Response.ErrorListener listener) {
             set.add(listener);
         }
 
-        public void removeListener(Response.ErrorListener listener)
-        {
+        public void removeListener(Response.ErrorListener listener) {
             set.remove(listener);
         }
 
         @Override
         public void onErrorResponse(VolleyError error) {
-            for(Response.ErrorListener listener : set)
-            {
+            for (Response.ErrorListener listener : set) {
                 listener.onErrorResponse(error);
             }
         }
     }
 
-    protected class ResponseListener implements Response.Listener<Risposta>
-    {
+    protected class ResponseListener implements Response.Listener<Risposta> {
 
         private Comando comando;
         private Predicate<Integer> isSizeValid;
@@ -97,14 +91,12 @@ public abstract class Manager {
 
         @Override
         public void onResponse(Risposta response) {
-            if(!comando.equals(response.getComando()))
-            {
-                errorListener.onErrorResponse(new VolleyError((new CheckException("Risulta un comando diverso: "+response.getComando()))));
+            if (!comando.equals(response.getComando())) {
+                errorListener.onErrorResponse(new VolleyError((new CheckException("Risulta un comando diverso: " + response.getComando()))));
                 return;
             }
 
-            switch (response.getStatoRisposta())
-            {
+            switch (response.getStatoRisposta()) {
                 case STATORISPOSTA_OK:
                     if (!isSizeValid.predict(response.getRisultati().size())) {
                         errorListener.onErrorResponse(new VolleyError((new CheckException("Il numero di risultati non corrisponde: " + response.getRisultati().size()))));
@@ -119,7 +111,7 @@ public abstract class Manager {
                     break;
 
                 default:
-                    errorListener.onErrorResponse(new VolleyError((new CheckException("Risulta uno stato diverso: "+response.getStatoRisposta()))));
+                    errorListener.onErrorResponse(new VolleyError((new CheckException("Risulta uno stato diverso: " + response.getStatoRisposta()))));
             }
         }
     }
@@ -128,8 +120,7 @@ public abstract class Manager {
     protected android.content.Context context;
     protected ResponseErrorMultipleListener errorListener;
 
-    public Manager(android.content.Context context)
-    {
+    public Manager(android.content.Context context) {
         this(MyContext.getSingleton().getIndirizzo(), context);
     }
 
@@ -155,8 +146,7 @@ public abstract class Manager {
         this.context = context;
     }
 
-    public void addDefaultErrorListener()
-    {
+    public void addDefaultErrorListener() {
         errorListener.addDefaultErrorListener();
     }
 
