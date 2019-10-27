@@ -18,11 +18,17 @@
   ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/fragment_pr_menu_aggiungiPrevenditaItem"
-        android:title="@string/fragment_pr_menu_aggiungiPrevenditaItem"/>
-    <item android:id="@+id/fragment_pr_menu_listaPrevenditeItem"
-        android:title="@string/fragment_pr_menu_listaPrevenditeItem"/>
-    <item android:id="@+id/fragment_pr_menu_statisticheEventoItem"
-        android:title="@string/fragment_pr_menu_statisticheEventoItem"/>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/fragment_pr_cliente_menu_searchClienteItem"
+        android:title="@string/fragment_pr_cliente_menu_searchItem"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_search"/>
+
+    <item android:id="@+id/fragment_pr_cliente_menu_aggiungiClienteItem"
+        android:title="@string/fragment_pr_cliente_menu_aggiungiClienteItem"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_add"/>
 </menu>

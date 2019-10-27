@@ -84,21 +84,14 @@ public class WEventoAdapter extends RecyclerView.Adapter<WEventoAdapter.WEventoV
     private WEvento[] dataset;
 
     public WEventoAdapter(WEvento[] dataset) {
-        this(dataset, new WEventoAdapter.ItemClickListener() {
-            @Override
-            public void onListItemClick(int clickedItemId) {
+        this(dataset, clickedItemId -> {
 
-            }
         });
     }
 
-    public WEventoAdapter(List<WEvento> dataset)
-    {
-        this(dataset, new WEventoAdapter.ItemClickListener() {
-            @Override
-            public void onListItemClick(int clickedItemId) {
+    public WEventoAdapter(List<WEvento> dataset) {
+        this(dataset, clickedItemId -> {
 
-            }
         });
     }
 
@@ -128,7 +121,9 @@ public class WEventoAdapter extends RecyclerView.Adapter<WEventoAdapter.WEventoV
 
         holder.textViewNome.setText(evento.getNome());
         holder.textViewDescrizione.setText(evento.getDescrizione());
-        holder.textViewPeriodo.setText(evento.getInizio().toString(DATE_FORMATTER) + " - " + evento.getFine().toString(DATE_FORMATTER));
+
+        String periodoText = parentContex.getString(R.string.select_evento_date_placeholder, evento.getInizio().toString(DATE_FORMATTER), evento.getFine().toString(DATE_FORMATTER));
+        holder.textViewPeriodo.setText(periodoText);
 
         holder.eventoId = evento.getId();
     }

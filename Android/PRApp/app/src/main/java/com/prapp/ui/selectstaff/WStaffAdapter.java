@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WStaff;
 
+import org.jetbrains.annotations.NotNull;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -87,6 +88,7 @@ public class WStaffAdapter extends RecyclerView.Adapter<WStaffAdapter.WStaffView
     }
 
     // Create new views (invoked by the layout manager)
+    @NotNull
     @Override
     public WStaffViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         parentContex = parent.getContext();
@@ -94,7 +96,7 @@ public class WStaffAdapter extends RecyclerView.Adapter<WStaffAdapter.WStaffView
         LayoutInflater inflater = LayoutInflater.from(parentContex);
         View view = inflater.inflate(R.layout.wstaff_list_item, parent, false);
 
-        return  new WStaffViewHolder(view);
+        return new WStaffViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -114,7 +116,6 @@ public class WStaffAdapter extends RecyclerView.Adapter<WStaffAdapter.WStaffView
     public int getItemCount() {
         return dataset.length;
     }
-
 
 
 }

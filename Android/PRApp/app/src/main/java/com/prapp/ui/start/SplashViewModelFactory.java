@@ -27,17 +27,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SplashViewModelFactory implements ViewModelProvider.Factory {
 
-    private Context context;
-
     public SplashViewModelFactory(Context context) {
-        this.context = context;
+
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(SplashViewModel.class)) {
-            return (T) new SplashViewModel(context);
+            return (T) new SplashViewModel();
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

@@ -38,6 +38,9 @@
 
     <!-- SELECT EVENTO -->
     <string name="select_evento_title">Seleziona Evento</string>
+    <string name="select_evento_date_placeholder">
+        <xliff:g example="01/01/01" id="inizio">%1$s</xliff:g> - <xliff:g example="01/01/01" id="fine">%2$s</xliff:g>
+    </string>
 
     <!--LOGIN -->
     <string name="title_activity_login">Entra</string>
@@ -148,14 +151,23 @@
     <string name="fragment_membro_menu_listaTipoPrevenditaItem">Lista tipo prevendita</string>
 
     <!-- FRAGMENT PR -->
-    <string name="fragment_pr_image_desc">Stefano Lavori</string>
-    <string name="fragment_pr_desc">Colpa di Stefano Lavori</string>
-    <string name="fragment_pr_linkButton">Web App</string>
+    <string name="fragment_pr_cliente_toolbar_label">Cliente</string>
+
+    <string name="fragment_pr_add_cliente_nome_label">Nome:</string>
+    <string name="fragment_pr_add_cliente_cognome_label">Cognome:</string>
+    <string name="fragment_pr_add_cliente_dataDiNascita_label">Cognome:</string>
+    <string name="fragment_pr_add_cliente_nome_editText_label">(opzionale)</string>
+    <string name="fragment_pr_add_cliente_cognome_editText_label">(opzionale)</string>
+    <string name="fragment_pr_add_cliente_dataDiNascita_editText_label">(opzionale)</string>
 
     <!-- MENU -->
-    <string name="fragment_pr_menu_aggiungiPrevenditaItem">Aggiungi Prevendita</string>
+    <string name="fragment_pr_menu_aggiungiPrevenditaItem">Aggiungi prevendita</string>
     <string name="fragment_pr_menu_listaPrevenditeItem">Lista prevendite</string>
     <string name="fragment_pr_menu_statisticheEventoItem">Statistiche evento</string>
+
+    <!-- MENU Toolbar Cliente -->
+    <string name="fragment_pr_cliente_menu_searchItem">Cerca</string>
+    <string name="fragment_pr_cliente_menu_aggiungiClienteItem">Aggiungi cliente</string>
 
     <!-- FRAGMENT CASSIERE -->
 

@@ -19,8 +19,6 @@
 
 package com.prapp.ui.selectevento;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,17 +26,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SelectEventoViewModelFactory implements ViewModelProvider.Factory {
 
-    private Context context;
+    public SelectEventoViewModelFactory() {
 
-    public SelectEventoViewModelFactory(Context context) {
-        this.context = context;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(SelectEventoViewModel.class)) {
-            return (T) new SelectEventoViewModel(context);
+            return (T) new SelectEventoViewModel();
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

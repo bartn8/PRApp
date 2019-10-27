@@ -19,12 +19,9 @@
 
 package com.prapp.ui.selectstaff;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Response;
 import com.prapp.R;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.wrapper.WStaff;
@@ -46,8 +43,8 @@ public class SelectStaffViewModel extends AbstractViewModel {
 
     private List<WStaff> staffList = new ArrayList<>();
 
-    public SelectStaffViewModel(Context context) {
-        super(context);
+    public SelectStaffViewModel() {
+        super();
     }
 
     public LiveData<Result<List<WStaff>,Void>> getListStaffResult() {
@@ -120,19 +117,13 @@ public class SelectStaffViewModel extends AbstractViewModel {
             ManagerUtente managerUtente = getManagerUtente();
 
             try {
-                managerUtente.restituisciListaStaffMembri(new Response.Listener<List<WStaff>>() {
-                    @Override
-                    public void onResponse(List<WStaff> response) {
-                        staffList = response;
-                        listStaffResult.setValue(new Result<>(response, null));
-                    }
-                }, new Response.Listener<List<Eccezione>>() {
-                    @Override
-                    public void onResponse(List<Eccezione> response) {
-                        //Tecnicamente non carico la lista e quindi non posso proseguire....
-                        //L'utente chiuderà l'applicazione.
-                        listStaffResult.setValue(new Result<>(null, Eccezione.convertiInExceptions(response)));
-                    }
+                managerUtente.restituisciListaStaffMembri(response -> {
+                    staffList = response;
+                    listStaffResult.setValue(new Result<>(response, null));
+                }, response -> {
+                    //Tecnicamente non carico la lista e quindi non posso proseguire....
+                    //L'utente chiuderà l'applicazione.
+                    listStaffResult.setValue(new Result<>(null, Eccezione.convertiInExceptions(response)));
                 });
             } catch (UnsupportedEncodingException e) {
                 //Non dovrebbe succedere.

@@ -19,20 +19,15 @@
 
 package com.prapp.model.net.manager;
 
-import android.content.Context;
-
 import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.prapp.model.net.CodaRichiesteSingleton;
+import com.prapp.PRAppApplication;
 import com.prapp.model.net.Eccezione;
 import com.prapp.model.net.Richiesta;
 import com.prapp.model.net.RichiestaVolley;
-import com.prapp.model.net.Risultato;
 import com.prapp.model.net.enums.Comando;
 import com.prapp.model.net.serialize.adapter.DateTimeAdapter;
-import com.prapp.model.util.functional.Consumer;
-import com.prapp.model.util.functional.Predicate;
 
 import org.joda.time.DateTime;
 
@@ -42,68 +37,48 @@ import java.util.List;
 
 public class ManagerManutenzione extends Manager {
 
-    //Istanza singleton produce memory leak
-//    private static ManagerManutenzione singleton;
+    private static ManagerManutenzione singleton;
 
-    public static synchronized ManagerManutenzione newInstance(Context context)
-    {
-        ManagerManutenzione tmp = null;
+    public static synchronized ManagerManutenzione getInstance() {
+        if (singleton == null)
+            singleton = new ManagerManutenzione();
 
-        if(tmp == null)
-            tmp = new ManagerManutenzione(context);
-
-        return tmp;
+        return singleton;
     }
 
-    public ManagerManutenzione(Context context) {
-        super(context);
+    private ManagerManutenzione() {
+        super();
     }
 
-    public ManagerManutenzione(URL indirizzo, Context context) {
-        super(indirizzo, context);
+    public ManagerManutenzione(URL indirizzo) {
+        super(indirizzo);
     }
 
     public void echo(final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
         Richiesta richiesta = new Richiesta(Comando.COMANDO_MANUTENZIONE_ECHO);
 
-        ResponseListener listener = new ResponseListener(Comando.COMANDO_MANUTENZIONE_ECHO, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return element.intValue() == 0;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                //Non fare nulla.
-            }
+        ResponseListener listener = new ResponseListener(Comando.COMANDO_MANUTENZIONE_ECHO, element -> element.intValue() == 0, element -> {
+            //Non fare nulla.
         }, onException, errorListener);
 
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void restituisciDateTimeServer(final Response.Listener<DateTime> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
         final Richiesta richiesta = new Richiesta(Comando.COMANDO_MANUTENZIONE_TIMESTAMP);
 
-        ResponseListener listener = new ResponseListener(Comando.COMANDO_MANUTENZIONE_TIMESTAMP, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return element.intValue() == 1;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                Gson myGson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeAdapter()).create();
-                DateTime dateTime = element.get(0).castRisultato(myGson, DateTime.class);
-                onSuccess.onResponse(dateTime);
-            }
+        ResponseListener listener = new ResponseListener(Comando.COMANDO_MANUTENZIONE_TIMESTAMP, element -> element.intValue() == 1, element -> {
+            Gson myGson = new GsonBuilder().registerTypeAdapter(DateTime.class, new DateTimeAdapter()).create();
+            DateTime dateTime = element.get(0).castRisultato(myGson, DateTime.class);
+            onSuccess.onResponse(dateTime);
         }, onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
 }

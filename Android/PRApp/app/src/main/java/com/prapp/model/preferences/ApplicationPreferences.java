@@ -23,15 +23,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.prapp.PRAppApplication;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WToken;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 //https://www.apriorit.com/dev-blog/432-using-androidkeystore
 public class ApplicationPreferences {
-    public static final String PREFERENCES_FILE = "settings";
+    private static final String PREFERENCES_FILE = "settings";
 
     private static final String IS_TOKEN_SAVED_KEY = "is_token_saved";
     private static final String TOKEN_KEY = "token";
@@ -54,9 +55,9 @@ public class ApplicationPreferences {
         passwordStorage = new PasswordStorageHelper(context);
     }
 
-    public static ApplicationPreferences getInstance(Context context) {
+    public static ApplicationPreferences getInstance() {
         if (instance == null) {
-            instance = new ApplicationPreferences(context);
+            instance = new ApplicationPreferences(PRAppApplication.getInstance());
         }
 
         return instance;
@@ -66,17 +67,17 @@ public class ApplicationPreferences {
         return preferences.getBoolean(IS_TOKEN_SAVED_KEY, false);
     }
 
-    public void saveToken(WToken token) throws UnsupportedEncodingException {
+    public void saveToken(WToken token) {
         String tokenJson = GSON_OBJECT.toJson(token, WToken.class);
-        passwordStorage.setData(TOKEN_KEY, tokenJson.getBytes("UTF-8"));
+        passwordStorage.setData(TOKEN_KEY, tokenJson.getBytes(StandardCharsets.UTF_8));
 
         setTokenSaved(true);
     }
 
-    public WToken getLastStoredToken() throws UnsupportedEncodingException {
+    public WToken getLastStoredToken() {
         if(isTokenSaved())
         {
-            String tokenJson = new String(passwordStorage.getData(TOKEN_KEY), "UTF-8");
+            String tokenJson = new String(passwordStorage.getData(TOKEN_KEY), StandardCharsets.UTF_8);
             return GSON_OBJECT.fromJson(tokenJson, WToken.class);
         }
 
@@ -104,7 +105,7 @@ public class ApplicationPreferences {
     public void setTokenSaved(boolean isEnabled) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(IS_TOKEN_SAVED_KEY, isEnabled);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean isStaffSaved()
@@ -116,7 +117,7 @@ public class ApplicationPreferences {
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(IS_STAFF_SAVED_KEY, isEnabled);
-        editor.commit();
+        editor.apply();
     }
 
     public void clearStaff()
@@ -124,7 +125,7 @@ public class ApplicationPreferences {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(IS_STAFF_SAVED_KEY, false);
         editor.remove(STAFF_KEY);
-        editor.commit();
+        editor.apply();
     }
 
     public void saveStaff(WStaff staff)
@@ -134,7 +135,7 @@ public class ApplicationPreferences {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(STAFF_KEY, staffJson);
         editor.putBoolean(IS_STAFF_SAVED_KEY, true);
-        editor.commit();
+        editor.apply();
     }
 
     public WStaff getStaff()
@@ -160,7 +161,7 @@ public class ApplicationPreferences {
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(IS_EVENTO_SAVED_KEY, isEnabled);
-        editor.commit();
+        editor.apply();
     }
 
     public void clearEvento()
@@ -168,7 +169,7 @@ public class ApplicationPreferences {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(IS_EVENTO_SAVED_KEY, false);
         editor.remove(EVENTO_KEY);
-        editor.commit();
+        editor.apply();
     }
 
     public void saveEvento(WEvento staff)
@@ -178,7 +179,7 @@ public class ApplicationPreferences {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(EVENTO_KEY, staffJson);
         editor.putBoolean(IS_EVENTO_SAVED_KEY, true);
-        editor.commit();
+        editor.apply();
     }
 
     public WEvento getEvento()

@@ -19,12 +19,11 @@
 
 package com.prapp.ui;
 
-import android.content.Context;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.volley.Response;
+import com.prapp.PRAppApplication;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WEvento;
@@ -39,14 +38,13 @@ import com.prapp.model.net.manager.ManagerPR;
 import com.prapp.model.net.manager.ManagerUtente;
 import com.prapp.model.preferences.ApplicationPreferences;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public abstract class AbstractViewModel extends ViewModel {
 
-    private static final boolean NETWORK_DEBUG = false;
+
 
     protected class DefaultSuccessListener<T, K> implements Response.Listener<T>
     {
@@ -97,8 +95,6 @@ public abstract class AbstractViewModel extends ViewModel {
         }
     }
 
-    @NotNull
-    private Context context;
     private MyContext myContext;
     private ApplicationPreferences preferences;
 
@@ -109,19 +105,18 @@ public abstract class AbstractViewModel extends ViewModel {
     private ManagerAmministratore managerAmministratore;
     private ManagerManutenzione managerManutenzione;
 
-    public AbstractViewModel(@NotNull Context context) {
-        this.context = context;
-        this.myContext = MyContext.getSingleton();
-        this.preferences = ApplicationPreferences.getInstance(context);
+    public AbstractViewModel() {
+        this.myContext = MyContext.getInstance();
+        this.preferences = ApplicationPreferences.getInstance();
 
-        this.managerUtente = ManagerUtente.newInstance(context);
-        this.managerMembro = ManagerMembro.newInstance(context);
-        this.managerPR = ManagerPR.newInstance(context);
-        this.managerCassiere = ManagerCassiere.newInstance(context);
-        this.managerAmministratore = ManagerAmministratore.newInstance(context);
-        this.managerManutenzione = ManagerManutenzione.newInstance(context);
+        this.managerUtente = ManagerUtente.getInstance();
+        this.managerMembro = ManagerMembro.getInstance();
+        this.managerPR = ManagerPR.getInstance();
+        this.managerCassiere = ManagerCassiere.getInstance();
+        this.managerAmministratore = ManagerAmministratore.getInstance();
+        this.managerManutenzione = ManagerManutenzione.getInstance();
 
-        if(NETWORK_DEBUG){
+        if(PRAppApplication.NETWORK_DEBUG){
             this.managerUtente.addDefaultErrorListener();
             this.managerMembro.addDefaultErrorListener();
             this.managerPR.addDefaultErrorListener();
@@ -161,10 +156,6 @@ public abstract class AbstractViewModel extends ViewModel {
 
     public boolean isEventoScelto() {
         return myContext.isEventoScelto();
-    }
-
-    protected Context getContext() {
-        return context;
     }
 
     protected MyContext getMyContext() {

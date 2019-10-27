@@ -81,25 +81,22 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    private Observer<Result<WUtente,Void>> loginResultObserver = new Observer<Result<WUtente,Void>>() {
-        @Override
-        public void onChanged(@Nullable Result<WUtente,Void> loginResult) {
-            if (loginResult == null) {
-                return;
-            }
-
-            if (loginResult.getError() != null) {
-                showLoginFailed(loginResult.getError());
-            }
-
-            if (loginResult.getSuccess() != null) {
-                showLoginSuccess(loginResult.getSuccess());
-            }
-
-            //Ritorna allo splash
-            setResult(Activity.RESULT_OK);
-            finish();
+    private Observer<Result<WUtente,Void>> loginResultObserver = loginResult -> {
+        if (loginResult == null) {
+            return;
         }
+
+        if (loginResult.getError() != null) {
+            showLoginFailed(loginResult.getError());
+        }
+
+        if (loginResult.getSuccess() != null) {
+            showLoginSuccess(loginResult.getSuccess());
+        }
+
+        //Ritorna allo splash
+        setResult(Activity.RESULT_OK);
+        finish();
     };
 
     @Override
@@ -110,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory(getApplicationContext())).get(LoginViewModel.class);
+        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
         //Quando si aggiorna lo stato del form si esegue sta roba
         loginViewModel.getLoginFormState().observe(this, loginFormStateObserver);

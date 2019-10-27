@@ -19,11 +19,9 @@
 
 package com.prapp.ui.login;
 
-import android.content.Context;
-
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
@@ -31,10 +29,8 @@ import androidx.annotation.NonNull;
  */
 public class LoginViewModelFactory implements ViewModelProvider.Factory {
 
-    private Context context;
+    public LoginViewModelFactory() {
 
-    public LoginViewModelFactory(Context context) {
-        this.context = context;
     }
 
     @NonNull
@@ -42,7 +38,7 @@ public class LoginViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
-            return (T) new LoginViewModel(context);
+            return (T) new LoginViewModel();
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

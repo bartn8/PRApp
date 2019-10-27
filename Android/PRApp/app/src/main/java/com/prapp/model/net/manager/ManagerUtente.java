@@ -22,11 +22,11 @@ package com.prapp.model.net.manager;
 import android.content.Context;
 
 import com.android.volley.Response;
+import com.prapp.PRAppApplication;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.model.net.Argomento;
-import com.prapp.model.net.CodaRichiesteSingleton;
 import com.prapp.model.net.Eccezione;
 import com.prapp.model.net.Richiesta;
 import com.prapp.model.net.RichiestaVolley;
@@ -34,8 +34,6 @@ import com.prapp.model.net.Risultato;
 import com.prapp.model.net.enums.Comando;
 import com.prapp.model.net.wrapper.NetWLogin;
 import com.prapp.model.net.wrapper.NetWToken;
-import com.prapp.model.util.functional.Consumer;
-import com.prapp.model.util.functional.Predicate;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -44,44 +42,37 @@ import java.util.List;
 
 public class ManagerUtente extends Manager {
 
-    public static final String LOGIN_ARG_LOGIN = "login";
-    public static final String LOGIN_TOKEN_ARG_TOKEN = "token";
+    private static final String LOGIN_ARG_LOGIN = "login";
+    private static final String LOGIN_TOKEN_ARG_TOKEN = "token";
 
-    //Istanza singleton produce memory leak
-//    private static ManagerPR singleton;
+    private static ManagerUtente singleton;
 
-    public static synchronized ManagerUtente newInstance(Context context)
-    {
-        ManagerUtente tmp = null;
+    public static synchronized ManagerUtente getInstance() {
+        if (singleton == null)
+            singleton = new ManagerUtente();
 
-        if(tmp == null)
-            tmp = new ManagerUtente(context);
-
-        return tmp;
+        return singleton;
     }
 
-    public ManagerUtente(Context context) {
-        super(context);
+    private ManagerUtente() {
+        super();
     }
 
     public ManagerUtente(URL indirizzo, Context context) {
-        super(indirizzo, context);
+        super(indirizzo);
     }
 
-    public void registrazione()
-    {
+    public void registrazione() {
         //Non disponibile nella versione attuale di android
         throw new UnsupportedOperationException();
     }
 
-    public void creaStaff()
-    {
+    public void creaStaff() {
         //Non disponibile nella versione attuale di android
         throw new UnsupportedOperationException();
     }
 
-    public void accediStaff()
-    {
+    public void accediStaff() {
         //Non disponibile nella versione attuale di android
         throw new UnsupportedOperationException();
     }
@@ -91,140 +82,82 @@ public class ManagerUtente extends Manager {
         NetWLogin loginData = new NetWLogin(username, password);
         richiesta.aggiungiArgomento(new Argomento(LOGIN_ARG_LOGIN, loginData.getRemoteClassPath(), loginData));
 
-        ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_LOGIN, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return element.intValue() == 1;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                onSuccess.onResponse(element.get(0).castRisultato(WUtente.class));
-            }
-        }, onException, errorListener);
+        ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_LOGIN, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WUtente.class)), onException, errorListener);
 
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void logout(final Response.Listener<Void> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
         Richiesta richiesta = new Richiesta(Comando.COMANDO_UTENTE_LOGOUT);
 
-        ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_LOGOUT, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return element.intValue() == 0;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                onSuccess.onResponse(null);
-            }
-        }, onException, errorListener);
+        ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_LOGOUT, element -> element.intValue() == 0, element -> onSuccess.onResponse(null), onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void restituisciListaStaff(final Response.Listener<List<WStaff>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
         final Richiesta richiesta = new Richiesta(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF);
 
-        ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return true;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                List<WStaff> myList = new ArrayList<>();
+        ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF, element -> true, element -> {
+            List<WStaff> myList = new ArrayList<>();
 
-                for(Risultato risultato : element)
-                {
-                    myList.add(risultato.castRisultato(WStaff.class));
-                }
-
-                onSuccess.onResponse(myList);
+            for (Risultato risultato : element) {
+                myList.add(risultato.castRisultato(WStaff.class));
             }
+
+            onSuccess.onResponse(myList);
         }, onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void restituisciListaStaffMembri(final Response.Listener<List<WStaff>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
         final Richiesta richiesta = new Richiesta(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF_MEMBRI);
 
-        ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF_MEMBRI, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return true;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                List<WStaff> myList = new ArrayList<>();
+        ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF_MEMBRI, element -> true, element -> {
+            List<WStaff> myList = new ArrayList<>();
 
-                for(Risultato risultato : element)
-                {
-                    myList.add(risultato.castRisultato(WStaff.class));
-                }
-
-                onSuccess.onResponse(myList);
+            for (Risultato risultato : element) {
+                myList.add(risultato.castRisultato(WStaff.class));
             }
+
+            onSuccess.onResponse(myList);
         }, onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void renewToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
         Comando comando = Comando.COMANDO_UTENTE_RENEW_TOKEN;
         Richiesta richiesta = new Richiesta(comando);
 
-        ResponseListener listener = new ResponseListener(comando, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return element.intValue() == 1;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                onSuccess.onResponse(element.get(0).castRisultato(WToken.class));
-            }
-        }, onException, errorListener);
+        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WToken.class)), onException, errorListener);
 
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void getToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
         Comando comando = Comando.COMANDO_UTENTE_GET_TOKEN;
         Richiesta richiesta = new Richiesta(comando);
 
-        ResponseListener listener = new ResponseListener(comando, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return element.intValue() == 1;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                onSuccess.onResponse(element.get(0).castRisultato(WToken.class));
-            }
-        }, onException, errorListener);
+        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WToken.class)), onException, errorListener);
 
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void loginWithToken(String token, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
@@ -233,22 +166,12 @@ public class ManagerUtente extends Manager {
         NetWToken loginData = new NetWToken(token);
         richiesta.aggiungiArgomento(new Argomento(LOGIN_TOKEN_ARG_TOKEN, loginData.getRemoteClassPath(), loginData));
 
-        ResponseListener listener = new ResponseListener(comando, new Predicate<Integer>() {
-            @Override
-            public boolean predict(Integer element) {
-                return element.intValue() == 1;
-            }
-        }, new Consumer<List<Risultato>>() {
-            @Override
-            public void supply(List<Risultato> element) {
-                onSuccess.onResponse(element.get(0).castRisultato(WUtente.class));
-            }
-        }, onException, errorListener);
+        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WUtente.class)), onException, errorListener);
 
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
-        CodaRichiesteSingleton.addToRequestQueue(richiestaVolley, context);
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
 }

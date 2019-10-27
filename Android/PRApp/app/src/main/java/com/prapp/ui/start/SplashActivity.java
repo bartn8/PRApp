@@ -19,7 +19,6 @@
 
 package com.prapp.ui.start;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -32,11 +31,6 @@ import com.prapp.R;
 import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
-import com.prapp.model.net.manager.ManagerAmministratore;
-import com.prapp.model.net.manager.ManagerCassiere;
-import com.prapp.model.net.manager.ManagerMembro;
-import com.prapp.model.net.manager.ManagerPR;
-import com.prapp.model.net.manager.ManagerUtente;
 import com.prapp.ui.Result;
 import com.prapp.ui.UiUtils;
 import com.prapp.ui.login.LoginActivity;
@@ -199,15 +193,14 @@ public class SplashActivity extends AppCompatActivity {
         splashViewModel.getGetInfoUtenteResult().observe(this, getInfoUtenteResultObserver);
         splashViewModel.getRenewTokenResult().observe(this, renewTokenResultObserver);
 
-        //Da fare solo qua all'inizio.
-        splashViewModel.initCookieManager();
-
         //Non serve setContentLayout: c'è il tema.
         verificaToken();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode != RESULT_OK)
             return;
 

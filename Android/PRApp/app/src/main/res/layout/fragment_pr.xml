@@ -26,15 +26,91 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.fragment.pr.PRFragment">
 
-    <!-- Utilizzo una webview per mostrare la web app. -->
 
-    <WebView
-        android:id="@+id/fragment_pr_webView"
+    <!-- Card view per visualizzare il cliente. -->
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/primaryColorGrey">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/fragment_pr_toolbar_cliente"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:titleTextColor="@color/black"/>
+
+            <!-- Roba per aggiungere cliente. -->
+
+            <LinearLayout
+                android:id="@+id/fragment_pr_aggiungiCliente_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fragment_pr_add_cliente_nome_label" />
+
+                    <EditText
+                        android:id="@+id/fragment_pr_aggiungiCliente_nome_editText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:selectAllOnFocus="true"
+                        android:inputType="text"
+                        android:hint="@string/fragment_pr_add_cliente_nome_editText_label"
+                        tools:ignore="Autofill"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fragment_pr_add_cliente_cognome_label" />
+
+                    <EditText
+                        android:id="@+id/fragment_pr_aggiungiCliente_cognome_editText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:selectAllOnFocus="true"
+                        android:inputType="text"
+                        android:hint="@string/fragment_pr_add_cliente_cognome_editText_label"
+                        tools:ignore="Autofill"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            
+            <!-- Roba per ricerca cliente. -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_pr_recyclerViewClienti"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.core.widget.NestedScrollView>

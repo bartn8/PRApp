@@ -19,8 +19,6 @@
 
 package com.prapp.ui.login;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -44,8 +42,8 @@ public class LoginViewModel extends AbstractViewModel {
 
 
     //Costruttore
-    public LoginViewModel(Context context) {
-        super(context);
+    LoginViewModel() {
+        super();
     }
 
     //Getters
@@ -68,7 +66,7 @@ public class LoginViewModel extends AbstractViewModel {
                 /**
                  * Passo i dati dell'utente e aggiorno il contesto server.
                  *
-                 * @param response
+                 * @param response Utente con cui ho loggato.
                  */
                 @Override
                 public void onResponse(WUtente response) {
@@ -79,7 +77,7 @@ public class LoginViewModel extends AbstractViewModel {
 
                 /**
                  * Converto la lista in eccezioni vere e la passo fuori come risultato.
-                 * @param response
+                 * @param response Lista delle eccezioni
                  */
                 @Override
                 public void onResponse(List<Eccezione> response) {

@@ -54,9 +54,9 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
     @BindView(R.id.selectEventoRecyclerView)
     public RecyclerView selectEventoRecyclerView;
 
-    private Observer<Result<List<WEvento>,Void>> listEventiResultObserver = new Observer<Result<List<WEvento>,Void>>() {
+    private Observer<Result<List<WEvento>, Void>> listEventiResultObserver = new Observer<Result<List<WEvento>, Void>>() {
         @Override
-        public void onChanged(Result<List<WEvento>,Void> listStaffResult) {
+        public void onChanged(Result<List<WEvento>, Void> listStaffResult) {
             if (listStaffResult == null) {
                 return;
             }
@@ -96,28 +96,22 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
         selectEventoRecyclerView.setHasFixedSize(true);
         selectEventoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        selectEventoViewModel = ViewModelProviders.of(this, new SelectEventoViewModelFactory(getApplicationContext())).get(SelectEventoViewModel.class);
+        selectEventoViewModel = ViewModelProviders.of(this, new SelectEventoViewModelFactory()).get(SelectEventoViewModel.class);
         selectEventoViewModel.getListEventiResult().observe(this, listEventiResultObserver);
 
         //Non verifico login: lo fa il viewModel.
-        if(searchPreferences)
-        {
+        if (searchPreferences) {
             //Carico lo staff già aperto in precedenza.
-            if(selectEventoViewModel.caricaEventoSalvato())
-            {
+            if (selectEventoViewModel.caricaEventoSalvato()) {
                 //Posso chiudere l'activity
                 //Si ritorna allo splash...
                 setResult(RESULT_OK);
                 finish();
-            }
-            else
-            {
+            } else {
                 //Carico gli staff e procedo normalmente
                 selectEventoViewModel.getEventiStaff();
             }
-        }
-        else
-        {
+        } else {
             //Carico gli staff e procedo normalmente
             selectEventoViewModel.getEventiStaff();
         }

@@ -54,9 +54,9 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
     @BindView(R.id.selectStaffRecyclerView)
     public RecyclerView selectStaffRecyclerView;
 
-    private Observer<Result<List<WStaff>,Void>> listStaffResultObserver = new Observer<Result<List<WStaff>,Void>>() {
+    private Observer<Result<List<WStaff>, Void>> listStaffResultObserver = new Observer<Result<List<WStaff>, Void>>() {
         @Override
-        public void onChanged(Result<List<WStaff>,Void> listStaffResult) {
+        public void onChanged(Result<List<WStaff>, Void> listStaffResult) {
             if (listStaffResult == null) {
                 return;
             }
@@ -81,7 +81,6 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
     };
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,29 +97,22 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
         selectStaffRecyclerView.setHasFixedSize(true);
         selectStaffRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        selectStaffViewModel = ViewModelProviders.of(this, new SelectStaffViewModelFactory(getApplicationContext())).get(SelectStaffViewModel.class);
+        selectStaffViewModel = ViewModelProviders.of(this, new SelectStaffViewModelFactory()).get(SelectStaffViewModel.class);
         selectStaffViewModel.getListStaffResult().observe(this, listStaffResultObserver);
-//        selectStaffViewModel.getGetInfoUtenteResult().observe(this, getInfoUtenteResultObserver);
 
         //Non verifico login: lo fa il viewModel.
-        if(searchPreferences)
-        {
+        if (searchPreferences) {
             //Carico lo staff già aperto in precedenza.
-            if(selectStaffViewModel.caricaStaffSalvato())
-            {
+            if (selectStaffViewModel.caricaStaffSalvato()) {
                 //Posso chiudere l'activity
                 //Si ritorna allo splash...
                 setResult(RESULT_OK);
                 finish();
-            }
-            else
-            {
+            } else {
                 //Carico gli staff e procedo normalmente
                 selectStaffViewModel.getStaffMembri();
             }
-        }
-        else
-        {
+        } else {
             //Carico gli staff e procedo normalmente
             selectStaffViewModel.getStaffMembri();
         }

@@ -19,8 +19,6 @@
 
 package com.prapp.ui.selectstaff;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,17 +26,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SelectStaffViewModelFactory implements ViewModelProvider.Factory {
 
-    private Context context;
+    public SelectStaffViewModelFactory( ) {
 
-    public SelectStaffViewModelFactory(Context context) {
-        this.context = context;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(SelectStaffViewModel.class)) {
-            return (T) new SelectStaffViewModel(context);
+            return (T) new SelectStaffViewModel();
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

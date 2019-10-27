@@ -34,8 +34,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: trasformare le classi manager in statiche se possibile.
-
 public abstract class Manager {
 
     protected class ResponseErrorDefaultListener implements Response.ErrorListener {
@@ -117,16 +115,14 @@ public abstract class Manager {
     }
 
     protected URL indirizzo;
-    protected android.content.Context context;
     protected ResponseErrorMultipleListener errorListener;
 
-    public Manager(android.content.Context context) {
-        this(MyContext.getSingleton().getIndirizzo(), context);
+    protected Manager() {
+        this(MyContext.getInstance().getIndirizzo());
     }
 
-    public Manager(URL indirizzo, android.content.Context context) {
+    protected Manager(URL indirizzo) {
         this.indirizzo = indirizzo;
-        this.context = context;
         this.errorListener = new ResponseErrorMultipleListener();
     }
 
@@ -134,16 +130,8 @@ public abstract class Manager {
         return indirizzo;
     }
 
-    public android.content.Context getContext() {
-        return context;
-    }
-
     public void setIndirizzo(URL indirizzo) {
         this.indirizzo = indirizzo;
-    }
-
-    public void setContext(android.content.Context context) {
-        this.context = context;
     }
 
     public void addDefaultErrorListener() {

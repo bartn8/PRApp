@@ -19,8 +19,6 @@
 
 package com.prapp.ui.start;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -31,7 +29,6 @@ import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
-import com.prapp.model.net.MyCookieManager;
 import com.prapp.model.net.manager.ManagerMembro;
 import com.prapp.model.net.manager.ManagerUtente;
 import com.prapp.model.preferences.ApplicationPreferences;
@@ -46,8 +43,8 @@ public class SplashViewModel extends AbstractViewModel {
     private MutableLiveData<Result<WDirittiUtente, Void>> getInfoUtenteResult = new MutableLiveData<>();
     private MutableLiveData<Result<WToken, Void>> renewTokenResult = new MutableLiveData<>();
 
-    public SplashViewModel(Context context) {
-        super(context);
+    public SplashViewModel() {
+        super();
     }
 
     public LiveData<Result<WUtente, Void>> getLoginResult() {
@@ -60,10 +57,6 @@ public class SplashViewModel extends AbstractViewModel {
 
     public LiveData<Result<WToken, Void>> getRenewTokenResult() {
         return renewTokenResult;
-    }
-
-    public void initCookieManager() {
-        MyCookieManager.initCookieManager();
     }
 
     public void clearSelected() {
@@ -117,12 +110,9 @@ public class SplashViewModel extends AbstractViewModel {
             ManagerMembro managerMembro = getManagerMembro();
 
             try {
-                managerMembro.restituisciDirittiPersonaliStaff(staff.getId(), new Response.Listener<WDirittiUtente>() {
-                    @Override
-                    public void onResponse(WDirittiUtente response) {
-                        myContext.setDirittiUtente(response);
-                        getInfoUtenteResult.setValue(new Result<>(response, null));
-                    }
+                managerMembro.restituisciDirittiPersonaliStaff(staff.getId(), response -> {
+                    myContext.setDirittiUtente(response);
+                    getInfoUtenteResult.setValue(new Result<>(response, null));
                 }, new DefaultExceptionListener<>(getInfoUtenteResult));
             } catch (UnsupportedEncodingException e) {
                 getInfoUtenteResult.setValue(new Result<>(e));
@@ -141,16 +131,9 @@ public class SplashViewModel extends AbstractViewModel {
             ManagerUtente managerUtente = getManagerUtente();
 
             try {
-                managerUtente.renewToken(new Response.Listener<WToken>() {
-                    @Override
-                    public void onResponse(WToken response) {
-                        try {
-                            preferences.saveToken(response);
-                            renewTokenResult.setValue(new Result<>(response, null));
-                        } catch (UnsupportedEncodingException e) {
-                            renewTokenResult.setValue(new Result<>(e));
-                        }
-                    }
+                managerUtente.renewToken(response -> {
+                    preferences.saveToken(response);
+                    renewTokenResult.setValue(new Result<>(response, null));
                 }, new DefaultExceptionListener<>(renewTokenResult));
             } catch (UnsupportedEncodingException e) {
                 renewTokenResult.setValue(new Result<>(e));

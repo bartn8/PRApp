@@ -19,12 +19,11 @@
 
 package com.prapp.ui.selectevento;
 
-import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Response;
 import com.prapp.R;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.wrapper.WEvento;
@@ -41,15 +40,17 @@ import java.util.List;
 
 public class SelectEventoViewModel extends AbstractViewModel {
 
-    private MutableLiveData<Result<List<WEvento>,Void>> listEventiResult = new MutableLiveData<>();
+    private static final String TAG = SelectEventoViewModel.class.getSimpleName();
+
+    private MutableLiveData<Result<List<WEvento>, Void>> listEventiResult = new MutableLiveData<>();
 
     private List<WEvento> eventiList = new ArrayList<>();
 
-    public SelectEventoViewModel(Context context) {
-        super(context);
+    SelectEventoViewModel() {
+        super();
     }
 
-    public LiveData<Result<List<WEvento>,Void>> getListEventiResult() {
+    public LiveData<Result<List<WEvento>, Void>> getListEventiResult() {
         return listEventiResult;
     }
 
@@ -66,8 +67,7 @@ public class SelectEventoViewModel extends AbstractViewModel {
         return null;
     }
 
-    public void selectEvento(int idEvento)
-    {
+    public void selectEvento(int idEvento) {
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
 
@@ -83,13 +83,11 @@ public class SelectEventoViewModel extends AbstractViewModel {
         myContext.setEvento(evento);
     }
 
-    public boolean caricaEventoSalvato()
-    {
+    public boolean caricaEventoSalvato() {
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
 
-        if(preferences.isEventoSaved())
-        {
+        if (preferences.isEventoSaved()) {
             WEvento evento = preferences.getEvento();
 
             eventiList = new ArrayList<>();
@@ -101,39 +99,33 @@ public class SelectEventoViewModel extends AbstractViewModel {
             return true;
         }
 
-        return  false;
+        return false;
     }
 
 
-    public void getEventiStaff()
-    {
+    public void getEventiStaff() {
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
 
-        if(myContext.isLoggato() && myContext.isStaffScelto())
-        {
+        if (myContext.isLoggato() && myContext.isStaffScelto()) {
             ManagerMembro managerMembro = getManagerMembro();
             Integer idStaff = myContext.getStaff().getId();
 
             try {
-                managerMembro.restituisciListaEventiStaff(idStaff, new Response.Listener<List<WEvento>>() {
-                    @Override
-                    public void onResponse(List<WEvento> response) {
-                        eventiList = response;
-                        listEventiResult.setValue(new Result<>(response, null));
-                    }
-                },new DefaultExceptionListener<>(listEventiResult));
+                managerMembro.restituisciListaEventiStaff(idStaff, response -> {
+                    eventiList = response;
+                    listEventiResult.setValue(new Result<>(response, null));
+                }, new DefaultExceptionListener<>(listEventiResult));
             } catch (UnsupportedEncodingException e) {
                 //Non dovrebbe succedere.
+
                 listEventiResult.setValue(new Result<>(e));
+                Log.d(TAG, e.getLocalizedMessage());
             }
-        }
-        else
-        {
+        } else {
             listEventiResult.setValue(new Result<>(R.string.no_staff));
         }
     }
-
 
 
 }

@@ -31,9 +31,8 @@ public class UiUtils {
 
     private static UiUtils singleton;
 
-    public static UiUtils getInstance(@NotNull Context context)
-    {
-        if(singleton == null)
+    public static UiUtils getInstance(@NotNull Context context) {
+        if (singleton == null)
             singleton = new UiUtils(context);
 
         return singleton;
@@ -41,8 +40,7 @@ public class UiUtils {
 
     private Context context;
 
-    private UiUtils(Context context)
-    {
+    private UiUtils(Context context) {
         this.context = context;
     }
 
@@ -61,13 +59,11 @@ public class UiUtils {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
-    public void makeToast(int resId)
-    {
+    public void makeToast(int resId) {
         Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
     }
 
-    public void makeToast(int resId, Object ... args)
-    {
+    public void makeToast(int resId, Object... args) {
         String string = context.getString(resId, args);
         makeToast(string);
     }

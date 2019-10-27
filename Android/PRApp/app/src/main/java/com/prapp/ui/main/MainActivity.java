@@ -21,9 +21,7 @@ package com.prapp.ui.main;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -39,6 +37,8 @@ import com.prapp.ui.main.fragment.cassiere.CassiereFragment;
 import com.prapp.ui.main.fragment.membro.MembroFragment;
 import com.prapp.ui.main.fragment.pr.PRFragment;
 import com.prapp.ui.main.fragment.utente.UtenteFragment;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -75,46 +75,42 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            = item -> {
+                switch (item.getItemId()) {
+                    case R.id.navigation_utente:
+                        currentFragment = ID_FRAGMENT_UTENTE;
+                        cambiaTab(false);
+                        return true;
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_utente:
-                    currentFragment = ID_FRAGMENT_UTENTE;
-                    cambiaTab(false);
-                    return true;
+                    case R.id.navigation_membro:
+                        currentFragment = ID_FRAGMENT_MEMBRO;
+                        cambiaTab(false);
+                        return true;
 
-                case R.id.navigation_membro:
-                    currentFragment = ID_FRAGMENT_MEMBRO;
-                    cambiaTab(false);
-                    return true;
+                    case R.id.navigation_pr:
+                        currentFragment = ID_FRAGMENT_PR;
+                        cambiaTab(false);
+                        return true;
 
-                case R.id.navigation_pr:
-                    currentFragment = ID_FRAGMENT_PR;
-                    cambiaTab(false);
-                    return true;
+                    case R.id.navigation_cassiere:
+                        currentFragment = ID_FRAGMENT_CASSIERE;
+                        cambiaTab(false);
+                        return true;
 
-                case R.id.navigation_cassiere:
-                    currentFragment = ID_FRAGMENT_CASSIERE;
-                    cambiaTab(false);
-                    return true;
+                    case R.id.navigation_amministratore:
+                        currentFragment = ID_FRAGMENT_AMMINISTRATORE;
+                        cambiaTab(false);
+                        return true;
+                }
 
-                case R.id.navigation_amministratore:
-                    currentFragment = ID_FRAGMENT_AMMINISTRATORE;
-                    cambiaTab(false);
-                    return true;
-            }
-
-            return false;
-        }
-    };
+                return false;
+            };
 
     /**
      * Cambia il fragment solamente in campo del navigatore di sotto.
      * Per esempio se CassiereFragment attiva un sotto fragment, non si usa questo metodo.
      *
-     * @param setBottomNavigationBar
+     * @param setBottomNavigationBar se impostato imposta l'elemento selezionato nel bottom nav
      */
     private void cambiaTab(boolean setBottomNavigationBar) {
         switch (currentFragment) {
@@ -205,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         amminisratoreFragment.holdInterface(this);
 
         //Inizializzo il view model e applico gli observer.
-        mainViewModel = ViewModelProviders.of(this, new MainViewModelFactory(getApplicationContext())).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(this, new MainViewModelFactory()).get(MainViewModel.class);
 
         //Recupero i diritti dell'utente.
         WDirittiUtente dirittiUtente = mainViewModel.getDirittiUtente();
@@ -247,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     //https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NotNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
         //Devo salvare il fragment selezionato.

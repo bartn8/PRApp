@@ -19,13 +19,11 @@
 
 package com.prapp.ui.main;
 
-import android.content.Context;
-import android.webkit.WebView;
+import android.util.SparseArray;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Response;
 import com.prapp.R;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.wrapper.WDirittiUtente;
@@ -37,7 +35,6 @@ import com.prapp.model.db.wrapper.WStatisticheCassiereEvento;
 import com.prapp.model.db.wrapper.WStatisticheEvento;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
 import com.prapp.model.db.wrapper.WUtente;
-import com.prapp.model.net.MyCookieManager;
 import com.prapp.model.net.manager.ManagerAmministratore;
 import com.prapp.model.net.manager.ManagerCassiere;
 import com.prapp.model.net.manager.ManagerMembro;
@@ -48,11 +45,11 @@ import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainViewModel extends AbstractViewModel {
+
+    public static final String TAG = MainViewModel.class.getSimpleName();
 
     private MutableLiveData<Result<Void, Void>> logoutResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WUtente>, Void>> membriStaffResult = new MutableLiveData<>();
@@ -67,10 +64,10 @@ public class MainViewModel extends AbstractViewModel {
 
 
 
-    private Map<Integer, NetWEntrata> mapEntrata = new HashMap<>();
+    private SparseArray<NetWEntrata> mapEntrata = new SparseArray<NetWEntrata>();
 
-    public MainViewModel(Context context) {
-        super(context);
+    MainViewModel() {
+        super();
     }
 
     public LiveData<Result<Void, Void>> getLogoutResult() {
@@ -117,29 +114,13 @@ public class MainViewModel extends AbstractViewModel {
         return mapEntrata.get(idPrevendita);
     }
 
-    public NetWEntrata remove(WPrevenditaPlus prevendita) {
-        return mapEntrata.remove(prevendita.getId());
-    }
-
-    public NetWEntrata remove(Integer idPrevendita) {
-        return mapEntrata.remove(idPrevendita);
-    }
-
-    public void acceptThirdPartyCookies(WebView view) {
-        MyCookieManager.acceptThirdPartyCookies(view);
+    public void remove(WPrevenditaPlus prevendita) {
+        mapEntrata.remove(prevendita.getId());
     }
 
     public String getToken() {
         ApplicationPreferences preferences = getPreferences();
-        String token = "";
-
-        try {
-            token = preferences.getLastStoredToken().getToken();
-        } catch (UnsupportedEncodingException e) {
-
-        }
-
-        return token;
+        return preferences.getLastStoredToken().getToken();
     }
 
     public void logout() {
@@ -151,14 +132,11 @@ public class MainViewModel extends AbstractViewModel {
             ManagerUtente managerUtente = getManagerUtente();
 
             try {
-                managerUtente.logout(new Response.Listener<Void>() {
-                    @Override
-                    public void onResponse(Void response) {
-                        //Pulisco il contesto e le preferenze.
-                        myContext.logout();
-                        preferences.logout();
-                        logoutResult.setValue(new Result<>(null, null));
-                    }
+                managerUtente.logout(response -> {
+                    //Pulisco il contesto e le preferenze.
+                    myContext.logout();
+                    preferences.logout();
+                    logoutResult.setValue(new Result<>(null, null));
                 }, new DefaultExceptionListener<>(logoutResult));
             } catch (UnsupportedEncodingException e) {
                 //Non dovrebbe succedere.
@@ -210,7 +188,7 @@ public class MainViewModel extends AbstractViewModel {
         Integer idPrevendita = entrata.getIdPrevendita();
 
         //La prevendita non deve essere già stata controllata.
-        if (!mapEntrata.containsKey(idPrevendita)) {
+        if (mapEntrata.indexOfKey(idPrevendita) < 0) {
             mapEntrata.put(idPrevendita, entrata);
 
             if (myContext.isLoggato()) {
@@ -232,7 +210,7 @@ public class MainViewModel extends AbstractViewModel {
         Integer idPrevendita = prevendita.getId();
 
         //Deve essere presente il codice originale per la verifica.
-        if (mapEntrata.containsKey(idPrevendita)) {
+        if (mapEntrata.indexOfKey(idPrevendita) >= 0) {
             if (myContext.isLoggato()) {
                 ManagerCassiere managerCassiere = getManagerCassiere();
 

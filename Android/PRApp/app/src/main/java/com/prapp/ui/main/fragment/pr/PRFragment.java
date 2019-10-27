@@ -20,7 +20,6 @@
 package com.prapp.ui.main.fragment.pr;
 
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,22 +27,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.prapp.R;
-import com.prapp.model.MyContext;
 import com.prapp.ui.main.InterfaceHolder;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
-import com.prapp.ui.main.MyWebViewClient;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,13 +57,28 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     private MainViewModel mainViewModel;
     private Unbinder unbinder;
 
+    @BindView(R.id.fragment_pr_toolbar_cliente)
+    public Toolbar toolbarClienti;
+
+    @BindView(R.id.fragment_pr_aggiungiCliente_layout)
+    public LinearLayout aggiungiClienteLayout;
+
+    @BindView(R.id.fragment_pr_aggiungiCliente_nome_editText)
+    public EditText aggiungiClienteNomeEditText;
+
+    @BindView(R.id.fragment_pr_aggiungiCliente_cognome_editText)
+    public EditText aggiungiClienteCognomeEditText;
+
+    @BindView(R.id.fragment_pr_recyclerViewClienti)
+    public RecyclerView recyclerViewClienti;
+
     /**
      * Interfaccia usata per comunicare con l'activity madre.
      */
     private MainActivityInterface mainActivityInterface;
 
     @Override
-    public void holdInterface(MainActivityInterface mainActivityInterface) {
+    public void holdInterface(@NotNull MainActivityInterface mainActivityInterface) {
         this.mainActivityInterface = mainActivityInterface;
     }
 
@@ -74,8 +87,6 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         return this.mainActivityInterface != null;
     }
 
-    @BindView(R.id.fragment_pr_webView)
-    public WebView webView;
 
     public PRFragment() {
         // Required empty public constructor
@@ -112,18 +123,48 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.pr_menu, menu);
+
+        //Inizialmente sono in modalità aggiungi: Rimuovo pulsante.
+        menu.removeItem(R.id.fragment_pr_menu_aggiungiPrevenditaItem);
+
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+            case R.id.fragment_pr_menu_aggiungiPrevenditaItem:
+
+                return true;
+
+            case R.id.fragment_pr_menu_listaPrevenditeItem:
+
+                return true;
+
+            case R.id.fragment_pr_menu_statisticheEventoItem:
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     //--------------------------------------------------------------------------------------
+
+    private boolean onClientiMenuItemSelected(@NonNull MenuItem item){
+        switch (item.getItemId()){
+
+            case R.id.fragment_pr_cliente_menu_aggiungiClienteItem:
+
+                return true;
+
+            case R.id.fragment_pr_cliente_menu_searchClienteItem:
+
+                return true;
+
+            default: return false;
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,40 +175,21 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         unbinder = ButterKnife.bind(this, view);
 
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        mainViewModel.acceptThirdPartyCookies(webView);
 
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+        //Imposto la toolbar clienti.
+        toolbarClienti.inflateMenu(R.menu.pr_cliente_menu);
+        Menu clientiMenu = toolbarClienti.getMenu();
 
-        webView.setWebViewClient(new MyWebViewClient(getContext()));
+        //Rimuovo il pulsante aggiungi cliente: parto da esso.
+        clientiMenu.removeItem(R.id.fragment_pr_cliente_menu_aggiungiClienteItem);
 
-        startWebApp();
+        //Imposto il callback.
+        toolbarClienti.setOnMenuItemClickListener(this::onClientiMenuItemSelected);
+
+        toolbarClienti.setTitle(R.string.fragment_pr_cliente_toolbar_label);
+
 
         return view;
-    }
-
-
-    private void startWebApp() {
-        webView.loadUrl(getUri().toString());
-    }
-
-    private Uri getUri() {
-        String stringUri = MyContext.DEFAULT_WEBAPP_ADDRESS;
-
-
-        try {
-            stringUri += "?token=" + URLEncoder.encode(mainViewModel.getToken(), "UTF-8");
-            stringUri += "&idEvento=" + URLEncoder.encode(mainViewModel.getEvento().getId() + "", "UTF-8");
-            stringUri += "&nomeEvento=" + URLEncoder.encode(mainViewModel.getEvento().getNome(), "UTF-8");
-            stringUri += "&idStaff=" + URLEncoder.encode(mainViewModel.getStaff().getId() + "", "UTF-8");
-            stringUri += "&nomeStaff=" + URLEncoder.encode(mainViewModel.getStaff().getNome(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-
-        }
-
-        Uri uri = Uri.parse(stringUri);
-
-        return uri;
     }
 
 }
