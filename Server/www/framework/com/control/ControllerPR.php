@@ -55,11 +55,7 @@ class ControllerPR extends Controller
     
     public function handle($command)
     {
-        switch ($command->getCommand()) {
-//             case ControllerPR::CMD_IS_PR:
-//                 $this->cmd_is_pr($command);
-//                 break;
-            
+        switch ($command->getCommand()) {            
             case ControllerPR::CMD_AGGIUNGI_CLIENTE:
                 $this->cmd_aggiungi_cliente($command);
                 break;
@@ -97,7 +93,6 @@ class ControllerPR extends Controller
         }
         
         switch ($command->getCommand()) {
-//             case ControllerPR::CMD_IS_PR:
             case ControllerPR::CMD_AGGIUNGI_CLIENTE:
             case ControllerPR::CMD_AGGIUNGI_PREVENDITA:
             case ControllerPR::CMD_MODIFICA_PREVENDITA:
@@ -113,16 +108,6 @@ class ControllerPR extends Controller
                 break;
         }
     }
-
-//     private function cmd_is_pr($command)
-//     {
-//         if(!array_key_exists("staff", $command->getArgs()))
-//         {
-//             throw new InvalidArgumentException("Argomenti non validi");
-//         }
-        
-//         parent::getPrinter()->addResult(PR::isPR($command->getArgs()['staff']->getValue()));
-//     }
 
     private function cmd_aggiungi_cliente($command)
     {

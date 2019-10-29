@@ -38,12 +38,10 @@ class InsertNetWCliente implements NetWrapper
             throw new InvalidArgumentException("Dato idStaff non trovato.");
 
         if (! array_key_exists("nome", $array))
-            $array["nome"] = null;
-            //throw new InvalidArgumentException("Dato nome non trovato.");
+            throw new InvalidArgumentException("Dato nome non trovato.");
 
         if (! array_key_exists("cognome", $array))
-            $array["cognome"] = null;
-            //throw new InvalidArgumentException("Dato cognome non trovato.");
+            throw new InvalidArgumentException("Dato cognome non trovato.");
 
         if (! array_key_exists("telefono", $array))
             $array["telefono"] = null;
@@ -56,7 +54,7 @@ class InsertNetWCliente implements NetWrapper
 			$array["codiceFiscale"] = null;
 			//throw new InvalidArgumentException("Dato codiceFiscale non trovato.");
 		
-		$dataDiNascita = new DateTimeImmutableAdapterJSON(new \DateTimeImmutable($array["dataDiNascita"]));   //ISO8061
+		$dataDiNascita = !is_null($array["dataDiNascita"]) ? new DateTimeImmutableAdapterJSON(new \DateTimeImmutable($array["dataDiNascita"])) : NULL;   //ISO8061
 		//new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_DATE, $array["dataDiNascita"]))
 		
         return self::make((int) $array["idStaff"], $array["nome"], $array["cognome"], $array["telefono"], $dataDiNascita, $array["codiceFiscale"]);
@@ -76,10 +74,10 @@ class InsertNetWCliente implements NetWrapper
      */
     private static function make($idStaff, $nome, $cognome, $telefono, $dataDiNascita, $codiceFiscale)
     {
-        if (/* is_null($nome) || is_null($cognome) || */ is_null($idStaff) || is_null($dataDiNascita))
+        if (is_null($nome) || is_null($cognome) ||  is_null($idStaff) /*|| is_null($dataDiNascita)*/)
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($idStaff) || (!is_null($nome) && ! is_string($nome)) ||  (! is_null($cognome) && ! is_string($cognome)) || ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON))
+        if (! is_int($idStaff) || (!is_null($nome) && ! is_string($nome)) ||  (! is_null($cognome) && ! is_string($cognome)) || (!is_null($dataDiNascita) && ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON)))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if (! is_null($telefono)) {
@@ -121,13 +119,13 @@ class InsertNetWCliente implements NetWrapper
 
     /**
      *
-     * @var string|NULL
+     * @var string
      */
     private $nome;
 
     /**
      *
-     * @var string|NULL
+     * @var string
      */
     private $cognome;
 
@@ -139,7 +137,7 @@ class InsertNetWCliente implements NetWrapper
 
     /**
      *
-     * @var DateTimeImmutableAdapterJSON
+     * @var DateTimeImmutableAdapterJSON|NULL
      */
     private $dataDiNascita;
 

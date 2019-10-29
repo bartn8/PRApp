@@ -153,7 +153,52 @@ class UiUtils extends GeneralUiUtils {
         return imageURL;
     }
 
+    erroreNomeCliente(){
+        var $nomeClienteText = $("#nomeCliente").parent("div");
+        var $errorIcon = $("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
 
+        $nomeClienteText.addClass("has-error");
+        $nomeClienteText.addClass("has-feedback");
+        $nomeClienteText.append($errorIcon);
+    }
+
+    erroreCognomeCliente(){
+        var $cognomeClienteText = $("#cognomeCliente").parent("div");
+        var $errorIcon = $("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+
+        $cognomeClienteText.addClass("has-error");
+        $cognomeClienteText.addClass("has-feedback");
+        $cognomeClienteText.append($errorIcon);
+    }
+
+    erroreDataDiNascitaCliente(){
+        var $dataDiNascitaClienteText = $("#dataDiNascita").parent("div");
+        var $errorIcon = $("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+
+        $dataDiNascitaClienteText.addClass("has-error");
+        $dataDiNascitaClienteText.addClass("has-feedback");
+        $dataDiNascitaClienteText.append($errorIcon);
+
+
+    }
+
+    resetFieldsCliente(){
+        var $nomeClienteText = $("#nomeCliente").parent("div");
+        var $cognomeClienteText = $("#cognomeCliente").parent("div");
+        var $dataDiNascitaClienteText = $("#dataDiNascita").parent("div");
+
+        $nomeClienteText.removeClass("has-error");
+        $nomeClienteText.removeClass("has-feedback");
+        $nomeClienteText.remove("span");
+
+        $cognomeClienteText.removeClass("has-error");
+        $cognomeClienteText.removeClass("has-feedback");
+        $cognomeClienteText.remove("span");
+
+        $dataDiNascitaClienteText.removeClass("has-error");
+        $dataDiNascitaClienteText.removeClass("has-feedback");
+        $dataDiNascitaClienteText.remove("span");
+    }
     
 }
 
@@ -235,11 +280,6 @@ var loginToken = function (needRenew) {
                 });
             }
 
-            //Sono loggato.
-            //uiUtils.impostaScritta("Devi scegliere un evento per continuare.");
-            //uiUtils.impostaLogout();
-            //uiUtils.attivaMenu();
-
             funzionePrincipale();
 
         }, function (response) {
@@ -288,21 +328,33 @@ var creaPrevenditaButtonClick = function () {
 
     //Check 
     if (nomeCliente == "") {
-        nomeCliente = null;
+        //nomeCliente = null;
+        //invio un messaggio sull'edit text.
+        //uiUtils.erroreNomeCliente();
+
+        alert("Nome cliente non valido");
+
+        return;
     }
 
     var cognomeCliente = $("#cognomeCliente").val();
 
     //Check 
     if (cognomeCliente == "") {
-        cognomeCliente = null;
+        //cognomeCliente = null;
+        //invio un messaggio sull'edit text.
+        //uiUtils.erroreCognomeCliente();
+
+        alert("Cognome cliente non valido");
+
+        return;
     }
 
     var dataDiNascita = $("#dataDiNascita").val();
 
     //Check 
     if (dataDiNascita == "") {
-        dataDiNascita = "1970-01-01T00:00:00.000Z";
+        dataDiNascita = null;
     }
 
     var idTipoPrevendita = $("#tipoPrevendita").val();
@@ -329,6 +381,10 @@ var creaPrevenditaButtonClick = function () {
 
         //Posso ricavare il cliente e aggiungere la prevendita:
         var idCliente = response.results[0].id;
+
+        //Aggiorno i clienti precedenti.
+        nomeClientePrecedente = nomeCliente;
+        cognomeClientePrecedente = cognomeCliente;
 
         ajax.aggiungiPrevendita(idCliente, idTipoPrevendita, codice, stato, function (response2) {
             //ho aggiunto la prevendita, pulisco i campi.
@@ -369,10 +425,6 @@ var creaPrevenditaButtonClick = function () {
 
             //Messaggio di log.
             console.log("add prevendita ok: " + JSON.stringify(prevendita));
-
-            //Aggiorno i clienti precedenti.
-            nomeClientePrecedente = nomeCliente;
-            cognomeClientePrecedente = cognomeCliente;
 
         }, function (response2) {
             console.log("error: " + JSON.stringify(response2.exceptions));

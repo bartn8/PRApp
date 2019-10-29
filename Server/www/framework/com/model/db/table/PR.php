@@ -178,9 +178,16 @@ class PR extends Table
         $stmtInserimento->bindValue(":nome", $cliente->getNome(), PDO::PARAM_STR);
         $stmtInserimento->bindValue(":cognome", $cliente->getCognome(), PDO::PARAM_STR);
         $stmtInserimento->bindValue(":telefono", $cliente->getTelefono(), PDO::PARAM_STR);
-        $stmtInserimento->bindValue(":dataDiNascita", $cliente->getDataDiNascita()
+
+        //Data di nascita opzionale:
+        if(!is_null($cliente->getDataDiNascita())){
+            $stmtInserimento->bindValue(":dataDiNascita", $cliente->getDataDiNascita()
             ->getDateTimeImmutable()
             ->format(DateTimeImmutableAdapterJSON::MYSQL_DATE), PDO::PARAM_STR);
+        }else{
+            $stmtInserimento->bindValue(":dataDiNascita", null, PDO::PARAM_STR);
+        }
+        
         $stmtInserimento->bindValue(":codiceFiscale", $cliente->getCodiceFiscale(), PDO::PARAM_STR);
 
         try {

@@ -58,19 +58,18 @@ class WCliente implements DatabaseWrapper
             throw new InvalidArgumentException("Dato idStaff non trovato.");
 
         if (! array_key_exists("nome", $array))
-            $array["nome"] = null;
-            //throw new InvalidArgumentException("Dato nome non trovato.");
+            throw new InvalidArgumentException("Dato nome non trovato.");
 
         if (! array_key_exists("cognome", $array))
-            $array["cognome"] = null;
-            //throw new InvalidArgumentException("Dato cognome non trovato.");
+            throw new InvalidArgumentException("Dato cognome non trovato.");
 
         if (! array_key_exists("telefono", $array))
 			$array["telefono"] = null;
             //throw new InvalidArgumentException("Dato telefono non trovato.");
 
         if (! array_key_exists("dataDiNascita", $array))
-            throw new InvalidArgumentException("Dato dataDiNascita non trovato.");
+            $array["dataDiNascita"] = null;
+            //throw new InvalidArgumentException("Dato dataDiNascita non trovato.");
 
         if (! array_key_exists("codiceFiscale", $array))
 			$array["codiceFiscale"] = null;
@@ -79,7 +78,9 @@ class WCliente implements DatabaseWrapper
         if (! array_key_exists("timestampInserimento", $array))
             throw new InvalidArgumentException("Dato timestampInserimento non trovato.");
 
-        return self::make((int) $array["id"], (int) $array["idStaff"], $array["nome"], $array["cognome"], $array["telefono"], new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_DATE, $array["dataDiNascita"])), $array["codiceFiscale"], new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampInserimento"])));
+        $tmpDataDiNascita = !is_null($array["dataDiNascita"]) ? new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_DATE, $array["dataDiNascita"])) : NULL;
+
+        return self::make((int) $array["id"], (int) $array["idStaff"], $array["nome"], $array["cognome"], $array["telefono"], $tmpDataDiNascita, $array["codiceFiscale"], new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampInserimento"])));
     }
 
     /**
@@ -98,10 +99,10 @@ class WCliente implements DatabaseWrapper
      */
     public static function make($id, $idStaff, $nome, $cognome, $telefono, $dataDiNascita, $codiceFiscale, $timestampInserimento)
     {
-        if (is_null($id) || /* is_null($nome) || is_null($cognome) || */ is_null($idStaff) || is_null($dataDiNascita) || is_null($timestampInserimento))
+        if (is_null($id) ||  is_null($nome) || is_null($cognome) ||  is_null($idStaff) || /*is_null($dataDiNascita) || */ is_null($timestampInserimento))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) || ! is_int($idStaff) || (!is_null($nome) && ! is_string($nome)) ||  (! is_null($cognome) && ! is_string($cognome)) || ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON) || ! ($timestampInserimento instanceof DateTimeImmutableAdapterJSON))
+        if (! is_int($id) || ! is_int($idStaff) || (!is_null($nome) && ! is_string($nome)) ||  (! is_null($cognome) && ! is_string($cognome)) || (! is_null($cognome) && ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON)) || ! ($timestampInserimento instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if (! is_null($telefono)) {
@@ -136,7 +137,8 @@ class WCliente implements DatabaseWrapper
             throw new InvalidArgumentException("ID Staff non valido");
 
         // Imposto il formato data per la data di nascita.
-        $dataDiNascita->setFormatType(DateTimeImmutableAdapterJSON::MYSQL_DATE);
+        if(!is_null($dataDiNascita))
+            $dataDiNascita->setFormatType(DateTimeImmutableAdapterJSON::MYSQL_DATE);
 
         return new WCliente($id, $idStaff, $nome, $cognome, $telefono, $dataDiNascita, $codiceFiscale, $timestampInserimento);
     }
@@ -165,14 +167,14 @@ class WCliente implements DatabaseWrapper
     /**
      * Nome del cliente.
      *
-     * @var string|NULL
+     * @var string
      */
     private $nome;
 
     /**
      * Cognome del cliente.
      *
-     * @var string|NULL
+     * @var string
      */
     private $cognome;
 
@@ -186,7 +188,7 @@ class WCliente implements DatabaseWrapper
     /**
      * Data di nascita del cliente.
      *
-     * @var DateTimeImmutableAdapterJSON
+     * @var DateTimeImmutableAdapterJSON | NULL
      */
     private $dataDiNascita;
 
@@ -279,11 +281,11 @@ class WCliente implements DatabaseWrapper
 
     /**
      *
-     * @return DateTimeImmutableAdapterJSON
+     * @return DateTimeImmutableAdapterJSON|boolean Restituisce FALSE se non c'è la DataDiNascita.
      */
     public function getDataDiNascita()
     {
-        return $this->dataDiNascita;
+        return ! is_null($this->dataDiNascita) ? $this->dataDiNascita : FALSE;
     }
 
     /**
