@@ -42,12 +42,11 @@ import com.prapp.model.db.wrapper.WStatisticheEvento;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
-import com.prapp.ui.main.adapter.StatisticheMembroAdapter;
-import com.prapp.ui.utils.UiUtils;
-import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.main.MainActivityInterface;
-import com.prapp.ui.main.MainViewModel;
+import com.prapp.ui.main.adapter.StatisticheMembroAdapter;
 import com.prapp.ui.main.adapter.WStatisticheEventoAdapter;
+import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.UiUtils;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -69,7 +68,7 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormat.shortTime();
     private static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormat.shortDateTime();
 
-    private MainViewModel mainViewModel;
+    private AmministratoreViewModel viewModel;
     private UiUtils uiUtils;
     private Unbinder unbinder;
 
@@ -148,8 +147,8 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
                 for(WUtente membro: success)
                 {
                     //Log.d(TAG, "Utente: " + membro.getCognome() + " " + membro.getId());
-                    mainViewModel.getStatisticheCassiereEvento(membro.getId());
-                    mainViewModel.getStatistichePREvento(membro.getId());
+                    viewModel.getStatisticheCassiereEvento(membro.getId());
+                    viewModel.getStatistichePREvento(membro.getId());
                 }
             }
         }
@@ -275,14 +274,14 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
         statisticheEventoRecyclerView.setNestedScrollingEnabled(false);
 
         //View model per richiamare il server.
-        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        mainViewModel.getStatisticheAmministratoreEventoResult().observe(this, statisticheEventoResultObserver);
-        mainViewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
-        mainViewModel.getStatistichePREventoResult().observe(this, statistichePREventoResultObserver);
-        mainViewModel.getStatisticheCassiereEventoResult().observe(this, statisticheCassiereEventoResultObserver);
+        viewModel = ViewModelProviders.of(getActivity()).get(AmministratoreViewModel.class);
+        viewModel.getStatisticheAmministratoreEventoResult().observe(this, statisticheEventoResultObserver);
+        viewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
+        viewModel.getStatistichePREventoResult().observe(this, statistichePREventoResultObserver);
+        viewModel.getStatisticheCassiereEventoResult().observe(this, statisticheCassiereEventoResultObserver);
 
-        mainViewModel.getStatisticheAmministratoreEvento();
-        mainViewModel.getMembriStaff();
+        viewModel.getStatisticheAmministratoreEvento();
+        viewModel.getMembriStaff();
 
         return view;
     }

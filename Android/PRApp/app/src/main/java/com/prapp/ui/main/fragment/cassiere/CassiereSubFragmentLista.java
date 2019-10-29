@@ -39,12 +39,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.ui.Result;
-import com.prapp.ui.utils.UiUtils;
-import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.main.MainActivity;
 import com.prapp.ui.main.MainActivityInterface;
-import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.WPrevenditaPlusAdapter;
+import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.UiUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -89,7 +88,7 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     /**
      * View-Model per interfacciarsi con il server.
      */
-    private MainViewModel mainViewModel;
+    private CassiereViewModel viewModel;
 
     /**
      * Robo per discollegarsi dalle view.
@@ -242,17 +241,17 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         recyclerView.setAdapter(recyclerAdapter);
 
         //View model per richiamare il server.
-        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        mainViewModel.getPrevenditeResult().observe(this, this.getPrevenditeResultObserver);
+        viewModel = ViewModelProviders.of(getActivity()).get(CassiereViewModel.class);
+        viewModel.getPrevenditeResult().observe(this, this.getPrevenditeResultObserver);
 
         //Richiedo al server i dati.
         if(mode == MODE_LIST_TIMBRATE){
             label.setText(R.string.subfragment_lista_cassiere_listaTimbrate_label);
-            mainViewModel.getListaPrevenditeTimbrateEvento();
+            viewModel.getListaPrevenditeTimbrateEvento();
         }
         else if (mode == MODE_LIST_NON_TIMBRATE){
             label.setText(R.string.subfragment_lista_cassiere_listaNonTimbrate_label);
-            mainViewModel.getListaPrevenditeNonTimbrateEvento();
+            viewModel.getListaPrevenditeNonTimbrateEvento();
         }
 
 

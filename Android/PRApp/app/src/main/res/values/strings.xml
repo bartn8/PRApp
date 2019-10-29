@@ -49,14 +49,14 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Accedi</string>
     <string name="action_sign_in_short">Accedi</string>
-    <string name="welcome">"Ciao! "</string>
+    <string name="welcome">Ciao! <xliff:g example="Piero" id="nome">%1$s</xliff:g></string>
     <string name="invalid_username">Username non valido</string>
     <string name="invalid_password">Password non valida</string>
     <string name="login_failed">"Accesso Fallito"</string>
 
     <!-- WStaff List Item -->
     <string name="wstaff_list_item_nome">Staff</string>
-    <string name="wstaff_list_item_data">01\-01\-1970</string>
+    <string name="wstaff_list_item_data">XX\-XX\-XXXX</string>
 
     <!-- WUtente List Item -->
     <string name="wutente_list_item_telefono">+39123456789</string>
@@ -159,13 +159,13 @@
     <!-- FRAGMENT PR -->
     <string name="fragment_pr_cliente_toolbar_label">Cliente</string>
 
+    <!-- CardView Aggiungi cliente / Seleziona cliente -->
     <string name="fragment_pr_add_cliente_nome_label">Nome:</string>
     <string name="fragment_pr_add_cliente_cognome_label">Cognome:</string>
     <string name="fragment_pr_add_cliente_dataDiNascita_label">Data di nascita:</string>
     <string name="fragment_pr_add_cliente_nome_editText_label">(opzionale)</string>
     <string name="fragment_pr_add_cliente_cognome_editText_label">(opzionale)</string>
     <string name="fragment_pr_add_cliente_dataDiNascita_editText_label">(opzionale)</string>
-
     <string name="fragment_pr_add_cliente_button_label">Aggiungi</string>
 
     <!-- MENU -->
@@ -173,9 +173,13 @@
     <string name="fragment_pr_menu_listaPrevenditeItem">Lista prevendite</string>
     <string name="fragment_pr_menu_statisticheEventoItem">Statistiche evento</string>
 
-    <!-- MENU Toolbar Cliente -->
+    <!-- MENU Toolbar Aggiungi/Seleziona Cliente -->
     <string name="fragment_pr_cliente_menu_searchItem">Cerca</string>
     <string name="fragment_pr_cliente_menu_aggiungiClienteItem">Aggiungi cliente</string>
+
+    <string name="fragment_pr_add_cliente_invalid_nome">Nome cliente non valido</string>
+    <string name="fragment_pr_add_cliente_invalid_cognome">Cognome cliente non valido</string>
+    <string name="fragment_pr_add_cliente_invalid_dataDiNascita">Data di nascita cliente non valido</string>
 
     <!-- FRAGMENT CASSIERE -->
 

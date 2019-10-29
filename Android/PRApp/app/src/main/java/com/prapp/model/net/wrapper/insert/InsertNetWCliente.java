@@ -52,6 +52,7 @@ public class InsertNetWCliente implements Twinned, NetWrapper, JSONSerializable 
     @SerializedName("telefono")
     private String telefono;
 
+    //Optional
     @SerializedName("dataDiNascita")
     @JsonAdapter(LocalDateAdapter.class)
     private LocalDate dataDiNascita;
@@ -74,7 +75,7 @@ public class InsertNetWCliente implements Twinned, NetWrapper, JSONSerializable 
 
     //Usare ISO8601 per dataDiNascita
     public InsertNetWCliente(Integer idStaff, String nome, String cognome, String telefono, String dataDiNascita, String codiceFiscale) {
-        this(idStaff, nome, cognome, telefono, new LocalDate(dataDiNascita), codiceFiscale);
+        this(idStaff, nome, cognome, telefono, dataDiNascita != null ? new LocalDate(dataDiNascita) : null, codiceFiscale);
     }
 
     public Integer getIdStaff() {
@@ -116,9 +117,5 @@ public class InsertNetWCliente implements Twinned, NetWrapper, JSONSerializable 
         return CLASS_PATH;
     }
 
-//    @Override
-//    public String getRemoteArgName() {
-//        return ARG_NAME;
-//    }
 
 }

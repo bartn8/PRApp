@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showLoginSuccess(@NotNull WUtente model) {
-        String welcome = getString(R.string.welcome) + model.getNome();
+        String welcome = getString(R.string.welcome, model.getNome());
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 

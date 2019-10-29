@@ -43,10 +43,9 @@ import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
-import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.main.MainActivityInterface;
-import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.start.SplashActivity;
+import com.prapp.ui.utils.InterfaceHolder;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.format.DateTimeFormat;
@@ -70,7 +69,7 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.shortDateTime();
 
-    private MainViewModel mainViewModel;
+    private UtenteViewModel viewModel;
     private Unbinder unbinder;
 
     /**
@@ -205,26 +204,26 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
         View view = inflater.inflate(R.layout.fragment_utente, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        mainViewModel.getLogoutResult().observe(this, logoutResultObserver);
+        viewModel = ViewModelProviders.of(getActivity()).get(UtenteViewModel.class);
+        viewModel.getLogoutResult().observe(this, logoutResultObserver);
 
-        if (mainViewModel.isLoggato()) {
-            WUtente utente = mainViewModel.getUtente();
+        if (viewModel.isLoggato()) {
+            WUtente utente = viewModel.getUtente();
 
             textViewNome.setText(utente.getNome());
             textViewCognome.setText(utente.getCognome());
             textViewTelefono.setText(utente.getTelefono());
 
-            if (mainViewModel.isStaffScelto()) {
-                WStaff staff = mainViewModel.getStaff();
-                WDirittiUtente dirittiUtente = mainViewModel.getDirittiUtente();
+            if (viewModel.isStaffScelto()) {
+                WStaff staff = viewModel.getStaff();
+                WDirittiUtente dirittiUtente = viewModel.getDirittiUtente();
 
                 textViewNomeStaff.setText(staff.getNome());
                 textViewDiritti.setText(dirittiUtente.getDiritti().toString());
             }
 
-            if (mainViewModel.isEventoScelto()) {
-                WEvento evento = mainViewModel.getEvento();
+            if (viewModel.isEventoScelto()) {
+                WEvento evento = viewModel.getEvento();
                 textViewNomeEvento.setText(evento.getNome());
                 textViewDescrizioneEvento.setText(evento.getDescrizione());
                 textViewPeriodoEvento.setText(evento.getInizio().toString(DATE_FORMATTER) + " - " + evento.getFine().toString(DATE_FORMATTER));
@@ -242,7 +241,7 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
 
     @OnClick(R.id.fragment_utente_logout)
     public void logout() {
-        mainViewModel.logout();
+        viewModel.logout();
     }
 
 }

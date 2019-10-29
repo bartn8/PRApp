@@ -118,7 +118,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     /**
      * View-Model per interfacciarsi con il server.
      */
-    private MainViewModel mainViewModel;
+    private CassiereViewModel viewModel;
 
     /**
      * Robo per discollegarsi dalle view.
@@ -234,7 +234,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
 
                 try {
                     NetWEntrata netWEntrata = gson.fromJson(barcode.displayValue, NetWEntrata.class);
-                    mainViewModel.getInformazioniPrevendita(netWEntrata);
+                    viewModel.getInformazioniPrevendita(netWEntrata);
                 } catch (JsonParseException e) {
                     //Non fare nulla.
                     //Non verrà aggiunta la lettura.
@@ -272,7 +272,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
             else if (success != null) {
                 //Devo controllare se attivo Auto-Approva: in caso positivo approvo direttamente
                 if(isAutoApprovaOn){
-                    mainViewModel.timbraEntrata(success);
+                    viewModel.timbraEntrata(success);
                 }else{
                     recyclerAdapter.add(success);
                     vibraSingolo();
@@ -417,9 +417,9 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         unbinder = ButterKnife.bind(this, view);
 
         //View model per richiamare il server.
-        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        mainViewModel.getInfoPrevenditaResult().observe(this, getInfoPrevenditaObserver);
-        mainViewModel.getEntrataResult().observe(this, timbraEntrataObserver);
+        viewModel = ViewModelProviders.of(getActivity()).get(CassiereViewModel.class);
+        viewModel.getInfoPrevenditaResult().observe(this, getInfoPrevenditaObserver);
+        viewModel.getEntrataResult().observe(this, timbraEntrataObserver);
 
         //Imposto il recyler view. Quello che fa vedere le entrate.
         entrateRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -529,10 +529,10 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     public void onApprovaClick(WPrevenditaPlusAdapter.WPrevenditaPlusWrapper prevendita) {
         //Faccio partire l'entrata. Levo temporaneamente dal recycler la prevendita:
         //Verrà riaggiunta in caso di errore
-        mainViewModel.timbraEntrata(prevendita.getData());
+        viewModel.timbraEntrata(prevendita.getData());
 
         //Si può ri-scannerizzare perchè la cosa non è stata gradita dallo staff.
-        mainViewModel.remove(prevendita.getData());
+        viewModel.remove(prevendita.getData());
         recyclerAdapter.remove(prevendita);
     }
 
@@ -548,7 +548,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         uiUtils.makeToast(R.string.fragment_cassiere_toast_annullata_label);
 
         //Levo semplicemente dagli archivi.
-        mainViewModel.remove(prevendita.getData());
+        viewModel.remove(prevendita.getData());
         recyclerAdapter.remove(prevendita);
     }
 
@@ -562,12 +562,12 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         try{
             Integer idPrevendita = Integer.parseInt(editTextIdPrevendita.getText().toString());
             //Integer idEvento = Integer.parseInt(editTextIdEvento.getText().toString());
-            Integer idEvento = mainViewModel.getEvento().getId();
+            Integer idEvento = viewModel.getEvento().getId();
             String codice = editTextCodice.getText().toString();
 
             NetWEntrata netWEntrata = new NetWEntrata(idPrevendita, idEvento, codice);
 
-            mainViewModel.getInformazioniPrevendita(netWEntrata);
+            viewModel.getInformazioniPrevendita(netWEntrata);
 
             //Pulisco i campi
             editTextIdPrevendita.getText().clear();

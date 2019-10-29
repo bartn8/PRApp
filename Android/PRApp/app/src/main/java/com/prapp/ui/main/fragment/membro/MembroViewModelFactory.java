@@ -17,17 +17,26 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.prapp.ui.main;
+package com.prapp.ui.main.fragment.membro;
 
-import com.prapp.ui.AbstractViewModel;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
-public class MainViewModel extends AbstractViewModel {
+import com.prapp.ui.main.MainViewModel;
 
-    public static final String TAG = MainViewModel.class.getSimpleName();
+public class MembroViewModelFactory implements ViewModelProvider.Factory {
 
-    MainViewModel() {
-        super();
+    public MembroViewModelFactory( ) {
     }
 
+    @NonNull
+    @Override
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+        if (modelClass.isAssignableFrom(MembroViewModel.class)) {
+            return (T) new MembroViewModel();
+        } else {
+            throw new IllegalArgumentException("Unknown ViewModel class");
+        }
+    }
 }
-

@@ -19,13 +19,47 @@
 
 package com.prapp.ui.main.fragment.utente;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.prapp.R;
+import com.prapp.model.MyContext;
+import com.prapp.model.net.manager.ManagerUtente;
+import com.prapp.model.preferences.ApplicationPreferences;
 import com.prapp.ui.AbstractViewModel;
+import com.prapp.ui.Result;
 
 public class UtenteViewModel extends AbstractViewModel {
+
+    public static final String TAG = UtenteViewModel.class.getSimpleName();
 
     public UtenteViewModel() {
         super();
     }
 
+    private MutableLiveData<Result<Void, Void>> logoutResult = new MutableLiveData<>();
+
+    public LiveData<Result<Void, Void>> getLogoutResult() {
+        return logoutResult;
+    }
+
+    public void logout() {
+        MyContext myContext = getMyContext();
+        ApplicationPreferences preferences = getPreferences();
+
+        if (myContext.isLoggato())  
+        {
+            ManagerUtente managerUtente = getManagerUtente();
+
+            managerUtente.logout(response -> {
+                //Pulisco il contesto e le preferenze.
+                myContext.logout();
+                preferences.logout();
+                logoutResult.setValue(new Result<>(null, null));
+            }, new DefaultExceptionListener<>(logoutResult));
+        } else {
+            logoutResult.setValue(new Result<>(R.string.no_login));
+        }
+    }
 
 }

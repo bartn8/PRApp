@@ -39,11 +39,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
-import com.prapp.ui.utils.UiUtils;
-import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.main.MainActivityInterface;
-import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.WUtenteAdapter;
+import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.UiUtils;
 
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
         return fragment;
     }
 
-    private MainViewModel mainViewModel;
+    private MembroViewModel viewModel;
     private UiUtils uiUtils;
     private Unbinder unbinder;
 
@@ -162,9 +161,9 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
         membriRecyclerView.setHasFixedSize(true);
         membriRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        mainViewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
-        mainViewModel.getMembriStaff();
+        viewModel = ViewModelProviders.of(getActivity()).get(MembroViewModel.class);
+        viewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
+        viewModel.getMembriStaff();
         return view;
     }
 

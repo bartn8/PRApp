@@ -24,6 +24,7 @@ import android.app.DatePickerDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,22 +49,22 @@ import com.prapp.R;
 import com.prapp.model.db.wrapper.WCliente;
 import com.prapp.ui.Result;
 import com.prapp.ui.main.MainActivityInterface;
-import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.WClienteAdapter;
 import com.prapp.ui.utils.DatePickerFragment;
 import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.utils.UiUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 
@@ -76,6 +77,9 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
     private static final String TAG = PRFragment.class.getSimpleName();
 
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.mediumDate();
+
+
     private static final String CLIENTE_MODE_KEY = "CLIENTI_MODE";
     private static final int CLIENTE_SEARCH_MODE = 0;
     private static final int CLIENTE_ADD_MODE = 1;
@@ -84,7 +88,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     /**
      * View-Model per interfacciarsi con il server.
      */
-    private MainViewModel mainViewModel;
+    private PRViewModel viewModel;
 
     /**
      * Robo per discollegarsi dalle view.
@@ -144,6 +148,28 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
             else if (success != null) {
                 adapterClienti.replace(success);
+            }
+        }
+    };
+
+    private Observer<AggiungiClienteState> aggiungiClienteStateObserver = new Observer<AggiungiClienteState>() {
+        @Override
+        public void onChanged(AggiungiClienteState aggiungiClienteState) {
+            if(aggiungiClienteState == null)
+                return;
+
+            if(aggiungiClienteState.isDataValid()){
+                aggiungiClienteButton.setEnabled(true);
+            }else{
+                if(aggiungiClienteState.getNomeClienteError() != null){
+                    aggiungiClienteNomeEditText.setError(getString(aggiungiClienteState.getNomeClienteError()));
+                }
+                if(aggiungiClienteState.getCognomeClienteError() != null){
+                    aggiungiClienteCognomeEditText.setError(getString(aggiungiClienteState.getCognomeClienteError()));
+                }
+                if(aggiungiClienteState.getDataDiNascitaClienteError() != null){
+                    aggiungiClienteDataDiNascitaEditText.setError(getString(aggiungiClienteState.getDataDiNascitaClienteError()));
+                }
             }
         }
     };
@@ -262,8 +288,9 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
         unbinder = ButterKnife.bind(this, view);
 
-        mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        mainViewModel.getListaClientiResult().observe(this, getListaClientiResultObserver);
+        viewModel = ViewModelProviders.of(getActivity()).get(PRViewModel.class);
+        viewModel.getListaClientiResult().observe(this, getListaClientiResultObserver);
+        viewModel.getAggiungiClienteState().observe(this, aggiungiClienteStateObserver);
 
         //Impostazione recycler view clienti.
         adapterClienti = new WClienteAdapter(this::onSearchClienteItemClick);
@@ -331,7 +358,8 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         //FINE IMPOSTAZIONI TOOLBAR
 
         //Impostazioni aggiunta cliente
-
+        //Inizialmente pulsante disabilitato: si abiliterà solo se i dati vanno bene
+        aggiungiClienteButton.setEnabled(false);
 
         aggiungiClienteDataDiNascitaEditText.setOnClickListener(view1 -> {
             DatePickerFragment datePicker = new DatePickerFragment();
@@ -342,7 +370,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         //FINE IMPOSTAZIONI AGGIUNTA CLIENTE
 
         //Popolo l'adapter.
-        mainViewModel.getListaClienti();
+        viewModel.getListaClienti();
 
         return view;
     }
@@ -399,21 +427,30 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     @OnClick(R.id.fragment_pr_aggiungiCliente_button)
     public void onAggiungiButtonClick(View v) {
         //Pulizia dei componenti
-
-
+        aggiungiClienteNomeEditText.getText().clear();
+        aggiungiClienteCognomeEditText.getText().clear();
+        aggiungiClienteDataDiNascitaEditText.getText().clear();
 
         //Provo ad inserire un nuovo cliente:
+
 
     }
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH).format(c.getTime());
-        aggiungiClienteDataDiNascitaEditText.setText(currentDateString);
+        LocalDate date = new LocalDate(year, month, dayOfMonth);
+        aggiungiClienteDataDiNascitaEditText.setText(date.toString(DATE_FORMAT));
+    }
+
+    @OnTextChanged(value = {R.id.fragment_pr_aggiungiCliente_nome_editText,
+            R.id.fragment_pr_aggiungiCliente_cognome_editText,
+            R.id.fragment_pr_aggiungiCliente_dataDiNascita_editText},
+            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    public void onTextChanged(Editable s)
+    {
+        viewModel.aggiungiClienteStateChanged(aggiungiClienteNomeEditText.getText().toString(),
+                aggiungiClienteCognomeEditText.getText().toString(),
+                aggiungiClienteDataDiNascitaEditText.getText().toString());
     }
 
 

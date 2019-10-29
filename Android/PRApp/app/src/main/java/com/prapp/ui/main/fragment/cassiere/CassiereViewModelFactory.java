@@ -17,17 +17,24 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.prapp.ui.main;
+package com.prapp.ui.main.fragment.cassiere;
 
-import com.prapp.ui.AbstractViewModel;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
-public class MainViewModel extends AbstractViewModel {
+public class CassiereViewModelFactory implements ViewModelProvider.Factory {
 
-    public static final String TAG = MainViewModel.class.getSimpleName();
-
-    MainViewModel() {
-        super();
+    public CassiereViewModelFactory( ) {
     }
 
+    @NonNull
+    @Override
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+        if (modelClass.isAssignableFrom(CassiereViewModel.class)) {
+            return (T) new CassiereViewModel();
+        } else {
+            throw new IllegalArgumentException("Unknown ViewModel class");
+        }
+    }
 }
-
