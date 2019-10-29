@@ -17,21 +17,10 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.prapp.ui.main;
+package com.prapp.ui.utils;
 
-import org.jetbrains.annotations.NotNull;
+public interface ItemClickListener<T> {
 
-public interface InterfaceHolder<T> {
+    public void onItemClick(int id, T obj);
 
-    /**
-     * Aggancia una interfaccia
-     * @param callback interfaccia da agganciare
-     */
-    public void holdInterface(@NotNull T callback);
-
-    /**
-     * Indica se l'interaccia è collegata
-     * @return vero se collegata
-     */
-    public boolean isInterfaceSet();
 }

@@ -79,21 +79,12 @@ public class WUtenteAdapter extends RecyclerView.Adapter<WUtenteAdapter.WUtenteV
     private WUtente[] dataset;
 
     public WUtenteAdapter(WUtente[] dataset) {
-        this(dataset, new ItemClickListener() {
-            @Override
-            public void onListItemClick(int clickedItemId) {
-
-            }
+        this(dataset, clickedItemId -> {
         });
     }
 
-    public WUtenteAdapter(List<WUtente> dataset)
-    {
-        this(dataset, new ItemClickListener() {
-            @Override
-            public void onListItemClick(int clickedItemId) {
-
-            }
+    public WUtenteAdapter(List<WUtente> dataset) {
+        this(dataset, clickedItemId -> {
         });
     }
 

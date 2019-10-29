@@ -19,6 +19,8 @@
 
 package com.prapp.model.net;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.prapp.model.net.enums.Comando;
 
@@ -30,6 +32,8 @@ import java.util.List;
 
 
 public class Richiesta {
+
+    private static final String TAG = Richiesta.class.getSimpleName();
 
     private static final Gson GSON_OBJECT = new Gson();
 
@@ -78,16 +82,21 @@ public class Richiesta {
     }
 
     //https://stackoverflow.com/questions/9767952/how-to-add-parameters-to-httpurlconnection-using-post-using-namevaluepair
-    public String generatePOSTQuery(Gson gson) throws UnsupportedEncodingException {
+    public String generatePOSTQuery(Gson gson) {
         StringBuilder result = new StringBuilder();
 
         result.append("command=").append(comando.getComando()).append("&");
-        result.append("args=").append(URLEncoder.encode(getArgomentiAsJsonString(gson), "UTF-8"));
+
+        try {
+            result.append("args=").append(URLEncoder.encode(getArgomentiAsJsonString(gson), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "UTF-8 not recognised", e);
+        }
 
         return result.toString();
     }
 
-    public String generatePOSTQuery() throws UnsupportedEncodingException {
+    public String generatePOSTQuery() {
         return generatePOSTQuery(GSON_OBJECT);
     }
 

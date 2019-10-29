@@ -75,7 +75,7 @@ dependencies {
 
     //Libreria obsoleta: rimpiazzata da Google Play Services. Ci sarebbe ML kit ma troppo complicato
     //implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    implementation 'com.google.android.gms:play-services-vision:18.0.0'
+    implementation 'com.google.android.gms:play-services-vision:19.0.0'
 
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'org.jetbrains:annotations-java5:15.0'

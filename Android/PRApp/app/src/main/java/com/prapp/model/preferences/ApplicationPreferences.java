@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 
 //https://www.apriorit.com/dev-blog/432-using-androidkeystore
 public class ApplicationPreferences {
-    private static final String PREFERENCES_FILE = "settings";
+    public static final String PREFERENCES_FILE = "settings";
 
     private static final String IS_TOKEN_SAVED_KEY = "is_token_saved";
     private static final String TOKEN_KEY = "token";

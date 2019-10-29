@@ -256,6 +256,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     public void onBackPressed() {
 //        super.onBackPressed();
 
+        //Per i search???
+
         //Chiudo direttamente l'applicazione.
         setResult(RESULT_OK);
         finish();

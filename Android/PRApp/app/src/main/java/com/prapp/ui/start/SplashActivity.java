@@ -32,7 +32,7 @@ import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
-import com.prapp.ui.UiUtils;
+import com.prapp.ui.utils.UiUtils;
 import com.prapp.ui.login.LoginActivity;
 import com.prapp.ui.main.MainActivity;
 import com.prapp.ui.selectevento.SelectEventoActivity;

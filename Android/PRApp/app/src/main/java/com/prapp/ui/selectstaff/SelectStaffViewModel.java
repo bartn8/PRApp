@@ -25,7 +25,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.prapp.R;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.wrapper.WStaff;
-import com.prapp.model.net.Eccezione;
 import com.prapp.model.net.manager.ManagerUtente;
 import com.prapp.model.preferences.ApplicationPreferences;
 import com.prapp.ui.AbstractViewModel;
@@ -33,13 +32,12 @@ import com.prapp.ui.Result;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectStaffViewModel extends AbstractViewModel {
 
-    private MutableLiveData<Result<List<WStaff>,Void>> listStaffResult = new MutableLiveData<>();
+    private MutableLiveData<Result<List<WStaff>, Void>> listStaffResult = new MutableLiveData<>();
 
     private List<WStaff> staffList = new ArrayList<>();
 
@@ -47,7 +45,7 @@ public class SelectStaffViewModel extends AbstractViewModel {
         super();
     }
 
-    public LiveData<Result<List<WStaff>,Void>> getListStaffResult() {
+    public LiveData<Result<List<WStaff>, Void>> getListStaffResult() {
         return listStaffResult;
     }
 
@@ -64,8 +62,7 @@ public class SelectStaffViewModel extends AbstractViewModel {
         return null;
     }
 
-    public void selectStaff(int idStaff)
-    {
+    public void selectStaff(int idStaff) {
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
 
@@ -85,13 +82,11 @@ public class SelectStaffViewModel extends AbstractViewModel {
         myContext.clearEvento();
     }
 
-    public boolean caricaStaffSalvato()
-    {
+    public boolean caricaStaffSalvato() {
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
 
-        if(preferences.isStaffSaved())
-        {
+        if (preferences.isStaffSaved()) {
             WStaff staff = preferences.getStaff();
 
             staffList = new ArrayList<>();
@@ -103,39 +98,25 @@ public class SelectStaffViewModel extends AbstractViewModel {
             return true;
         }
 
-        return  false;
+        return false;
     }
 
 
-    public void getStaffMembri()
-    {
+    public void getStaffMembri() {
         MyContext myContext = getMyContext();
         ApplicationPreferences preferences = getPreferences();
 
-        if(myContext.isLoggato())
-        {
+        if (myContext.isLoggato()) {
             ManagerUtente managerUtente = getManagerUtente();
 
-            try {
-                managerUtente.restituisciListaStaffMembri(response -> {
-                    staffList = response;
-                    listStaffResult.setValue(new Result<>(response, null));
-                }, response -> {
-                    //Tecnicamente non carico la lista e quindi non posso proseguire....
-                    //L'utente chiuderà l'applicazione.
-                    listStaffResult.setValue(new Result<>(null, Eccezione.convertiInExceptions(response)));
-                });
-            } catch (UnsupportedEncodingException e) {
-                //Non dovrebbe succedere.
-                listStaffResult.setValue(new Result<>(e));
-            }
-        }
-        else
-        {
+            managerUtente.restituisciListaStaffMembri(response -> {
+                staffList = response;
+                listStaffResult.setValue(new Result<>(response, null));
+            }, new DefaultExceptionListener<>(listStaffResult));
+        } else {
             listStaffResult.setValue(new Result<>(R.string.no_login));
         }
     }
-
 
 
 }

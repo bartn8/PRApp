@@ -40,7 +40,6 @@ import com.prapp.model.net.wrapper.insert.InsertNetWCliente;
 import com.prapp.model.net.wrapper.insert.InsertNetWPrevendita;
 import com.prapp.model.net.wrapper.update.UpdateNetWPrevendita;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,7 @@ public class ManagerPR extends Manager {
         super(indirizzo);
     }
 
-    public void aggiungiCliente(InsertNetWCliente newCliente, final Response.Listener<WCliente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void aggiungiCliente(InsertNetWCliente newCliente, final Response.Listener<WCliente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_AGGIUNGI_CLIENTE;
         final Richiesta richiesta = new Richiesta(comando);
         richiesta.aggiungiArgomento(new Argomento(AGGIUNGI_CLIENTE_ARG_CLIENTE, newCliente.getRemoteClassPath(), newCliente));
@@ -84,7 +83,7 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void aggiungiPrevendita(InsertNetWPrevendita newPrevendita, final Response.Listener<WPrevendita> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void aggiungiPrevendita(InsertNetWPrevendita newPrevendita, final Response.Listener<WPrevendita> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_AGGIUNGI_PREVENDITA;
         final Richiesta richiesta = new Richiesta(comando);
         richiesta.aggiungiArgomento(new Argomento(AGGIUNGI_PREVENDITA_ARG_PREVENDITA, newPrevendita.getRemoteClassPath(), newPrevendita));
@@ -97,7 +96,7 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void modificaPrevendita(UpdateNetWPrevendita updatePrevendita, final Response.Listener<WPrevendita> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void modificaPrevendita(UpdateNetWPrevendita updatePrevendita, final Response.Listener<WPrevendita> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_MODIFICA_PREVENDITA;
         final Richiesta richiesta = new Richiesta(comando);
         richiesta.aggiungiArgomento(new Argomento(MODIFICA_PREVENDITA_ARG_PREVENDITA, updatePrevendita.getRemoteClassPath(), updatePrevendita));
@@ -110,7 +109,7 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaPrevendite(NetWFiltriStatoPrevendita filtri, final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaPrevendite(NetWFiltriStatoPrevendita filtri, final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_RESTITUISCI_PREVENDITE;
         final Richiesta richiesta = new Richiesta(comando);
         richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_LISTA_PREVENDITE_ARG_FILTRI, filtri.getRemoteClassPath(), filtri));
@@ -131,7 +130,7 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheTotali(final Response.Listener<WStatistichePRTotali> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void resitituisciStatisticheTotali(final Response.Listener<WStatistichePRTotali> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_RESTITUISCI_STATISTICHE_PR_TOTALI;
         final Richiesta richiesta = new Richiesta(comando);
 
@@ -142,7 +141,7 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheStaff(int idStaff, final Response.Listener<WStatistichePRStaff> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void resitituisciStatisticheStaff(int idStaff, final Response.Listener<WStatistichePRStaff> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_RESTITUISCI_STATISTICHE_PR_STAFF;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idStaff);
@@ -155,7 +154,7 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheEvento(int idEvento, final Response.Listener<WStatistichePREvento> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void resitituisciStatisticheEvento(int idEvento, final Response.Listener<WStatistichePREvento> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_RESTITUISCI_STATISTICHE_PR_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idEvento);

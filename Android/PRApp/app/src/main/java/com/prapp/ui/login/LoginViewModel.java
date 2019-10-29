@@ -26,14 +26,10 @@ import com.android.volley.Response;
 import com.prapp.R;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.wrapper.WUtente;
-import com.prapp.model.net.Eccezione;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
 import org.jetbrains.annotations.Contract;
-
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 public class LoginViewModel extends AbstractViewModel {
 
@@ -60,33 +56,19 @@ public class LoginViewModel extends AbstractViewModel {
     public void login(String username, String password) {
         MyContext myContext = getMyContext();
 
-        try {
-            getManagerUtente().login(username, password, new Response.Listener<WUtente>() {
+        getManagerUtente().login(username, password, new Response.Listener<WUtente>() {
 
-                /**
-                 * Passo i dati dell'utente e aggiorno il contesto server.
-                 *
-                 * @param response Utente con cui ho loggato.
-                 */
-                @Override
-                public void onResponse(WUtente response) {
-                    myContext.login(response);
-                    loginResult.setValue(new Result<>(response, null));
-                }
-            }, new Response.Listener<List<Eccezione>>() {
-
-                /**
-                 * Converto la lista in eccezioni vere e la passo fuori come risultato.
-                 * @param response Lista delle eccezioni
-                 */
-                @Override
-                public void onResponse(List<Eccezione> response) {
-                    loginResult.setValue(new Result<>(null, Eccezione.convertiInExceptions(response)));
-                }
-            });
-        } catch (UnsupportedEncodingException e) {
-            loginResult.setValue(new Result<>(e));
-        }
+            /**
+             * Passo i dati dell'utente e aggiorno il contesto server.
+             *
+             * @param response Utente con cui ho loggato.
+             */
+            @Override
+            public void onResponse(WUtente response) {
+                myContext.login(response);
+                loginResult.setValue(new Result<>(response, null));
+            }
+        }, new DefaultExceptionListener<>(loginResult));
     }
 
     public void loginDataChanged(String username, String password) {

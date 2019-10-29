@@ -43,7 +43,7 @@ import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
-import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.start.SplashActivity;

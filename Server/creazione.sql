@@ -54,10 +54,10 @@ CREATE TABLE amministratore (
 CREATE TABLE cliente (
   id int NOT NULL AUTO_INCREMENT,
   idStaff int NOT NULL,
-  nome varchar(150), /* Nome e cognome diviene opzionale */
-  cognome varchar(150),
+  nome varchar(150) DEFAULT 'ND', /* Nome e cognome diviene opzionale */
+  cognome varchar(150) DEFAULT 'ND',
   telefono varchar(80),
-  dataDiNascita date NOT NULL,
+  dataDiNascita date /* Data di nascita diviene opzionale */,
   codiceFiscale varchar(16),
   timestampInserimento timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -81,8 +81,8 @@ CREATE TABLE evento (
   FOREIGN KEY (idStaff) REFERENCES staff(id),
   FOREIGN KEY (idCreatore) REFERENCES utente(id),
   FOREIGN KEY (idModificatore) REFERENCES utente(id),
-  CONSTRAINT chkUnicitàEvento UNIQUE(idStaff, inizio, fine, nome, indirizzo)
-  /*CONSTRAINT chkValiditàData CHECK (inizio < fine)*/
+  CONSTRAINT chkUnicitï¿½Evento UNIQUE(idStaff, inizio, fine, nome, indirizzo)
+  /*CONSTRAINT chkValiditï¿½Data CHECK (inizio < fine)*/
 );
 
 CREATE TABLE tipoPrevendita (
@@ -98,7 +98,7 @@ CREATE TABLE tipoPrevendita (
   PRIMARY KEY (id),
   FOREIGN KEY (idEvento) REFERENCES evento(id),
   FOREIGN KEY (idModificatore) REFERENCES utente(id),
-  CONSTRAINT chkUnicitàTipoPrevendita UNIQUE(idEvento, nome)
+  CONSTRAINT chkUnicitï¿½TipoPrevendita UNIQUE(idEvento, nome)
 );
 
 CREATE TABLE prevendita (
@@ -116,8 +116,8 @@ CREATE TABLE prevendita (
   FOREIGN KEY (idPR) REFERENCES utente(id),
   FOREIGN KEY (idCliente) REFERENCES cliente(id) ON DELETE SET NULL,
   FOREIGN KEY (idTipoPrevendita) REFERENCES tipoPrevendita(id)/*,*/
-  /*CONSTRAINT chkUnicitàPrevendita UNIQUE(idEvento, idCliente), Da rimuovere perchè l'unique considera il NULL... Dopo tutto non importa se il cliente compra più prevendite...*/
-  /*CONSTRAINT chkUnicitàCodice UNIQUE(codice)*/
+  /*CONSTRAINT chkUnicitï¿½Prevendita UNIQUE(idEvento, idCliente), Da rimuovere perchï¿½ l'unique considera il NULL... Dopo tutto non importa se il cliente compra piï¿½ prevendite...*/
+  /*CONSTRAINT chkUnicitï¿½Codice UNIQUE(codice)*/
 );
 
 CREATE TABLE entrata (
@@ -128,7 +128,7 @@ CREATE TABLE entrata (
   PRIMARY KEY (seq),
   FOREIGN KEY (idCassiere) REFERENCES utente(id),
   FOREIGN KEY (idPrevendita) REFERENCES prevendita(id),
-  CONSTRAINT chkUnicitàEntrata UNIQUE(idPrevendita)
+  CONSTRAINT chkUnicitï¿½Entrata UNIQUE(idPrevendita)
 );
 
 /*
@@ -346,7 +346,7 @@ FOR EACH ROW BEGIN
         SET MESSAGE_TEXT = 'Data non valida: inizio in una data passata!';
 	ELSEIF (NEW.stato <> 'VALIDO') THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: l\'evento può essere solo VALIDO!";
+        SET MESSAGE_TEXT = "Stato non valido: l\'evento puï¿½ essere solo VALIDO!";
     END IF;
 END$$
 
@@ -375,13 +375,13 @@ FOR EACH ROW BEGIN
         SET MESSAGE_TEXT = 'Data non valida: inizio in una data passata!';
 	ELSEIF (NEW.stato = 'PAGATO' AND (OLD.stato <> 'VALIDO' AND OLD.stato <> 'PAGATO')) THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento è PAGATO solo se prima era VALIDO!";
+        SET MESSAGE_TEXT = "Stato non valido: un evento ï¿½ PAGATO solo se prima era VALIDO!";
 	ELSEIF (NEW.stato = 'ANNULLATO' AND (OLD.stato <> 'VALIDO' AND OLD.stato <> 'PAGATO')) THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento è ANNULLATO solo se prima era VALIDO o PAGATO!";
+        SET MESSAGE_TEXT = "Stato non valido: un evento ï¿½ ANNULLATO solo se prima era VALIDO o PAGATO!";
 	ELSEIF (NEW.stato = 'RIMBORSATO' AND (OLD.stato <> 'ANNULLATO' AND OLD.stato <> 'PAGATO')) THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento è RIMBORSATO solo se prima era ANNULLATO o PAGATO!";
+        SET MESSAGE_TEXT = "Stato non valido: un evento ï¿½ RIMBORSATO solo se prima era ANNULLATO o PAGATO!";
 	ELSEIF (NEW.stato = 'VALIDO' AND (OLD.stato <> 'VALIDO' AND OLD.stato <> 'PAGATO')) THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = "Stato non valido: un evento NON VALIDO rimane tale";
@@ -483,7 +483,7 @@ END$$
 DELIMITER ;
 
 /*
-Verifica che la prevendita appena inserita sia effettivamente vendibile, cioè:
+Verifica che la prevendita appena inserita sia effettivamente vendibile, cioï¿½:
   1)I dati devono essere congruenti: evento e tipo prevendita compatibile. Cliente dello giusto staff.
   2)La data della vendita deve rientrare nel periodo di vendita.
   3)L'evento deve essere VALIDO.
@@ -528,9 +528,9 @@ END$$
 DELIMITER ;
 
 /*
-Verifica che la prevendita è aggiornabile:
-  1)Il nuovo tipo prevendita è compatibile.
-  2)Il nuovo tipo prevendita si può modificare solo se rispetta il periodo di vendita
+Verifica che la prevendita ï¿½ aggiornabile:
+  1)Il nuovo tipo prevendita ï¿½ compatibile.
+  2)Il nuovo tipo prevendita si puï¿½ modificare solo se rispetta il periodo di vendita
   3)Lo stato deve seguire il relativo grafo (stati.png).
 */
 
@@ -556,21 +556,21 @@ FOR EACH ROW BEGIN
         SET MESSAGE_TEXT = 'Data non valida: non puoi vendere in questo momento!';
     ELSEIF (statoEvento <> 'VALIDO' AND (NEW.stato = 'CONSEGNATA' OR NEW.stato = 'PAGATA'))  THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: la prevendita deve essere CONSEGNATA o PAGATA quando l\'evento è VALIDO!";
-		/* Se un pr sbaglia a fare la prevendita non la può annullare.
+        SET MESSAGE_TEXT = "Stato non valido: la prevendita deve essere CONSEGNATA o PAGATA quando l\'evento ï¿½ VALIDO!";
+		/* Se un pr sbaglia a fare la prevendita non la puï¿½ annullare.
 	ELSEIF (statoEvento <> 'ANNULLATO' AND (NEW.stato = 'ANNULLATA' OR NEW.stato = 'RIMBORSATA'))  THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: la prevendita deve essere ANNULLATA o RIMBORSATA quando l\'evento è ANNULLATO!";
+        SET MESSAGE_TEXT = "Stato non valido: la prevendita deve essere ANNULLATA o RIMBORSATA quando l\'evento ï¿½ ANNULLATO!";
 		*/
 	ELSEIF (NEW.stato = 'ANNULLATA' AND (OLD.stato <> 'CONSEGNATA' AND OLD.stato <> 'PAGATA')) THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita si può annullare solo se nello stato CONSEGNATA o PAGATA!';
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita si puï¿½ annullare solo se nello stato CONSEGNATA o PAGATA!';
 	ELSEIF (NEW.stato = 'RIMBORSATA' AND OLD.stato <> 'PAGATA') THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita PAGATA può essere solo RIMBORSATA!';
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita PAGATA puï¿½ essere solo RIMBORSATA!';
 	ELSEIF (NEW.stato = 'PAGATA' AND OLD.stato <> 'CONSEGNATA') THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita può andare in PAGATA solo se in CONSEGNATA.';
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita puï¿½ andare in PAGATA solo se in CONSEGNATA.';
 	ELSEIF (NEW.stato <> 'ANNULLATA' AND OLD.stato = 'ANNULLATA') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Stato non valido: una prevendita ANNULLATA rimane tale.';
@@ -586,18 +586,18 @@ END$$
 DELIMITER ;
 
 /*
-Se un evento è ANNULLATO, lo porto automaticamente in RIMBORSATO
+Se un evento ï¿½ ANNULLATO, lo porto automaticamente in RIMBORSATO
   se tutte le prevendite sono state rimborsate o annullate.
 */
 
 /*
-Se un evento è VALIDO e tutte le prevendite sono pagate
+Se un evento ï¿½ VALIDO e tutte le prevendite sono pagate
   lo porto automaticamente in PAGATO.
 */
 
 
 /*
-Se un evento è PAGATO e tutte le prevendite non sono pagate
+Se un evento ï¿½ PAGATO e tutte le prevendite non sono pagate
   lo porto automaticamente in VALIDO.
 */
 
@@ -677,7 +677,7 @@ DELIMITER ;
 /* Creo un trigger per l'inserimento di un'entrata */
 
 /*
-Verifica che la prevendita appena inserita sia effettivamente valida, cioè:
+Verifica che la prevendita appena inserita sia effettivamente valida, cioï¿½:
   1)L'entrata deve essere effettuata nel tempo dell'evento.
   2)L'evento deve essere VALIDO.
   3)La prevendita deve essere consegnata o pagata.

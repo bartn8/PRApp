@@ -199,6 +199,10 @@ var onCopiaLinkClick = function () {
 
 //https://stackoverflow.com/questions/13459866/javascript-change-date-into-format-of-dd-mm-yyyy
 var convertiData = function (inputFormat) {
+    if(inputFormat == "1970-01-01T00:00:00.000Z"){
+        return "XX-XX-XXXX";
+    }
+
     function pad(s) { return (s < 10) ? '0' + s : s; }
     var d = new Date(inputFormat);
     return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');

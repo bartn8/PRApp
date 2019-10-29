@@ -70,8 +70,8 @@ import com.prapp.model.db.wrapper.WEntrata;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.model.net.wrapper.NetWEntrata;
 import com.prapp.ui.Result;
-import com.prapp.ui.UiUtils;
-import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.WPrevenditaPlusAdapter;
@@ -136,7 +136,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     private MainActivityInterface mainActivityInterface;
 
     @Override
-    public void holdInterface(MainActivityInterface mainActivityInterface){
+    public void holdInterface(@NotNull MainActivityInterface mainActivityInterface){
         this.mainActivityInterface = mainActivityInterface;
     }
 

@@ -34,7 +34,6 @@ import com.prapp.model.net.Risultato;
 import com.prapp.model.net.enums.Comando;
 import com.prapp.model.net.wrapper.NetWId;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +65,7 @@ public class ManagerMembro extends Manager {
         super(indirizzo);
     }
 
-    public void restituisciListaUtentiStaff(int idStaff, final Response.Listener<List<WUtente>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaUtentiStaff(int idStaff, final Response.Listener<List<WUtente>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_LISTA_UTENTI;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idStaff);
@@ -88,7 +87,7 @@ public class ManagerMembro extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciDirittiPersonaliStaff(int idStaff, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciDirittiPersonaliStaff(int idStaff, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_DIRITTI_PERSONALI;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idStaff);
@@ -102,7 +101,7 @@ public class ManagerMembro extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciDirittiUtenteStaff(int idUtente, int idStaff, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciDirittiUtenteStaff(int idUtente, int idStaff, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_DIRITTI_UTENTE;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWIdUtente = new NetWId(idUtente);
@@ -118,7 +117,7 @@ public class ManagerMembro extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaEventiStaff(int idStaff, final Response.Listener<List<WEvento>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaEventiStaff(int idStaff, final Response.Listener<List<WEvento>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_LISTA_EVENTI;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idStaff);
@@ -140,7 +139,7 @@ public class ManagerMembro extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaTipiPrevenditaEvento(int idEvento, final Response.Listener<List<WTipoPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaTipiPrevenditaEvento(int idEvento, final Response.Listener<List<WTipoPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_TIPI_PREVENDITA;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idEvento);
@@ -162,7 +161,7 @@ public class ManagerMembro extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaClientiStaff(int idStaff, final Response.Listener<List<WCliente>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaClientiStaff(int idStaff, final Response.Listener<List<WCliente>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_LISTA_CLIENTI;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idStaff);

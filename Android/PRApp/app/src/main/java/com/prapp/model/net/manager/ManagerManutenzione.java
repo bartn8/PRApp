@@ -31,7 +31,6 @@ import com.prapp.model.net.serialize.adapter.DateTimeAdapter;
 
 import org.joda.time.DateTime;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class ManagerManutenzione extends Manager {
         super(indirizzo);
     }
 
-    public void echo(final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void echo(final Response.Listener<List<Eccezione>> onException)  {
         Richiesta richiesta = new Richiesta(Comando.COMANDO_MANUTENZIONE_ECHO);
 
         ResponseListener listener = new ResponseListener(Comando.COMANDO_MANUTENZIONE_ECHO, element -> element.intValue() == 0, element -> {
@@ -67,7 +66,7 @@ public class ManagerManutenzione extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciDateTimeServer(final Response.Listener<DateTime> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciDateTimeServer(final Response.Listener<DateTime> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         final Richiesta richiesta = new Richiesta(Comando.COMANDO_MANUTENZIONE_TIMESTAMP);
 
         ResponseListener listener = new ResponseListener(Comando.COMANDO_MANUTENZIONE_TIMESTAMP, element -> element.intValue() == 1, element -> {

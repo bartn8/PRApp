@@ -18,20 +18,7 @@
   ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <item
-        android:id="@+id/fragment_pr_cliente_menu_searchClienteItem"
-        android:icon="@drawable/ic_search"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        android:title="@string/fragment_pr_cliente_menu_searchItem"/>
-
-    <item android:id="@+id/fragment_pr_cliente_menu_aggiungiClienteItem"
-        android:title="@string/fragment_pr_cliente_menu_aggiungiClienteItem"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_add"/>
-
-</menu>
+<!-- https://stackoverflow.com/questions/27378981/how-to-use-searchview-in-toolbar-android -->
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:hint="@string/search_hint"
+    android:label="@string/app_name" />

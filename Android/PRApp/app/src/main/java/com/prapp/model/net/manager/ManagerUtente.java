@@ -35,7 +35,6 @@ import com.prapp.model.net.enums.Comando;
 import com.prapp.model.net.wrapper.NetWLogin;
 import com.prapp.model.net.wrapper.NetWToken;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +76,7 @@ public class ManagerUtente extends Manager {
         throw new UnsupportedOperationException();
     }
 
-    public void login(String username, String password, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void login(String username, String password, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Richiesta richiesta = new Richiesta(Comando.COMANDO_UTENTE_LOGIN);
         NetWLogin loginData = new NetWLogin(username, password);
         richiesta.aggiungiArgomento(new Argomento(LOGIN_ARG_LOGIN, loginData.getRemoteClassPath(), loginData));
@@ -90,7 +89,7 @@ public class ManagerUtente extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void logout(final Response.Listener<Void> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void logout(final Response.Listener<Void> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Richiesta richiesta = new Richiesta(Comando.COMANDO_UTENTE_LOGOUT);
 
         ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_LOGOUT, element -> element.intValue() == 0, element -> onSuccess.onResponse(null), onException, errorListener);
@@ -100,7 +99,7 @@ public class ManagerUtente extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaStaff(final Response.Listener<List<WStaff>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaStaff(final Response.Listener<List<WStaff>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         final Richiesta richiesta = new Richiesta(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF);
 
         ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF, element -> true, element -> {
@@ -118,7 +117,7 @@ public class ManagerUtente extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaStaffMembri(final Response.Listener<List<WStaff>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaStaffMembri(final Response.Listener<List<WStaff>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         final Richiesta richiesta = new Richiesta(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF_MEMBRI);
 
         ResponseListener listener = new ResponseListener(Comando.COMANDO_UTENTE_RESTITUISCI_LISTA_STAFF_MEMBRI, element -> true, element -> {
@@ -136,7 +135,7 @@ public class ManagerUtente extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void renewToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void renewToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_UTENTE_RENEW_TOKEN;
         Richiesta richiesta = new Richiesta(comando);
 
@@ -148,7 +147,7 @@ public class ManagerUtente extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void getToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void getToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_UTENTE_GET_TOKEN;
         Richiesta richiesta = new Richiesta(comando);
 
@@ -160,7 +159,7 @@ public class ManagerUtente extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void loginWithToken(String token, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void loginWithToken(String token, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_UTENTE_LOGIN_TOKEN;
         Richiesta richiesta = new Richiesta(comando);
         NetWToken loginData = new NetWToken(token);

@@ -37,7 +37,6 @@ import com.prapp.model.net.enums.Comando;
 import com.prapp.model.net.wrapper.NetWEntrata;
 import com.prapp.model.net.wrapper.NetWId;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,7 @@ public class ManagerCassiere extends Manager {
         super(indirizzo);
     }
 
-    public void timbraEntrata(NetWEntrata entrata, final Response.Listener<WEntrata> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void timbraEntrata(NetWEntrata entrata, final Response.Listener<WEntrata> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_TIMBRA_ENTRATA;
         final Richiesta richiesta = new Richiesta(comando);
         richiesta.aggiungiArgomento(new Argomento(TIMBRA_ENTRATA_ARG_ENTRATA, entrata.getRemoteClassPath(), entrata));
@@ -84,7 +83,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciDatiCliente(int idPrevendita, final Response.Listener<WCliente> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciDatiCliente(int idPrevendita, final Response.Listener<WCliente> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_DATI_CLIENTE;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idPrevendita);
@@ -98,7 +97,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheTotali(final Response.Listener<WStatisticheCassiereTotali> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void resitituisciStatisticheTotali(final Response.Listener<WStatisticheCassiereTotali> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_STATISTICHE_CASSIERE_TOTALI;
         final Richiesta richiesta = new Richiesta(comando);
 
@@ -109,7 +108,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheStaff(int idStaff, final Response.Listener<WStatisticheCassiereStaff> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void resitituisciStatisticheStaff(int idStaff, final Response.Listener<WStatisticheCassiereStaff> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_STATISTICHE_CASSIERE_STAFF;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idStaff);
@@ -122,7 +121,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheEvento(int idEvento, final Response.Listener<WStatisticheCassiereEvento> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void resitituisciStatisticheEvento(int idEvento, final Response.Listener<WStatisticheCassiereEvento> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idEvento);
@@ -135,7 +134,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciEntrateEvento(int idEvento, final Response.Listener<List<WEntrata>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciEntrateEvento(int idEvento, final Response.Listener<List<WEntrata>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_ENTRATE_SVOLTE;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idEvento);
@@ -157,7 +156,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaPrevendite(int idEvento, final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaPrevendite(int idEvento, final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_PREVENDITE_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idEvento);
@@ -179,7 +178,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciInformazioniPrevendita(int idPrevendita, final Response.Listener<WPrevenditaPlus> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciInformazioniPrevendita(int idPrevendita, final Response.Listener<WPrevenditaPlus> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_INFORMAZIONI_PREVENDITA;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idPrevendita);
@@ -193,7 +192,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaPrevenditeTimbrate(int idEvento, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaPrevenditeTimbrate(int idEvento, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_LISTA_PREVENDITE_TIMBRATE;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idEvento);
@@ -215,7 +214,7 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaPrevenditeNonTimbrate(int idEvento, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException) throws UnsupportedEncodingException {
+    public void restituisciListaPrevenditeNonTimbrate(int idEvento, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idEvento);

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ PRApp  Copyright (C) 2019  Luca Bartolomei
   ~
   ~ This file is part of PRApp.
@@ -18,8 +17,7 @@
   ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -43,7 +41,7 @@
                 android:id="@+id/fragment_pr_toolbar_cliente"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:titleTextColor="@color/black"/>
+                app:titleTextColor="@color/black" />
 
             <!-- Roba per aggiungere cliente. -->
 
@@ -67,10 +65,10 @@
                         android:id="@+id/fragment_pr_aggiungiCliente_nome_editText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:selectAllOnFocus="true"
-                        android:inputType="text"
                         android:hint="@string/fragment_pr_add_cliente_nome_editText_label"
-                        tools:ignore="Autofill"/>
+                        android:inputType="text"
+                        android:selectAllOnFocus="true"
+                        tools:ignore="Autofill" />
 
                 </LinearLayout>
 
@@ -88,25 +86,54 @@
                         android:id="@+id/fragment_pr_aggiungiCliente_cognome_editText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:selectAllOnFocus="true"
-                        android:inputType="text"
                         android:hint="@string/fragment_pr_add_cliente_cognome_editText_label"
-                        tools:ignore="Autofill"/>
+                        android:inputType="text"
+                        android:selectAllOnFocus="true"
+                        tools:ignore="Autofill" />
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fragment_pr_add_cliente_dataDiNascita_label" />
+
+                    <EditText
+                        android:id="@+id/fragment_pr_aggiungiCliente_dataDiNascita_editText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:hint="@string/fragment_pr_add_cliente_dataDiNascita_editText_label"
+                        android:inputType="date"
+                        android:selectAllOnFocus="true"
+                        tools:ignore="Autofill" />
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fragment_pr_aggiungiCliente_button"
+                    android:text="@string/fragment_pr_add_cliente_button_label" />
+
 
             </LinearLayout>
 
 
-            
             <!-- Roba per ricerca cliente. -->
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_pr_recyclerViewClienti"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/fragment_pr_recyclerViewClienti"
                 android:clipToPadding="false"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
 
         </LinearLayout>
 

@@ -19,8 +19,6 @@
 
 package com.prapp.ui.selectevento;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -34,7 +32,6 @@ import com.prapp.ui.Result;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,17 +108,10 @@ public class SelectEventoViewModel extends AbstractViewModel {
             ManagerMembro managerMembro = getManagerMembro();
             Integer idStaff = myContext.getStaff().getId();
 
-            try {
-                managerMembro.restituisciListaEventiStaff(idStaff, response -> {
-                    eventiList = response;
-                    listEventiResult.setValue(new Result<>(response, null));
-                }, new DefaultExceptionListener<>(listEventiResult));
-            } catch (UnsupportedEncodingException e) {
-                //Non dovrebbe succedere.
-
-                listEventiResult.setValue(new Result<>(e));
-                Log.d(TAG, e.getLocalizedMessage());
-            }
+            managerMembro.restituisciListaEventiStaff(idStaff, response -> {
+                eventiList = response;
+                listEventiResult.setValue(new Result<>(response, null));
+            }, new DefaultExceptionListener<>(listEventiResult));
         } else {
             listEventiResult.setValue(new Result<>(R.string.no_staff));
         }

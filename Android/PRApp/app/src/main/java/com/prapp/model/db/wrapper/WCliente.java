@@ -55,6 +55,7 @@ public class WCliente implements  DatabaseWrapper, Twinned, JSONSerializable, JS
     @SerializedName("telefono")
     private String telefono;
 
+    //Optional
     @SerializedName("dataDiNascita")
     @JsonAdapter(LocalDateAdapter.class)
     private LocalDate dataDiNascita;
@@ -80,7 +81,7 @@ public class WCliente implements  DatabaseWrapper, Twinned, JSONSerializable, JS
     }
 
     public WCliente(Integer id, Integer idStaff, String nome, String cognome, String telefono, String dataDiNascita, String codiceFiscale, String timestampInserimento) {
-        this(id, idStaff, nome, cognome, telefono, new LocalDate(dataDiNascita), codiceFiscale, new DateTime(timestampInserimento));
+        this(id, idStaff, nome, cognome, telefono, dataDiNascita != null ? new LocalDate(dataDiNascita) : null, codiceFiscale, new DateTime(timestampInserimento));
     }
 
     public Integer getId() {
@@ -123,6 +124,10 @@ public class WCliente implements  DatabaseWrapper, Twinned, JSONSerializable, JS
     public boolean isCodiceFiscalePresent()
     {
         return codiceFiscale != null;
+    }
+
+    public boolean isDataDiNascitaPresent(){
+        return dataDiNascita != null;
     }
 
     @Override

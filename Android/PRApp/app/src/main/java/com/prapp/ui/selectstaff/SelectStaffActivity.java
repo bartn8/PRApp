@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.ui.Result;
-import com.prapp.ui.UiUtils;
+import com.prapp.ui.utils.UiUtils;
 
 import java.util.List;
 

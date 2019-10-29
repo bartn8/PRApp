@@ -20,6 +20,9 @@
 package com.prapp.ui.main.fragment.pr;
 
 
+import android.app.DatePickerDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,35 +30,73 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prapp.R;
-import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.model.db.wrapper.WCliente;
+import com.prapp.ui.Result;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
+import com.prapp.ui.main.adapter.WClienteAdapter;
+import com.prapp.ui.utils.DatePickerFragment;
+import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.UiUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link PRFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PRFragment extends Fragment implements InterfaceHolder<MainActivityInterface> {
+public class PRFragment extends Fragment implements InterfaceHolder<MainActivityInterface>, DatePickerDialog.OnDateSetListener {
 
+    private static final String TAG = PRFragment.class.getSimpleName();
+
+    private static final String CLIENTE_MODE_KEY = "CLIENTI_MODE";
+    private static final int CLIENTE_SEARCH_MODE = 0;
+    private static final int CLIENTE_ADD_MODE = 1;
+    private static final int CLIENTE_SELECT_MODE = 2;
+
+    /**
+     * View-Model per interfacciarsi con il server.
+     */
     private MainViewModel mainViewModel;
+
+    /**
+     * Robo per discollegarsi dalle view.
+     */
     private Unbinder unbinder;
+
+    /**
+     * Utilty per la grafica
+     */
+    private UiUtils uiUtils;
+
+    private int clienteMode = CLIENTE_ADD_MODE;
 
     @BindView(R.id.fragment_pr_toolbar_cliente)
     public Toolbar toolbarClienti;
@@ -69,8 +110,43 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     @BindView(R.id.fragment_pr_aggiungiCliente_cognome_editText)
     public EditText aggiungiClienteCognomeEditText;
 
+    @BindView(R.id.fragment_pr_aggiungiCliente_dataDiNascita_editText)
+    public EditText aggiungiClienteDataDiNascitaEditText;
+
+    @BindView(R.id.fragment_pr_aggiungiCliente_button)
+    public Button aggiungiClienteButton;
+
+    private WClienteAdapter adapterClienti;
+
     @BindView(R.id.fragment_pr_recyclerViewClienti)
     public RecyclerView recyclerViewClienti;
+
+    private SearchView searchClienteView;
+
+    private Observer<Result<List<WCliente>, Void>> getListaClientiResultObserver = new Observer<Result<List<WCliente>, Void>>() {
+
+        @Override
+        public void onChanged(Result<List<WCliente>, Void> listVoidResult) {
+            if (listVoidResult == null) {
+                return;
+            }
+
+            Integer integerError = listVoidResult.getIntegerError();
+            List<Exception> error = listVoidResult.getError();
+            List<WCliente> success = listVoidResult.getSuccess();
+
+            if (integerError != null)
+                uiUtils.showError(integerError);
+
+            else if (error != null)
+                uiUtils.showError(error);
+
+
+            else if (success != null) {
+                adapterClienti.replace(success);
+            }
+        }
+    };
 
     /**
      * Interfaccia usata per comunicare con l'activity madre.
@@ -109,6 +185,16 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);    //Opzione menu
+
+        if (savedInstanceState != null) {
+            clienteMode = savedInstanceState.getInt(CLIENTE_MODE_KEY);
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        uiUtils = UiUtils.getInstance(context);
     }
 
     @Override
@@ -151,18 +237,20 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
     //--------------------------------------------------------------------------------------
 
-    private boolean onClientiMenuItemSelected(@NonNull MenuItem item){
-        switch (item.getItemId()){
+    private boolean onClientiMenuItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
 
             case R.id.fragment_pr_cliente_menu_aggiungiClienteItem:
+                //Nascondo il recycler view.
+                recyclerViewClienti.setVisibility(View.GONE);
+
+                //Mostro la roba per aggiungere il cliente.
+                aggiungiClienteLayout.setVisibility(View.VISIBLE);
 
                 return true;
 
-            case R.id.fragment_pr_cliente_menu_searchClienteItem:
-
-                return true;
-
-            default: return false;
+            default:
+                return false;
         }
     }
 
@@ -175,21 +263,158 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         unbinder = ButterKnife.bind(this, view);
 
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        mainViewModel.getListaClientiResult().observe(this, getListaClientiResultObserver);
+
+        //Impostazione recycler view clienti.
+        adapterClienti = new WClienteAdapter(this::onSearchClienteItemClick);
+        recyclerViewClienti.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewClienti.setHasFixedSize(false);
+        recyclerViewClienti.setNestedScrollingEnabled(false);
+        recyclerViewClienti.setAdapter(adapterClienti);
+        recyclerViewClienti.setVisibility(View.GONE);
+
 
         //Imposto la toolbar clienti.
         toolbarClienti.inflateMenu(R.menu.pr_cliente_menu);
-        Menu clientiMenu = toolbarClienti.getMenu();
-
-        //Rimuovo il pulsante aggiungi cliente: parto da esso.
-        clientiMenu.removeItem(R.id.fragment_pr_cliente_menu_aggiungiClienteItem);
-
-        //Imposto il callback.
+        //Imposto il callback e il titolo della toolbar.
         toolbarClienti.setOnMenuItemClickListener(this::onClientiMenuItemSelected);
-
         toolbarClienti.setTitle(R.string.fragment_pr_cliente_toolbar_label);
 
+        //Nascondo il pulsante di aggiunta
+        Menu clientiMenu = toolbarClienti.getMenu();
+
+        //Item della ricerca
+        MenuItem searchItem = clientiMenu.findItem(R.id.fragment_pr_cliente_menu_searchClienteItem);
+        //Imposto l'item di ricerca:
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        //https://stackoverflow.com/questions/27378981/how-to-use-searchview-in-toolbar-android
+        if (searchItem != null) {
+            searchClienteView = (SearchView) searchItem.getActionView();
+
+            if (searchClienteView != null) {
+                // Assumes current activity is the searchable activity
+                searchClienteView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+                searchClienteView.setIconifiedByDefault(true); // Do iconify the widget
+                searchClienteView.setSubmitButtonEnabled(false); //Non voglio il pulsante di submit.
+
+                //Imposto i listener:
+                //Questo serve quando clicco sulla ricerca.
+                searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                        return onSearchClienteExpand(menuItem);
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                        return onSearchClienteCollapse(menuItem);
+                    }
+                });
+
+                //Questo serve per aggiornare i filtri
+                searchClienteView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false; //Non ci interessa quando si preme il pulsante perchè non c'è pulsante.
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return onSearchClienteQueryTextChange(newText);
+                    }
+                });
+            }
+        }
+
+        //FINE IMPOSTAZIONI TOOLBAR
+
+        //Impostazioni aggiunta cliente
+
+
+        aggiungiClienteDataDiNascitaEditText.setOnClickListener(view1 -> {
+            DatePickerFragment datePicker = new DatePickerFragment();
+            datePicker.holdInterface(this);
+            datePicker.show(getFragmentManager(), TAG);
+        });
+
+        //FINE IMPOSTAZIONI AGGIUNTA CLIENTE
+
+        //Popolo l'adapter.
+        mainViewModel.getListaClienti();
 
         return view;
     }
+
+    private boolean onSearchClienteCollapse(MenuItem menuItem) {
+        //Lo stato viene aggiornato precedentemente.
+        switchClienteModeView();
+        return true;
+    }
+
+    private boolean onSearchClienteExpand(MenuItem menuItem) {
+        clienteMode = CLIENTE_SEARCH_MODE;
+        switchClienteModeView();
+        return true;
+    }
+
+    public void onSearchClienteItemClick(int id, WCliente obj) {
+        //Quando ho premuto su un cliente vuol dire che ho selezionato il cliente:
+        //Aggiorno lo stato
+        clienteMode = CLIENTE_SELECT_MODE;
+
+        //Chiudo la ricerca:
+        Menu clientiMenu = toolbarClienti.getMenu();
+        MenuItem item = clientiMenu.findItem(R.id.fragment_pr_cliente_menu_searchClienteItem);
+        item.collapseActionView();
+
+        //Pulisco il recycler view e lascio solo quello selezionato:
+        adapterClienti.replace(obj);
+
+        switchClienteModeView();
+    }
+
+    private boolean onSearchClienteQueryTextChange(String newText) {
+        adapterClienti.getFilter().filter(newText);
+        return false;
+    }
+
+    private void switchClienteModeView() {
+        if (clienteMode == CLIENTE_ADD_MODE) {
+            //Mostro aggiunta cliente:
+            aggiungiClienteLayout.setVisibility(View.VISIBLE);
+
+            //Nascondo il recycler view con i clienti.
+            recyclerViewClienti.setVisibility(View.GONE);
+        } else if (clienteMode == CLIENTE_SEARCH_MODE || clienteMode == CLIENTE_SELECT_MODE) {
+            //Chiusura aggiunta cliente:
+            aggiungiClienteLayout.setVisibility(View.GONE);
+
+            //Mostro il recycler view con i clienti.
+            recyclerViewClienti.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @OnClick(R.id.fragment_pr_aggiungiCliente_button)
+    public void onAggiungiButtonClick(View v) {
+        //Pulizia dei componenti
+
+
+
+        //Provo ad inserire un nuovo cliente:
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currentDateString = DateFormat.getDateInstance(DateFormat.SHORT, Locale.ENGLISH).format(c.getTime());
+        aggiungiClienteDataDiNascitaEditText.setText(currentDateString);
+    }
+
 
 }

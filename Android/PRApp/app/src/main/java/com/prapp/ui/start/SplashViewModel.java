@@ -35,8 +35,6 @@ import com.prapp.model.preferences.ApplicationPreferences;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
-import java.io.UnsupportedEncodingException;
-
 public class SplashViewModel extends AbstractViewModel {
 
     private MutableLiveData<Result<WUtente, Void>> loginResult = new MutableLiveData<>();
@@ -73,28 +71,24 @@ public class SplashViewModel extends AbstractViewModel {
         ApplicationPreferences preferences = getPreferences();
 
         if (preferences.isTokenSaved()) {
-            try {
-                WToken token = preferences.getLastStoredToken();
+            WToken token = preferences.getLastStoredToken();
 
-                //Prima di procedere verifico che sia ancora valido.
-                if (token.isTokenValid()) {
-                    ManagerUtente managerUtente = getManagerUtente();
-                    managerUtente.loginWithToken(token.getToken(), new Response.Listener<WUtente>() {
-                        @Override
-                        public void onResponse(WUtente response) {
-                            myContext.login(response);
-                            loginResult.setValue(new Result<>(response, null));
-                        }
-                    }, new DefaultExceptionListener<>(loginResult));
-                } else {
-                    //Token non valido lo elimino.
-                    preferences.clearToken();
+            //Prima di procedere verifico che sia ancora valido.
+            if (token.isTokenValid()) {
+                ManagerUtente managerUtente = getManagerUtente();
+                managerUtente.loginWithToken(token.getToken(), new Response.Listener<WUtente>() {
+                    @Override
+                    public void onResponse(WUtente response) {
+                        myContext.login(response);
+                        loginResult.setValue(new Result<>(response, null));
+                    }
+                }, new DefaultExceptionListener<>(loginResult));
+            } else {
+                //Token non valido lo elimino.
+                preferences.clearToken();
 
-                    //Imposto un valore di errore
-                    loginResult.setValue(new Result<>(R.string.invalid_token));
-                }
-            } catch (UnsupportedEncodingException e) {
-                loginResult.setValue(new Result<>(e));
+                //Imposto un valore di errore
+                loginResult.setValue(new Result<>(R.string.invalid_token));
             }
         } else {
             loginResult.setValue(new Result<>(R.string.no_token));
@@ -109,14 +103,10 @@ public class SplashViewModel extends AbstractViewModel {
 
             ManagerMembro managerMembro = getManagerMembro();
 
-            try {
-                managerMembro.restituisciDirittiPersonaliStaff(staff.getId(), response -> {
-                    myContext.setDirittiUtente(response);
-                    getInfoUtenteResult.setValue(new Result<>(response, null));
-                }, new DefaultExceptionListener<>(getInfoUtenteResult));
-            } catch (UnsupportedEncodingException e) {
-                getInfoUtenteResult.setValue(new Result<>(e));
-            }
+            managerMembro.restituisciDirittiPersonaliStaff(staff.getId(), response -> {
+                myContext.setDirittiUtente(response);
+                getInfoUtenteResult.setValue(new Result<>(response, null));
+            }, new DefaultExceptionListener<>(getInfoUtenteResult));
 
         } else {
             getInfoUtenteResult.setValue(new Result<>(R.string.no_staff));
@@ -130,14 +120,10 @@ public class SplashViewModel extends AbstractViewModel {
         if (myContext.isLoggato()) {
             ManagerUtente managerUtente = getManagerUtente();
 
-            try {
-                managerUtente.renewToken(response -> {
-                    preferences.saveToken(response);
-                    renewTokenResult.setValue(new Result<>(response, null));
-                }, new DefaultExceptionListener<>(renewTokenResult));
-            } catch (UnsupportedEncodingException e) {
-                renewTokenResult.setValue(new Result<>(e));
-            }
+            managerUtente.renewToken(response -> {
+                preferences.saveToken(response);
+                renewTokenResult.setValue(new Result<>(response, null));
+            }, new DefaultExceptionListener<>(renewTokenResult));
         } else {
             renewTokenResult.setValue(new Result<>(R.string.no_login));
         }

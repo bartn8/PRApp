@@ -26,6 +26,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.prapp.R;
 import com.prapp.model.MyContext;
+import com.prapp.model.db.wrapper.WCliente;
 import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WEntrata;
 import com.prapp.model.db.wrapper.WEvento;
@@ -44,7 +45,6 @@ import com.prapp.model.preferences.ApplicationPreferences;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class MainViewModel extends AbstractViewModel {
@@ -61,8 +61,7 @@ public class MainViewModel extends AbstractViewModel {
     private MutableLiveData<Result<WStatisticheCassiereEvento, Integer>> statisticheCassiereEventoResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WStatisticheEvento>, Void>> statisticheAmministratoreEventoResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WPrevenditaPlus>, Void>> prevenditeResult = new MutableLiveData<>();
-
-
+    private MutableLiveData<Result<List<WCliente>, Void>> listaClientiResult = new MutableLiveData<>();
 
     private SparseArray<NetWEntrata> mapEntrata = new SparseArray<NetWEntrata>();
 
@@ -110,6 +109,10 @@ public class MainViewModel extends AbstractViewModel {
         return prevenditeResult;
     }
 
+    public LiveData<Result<List<WCliente>, Void>> getListaClientiResult() {
+        return listaClientiResult;
+    }
+
     public NetWEntrata get(Integer idPrevendita) {
         return mapEntrata.get(idPrevendita);
     }
@@ -131,17 +134,12 @@ public class MainViewModel extends AbstractViewModel {
         {
             ManagerUtente managerUtente = getManagerUtente();
 
-            try {
-                managerUtente.logout(response -> {
-                    //Pulisco il contesto e le preferenze.
-                    myContext.logout();
-                    preferences.logout();
-                    logoutResult.setValue(new Result<>(null, null));
-                }, new DefaultExceptionListener<>(logoutResult));
-            } catch (UnsupportedEncodingException e) {
-                //Non dovrebbe succedere.
-                logoutResult.setValue(new Result<>(e));
-            }
+            managerUtente.logout(response -> {
+                //Pulisco il contesto e le preferenze.
+                myContext.logout();
+                preferences.logout();
+                logoutResult.setValue(new Result<>(null, null));
+            }, new DefaultExceptionListener<>(logoutResult));
         } else {
             logoutResult.setValue(new Result<>(R.string.no_login));
         }
@@ -154,12 +152,7 @@ public class MainViewModel extends AbstractViewModel {
             ManagerMembro managerMembro = getManagerMembro();
             WStaff staff = getStaff();
 
-            try {
-                managerMembro.restituisciListaUtentiStaff(staff.getId(), new DefaultSuccessListener<>(membriStaffResult), new DefaultExceptionListener<>(membriStaffResult));
-            } catch (UnsupportedEncodingException e) {
-                //Non dovrebbe succedere.
-                membriStaffResult.setValue(new Result<>(e));
-            }
+            managerMembro.restituisciListaUtentiStaff(staff.getId(), new DefaultSuccessListener<>(membriStaffResult), new DefaultExceptionListener<>(membriStaffResult));
         } else {
             membriStaffResult.setValue(new Result<>(R.string.no_staff));
         }
@@ -172,12 +165,7 @@ public class MainViewModel extends AbstractViewModel {
             ManagerMembro managerMembro = getManagerMembro();
             WStaff staff = getStaff();
 
-            try {
-                managerMembro.restituisciListaEventiStaff(staff.getId(), new DefaultSuccessListener<>(eventiStaffResult), new DefaultExceptionListener<>(eventiStaffResult));
-            } catch (UnsupportedEncodingException e) {
-                //Non dovrebbe succedere.
-                eventiStaffResult.setValue(new Result<>(e));
-            }
+            managerMembro.restituisciListaEventiStaff(staff.getId(), new DefaultSuccessListener<>(eventiStaffResult), new DefaultExceptionListener<>(eventiStaffResult));
         } else {
             eventiStaffResult.setValue(new Result<>(R.string.no_staff));
         }
@@ -194,11 +182,7 @@ public class MainViewModel extends AbstractViewModel {
             if (myContext.isLoggato()) {
                 ManagerCassiere managerCassiere = getManagerCassiere();
 
-                try {
-                    managerCassiere.restituisciInformazioniPrevendita(idPrevendita, new DefaultSuccessListener<>(infoPrevenditaResult), new DefaultExceptionListener<>(infoPrevenditaResult));
-                } catch (UnsupportedEncodingException e) {
-                    infoPrevenditaResult.setValue(new Result<>(e));
-                }
+                managerCassiere.restituisciInformazioniPrevendita(idPrevendita, new DefaultSuccessListener<>(infoPrevenditaResult), new DefaultExceptionListener<>(infoPrevenditaResult));
             } else {
                 infoPrevenditaResult.setValue(new Result<>(R.string.no_login));
             }
@@ -214,11 +198,7 @@ public class MainViewModel extends AbstractViewModel {
             if (myContext.isLoggato()) {
                 ManagerCassiere managerCassiere = getManagerCassiere();
 
-                try {
-                    managerCassiere.timbraEntrata(mapEntrata.get(idPrevendita), new DefaultSuccessListener<>(entrataResult, prevendita), new DefaultExceptionListener<>(entrataResult, prevendita));
-                } catch (UnsupportedEncodingException e) {
-                    infoPrevenditaResult.setValue(new Result<>(e));
-                }
+                managerCassiere.timbraEntrata(mapEntrata.get(idPrevendita), new DefaultSuccessListener<>(entrataResult, prevendita), new DefaultExceptionListener<>(entrataResult, prevendita));
             } else {
                 infoPrevenditaResult.setValue(new Result<>(R.string.no_login));
             }
@@ -232,11 +212,7 @@ public class MainViewModel extends AbstractViewModel {
             Integer idStaff = myContext.getStaff().getId();
             ManagerMembro managerMembro = getManagerMembro();
 
-            try {
-                managerMembro.restituisciDirittiUtenteStaff(idUtente, idStaff, new DefaultSuccessListener<>(dirittiMembroResult, idUtente), new DefaultExceptionListener<>(dirittiMembroResult, idUtente));
-            } catch (UnsupportedEncodingException e) {
-                dirittiMembroResult.setValue(new Result<>(e));
-            }
+            managerMembro.restituisciDirittiUtenteStaff(idUtente, idStaff, new DefaultSuccessListener<>(dirittiMembroResult, idUtente), new DefaultExceptionListener<>(dirittiMembroResult, idUtente));
         } else {
             dirittiMembroResult.setValue(new Result<>(R.string.no_staff));
         }
@@ -249,11 +225,7 @@ public class MainViewModel extends AbstractViewModel {
             ManagerAmministratore managerAmministratore = getManagerAmministratore();
             Integer idEvento = myContext.getEvento().getId();
 
-            try {
-                managerAmministratore.resitituisciStatisticheEvento(idEvento, new DefaultSuccessListener<>(statisticheAmministratoreEventoResult), new DefaultExceptionListener<>(statisticheAmministratoreEventoResult));
-            } catch (UnsupportedEncodingException e) {
-                statisticheAmministratoreEventoResult.setValue(new Result<>(e));
-            }
+            managerAmministratore.resitituisciStatisticheEvento(idEvento, new DefaultSuccessListener<>(statisticheAmministratoreEventoResult), new DefaultExceptionListener<>(statisticheAmministratoreEventoResult));
         } else {
             statisticheAmministratoreEventoResult.setValue(new Result<>(R.string.no_login));
         }
@@ -266,11 +238,7 @@ public class MainViewModel extends AbstractViewModel {
             ManagerAmministratore managerAmministratore = getManagerAmministratore();
             Integer idEvento = myContext.getEvento().getId();
 
-            try {
-                managerAmministratore.resitituisciStatistichePREvento(idPR, idEvento, new DefaultSuccessListener<>(statistichePREventoResult, idPR), new DefaultExceptionListener<>(statistichePREventoResult, idPR));
-            } catch (UnsupportedEncodingException e) {
-                statistichePREventoResult.setValue(new Result<>(e));
-            }
+            managerAmministratore.resitituisciStatistichePREvento(idPR, idEvento, new DefaultSuccessListener<>(statistichePREventoResult, idPR), new DefaultExceptionListener<>(statistichePREventoResult, idPR));
         } else {
             statistichePREventoResult.setValue(new Result<>(R.string.no_evento));
         }
@@ -283,11 +251,7 @@ public class MainViewModel extends AbstractViewModel {
             ManagerAmministratore managerAmministratore = getManagerAmministratore();
             Integer idEvento = myContext.getEvento().getId();
 
-            try {
-                managerAmministratore.resitituisciStatisticheCassiereEvento(idCassiere, idEvento, new DefaultSuccessListener<>(statisticheCassiereEventoResult, idCassiere), new DefaultExceptionListener<>(statisticheCassiereEventoResult, idCassiere));
-            } catch (UnsupportedEncodingException e) {
-                statisticheCassiereEventoResult.setValue(new Result<>(e));
-            }
+            managerAmministratore.resitituisciStatisticheCassiereEvento(idCassiere, idEvento, new DefaultSuccessListener<>(statisticheCassiereEventoResult, idCassiere), new DefaultExceptionListener<>(statisticheCassiereEventoResult, idCassiere));
         } else {
             statisticheCassiereEventoResult.setValue(new Result<>(R.string.no_evento));
         }
@@ -300,11 +264,7 @@ public class MainViewModel extends AbstractViewModel {
             ManagerCassiere managerCassiere = getManagerCassiere();
             Integer idEvento = myContext.getEvento().getId();
 
-            try {
-                managerCassiere.restituisciListaPrevenditeTimbrate(idEvento, new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
-            } catch (UnsupportedEncodingException e) {
-                prevenditeResult.setValue(new Result<>(e));
-            }
+            managerCassiere.restituisciListaPrevenditeTimbrate(idEvento, new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
         } else {
             prevenditeResult.setValue(new Result<>(R.string.no_login));
         }
@@ -317,11 +277,22 @@ public class MainViewModel extends AbstractViewModel {
             ManagerCassiere managerCassiere = getManagerCassiere();
             Integer idEvento = myContext.getEvento().getId();
 
-            try {
-                managerCassiere.restituisciListaPrevenditeNonTimbrate(idEvento, new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
-            } catch (UnsupportedEncodingException e) {
-                prevenditeResult.setValue(new Result<>(e));
-            }
+            managerCassiere.restituisciListaPrevenditeNonTimbrate(idEvento, new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
+        } else {
+            prevenditeResult.setValue(new Result<>(R.string.no_login));
+        }
+    }
+
+    public void getListaClienti(){
+        MyContext myContext = getMyContext();
+
+        if (myContext.isLoggato() && myContext.isStaffScelto()) {
+
+            ManagerMembro managerMembro = getManagerMembro();
+            Integer idStaff = myContext.getStaff().getId();
+
+            managerMembro.restituisciListaClientiStaff(idStaff, new DefaultSuccessListener<>(listaClientiResult), new DefaultExceptionListener<>(listaClientiResult));
+
         } else {
             prevenditeResult.setValue(new Result<>(R.string.no_login));
         }

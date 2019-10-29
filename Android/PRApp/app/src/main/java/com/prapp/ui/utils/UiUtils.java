@@ -17,7 +17,7 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.prapp.ui;
+package com.prapp.ui.utils;
 
 import android.content.Context;
 import android.content.res.Resources;

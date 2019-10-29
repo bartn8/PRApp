@@ -19,6 +19,7 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">PRApp</string>
+    <string name="search_hint">Cerca</string>
 
     <!--APPLICATION PREFERENCES-->
     <string name="app_package">com.prapp</string>
@@ -62,10 +63,15 @@
     <string name="wutente_list_item_cognome">Cognome</string>
     <string name="wutente_list_item_nome">Nome</string>
 
-    <!-- WUEvento List Item -->
+    <!-- WEvento List Item -->
     <string name="wevento_list_item_nome">Nome</string>
     <string name="wevento_list_item_descrizione">Descrizione</string>
     <string name="wevento_list_item_periodo">Periodo</string>
+
+    <!-- WCliente List Item -->
+    <string name="wcliente_list_item_nome">Nome</string>
+    <string name="wcliente_list_item_cognome">Cognome</string>
+    <string name="wcliente_list_item_dataDiNascita">XX-XX-XXXX</string>
 
     <!-- WPrevendita+ List Item -->
     <string name="wprevendita_plus_list_item_nomeEvento_label">Evento:</string>
@@ -155,10 +161,12 @@
 
     <string name="fragment_pr_add_cliente_nome_label">Nome:</string>
     <string name="fragment_pr_add_cliente_cognome_label">Cognome:</string>
-    <string name="fragment_pr_add_cliente_dataDiNascita_label">Cognome:</string>
+    <string name="fragment_pr_add_cliente_dataDiNascita_label">Data di nascita:</string>
     <string name="fragment_pr_add_cliente_nome_editText_label">(opzionale)</string>
     <string name="fragment_pr_add_cliente_cognome_editText_label">(opzionale)</string>
     <string name="fragment_pr_add_cliente_dataDiNascita_editText_label">(opzionale)</string>
+
+    <string name="fragment_pr_add_cliente_button_label">Aggiungi</string>
 
     <!-- MENU -->
     <string name="fragment_pr_menu_aggiungiPrevenditaItem">Aggiungi prevendita</string>

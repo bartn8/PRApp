@@ -42,11 +42,11 @@ import com.prapp.model.db.wrapper.WStatisticheEvento;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
-import com.prapp.ui.UiUtils;
-import com.prapp.ui.main.InterfaceHolder;
+import com.prapp.ui.main.adapter.StatisticheMembroAdapter;
+import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.MainViewModel;
-import com.prapp.ui.main.adapter.StatisticheMembroAdapter;
 import com.prapp.ui.main.adapter.WStatisticheEventoAdapter;
 
 import org.joda.time.format.DateTimeFormat;
