@@ -24,120 +24,210 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.fragment.pr.PRFragment">
 
-
-    <!-- Card view per visualizzare il cliente. -->
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/primaryColorGrey">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <!-- Card view per visualizzare il cliente. -->
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/fragment_pr_toolbar_cliente"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:titleTextColor="@color/black" />
-
-            <!-- Roba per aggiungere cliente. -->
+            app:cardBackgroundColor="@color/primaryColorGrey">
 
             <LinearLayout
-                android:id="@+id/fragment_pr_aggiungiCliente_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/fragment_pr_cliente_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:titleTextColor="@color/black" />
+
+                <!-- Roba per aggiungere cliente. -->
+
                 <LinearLayout
+                    android:id="@+id/fragment_pr_aggiungiCliente_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/fragment_pr_add_cliente_nome_label" />
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/fragment_pr_aggiungiCliente_nome_editText"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fragment_pr_add_cliente_nome_label" />
+
+                        <EditText
+                            android:id="@+id/fragment_pr_aggiungiCliente_nome_editText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/fragment_pr_add_cliente_nome_editText_label"
+                            android:inputType="text"
+                            android:selectAllOnFocus="true"
+                            tools:ignore="Autofill" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/fragment_pr_add_cliente_nome_editText_label"
-                        android:inputType="text"
-                        android:selectAllOnFocus="true"
-                        tools:ignore="Autofill" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fragment_pr_add_cliente_cognome_label" />
+
+                        <EditText
+                            android:id="@+id/fragment_pr_aggiungiCliente_cognome_editText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/fragment_pr_add_cliente_cognome_editText_label"
+                            android:inputType="text"
+                            android:selectAllOnFocus="true"
+                            tools:ignore="Autofill" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fragment_pr_add_cliente_dataDiNascita_label" />
+
+                        <EditText
+                            android:id="@+id/fragment_pr_aggiungiCliente_dataDiNascita_editText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:hint="@string/fragment_pr_add_cliente_dataDiNascita_editText_label"
+                            android:inputType="date"
+                            android:selectAllOnFocus="true"
+                            tools:ignore="Autofill" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/fragment_pr_aggiungiCliente_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fragment_pr_add_cliente_button_label" />
+
 
                 </LinearLayout>
 
-                <LinearLayout
+
+                <!-- Roba per ricerca cliente. -->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_pr_clienti_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fragment_pr_add_cliente_cognome_label" />
-
-                    <EditText
-                        android:id="@+id/fragment_pr_aggiungiCliente_cognome_editText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/fragment_pr_add_cliente_cognome_editText_label"
-                        android:inputType="text"
-                        android:selectAllOnFocus="true"
-                        tools:ignore="Autofill" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fragment_pr_add_cliente_dataDiNascita_label" />
-
-                    <EditText
-                        android:id="@+id/fragment_pr_aggiungiCliente_dataDiNascita_editText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="false"
-                        android:hint="@string/fragment_pr_add_cliente_dataDiNascita_editText_label"
-                        android:inputType="date"
-                        android:selectAllOnFocus="true"
-                        tools:ignore="Autofill" />
-
-                </LinearLayout>
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/fragment_pr_aggiungiCliente_button"
-                    android:text="@string/fragment_pr_add_cliente_button_label" />
-
+                    android:clipToPadding="false"
+                    android:scrollbars="vertical" />
 
             </LinearLayout>
 
+        </androidx.cardview.widget.CardView>
 
-            <!-- Roba per ricerca cliente. -->
+        <!-- Parte in cui imposto la prevendita. -->
+        <!-- Uso sempre una cardview -->
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fragment_pr_recyclerViewClienti"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/primaryColorGrey">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:scrollbars="vertical" />
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/fragment_pr_prevendita_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:titleTextColor="@color/black" />
 
-    </androidx.cardview.widget.CardView>
 
+                <LinearLayout
+                    android:id="@+id/fragment_pr_selezionaPrevendita_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fragment_pr_tipoPrevendita_label" />
+
+                        <EditText
+                            android:id="@+id/fragment_pr_tipoPrevendita_editText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/fragment_pr_tipoPrevendita_editText_label"
+                            android:inputType="none"
+                            android:selectAllOnFocus="true"
+                            tools:ignore="Autofill" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fragment_pr_statoPrevendita_label" />
+
+                        <Spinner
+                            android:id="@+id/fragment_pr_statoPrevendita_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Roba per ricerca tipo prevendita. -->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_pr_tipiPrevendita_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:scrollbars="vertical" />
+
+                <Button
+                    android:id="@+id/fragment_pr_aggiungiPrevendita_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fragment_pr_aggiungiPrevendita_button_label" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

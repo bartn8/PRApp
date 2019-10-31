@@ -31,21 +31,34 @@ public enum StatoPrevendita {
     public static StatoPrevendita parseId(int id) throws ParseException {
         StatoPrevendita[] values = StatoPrevendita.values();
 
-        for (StatoPrevendita value: values) {
-            if(value.getId() == id)
-            {
-                return value;
+        for (StatoPrevendita stato : values) {
+            if (stato.getId() == id) {
+                return stato;
             }
         }
 
-        throw new ParseException("ID non valido", id);
+        throw new ParseException("ID non valido", -1);
+    }
+
+    public static StatoPrevendita parseName(String name) throws ParseException {
+        StatoPrevendita[] values = StatoPrevendita.values();
+
+        if (name != null) {
+            name = name.toUpperCase();
+            for (StatoPrevendita stato : values) {
+                if (name.equals(stato.getNome())) {
+                    return stato;
+                }
+            }
+        }
+
+        throw new ParseException("Nome non valido", -1);
     }
 
     private int id;
     private String nome;
 
-    private StatoPrevendita(int id, String nome)
-    {
+    StatoPrevendita(int id, String nome) {
         this.id = id;
         this.nome = nome;
     }

@@ -23,15 +23,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/fragment_pr_cliente_menu_searchItem"
+        android:id="@+id/fragment_pr_prevendita_menu_searchItem"
         android:icon="@drawable/ic_search"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        android:title="@string/fragment_pr_cliente_menu_searchItem"/>
-
-    <item android:id="@+id/fragment_pr_cliente_menu_aggiungiClienteItem"
-        android:title="@string/fragment_pr_cliente_menu_aggiungiClienteItem"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_add"/>
+        android:title="@string/fragment_pr_prevendita_menu_searchItem"/>
 
 </menu>

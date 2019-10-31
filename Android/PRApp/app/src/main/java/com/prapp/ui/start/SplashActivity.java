@@ -136,7 +136,7 @@ public class SplashActivity extends AppCompatActivity {
     };
 
     private void showLoginSuccess(@NotNull WUtente model) {
-        String welcome = getString(R.string.welcome) + model.getNome();
+        String welcome = getString(R.string.welcome, model.getNome());
         uiUtils.makeToast(welcome);
     }
 

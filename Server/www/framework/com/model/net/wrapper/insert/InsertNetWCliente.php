@@ -48,7 +48,8 @@ class InsertNetWCliente implements NetWrapper
 			//throw new InvalidArgumentException("Dato telefono non trovato.");
 
         if (! array_key_exists("dataDiNascita", $array))
-            throw new InvalidArgumentException("Dato dataDiNascita non trovato.");
+            $array["dataDiNascita"] = null;
+            //throw new InvalidArgumentException("Dato dataDiNascita non trovato.");
 
         if (! array_key_exists("codiceFiscale", $array))
 			$array["codiceFiscale"] = null;

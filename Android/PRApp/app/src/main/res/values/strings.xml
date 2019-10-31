@@ -73,6 +73,15 @@
     <string name="wcliente_list_item_cognome">Cognome</string>
     <string name="wcliente_list_item_dataDiNascita">XX-XX-XXXX</string>
 
+    <!-- WTipoPrevendita List Item -->
+    <string name="wtipoprevendita_list_item_nome">Nome</string>
+    <string name="wtipoprevendita_list_item_prezzo_label">Prezzo:</string>
+    <string name="wtipoprevendita_list_item_prezzo">ND</string>
+    <string name="wtipoprevendita_list_item_periodoVendita_label">Periodo vendita:</string>
+    <string name="wtipoprevendita_list_item_periodoVendita">
+        <xliff:g example="01/01/01" id="inizio">%1$s</xliff:g> - <xliff:g example="01/01/01" id="fine">%2$s</xliff:g>
+    </string>
+
     <!-- WPrevendita+ List Item -->
     <string name="wprevendita_plus_list_item_nomeEvento_label">Evento:</string>
     <string name="wprevendita_plus_list_item_nomeEvento">ND</string>
@@ -158,15 +167,16 @@
 
     <!-- FRAGMENT PR -->
     <string name="fragment_pr_cliente_toolbar_label">Cliente</string>
+    <string name="fragment_pr_prevendita_toolbar_label">Prevendita</string>
 
     <!-- CardView Aggiungi cliente / Seleziona cliente -->
     <string name="fragment_pr_add_cliente_nome_label">Nome:</string>
     <string name="fragment_pr_add_cliente_cognome_label">Cognome:</string>
     <string name="fragment_pr_add_cliente_dataDiNascita_label">Data di nascita:</string>
-    <string name="fragment_pr_add_cliente_nome_editText_label">(opzionale)</string>
-    <string name="fragment_pr_add_cliente_cognome_editText_label">(opzionale)</string>
+    <string name="fragment_pr_add_cliente_nome_editText_label">(obbligatorio)</string>
+    <string name="fragment_pr_add_cliente_cognome_editText_label">(obbligatorio)</string>
     <string name="fragment_pr_add_cliente_dataDiNascita_editText_label">(opzionale)</string>
-    <string name="fragment_pr_add_cliente_button_label">Aggiungi</string>
+    <string name="fragment_pr_add_cliente_button_label">Aggiungi Cliente</string>
 
     <!-- MENU -->
     <string name="fragment_pr_menu_aggiungiPrevenditaItem">Aggiungi prevendita</string>
@@ -177,9 +187,26 @@
     <string name="fragment_pr_cliente_menu_searchItem">Cerca</string>
     <string name="fragment_pr_cliente_menu_aggiungiClienteItem">Aggiungi cliente</string>
 
+    <!-- Errori inserimento dati nuovo cliente -->
     <string name="fragment_pr_add_cliente_invalid_nome">Nome cliente non valido</string>
     <string name="fragment_pr_add_cliente_invalid_cognome">Cognome cliente non valido</string>
     <string name="fragment_pr_add_cliente_invalid_dataDiNascita">Data di nascita cliente non valido</string>
+
+    <!-- MENU Toolbar Prevendita -->
+    <string name="fragment_pr_prevendita_menu_searchItem">Cerca</string>
+
+    <!-- CardView Seleziona Tipo Prevendita -->
+    <string name="fragment_pr_tipoPrevendita_label">Tipo Prevendita:</string>
+    <string name="fragment_pr_tipoPrevendita_editText_label">(seleziona)</string>
+    <string name="fragment_pr_statoPrevendita_label">Stato Prevendita:</string>
+    <string-array name="fragment_pr_statoPrevendita">
+        <item>Consegnata</item>
+        <item>Pagata</item>
+        <item>Annullata</item>
+        <item>Rimborsata</item>
+    </string-array>
+
+    <string name="fragment_pr_aggiungiPrevendita_button_label">Aggiungi Prevendita</string>
 
     <!-- FRAGMENT CASSIERE -->
 

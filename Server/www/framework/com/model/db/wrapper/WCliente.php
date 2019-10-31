@@ -102,7 +102,7 @@ class WCliente implements DatabaseWrapper
         if (is_null($id) ||  is_null($nome) || is_null($cognome) ||  is_null($idStaff) || /*is_null($dataDiNascita) || */ is_null($timestampInserimento))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) || ! is_int($idStaff) || (!is_null($nome) && ! is_string($nome)) ||  (! is_null($cognome) && ! is_string($cognome)) || (! is_null($cognome) && ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON)) || ! ($timestampInserimento instanceof DateTimeImmutableAdapterJSON))
+        if (! is_int($id) || ! is_int($idStaff) || (!is_null($nome) && ! is_string($nome)) ||  (! is_null($cognome) && ! is_string($cognome)) || (! is_null($dataDiNascita) && ! ($dataDiNascita instanceof DateTimeImmutableAdapterJSON)) || ! ($timestampInserimento instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if (! is_null($telefono)) {

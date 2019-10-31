@@ -31,10 +31,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -47,9 +49,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WCliente;
+import com.prapp.model.db.wrapper.WTipoPrevendita;
 import com.prapp.ui.Result;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.adapter.WClienteAdapter;
+import com.prapp.ui.main.adapter.WTipoPrevenditaAdapter;
 import com.prapp.ui.utils.DatePickerFragment;
 import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.utils.UiUtils;
@@ -77,13 +81,11 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
     private static final String TAG = PRFragment.class.getSimpleName();
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.mediumDate();
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.fullDate();
 
 
-    private static final String CLIENTE_MODE_KEY = "CLIENTI_MODE";
-    private static final int CLIENTE_SEARCH_MODE = 0;
-    private static final int CLIENTE_ADD_MODE = 1;
-    private static final int CLIENTE_SELECT_MODE = 2;
+//    private static final String CLIENTE_MODE_KEY = "CLIENTI_MODE";
+
 
     /**
      * View-Model per interfacciarsi con il server.
@@ -100,10 +102,8 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
      */
     private UiUtils uiUtils;
 
-    private int clienteMode = CLIENTE_ADD_MODE;
-
-    @BindView(R.id.fragment_pr_toolbar_cliente)
-    public Toolbar toolbarClienti;
+    @BindView(R.id.fragment_pr_cliente_toolbar)
+    public Toolbar clientiToolbar;
 
     @BindView(R.id.fragment_pr_aggiungiCliente_layout)
     public LinearLayout aggiungiClienteLayout;
@@ -120,12 +120,32 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     @BindView(R.id.fragment_pr_aggiungiCliente_button)
     public Button aggiungiClienteButton;
 
-    private WClienteAdapter adapterClienti;
+    private WClienteAdapter clientiAdapter;
 
-    @BindView(R.id.fragment_pr_recyclerViewClienti)
-    public RecyclerView recyclerViewClienti;
+    @BindView(R.id.fragment_pr_clienti_recyclerView)
+    public RecyclerView clientiRecyclerView;
 
-    private SearchView searchClienteView;
+    @BindView(R.id.fragment_pr_selezionaPrevendita_layout)
+    public LinearLayout aggiungiPrevenditaLayout;
+
+    @BindView(R.id.fragment_pr_prevendita_toolbar)
+    public Toolbar prevenditaToolbar;
+
+    @BindView(R.id.fragment_pr_tipoPrevendita_editText)
+    public EditText tipoPrevenditaEditText;
+
+    private ArrayAdapter<CharSequence> statoPrevenditaAdapter;
+
+    @BindView(R.id.fragment_pr_statoPrevendita_spinner)
+    public Spinner statoPrevenditaSpinner;
+
+    private WTipoPrevenditaAdapter tipoPrevenditaAdapter;
+
+    @BindView(R.id.fragment_pr_tipiPrevendita_recyclerView)
+    public RecyclerView tipiPrevenditaRecyclerView;
+
+    @BindView(R.id.fragment_pr_aggiungiPrevendita_button)
+    public Button aggiungiPrevenditaButton;
 
     private Observer<Result<List<WCliente>, Void>> getListaClientiResultObserver = new Observer<Result<List<WCliente>, Void>>() {
 
@@ -147,30 +167,94 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
 
             else if (success != null) {
-                adapterClienti.replace(success);
+                clientiAdapter.replace(success);
             }
         }
     };
 
+    private Observer<Result<List<WTipoPrevendita>, Void>> getListaTipoPrevenditaResultObserver = new Observer<Result<List<WTipoPrevendita>, Void>>() {
+
+        @Override
+        public void onChanged(Result<List<WTipoPrevendita>, Void> listVoidResult) {
+            if (listVoidResult == null) {
+                return;
+            }
+
+            Integer integerError = listVoidResult.getIntegerError();
+            List<Exception> error = listVoidResult.getError();
+            List<WTipoPrevendita> success = listVoidResult.getSuccess();
+
+            if (integerError != null)
+                uiUtils.showError(integerError);
+
+            else if (error != null)
+                uiUtils.showError(error);
+
+
+            else if (success != null) {
+                tipoPrevenditaAdapter.replace(success);
+            }
+        }
+    };
+
+
     private Observer<AggiungiClienteState> aggiungiClienteStateObserver = new Observer<AggiungiClienteState>() {
         @Override
         public void onChanged(AggiungiClienteState aggiungiClienteState) {
-            if(aggiungiClienteState == null)
+            if (aggiungiClienteState == null)
                 return;
 
-            if(aggiungiClienteState.isDataValid()){
+            if (aggiungiClienteState.isDataValid()) {
                 aggiungiClienteButton.setEnabled(true);
-            }else{
-                if(aggiungiClienteState.getNomeClienteError() != null){
+            } else {
+                if (aggiungiClienteState.getNomeClienteError() != null) {
                     aggiungiClienteNomeEditText.setError(getString(aggiungiClienteState.getNomeClienteError()));
                 }
-                if(aggiungiClienteState.getCognomeClienteError() != null){
+                if (aggiungiClienteState.getCognomeClienteError() != null) {
                     aggiungiClienteCognomeEditText.setError(getString(aggiungiClienteState.getCognomeClienteError()));
                 }
-                if(aggiungiClienteState.getDataDiNascitaClienteError() != null){
+                if (aggiungiClienteState.getDataDiNascitaClienteError() != null) {
                     aggiungiClienteDataDiNascitaEditText.setError(getString(aggiungiClienteState.getDataDiNascitaClienteError()));
                 }
             }
+        }
+    };
+
+
+    private Observer<Result<WCliente, Void>> aggiungiClienteResultObserver = new Observer<Result<WCliente, Void>>() {
+        @Override
+        public void onChanged(Result<WCliente, Void> result) {
+            if (result == null)
+                return;
+
+            Integer integerError = result.getIntegerError();
+            List<Exception> error = result.getError();
+            WCliente success = result.getSuccess();
+
+            if (integerError != null)
+                uiUtils.showError(integerError);
+
+            else if (error != null)
+                uiUtils.showError(error);
+
+            else if (success != null) {
+                //Aggiorno stato e schermata di cliente
+                viewModel.setClienteMode(PRViewModel.CLIENTE_SELECT_MODE);
+                switchClienteModeView();
+                clientiAdapter.replace(success);
+            }
+        }
+    };
+
+    private Observer<Integer> clienteModeObserver = mode -> {
+        if (mode != null) {
+            aggiungiPrevenditaButton.setEnabled(mode == PRViewModel.CLIENTE_SELECT_MODE && viewModel.getPrevenditaMode() == PRViewModel.PREVENDITA_SELECT_MODE);
+        }
+    };
+
+    private Observer<Integer> prevenditaModeObserver = mode -> {
+        if (mode != null) {
+            aggiungiPrevenditaButton.setEnabled(mode == PRViewModel.PREVENDITA_SELECT_MODE && viewModel.getClienteMode() == PRViewModel.CLIENTE_SELECT_MODE);
         }
     };
 
@@ -212,9 +296,9 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);    //Opzione menu
 
-        if (savedInstanceState != null) {
-            clienteMode = savedInstanceState.getInt(CLIENTE_MODE_KEY);
-        }
+//        if (savedInstanceState != null) {
+//            clienteMode = savedInstanceState.getInt(CLIENTE_MODE_KEY);
+//        }
     }
 
     @Override
@@ -268,7 +352,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
             case R.id.fragment_pr_cliente_menu_aggiungiClienteItem:
                 //Nascondo il recycler view.
-                recyclerViewClienti.setVisibility(View.GONE);
+                clientiRecyclerView.setVisibility(View.GONE);
 
                 //Mostro la roba per aggiungere il cliente.
                 aggiungiClienteLayout.setVisibility(View.VISIBLE);
@@ -291,33 +375,38 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         viewModel = ViewModelProviders.of(getActivity()).get(PRViewModel.class);
         viewModel.getListaClientiResult().observe(this, getListaClientiResultObserver);
         viewModel.getAggiungiClienteState().observe(this, aggiungiClienteStateObserver);
+        viewModel.getAggiungiClienteResult().observe(this, aggiungiClienteResultObserver);
+        viewModel.getClienteModeLiveData().observe(this, clienteModeObserver);
+        viewModel.getPrevenditaModeLiveData().observe(this, prevenditaModeObserver);
+        viewModel.getListaTipoPrevenditaResult().observe(this, getListaTipoPrevenditaResultObserver);
 
         //Impostazione recycler view clienti.
-        adapterClienti = new WClienteAdapter(this::onSearchClienteItemClick);
-        recyclerViewClienti.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewClienti.setHasFixedSize(false);
-        recyclerViewClienti.setNestedScrollingEnabled(false);
-        recyclerViewClienti.setAdapter(adapterClienti);
-        recyclerViewClienti.setVisibility(View.GONE);
+        clientiAdapter = new WClienteAdapter(this::onSearchClienteItemClick);
+        clientiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        clientiRecyclerView.setHasFixedSize(false);
+        clientiRecyclerView.setNestedScrollingEnabled(false);
+        clientiRecyclerView.setAdapter(clientiAdapter);
+        clientiRecyclerView.setVisibility(View.GONE);
 
 
         //Imposto la toolbar clienti.
-        toolbarClienti.inflateMenu(R.menu.pr_cliente_menu);
+        clientiToolbar.inflateMenu(R.menu.pr_cliente_menu);
         //Imposto il callback e il titolo della toolbar.
-        toolbarClienti.setOnMenuItemClickListener(this::onClientiMenuItemSelected);
-        toolbarClienti.setTitle(R.string.fragment_pr_cliente_toolbar_label);
+        clientiToolbar.setOnMenuItemClickListener(this::onClientiMenuItemSelected);
+        clientiToolbar.setTitle(R.string.fragment_pr_cliente_toolbar_label);
 
-        //Nascondo il pulsante di aggiunta
-        Menu clientiMenu = toolbarClienti.getMenu();
-
-        //Item della ricerca
-        MenuItem searchItem = clientiMenu.findItem(R.id.fragment_pr_cliente_menu_searchClienteItem);
         //Imposto l'item di ricerca:
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 
+        //Nascondo il pulsante di aggiunta
+        Menu clientiMenu = clientiToolbar.getMenu();
+
+        //Item della ricerca
+        MenuItem searchClientiItem = clientiMenu.findItem(R.id.fragment_pr_cliente_menu_searchItem);
+
         //https://stackoverflow.com/questions/27378981/how-to-use-searchview-in-toolbar-android
-        if (searchItem != null) {
-            searchClienteView = (SearchView) searchItem.getActionView();
+        if (searchClientiItem != null) {
+            SearchView searchClienteView = (SearchView) searchClientiItem.getActionView();
 
             if (searchClienteView != null) {
                 // Assumes current activity is the searchable activity
@@ -328,7 +417,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
                 //Imposto i listener:
                 //Questo serve quando clicco sulla ricerca.
-                searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                searchClientiItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem menuItem) {
                         return onSearchClienteExpand(menuItem);
@@ -369,71 +458,144 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
         //FINE IMPOSTAZIONI AGGIUNTA CLIENTE
 
-        //Popolo l'adapter.
-        viewModel.getListaClienti();
+        //Impostazioni prevendita.
+
+        //Impostazione recycler view tipi prevendita.
+        tipoPrevenditaAdapter = new WTipoPrevenditaAdapter(this::onSearchTipoPrevenditaItemClick);
+        tipiPrevenditaRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        tipiPrevenditaRecyclerView.setHasFixedSize(false);
+        tipiPrevenditaRecyclerView.setNestedScrollingEnabled(false);
+        tipiPrevenditaRecyclerView.setAdapter(tipoPrevenditaAdapter);
+        tipiPrevenditaRecyclerView.setVisibility(View.GONE);
+
+        //Imposto la toolbar clienti.
+        prevenditaToolbar.inflateMenu(R.menu.pr_prevendita_menu);
+        prevenditaToolbar.setTitle(R.string.fragment_pr_prevendita_toolbar_label);
+
+        //Nascondo il pulsante di aggiunta
+        Menu prevenditaMenu = prevenditaToolbar.getMenu();
+
+        //Item della ricerca
+        MenuItem searchTipoPrevenditaItem = prevenditaMenu.findItem(R.id.fragment_pr_prevendita_menu_searchItem);
+
+        //https://stackoverflow.com/questions/27378981/how-to-use-searchview-in-toolbar-android
+        if (searchTipoPrevenditaItem != null) {
+            SearchView searchTipoPrevenditaView = (SearchView) searchTipoPrevenditaItem.getActionView();
+
+            if (searchTipoPrevenditaView != null) {
+                // Assumes current activity is the searchable activity
+                searchTipoPrevenditaView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+                searchTipoPrevenditaView.setIconifiedByDefault(true); // Do iconify the widget
+                searchTipoPrevenditaView.setSubmitButtonEnabled(false); //Non voglio il pulsante di submit.
+
+                //Imposto i listener:
+                //Questo serve quando clicco sulla ricerca.
+                searchTipoPrevenditaItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                        return onSearchTipoPrevenditaExpand(menuItem);
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                        return onSearchTipoPrevenditaCollapse(menuItem);
+                    }
+                });
+
+                //Questo serve per aggiornare i filtri
+                searchTipoPrevenditaView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false; //Non ci interessa quando si preme il pulsante perchè non c'è pulsante.
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return onSearchTipoPrevenditaQueryTextChange(newText);
+                    }
+                });
+            }
+        }
+
+        //https://developer.android.com/guide/topics/ui/controls/spinner
+        //Spinner dello stato prevendita
+        statoPrevenditaAdapter = ArrayAdapter.createFromResource(getContext(), R.array.fragment_pr_statoPrevendita, android.R.layout.simple_spinner_item);
+        statoPrevenditaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  // Specify the layout to use when the list of choices appears
+        statoPrevenditaSpinner.setAdapter(statoPrevenditaAdapter);  // Apply the adapter to the spinner
+
+        //Inizialmente pulsante disabilitato: si abiliterà solo se i dati vanno bene
+        aggiungiPrevenditaButton.setEnabled(false);
 
         return view;
     }
 
     private boolean onSearchClienteCollapse(MenuItem menuItem) {
-        //Lo stato viene aggiornato precedentemente.
+        //Quando collasso devo verificare che non abbia premuto il tasto indietro senza fare una select.
+        if (viewModel.getClienteMode() != PRViewModel.CLIENTE_SELECT_MODE) {
+            viewModel.setClienteMode(PRViewModel.CLIENTE_ADD_MODE);
+        }
         switchClienteModeView();
         return true;
     }
 
     private boolean onSearchClienteExpand(MenuItem menuItem) {
-        clienteMode = CLIENTE_SEARCH_MODE;
+        viewModel.setClienteMode(PRViewModel.CLIENTE_SEARCH_MODE);
         switchClienteModeView();
+        //Popolo l'adapter.
+        viewModel.getListaClienti();
         return true;
     }
 
     public void onSearchClienteItemClick(int id, WCliente obj) {
         //Quando ho premuto su un cliente vuol dire che ho selezionato il cliente:
         //Aggiorno lo stato
-        clienteMode = CLIENTE_SELECT_MODE;
+        viewModel.setClienteMode(PRViewModel.CLIENTE_SELECT_MODE);
 
         //Chiudo la ricerca:
-        Menu clientiMenu = toolbarClienti.getMenu();
-        MenuItem item = clientiMenu.findItem(R.id.fragment_pr_cliente_menu_searchClienteItem);
+        Menu clientiMenu = clientiToolbar.getMenu();
+        MenuItem item = clientiMenu.findItem(R.id.fragment_pr_cliente_menu_searchItem);
         item.collapseActionView();
 
         //Pulisco il recycler view e lascio solo quello selezionato:
-        adapterClienti.replace(obj);
-
-        switchClienteModeView();
+        clientiAdapter.replace(obj);
     }
 
     private boolean onSearchClienteQueryTextChange(String newText) {
-        adapterClienti.getFilter().filter(newText);
+        clientiAdapter.getFilter().filter(newText);
         return false;
     }
 
     private void switchClienteModeView() {
-        if (clienteMode == CLIENTE_ADD_MODE) {
+        if (viewModel.getClienteMode() == PRViewModel.CLIENTE_ADD_MODE) {
             //Mostro aggiunta cliente:
             aggiungiClienteLayout.setVisibility(View.VISIBLE);
 
             //Nascondo il recycler view con i clienti.
-            recyclerViewClienti.setVisibility(View.GONE);
-        } else if (clienteMode == CLIENTE_SEARCH_MODE || clienteMode == CLIENTE_SELECT_MODE) {
+            clientiRecyclerView.setVisibility(View.GONE);
+        } else if (viewModel.getClienteMode() == PRViewModel.CLIENTE_SEARCH_MODE || viewModel.getClienteMode() == PRViewModel.CLIENTE_SELECT_MODE) {
             //Chiusura aggiunta cliente:
             aggiungiClienteLayout.setVisibility(View.GONE);
 
             //Mostro il recycler view con i clienti.
-            recyclerViewClienti.setVisibility(View.VISIBLE);
+            clientiRecyclerView.setVisibility(View.VISIBLE);
         }
     }
 
     @OnClick(R.id.fragment_pr_aggiungiCliente_button)
     public void onAggiungiButtonClick(View v) {
+        //Ricavo i dati cliente.
+        String nome = aggiungiClienteNomeEditText.getText().toString();
+        String cognome = aggiungiClienteCognomeEditText.getText().toString();
+        String dataDiNascita = aggiungiClienteDataDiNascitaEditText.getText().toString();
+
         //Pulizia dei componenti
         aggiungiClienteNomeEditText.getText().clear();
         aggiungiClienteCognomeEditText.getText().clear();
         aggiungiClienteDataDiNascitaEditText.getText().clear();
 
         //Provo ad inserire un nuovo cliente:
-
-
+        viewModel.aggiungiCliente(nome, cognome, dataDiNascita);
     }
 
     @Override
@@ -446,12 +608,70 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
             R.id.fragment_pr_aggiungiCliente_cognome_editText,
             R.id.fragment_pr_aggiungiCliente_dataDiNascita_editText},
             callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    public void onTextChanged(Editable s)
-    {
+    public void onTextChanged(Editable s) {
         viewModel.aggiungiClienteStateChanged(aggiungiClienteNomeEditText.getText().toString(),
                 aggiungiClienteCognomeEditText.getText().toString(),
                 aggiungiClienteDataDiNascitaEditText.getText().toString());
     }
 
+    public void onSearchTipoPrevenditaItemClick(int id, WTipoPrevendita obj) {
+        //Quando ho premuto su un cliente vuol dire che ho selezionato il cliente:
+        //Aggiorno lo stato
+        viewModel.setPrevenditaMode(PRViewModel.PREVENDITA_SELECT_MODE);
+
+        //Chiudo la ricerca:
+        Menu prevenditaMenu = prevenditaToolbar.getMenu();
+        MenuItem item = prevenditaMenu.findItem(R.id.fragment_pr_prevendita_menu_searchItem);
+        item.collapseActionView();
+
+        //Pulisco il recycler view e lascio solo quello selezionato:
+        tipoPrevenditaAdapter.replace(obj);
+        //Imposto il text view.
+        tipoPrevenditaEditText.setText(obj.getNome());
+    }
+
+    private boolean onSearchTipoPrevenditaCollapse(MenuItem menuItem) {
+        //Quando collasso devo verificare che non abbia premuto il tasto indietro senza fare una select.
+        if (viewModel.getPrevenditaMode() != PRViewModel.PREVENDITA_SELECT_MODE) {
+            viewModel.setPrevenditaMode(PRViewModel.PREVENDITA_SELECT_MODE);
+        }
+        switchPrevenditaModeView();
+        return true;
+    }
+
+    private boolean onSearchTipoPrevenditaExpand(MenuItem item){
+        viewModel.setPrevenditaMode(PRViewModel.PREVENDITA_SEARCH_MODE);
+        switchPrevenditaModeView();
+        //Popolo l'adapter.
+        viewModel.getListaTipoPrevendita();
+        return true;
+    }
+
+    private boolean onSearchTipoPrevenditaQueryTextChange(String newText) {
+        tipoPrevenditaAdapter.getFilter().filter(newText);
+        return false;
+    }
+
+    private void switchPrevenditaModeView() {
+        if (viewModel.getPrevenditaMode() == PRViewModel.PREVENDITA_SEARCH_MODE) {
+            //Chiusura aggiunta cliente:
+            aggiungiPrevenditaLayout.setVisibility(View.GONE);
+
+            //Mostro il recycler view con i clienti.
+            tipiPrevenditaRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            //Mostro aggiunta cliente:
+            aggiungiPrevenditaLayout.setVisibility(View.VISIBLE);
+
+            //Nascondo il recycler view con i clienti.
+            tipiPrevenditaRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.fragment_pr_aggiungiPrevendita_button)
+    public void onAggiungiPrevenditaClick(View v){
+        //Dato che il tasto è abilitato solo se i dati sono selezionati posso passare direttamente
+        //All'inserimento della prevendita.
+    }
 
 }
