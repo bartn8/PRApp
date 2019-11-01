@@ -29,7 +29,6 @@ import com.google.gson.JsonSerializer;
 import com.prapp.model.db.enums.StatoEvento;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 
 public class StatoEventoAdapter implements JsonSerializer<StatoEvento>, JsonDeserializer<StatoEvento> {
     @Override
@@ -39,10 +38,10 @@ public class StatoEventoAdapter implements JsonSerializer<StatoEvento>, JsonDese
 
     @Override
     public StatoEvento deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        try {
-            return StatoEvento.parseId(json.getAsInt());
-        } catch (ParseException e) {
-            throw new JsonParseException(e.getLocalizedMessage());
-        }
+        StatoEvento statoEvento = StatoEvento.parseId(json.getAsInt());
+
+        if(statoEvento == null) throw new JsonParseException("Stato evento non valido (parse exception)");
+
+        return statoEvento;
     }
 }

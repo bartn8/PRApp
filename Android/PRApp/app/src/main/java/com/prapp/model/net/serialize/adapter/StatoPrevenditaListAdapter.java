@@ -29,7 +29,6 @@ import com.google.gson.JsonSerializer;
 import com.prapp.model.db.enums.StatoPrevendita;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,13 +54,13 @@ public class StatoPrevenditaListAdapter implements JsonSerializer<List<StatoPrev
         JsonArray array = json.getAsJsonArray();
         Iterator<JsonElement> iterator = array.iterator();
 
-        try {
-            while (iterator.hasNext()) {
-                JsonElement next = iterator.next();
-                list.add(StatoPrevendita.parseId(next.getAsInt()));
-            }
-        } catch (ParseException e) {
-            throw new JsonParseException(e.getLocalizedMessage());
+        while (iterator.hasNext()) {
+            JsonElement next = iterator.next();
+            StatoPrevendita statoPrevendita = StatoPrevendita.parseId(next.getAsInt());
+
+            if(statoPrevendita == null) throw new JsonParseException("Stato prevendita non valido (parse exception)");
+
+            list.add(statoPrevendita);
         }
 
         return list;

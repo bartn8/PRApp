@@ -19,7 +19,9 @@
 
 package com.prapp.model.db.enums;
 
-import java.text.ParseException;
+import android.util.SparseArray;
+
+import androidx.annotation.Nullable;
 
 public enum StatoEvento {
 
@@ -28,26 +30,32 @@ public enum StatoEvento {
     RIMBORSATO(2, "RIMBORSATO"),
     PAGATO(3, "PAGATO");
 
-    public static StatoEvento parseId(int id) throws ParseException {
-        StatoEvento[] values = StatoEvento.values();
+    private static final SparseArray<StatoEvento> mappaId = new SparseArray<>();
 
-        for (StatoEvento value: values) {
-            if(value.getId() == id)
-            {
-                return value;
-            }
-        }
+    static {
+        //Inizializzo le mappe
+        mappaId.put(StatoEvento.VALIDO.getId(), StatoEvento.VALIDO);
+        mappaId.put(StatoEvento.ANNULLATO.getId(), StatoEvento.ANNULLATO);
+        mappaId.put(StatoEvento.RIMBORSATO.getId(), StatoEvento.RIMBORSATO);
+        mappaId.put(StatoEvento.PAGATO.getId(), StatoEvento.PAGATO);
+    }
 
-        throw new ParseException("ID non valido", id);
+    @Nullable
+    public static StatoEvento parseId(int id) {
+        return mappaId.get(id);
     }
 
     private int id;
     private String nome;
+    private int resId;
+    private String resValue;
 
     private StatoEvento(int id, String nome)
     {
         this.id = id;
         this.nome = nome;
+        this.resId = -1;
+        this.resValue = nome;
     }
 
     public int getId() {
@@ -58,4 +66,25 @@ public enum StatoEvento {
         return nome;
     }
 
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
+    }
+
+    public String getResValue() {
+        return resValue;
+    }
+
+    public void setResValue(String resValue) {
+        if(resValue != null)
+            this.resValue = resValue;
+    }
+
+    @Override
+    public String toString() {
+        return resValue;
+    }
 }

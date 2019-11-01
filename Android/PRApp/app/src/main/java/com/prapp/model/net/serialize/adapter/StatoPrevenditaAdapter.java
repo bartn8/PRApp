@@ -29,7 +29,6 @@ import com.google.gson.JsonSerializer;
 import com.prapp.model.db.enums.StatoPrevendita;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 
 public class StatoPrevenditaAdapter implements JsonSerializer<StatoPrevendita>, JsonDeserializer<StatoPrevendita> {
     @Override
@@ -39,10 +38,10 @@ public class StatoPrevenditaAdapter implements JsonSerializer<StatoPrevendita>, 
 
     @Override
     public StatoPrevendita deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        try {
-            return StatoPrevendita.parseId(json.getAsInt());
-        } catch (ParseException e) {
-            throw new JsonParseException(e.getLocalizedMessage());
-        }
+        StatoPrevendita statoPrevendita = StatoPrevendita.parseId(json.getAsInt());
+
+        if(statoPrevendita == null) throw new JsonParseException("Stato prevendita non valido (parse exception)");
+
+        return statoPrevendita;
     }
 }

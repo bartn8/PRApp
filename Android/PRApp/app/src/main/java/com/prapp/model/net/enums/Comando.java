@@ -19,8 +19,6 @@
 
 package com.prapp.model.net.enums;
 
-import java.text.ParseException;
-
 public enum Comando {
 
     COMANDO_INDEFINITO(-1),
@@ -81,7 +79,7 @@ public enum Comando {
     COMANDO_MANUTENZIONE_ECHO(951),
     COMANDO_MANUTENZIONE_TIMESTAMP(952);
 
-    public static Comando parseComando(int comando) throws ParseException {
+    public static Comando parseComando(int comando) {
         Comando[] values = Comando.values();
 
         for (Comando value: values) {
@@ -91,7 +89,7 @@ public enum Comando {
             }
         }
 
-        throw new ParseException("Comando non valido", comando);
+        return null;
     }
 
     private int comando;

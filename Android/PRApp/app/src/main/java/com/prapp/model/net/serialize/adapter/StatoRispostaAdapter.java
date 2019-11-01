@@ -29,7 +29,6 @@ import com.google.gson.JsonSerializer;
 import com.prapp.model.net.enums.StatoRisposta;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 
 public class StatoRispostaAdapter implements JsonSerializer<StatoRisposta>, JsonDeserializer<StatoRisposta> {
 
@@ -40,11 +39,11 @@ public class StatoRispostaAdapter implements JsonSerializer<StatoRisposta>, Json
 
     @Override
     public StatoRisposta deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        try {
-            return StatoRisposta.parseStatoRisposta(json.getAsInt());
-        } catch (ParseException e) {
-            throw new JsonParseException(e.getLocalizedMessage());
-        }
+        StatoRisposta statoRisposta = StatoRisposta.parseStatoRisposta(json.getAsInt());
+
+        if(statoRisposta == null) throw new JsonParseException("Stato risposta non valido (parse exception)");
+
+        return statoRisposta;
     }
 
 }

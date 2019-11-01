@@ -24,11 +24,14 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.prapp.R;
 import com.prapp.model.MyContext;
+import com.prapp.model.db.enums.StatoPrevendita;
 import com.prapp.model.db.wrapper.WCliente;
+import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WTipoPrevendita;
 import com.prapp.model.net.manager.ManagerMembro;
 import com.prapp.model.net.manager.ManagerPR;
 import com.prapp.model.net.wrapper.insert.InsertNetWCliente;
+import com.prapp.model.net.wrapper.insert.InsertNetWPrevendita;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
@@ -59,6 +62,7 @@ public class PRViewModel extends AbstractViewModel {
         return aggiungiClienteState;
     }
 
+    //Roba di stati
     private MutableLiveData<Integer> clienteMode = new MutableLiveData<>(CLIENTE_ADD_MODE);
 
     public int getClienteMode() {
@@ -89,10 +93,13 @@ public class PRViewModel extends AbstractViewModel {
         this.prevenditaMode.setValue(prevenditaMode);
     }
 
+    //Roba generale
+
     //Roba lato network
     private MutableLiveData<Result<List<WCliente>, Void>> listaClientiResult = new MutableLiveData<>();
     private MutableLiveData<Result<WCliente, Void>> aggiungiClienteResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WTipoPrevendita>, Void>> listaTipoPrevenditaResult = new MutableLiveData<>();
+    private MutableLiveData<Result<WPrevendita, Void>> aggiungiPrevenditaResult = new MutableLiveData<>();
 
     public LiveData<Result<List<WCliente>, Void>> getListaClientiResult() {
         return listaClientiResult;
@@ -104,6 +111,10 @@ public class PRViewModel extends AbstractViewModel {
 
     public LiveData<Result<List<WTipoPrevendita>, Void>> getListaTipoPrevenditaResult() {
         return listaTipoPrevenditaResult;
+    }
+
+    public LiveData<Result<WPrevendita, Void>> getAggiungiPrevenditaResult() {
+        return aggiungiPrevenditaResult;
     }
 
 
@@ -157,6 +168,26 @@ public class PRViewModel extends AbstractViewModel {
 
         } else {
             listaTipoPrevenditaResult.setValue(new Result<>(R.string.no_login));
+        }
+    }
+
+    public void aggiungiPrevendita(WCliente cliente, WTipoPrevendita tipoPrevendita, StatoPrevendita statoPrevendita) {
+        MyContext myContext = getMyContext();
+
+        if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
+            ManagerPR managerPR = getManagerPR();
+
+            Integer idCliente = cliente.getId();
+            Integer idEvento = getEvento().getId();
+            Integer idTipoPrevendita = tipoPrevendita.getId();
+            String codice = myContext.generatePrevenditaCode();
+
+            //Creo la struttura interna
+            InsertNetWPrevendita insertNetWPrevendita = new InsertNetWPrevendita(idCliente, idEvento, idTipoPrevendita, codice, statoPrevendita);
+
+            managerPR.aggiungiPrevendita(insertNetWPrevendita, new DefaultSuccessListener<>(aggiungiPrevenditaResult), new DefaultExceptionListener<>(aggiungiPrevenditaResult));
+        } else {
+            aggiungiPrevenditaResult.setValue(new Result<>(R.string.no_login));
         }
     }
 

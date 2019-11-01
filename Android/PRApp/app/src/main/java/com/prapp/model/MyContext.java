@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 import java.util.TreeSet;
 
 public class MyContext {
@@ -60,6 +61,7 @@ public class MyContext {
 
     public static final String WEBAPP_NAME = "webapppr";
 
+    public static final int PREVENDITA_CODE_LENGTH = 3;
 
     private static MyContext context = null;
 
@@ -89,10 +91,27 @@ public class MyContext {
 
     private WDirittiUtente dirittiUtente;
 
+    private Random random = new Random();
+
     private MyContext() throws MalformedURLException {
         this.loggato = false;
         this.staffScelto = false;
         this.indirizzo = new URL(DEFAULT_FRAMEWORK_ADDRESS);
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    //https://stackoverflow.com/questions/12116092/android-random-string-generator
+    public String generatePrevenditaCode(){
+        StringBuilder builder = new StringBuilder();
+
+        for(int i = 0; i < PREVENDITA_CODE_LENGTH; i++){
+            builder.append((char) (random.nextInt(96) + 32));
+        }
+
+        return builder.toString();
     }
 
     public void login(@NotNull WUtente utente)
@@ -165,7 +184,6 @@ public class MyContext {
     public boolean isEventoScelto(){
         return eventoScelto;
     }
-
 
     public boolean isStaffScelto(){
         return staffScelto;

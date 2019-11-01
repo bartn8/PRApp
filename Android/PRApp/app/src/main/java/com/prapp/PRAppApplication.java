@@ -25,6 +25,11 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.prapp.model.db.enums.Diritto;
+import com.prapp.model.db.enums.StatoEvento;
+import com.prapp.model.db.enums.StatoPrevendita;
+
+import org.jetbrains.annotations.Contract;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -36,12 +41,13 @@ public class PRAppApplication extends Application {
     public static final boolean NETWORK_DEBUG = true;
 
     private static PRAppApplication myInstance;
-    private RequestQueue requestQueue;
 
+    @Contract(pure = true)
     public static synchronized PRAppApplication getInstance(){
         return myInstance;
     }
 
+    private RequestQueue requestQueue;
     private CookieManager manager;
 
     @Override
@@ -49,6 +55,7 @@ public class PRAppApplication extends Application {
         super.onCreate();
         myInstance = this;
         initCookieManager();
+        initEnumsResources();
     }
 
     private void initCookieManager(){
@@ -61,6 +68,44 @@ public class PRAppApplication extends Application {
         android.webkit.CookieManager cookieManager = android.webkit.CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeAllCookies(null);
+    }
+
+    private void initEnumsResources(){
+        //StatoPrevendita
+        StatoPrevendita.CONSEGNATA.setResId(R.string.statoPrevendita_consegnata);
+        StatoPrevendita.CONSEGNATA.setResValue(getString(StatoPrevendita.CONSEGNATA.getResId()));
+
+        StatoPrevendita.PAGATA.setResId(R.string.statoPrevendita_pagata);
+        StatoPrevendita.PAGATA.setResValue(getString(StatoPrevendita.PAGATA.getResId()));
+
+        StatoPrevendita.ANNULLATA.setResId(R.string.statoPrevendita_annullata);
+        StatoPrevendita.ANNULLATA.setResValue(getString(StatoPrevendita.ANNULLATA.getResId()));
+
+        StatoPrevendita.RIMBORSATA.setResId(R.string.statoPrevendita_rimborsata);
+        StatoPrevendita.RIMBORSATA.setResValue(getString(StatoPrevendita.RIMBORSATA.getResId()));
+
+        //Diritto
+        Diritto.PR.setResId(R.string.diritto_pr);
+        Diritto.PR.setResValue(getString(Diritto.PR.getResId()));
+
+        Diritto.CASSIERE.setResId(R.string.diritto_cassiere);
+        Diritto.CASSIERE.setResValue(getString(Diritto.CASSIERE.getResId()));
+
+        Diritto.AMMINISTRATORE.setResId(R.string.diritto_amministratore);
+        Diritto.AMMINISTRATORE.setResValue(getString(Diritto.AMMINISTRATORE.getResId()));
+
+        //StatoEvento
+        StatoEvento.VALIDO.setResId(R.string.statoEvento_valido);
+        StatoEvento.VALIDO.setResValue(getString(StatoEvento.VALIDO.getResId()));
+
+        StatoEvento.ANNULLATO.setResId(R.string.statoEvento_annullato);
+        StatoEvento.ANNULLATO.setResValue(getString(StatoEvento.ANNULLATO.getResId()));
+
+        StatoEvento.RIMBORSATO.setResId(R.string.statoEvento_rimborsato);
+        StatoEvento.RIMBORSATO.setResValue(getString(StatoEvento.RIMBORSATO.getResId()));
+
+        StatoEvento.PAGATO.setResId(R.string.statoEvento_pagato);
+        StatoEvento.PAGATO.setResValue(getString(StatoEvento.PAGATO.getResId()));
     }
 
     public RequestQueue getRequestQueue() {
@@ -94,8 +139,5 @@ public class PRAppApplication extends Application {
             requestQueue.cancelAll(tag);
         }
     }
-
-
-
 
 }

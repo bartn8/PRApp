@@ -29,7 +29,6 @@ import com.google.gson.JsonSerializer;
 import com.prapp.model.net.enums.Comando;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 
 public class ComandoAdapter implements JsonSerializer<Comando>, JsonDeserializer<Comando> {
 
@@ -40,11 +39,11 @@ public class ComandoAdapter implements JsonSerializer<Comando>, JsonDeserializer
 
     @Override
     public Comando deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        try {
-            return Comando.parseComando(json.getAsInt());
-        } catch (ParseException e) {
-            throw new JsonParseException(e.getLocalizedMessage());
-        }
+        Comando comando = Comando.parseComando(json.getAsInt());
+
+        if(comando == null) throw new JsonParseException("Comando non valido (parse exception)");
+
+        return comando;
     }
 
 }

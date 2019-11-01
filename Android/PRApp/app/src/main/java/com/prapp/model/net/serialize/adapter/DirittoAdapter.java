@@ -19,7 +19,6 @@
 
 package com.prapp.model.net.serialize.adapter;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -30,7 +29,6 @@ import com.google.gson.JsonSerializer;
 import com.prapp.model.db.enums.Diritto;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 
 public class DirittoAdapter implements JsonSerializer<Diritto>, JsonDeserializer<Diritto> {
     @Override
@@ -40,10 +38,10 @@ public class DirittoAdapter implements JsonSerializer<Diritto>, JsonDeserializer
 
     @Override
     public Diritto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        try {
-            return Diritto.parseId(json.getAsInt());
-        } catch (ParseException e) {
-            throw new JsonParseException(e.getLocalizedMessage());
-        }
+        Diritto diritto = Diritto.parseId(json.getAsInt());
+
+        if(diritto == null) throw new JsonParseException("Diritto non valido (parse exception)");
+
+        return diritto;
     }
 }

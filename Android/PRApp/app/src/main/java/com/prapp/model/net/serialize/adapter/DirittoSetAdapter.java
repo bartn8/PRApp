@@ -29,7 +29,6 @@ import com.google.gson.JsonSerializer;
 import com.prapp.model.db.enums.Diritto;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -56,13 +55,13 @@ public class DirittoSetAdapter implements JsonSerializer<Set<Diritto>>, JsonDese
         JsonArray array = json.getAsJsonArray();
         Iterator<JsonElement> iterator = array.iterator();
 
-        try {
-            while (iterator.hasNext()) {
-                JsonElement next = iterator.next();
-                set.add(Diritto.parseId(next.getAsInt()));
-            }
-        } catch (ParseException e) {
-            throw new JsonParseException(e.getLocalizedMessage());
+        while (iterator.hasNext()) {
+            JsonElement next = iterator.next();
+            Diritto diritto = Diritto.parseId(next.getAsInt());
+
+            if(diritto == null) throw new JsonParseException("Diritto non valido (parse exception)");
+
+            set.add(diritto);
         }
 
         return set;

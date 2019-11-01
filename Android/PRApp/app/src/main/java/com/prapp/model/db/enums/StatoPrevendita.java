@@ -19,7 +19,9 @@
 
 package com.prapp.model.db.enums;
 
-import java.text.ParseException;
+import android.util.SparseArray;
+
+import androidx.annotation.Nullable;
 
 public enum StatoPrevendita {
 
@@ -28,39 +30,33 @@ public enum StatoPrevendita {
     ANNULLATA(2, "ANNULLATA"),
     RIMBORSATA(3, "RIMBORSATA");
 
-    public static StatoPrevendita parseId(int id) throws ParseException {
-        StatoPrevendita[] values = StatoPrevendita.values();
+    private static final int LENGTH = 4;
 
-        for (StatoPrevendita stato : values) {
-            if (stato.getId() == id) {
-                return stato;
-            }
-        }
+    private static final SparseArray<StatoPrevendita> mappaId = new SparseArray<>();
 
-        throw new ParseException("ID non valido", -1);
+    static {
+        //Inizializzo le mappe
+        mappaId.put(StatoPrevendita.CONSEGNATA.getId(), StatoPrevendita.CONSEGNATA);
+        mappaId.put(StatoPrevendita.PAGATA.getId(), StatoPrevendita.PAGATA);
+        mappaId.put(StatoPrevendita.ANNULLATA.getId(), StatoPrevendita.ANNULLATA);
+        mappaId.put(StatoPrevendita.RIMBORSATA.getId(), StatoPrevendita.RIMBORSATA);
     }
 
-    public static StatoPrevendita parseName(String name) throws ParseException {
-        StatoPrevendita[] values = StatoPrevendita.values();
-
-        if (name != null) {
-            name = name.toUpperCase();
-            for (StatoPrevendita stato : values) {
-                if (name.equals(stato.getNome())) {
-                    return stato;
-                }
-            }
-        }
-
-        throw new ParseException("Nome non valido", -1);
+    @Nullable
+    public static StatoPrevendita parseId(int id) {
+        return mappaId.get(id);
     }
 
     private int id;
     private String nome;
+    private int resId;
+    private String resValue;
 
     StatoPrevendita(int id, String nome) {
         this.id = id;
         this.nome = nome;
+        this.resId = -1;
+        this.resValue = nome;
     }
 
     public int getId() {
@@ -71,4 +67,25 @@ public enum StatoPrevendita {
         return nome;
     }
 
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
+    }
+
+    public String getResValue() {
+        return resValue;
+    }
+
+    public void setResValue(String resValue) {
+        if(resValue != null)
+            this.resValue = resValue;
+    }
+
+    @Override
+    public String toString() {
+        return resValue;
+    }
 }

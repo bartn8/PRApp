@@ -21,6 +21,22 @@
     <string name="app_name">PRApp</string>
     <string name="search_hint">Cerca</string>
 
+    <!-- Riferimenti agli stati -->
+    <string name="statoPrevendita_consegnata">Consegnata</string>
+    <string name="statoPrevendita_pagata">Pagata</string>
+    <string name="statoPrevendita_annullata">Annullata</string>
+    <string name="statoPrevendita_rimborsata">Rimborsata</string>
+
+    <string name="diritto_pr">Pr</string>
+    <string name="diritto_cassiere">Cassiere</string>
+    <string name="diritto_amministratore">Amministratore</string>
+
+    <string name="statoEvento_valido">Valido</string>
+    <string name="statoEvento_annullato">Annullato</string>
+    <string name="statoEvento_rimborsato">Rimborsato</string>
+    <string name="statoEvento_pagato">Pagato</string>
+
+
     <!--APPLICATION PREFERENCES-->
     <string name="app_package">com.prapp</string>
 
@@ -199,12 +215,6 @@
     <string name="fragment_pr_tipoPrevendita_label">Tipo Prevendita:</string>
     <string name="fragment_pr_tipoPrevendita_editText_label">(seleziona)</string>
     <string name="fragment_pr_statoPrevendita_label">Stato Prevendita:</string>
-    <string-array name="fragment_pr_statoPrevendita">
-        <item>Consegnata</item>
-        <item>Pagata</item>
-        <item>Annullata</item>
-        <item>Rimborsata</item>
-    </string-array>
 
     <string name="fragment_pr_aggiungiPrevendita_button_label">Aggiungi Prevendita</string>
 

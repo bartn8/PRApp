@@ -19,8 +19,6 @@
 
 package com.prapp.model.net.enums;
 
-import java.text.ParseException;
-
 public enum StatoRisposta {
 
     STATORISPOSTA_INDEFINITO(-1),
@@ -28,7 +26,7 @@ public enum StatoRisposta {
     STATORISPOSTA_NON_TROVATO(1),
     STATORISPOSTA_ECCEZIONE(2);
 
-    public static StatoRisposta parseStatoRisposta(int stato) throws ParseException {
+    public static StatoRisposta parseStatoRisposta(int stato) {
         StatoRisposta[] values = StatoRisposta.values();
 
         for (StatoRisposta value: values) {
@@ -38,7 +36,7 @@ public enum StatoRisposta {
             }
         }
 
-        throw new ParseException("Stato non valido", stato);
+        return null;
     }
 
     private int stato;

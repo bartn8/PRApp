@@ -20,7 +20,9 @@
 
 package com.prapp.model.db.enums;
 
-import java.text.ParseException;
+import android.util.SparseArray;
+
+import androidx.annotation.Nullable;
 
 public enum Diritto {
 
@@ -28,26 +30,31 @@ public enum Diritto {
     CASSIERE(1, "CASSIERE"),
     AMMINISTRATORE(2, "AMMINISTRATORE");
 
-    public static Diritto parseId(int id) throws ParseException {
-        Diritto[] values = Diritto.values();
+    private static final SparseArray<Diritto> mappaId = new SparseArray<>();
 
-        for (Diritto value: values) {
-            if(value.getId() == id)
-            {
-                return value;
-            }
-        }
+    static {
+        //Inizializzo le mappe
+        mappaId.put(Diritto.PR.getId(), Diritto.PR);
+        mappaId.put(Diritto.CASSIERE.getId(), Diritto.CASSIERE);
+        mappaId.put(Diritto.AMMINISTRATORE.getId(), Diritto.AMMINISTRATORE);
+    }
 
-        throw new ParseException("ID non valido", id);
+    @Nullable
+    public static Diritto parseId(int id) {
+        return mappaId.get(id);
     }
 
     private int id;
     private String nome;
+    private int resId;
+    private String resValue;
 
     private Diritto(int id, String nome)
     {
         this.id = id;
         this.nome = nome;
+        this.resId = -1;
+        this.resValue = nome;
     }
 
     public int getId() {
@@ -56,5 +63,27 @@ public enum Diritto {
 
     public String getNome() {
         return nome;
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
+    }
+
+    public String getResValue() {
+        return resValue;
+    }
+
+    public void setResValue(String resValue) {
+        if(resValue != null)
+            this.resValue = resValue;
+    }
+
+    @Override
+    public String toString() {
+        return resValue;
     }
 }
