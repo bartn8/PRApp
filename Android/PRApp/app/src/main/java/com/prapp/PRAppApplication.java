@@ -40,6 +40,8 @@ public class PRAppApplication extends Application {
     public static final String TAG = PRAppApplication.class.getSimpleName();
     public static final boolean NETWORK_DEBUG = true;
 
+    public static final String FILE_PROVIDER = "com.prapp.fileprovider";
+
     private static PRAppApplication myInstance;
 
     @Contract(pure = true)

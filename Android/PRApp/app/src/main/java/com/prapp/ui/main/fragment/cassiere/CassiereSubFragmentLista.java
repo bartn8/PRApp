@@ -43,7 +43,7 @@ import com.prapp.ui.main.MainActivity;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.adapter.WPrevenditaPlusAdapter;
 import com.prapp.ui.utils.InterfaceHolder;
-import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -98,7 +98,7 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     /**
      * Utilty per la grafica
      */
-    private UiUtils uiUtils;
+    private UiUtil uiUtil;
 
     /**
      * Interfaccia usata per comunicare con l'activity madre.
@@ -138,14 +138,14 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
             List<WPrevenditaPlus> success = wPrevenditaPlusResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if (success != null) {
                 if(success.isEmpty()){
-                    uiUtils.makeToast(R.string.subfragment_lista_cassiere_lista_vuota_toast);
+                    uiUtil.makeToast(R.string.subfragment_lista_cassiere_lista_vuota_toast);
                 }else{
                     //Applico al recycler view i dati.
                     recyclerAdapter.add(success);
@@ -221,7 +221,7 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        uiUtils = UiUtils.getInstance(context);
+        uiUtil = new UiUtil(context);
     }
 
 

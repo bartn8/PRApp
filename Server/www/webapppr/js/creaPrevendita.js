@@ -81,9 +81,9 @@ class UiUtils extends GeneralUiUtils {
         $("#condividiWhatsAppButton").attr("data-href", "#");
     }
 
-    attivaButtonScaricaQrCode(idPrevendita, nome, cognome, image){
+    attivaButtonScaricaQrCode(idPrevendita, nome, cognome, image) {
         $("#scaricaQRCodeButton").removeClass("disabled");
-        $("#scaricaQRCodeButton").attr("download", idPrevendita+"_"+nome+"_"+cognome+".png");
+        $("#scaricaQRCodeButton").attr("download", idPrevendita + "_" + nome + "_" + cognome + ".png");
         $("#scaricaQRCodeButton").attr("href", image);
     }
 
@@ -105,55 +105,79 @@ class UiUtils extends GeneralUiUtils {
 
         $("#myCanvas").clearCanvas();
 
-        $("#myCanvas").drawImage({
+        $("#myCanvas").addLayer({
+            type: 'rectangle',
+            name: "background",
+            index: 0,
+            fillStyle: '#FFF',
+            fromCenter: false,
+            x: 0, y: 0,
+            width: 320,
+            height: 410
+        }).addLayer({
+            type: 'image',
+            name: "image",
+            index: 1,
             source: image,
             x: 160, y: 160,
-            fromCenter: true,
-            load: function () {
-                //Disegno le scritte dopo il caricamento.
-                $("#myCanvas").drawText({
-                    fillStyle: '#000',
-                    strokeStyle: '#000',
-                    strokeWidth: 0,
-                    x: 150, y: 330,
-                    fontSize: 12,
-                    fontFamily: 'Verdana, sans-serif',
-                    text: myPerson
-                }).drawText({
-                    fillStyle: '#000',
-                    strokeStyle: '#000',
-                    strokeWidth: 1,
-                    x: 150, y: 350,
-                    fontSize: 12,
-                    fontFamily: 'Verdana, sans-serif',
-                    text: 'RICORDATI UN DOCUMENTO VALIDO'
-                }).drawText({
-                    fillStyle: '#000',
-                    strokeStyle: '#000',
-                    strokeWidth: 0,
-                    x: 150, y: 370,
-                    fontSize: 13,
-                    fontFamily: 'Verdana, sans-serif',
-                    text: myPrevendita
-                }).drawText({
-                    fillStyle: '#000',
-                    strokeStyle: '#000',
-                    strokeWidth: 0,
-                    x: 150, y: 390,
-                    fontSize: 13,
-                    fontFamily: 'Verdana, sans-serif',
-                    text: nomeTipoPrevendita
-                });
-            }
-        });
+            fromCenter: true
+        }).addLayer({
+            type: 'text',
+            name: "person",
+            groups: ["textGroup"],
+            index: 2,
+            fillStyle: '#000',
+            strokeStyle: '#000',
+            strokeWidth: 0,
+            x: 150, y: 330,
+            fontSize: 12,
+            fontFamily: 'Verdana, sans-serif',
+            text: myPerson
+        }).addLayer({
+            type: 'text',
+            name: "warning",
+            groups: ["textGroup"],
+            index: 2,
+            fillStyle: '#000',
+            strokeStyle: '#000',
+            strokeWidth: 1,
+            x: 150, y: 350,
+            fontSize: 12,
+            fontFamily: 'Verdana, sans-serif',
+            text: 'RICORDATI UN DOCUMENTO VALIDO'
+        }).addLayer({
+            type: 'text',
+            name: "prevendita",
+            groups: ["textGroup"],
+            index: 2,
+            fillStyle: '#000',
+            strokeStyle: '#000',
+            strokeWidth: 0,
+            x: 150, y: 370,
+            fontSize: 13,
+            fontFamily: 'Verdana, sans-serif',
+            text: myPrevendita
+        }).addLayer({
+            type: 'text',
+            name: "tipoPrevendita",
+            groups: ["textGroup"],
+            index: 2,                
+            fillStyle: '#000',
+            strokeStyle: '#000',
+            strokeWidth: 0,
+            x: 150, y: 390,
+            fontSize: 13,
+            fontFamily: 'Verdana, sans-serif',
+            text: nomeTipoPrevendita
+        }).drawLayers();
     }
 
-    scaricaCanvas(){
+    scaricaCanvas() {
         var imageURL = $("#myCanvas").getCanvasImage();
         return imageURL;
     }
 
-    erroreNomeCliente(){
+    erroreNomeCliente() {
         var $nomeClienteText = $("#nomeCliente").parent("div");
         var $errorIcon = $("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
 
@@ -162,7 +186,7 @@ class UiUtils extends GeneralUiUtils {
         $nomeClienteText.append($errorIcon);
     }
 
-    erroreCognomeCliente(){
+    erroreCognomeCliente() {
         var $cognomeClienteText = $("#cognomeCliente").parent("div");
         var $errorIcon = $("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
 
@@ -171,7 +195,7 @@ class UiUtils extends GeneralUiUtils {
         $cognomeClienteText.append($errorIcon);
     }
 
-    erroreDataDiNascitaCliente(){
+    erroreDataDiNascitaCliente() {
         var $dataDiNascitaClienteText = $("#dataDiNascita").parent("div");
         var $errorIcon = $("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
 
@@ -182,7 +206,7 @@ class UiUtils extends GeneralUiUtils {
 
     }
 
-    resetFieldsCliente(){
+    resetFieldsCliente() {
         var $nomeClienteText = $("#nomeCliente").parent("div");
         var $cognomeClienteText = $("#cognomeCliente").parent("div");
         var $dataDiNascitaClienteText = $("#dataDiNascita").parent("div");
@@ -199,7 +223,7 @@ class UiUtils extends GeneralUiUtils {
         $dataDiNascitaClienteText.removeClass("has-feedback");
         $dataDiNascitaClienteText.remove("span");
     }
-    
+
 }
 
 var generaLink = function (idPrevendita, idEvento, nome, cognome, data, codice, nomeTipoPrevendita) {
@@ -214,11 +238,17 @@ var generaLink = function (idPrevendita, idEvento, nome, cognome, data, codice, 
     var idEventoEncoded = encodeURIComponent(idEvento);
     var nomeEncoded = encodeURIComponent(nome);
     var cognomeEncoded = encodeURIComponent(cognome);
-    var dataEncoded = encodeURIComponent(data);
     var codiceEncoded = encodeURIComponent(codice);
     var nomeTipoPrevenditaEncoded = encodeURIComponent(nomeTipoPrevendita);
 
-    return defaultUrl + "?idPrev=" + idPrevenditaEncoded + "&idEv=" + idEventoEncoded + "&nome=" + nomeEncoded + "&cognome=" + cognomeEncoded + "&data=" + dataEncoded + "&cod=" + codiceEncoded + "&nTipoP=" + nomeTipoPrevenditaEncoded;
+    if(data != null){
+        var dataEncoded = encodeURIComponent(data);
+        return defaultUrl + "?idPrev=" + idPrevenditaEncoded + "&idEv=" + idEventoEncoded + "&nome=" + nomeEncoded + "&cognome=" + cognomeEncoded + "&data=" + dataEncoded + "&cod=" + codiceEncoded + "&nTipoP=" + nomeTipoPrevenditaEncoded;
+    }
+    else{
+        return defaultUrl + "?idPrev=" + idPrevenditaEncoded + "&idEv=" + idEventoEncoded + "&nome=" + nomeEncoded + "&cognome=" + cognomeEncoded + "&cod=" + codiceEncoded + "&nTipoP=" + nomeTipoPrevenditaEncoded;
+    }
+
 }
 
 var onCopiaLinkClick = function () {
@@ -244,7 +274,7 @@ var onCopiaLinkClick = function () {
 
 //https://stackoverflow.com/questions/13459866/javascript-change-date-into-format-of-dd-mm-yyyy
 var convertiData = function (inputFormat) {
-    if(inputFormat == "1970-01-01T00:00:00.000Z"){
+    if (inputFormat == null) {
         return "XX-XX-XXXX";
     }
 
@@ -412,14 +442,14 @@ var creaPrevenditaButtonClick = function () {
             uiUtils.disegnaCanvas(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita, qrCodeImage);
 
             //Attivo i pulsanti di qr code.
-            var link = generaLink(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita);
+            var link = generaLink(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, dataDiNascita != null ? myDataDiNascita : null, codice, nomeTipoPrevendita);
 
             uiUtils.attivaButtonCondividiQrCode(myIdPrevendita, nomeCliente, cognomeCliente, codice, link);
             uiUtils.impostaLink(link);
 
             //Non posso inserire qua il link: prima devo generare il canvas
             //Aggiorno il pulsante dopo timeout (2sec).
-            setTimeout(function(){
+            setTimeout(function () {
                 uiUtils.attivaButtonScaricaQrCode(myIdPrevendita, nomeCliente, cognomeCliente, uiUtils.scaricaCanvas());
             }, 2000);
 

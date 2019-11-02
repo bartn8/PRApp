@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.ui.Result;
-import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.UiUtil;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
 
     private WStaffAdapter.ItemClickListener itemClickListener = this;
 
-    private UiUtils uiUtils;
+    private UiUtil uiUtil;
 
     @BindView(R.id.selectStaffRecyclerView)
     public RecyclerView selectStaffRecyclerView;
@@ -66,10 +66,10 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
             List<WStaff> success = listStaffResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             if (success != null) {
                 //Popolo la recycler view.
@@ -89,7 +89,7 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
 
         ButterKnife.bind(this);
 
-        uiUtils = UiUtils.getInstance(getApplicationContext());
+        uiUtil = new UiUtil(getApplicationContext());
 
         Intent intent = getIntent();
         searchPreferences = intent.getBooleanExtra(SEARCH_PREFERENCES_MESSAGE, false);

@@ -23,6 +23,7 @@ import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WUtente;
+import com.prapp.model.util.RandomString;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -91,7 +92,7 @@ public class MyContext {
 
     private WDirittiUtente dirittiUtente;
 
-    private Random random = new Random();
+    private RandomString random = new RandomString();
 
     private MyContext() throws MalformedURLException {
         this.loggato = false;
@@ -100,18 +101,11 @@ public class MyContext {
     }
 
     public Random getRandom() {
-        return random;
+        return random.getRandom();
     }
 
-    //https://stackoverflow.com/questions/12116092/android-random-string-generator
     public String generatePrevenditaCode(){
-        StringBuilder builder = new StringBuilder();
-
-        for(int i = 0; i < PREVENDITA_CODE_LENGTH; i++){
-            builder.append((char) (random.nextInt(96) + 32));
-        }
-
-        return builder.toString();
+        return random.nextString().substring(0, PREVENDITA_CODE_LENGTH);
     }
 
     public void login(@NotNull WUtente utente)

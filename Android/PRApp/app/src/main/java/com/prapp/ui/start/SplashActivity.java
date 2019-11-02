@@ -32,7 +32,7 @@ import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
-import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.UiUtil;
 import com.prapp.ui.login.LoginActivity;
 import com.prapp.ui.main.MainActivity;
 import com.prapp.ui.selectevento.SelectEventoActivity;
@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_SELECT_EVENTO = 3;
 
     private SplashViewModel splashViewModel;
-    private UiUtils uiUtils;
+    private UiUtil uiUtil;
 
     private Observer<Result<WUtente, Void>> loginTokenResultObserver = new Observer<Result<WUtente, Void>>() {
 
@@ -66,12 +66,12 @@ public class SplashActivity extends AppCompatActivity {
             WUtente success = loginTokenResult.getSuccess();
 
             if (integerError != null) {
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
                 passaggioAllaPaginaDiLogin();
             }
 
             if (error != null) {
-                uiUtils.showError(error);
+                uiUtil.showError(error);
                 passaggioAllaPaginaDiLogin();
             }
 
@@ -100,10 +100,10 @@ public class SplashActivity extends AppCompatActivity {
             WDirittiUtente success = getInfoUtenteResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             if (success != null) {
                 //Do i diritti alla pagina successiva.
@@ -124,10 +124,10 @@ public class SplashActivity extends AppCompatActivity {
             WToken success = renewTokenResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             if (success != null) {
                 //non fare nulla.
@@ -137,7 +137,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void showLoginSuccess(@NotNull WUtente model) {
         String welcome = getString(R.string.welcome, model.getNome());
-        uiUtils.makeToast(welcome);
+        uiUtil.makeToast(welcome);
     }
 
     private void creaToken() {
@@ -185,7 +185,7 @@ public class SplashActivity extends AppCompatActivity {
         //https://stackoverflow.com/questions/31775276/joda-time-resource-not-found-error
         JodaTimeAndroid.init(getApplicationContext());
 
-        uiUtils = UiUtils.getInstance(getApplicationContext());
+        uiUtil = new UiUtil(getApplicationContext());
 
         //Inizializzo il view model e applico gli observer.
         splashViewModel = ViewModelProviders.of(this, new SplashViewModelFactory(getApplicationContext())).get(SplashViewModel.class);

@@ -42,7 +42,7 @@ import com.prapp.ui.Result;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.adapter.WUtenteAdapter;
 import com.prapp.ui.utils.InterfaceHolder;
-import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.UiUtil;
 
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
     }
 
     private MembroViewModel viewModel;
-    private UiUtils uiUtils;
+    private UiUtil uiUtil;
     private Unbinder unbinder;
 
     /**
@@ -102,10 +102,10 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
             List<WUtente> success = listResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if (success != null) {
                 WUtenteAdapter myAdapter = new WUtenteAdapter(success);
@@ -147,7 +147,7 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        uiUtils = UiUtils.getInstance(context);
+        uiUtil = new UiUtil(context);
     }
 
     @Override

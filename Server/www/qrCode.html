@@ -55,48 +55,72 @@
             var myPrevendita = idPrevendita + " - " + idEvento + " - " + codice;
 
             $("#myCanvas").clearCanvas();
-
-            $("#myCanvas").drawImage({
+            
+            $("#myCanvas").addLayer({
+                type: 'rectangle',
+                name: "background",
+                index: 0,
+                fillStyle: '#FFF',
+                fromCenter: false,
+                x: 0, y: 0,
+                width: 320,
+                height: 410
+            }).addLayer({
+                type: 'image',
+                name: "image",
+                index: 1,
                 source: image,
                 x: 160, y: 160,
-                fromCenter: true,
-                load: function () {
-                    //Disegno le scritte dopo il caricamento.
-                    $("#myCanvas").drawText({
-                        fillStyle: '#000',
-                        strokeStyle: '#000',
-                        strokeWidth: 0,
-                        x: 150, y: 330,
-                        fontSize: 12,
-                        fontFamily: 'Verdana, sans-serif',
-                        text: myPerson
-                    }).drawText({
-                        fillStyle: '#000',
-                        strokeStyle: '#000',
-                        strokeWidth: 1,
-                        x: 150, y: 350,
-                        fontSize: 12,
-                        fontFamily: 'Verdana, sans-serif',
-                        text: 'RICORDATI UN DOCUMENTO VALIDO'
-                    }).drawText({
-                        fillStyle: '#000',
-                        strokeStyle: '#000',
-                        strokeWidth: 0,
-                        x: 150, y: 370,
-                        fontSize: 13,
-                        fontFamily: 'Verdana, sans-serif',
-                        text: myPrevendita
-                    }).drawText({
-                        fillStyle: '#000',
-                        strokeStyle: '#000',
-                        strokeWidth: 0,
-                        x: 150, y: 390,
-                        fontSize: 13,
-                        fontFamily: 'Verdana, sans-serif',
-                        text: nomeTipoPrevendita
-                    });
-                }
-            });
+                fromCenter: true
+            }).addLayer({
+                type: 'text',
+                name: "person",
+                groups: ["textGroup"],
+                index: 2,
+                fillStyle: '#000',
+                strokeStyle: '#000',
+                strokeWidth: 0,
+                x: 150, y: 330,
+                fontSize: 12,
+                fontFamily: 'Verdana, sans-serif',
+                text: myPerson
+            }).addLayer({
+                type: 'text',
+                name: "warning",
+                groups: ["textGroup"],
+                index: 2,
+                fillStyle: '#000',
+                strokeStyle: '#000',
+                strokeWidth: 1,
+                x: 150, y: 350,
+                fontSize: 12,
+                fontFamily: 'Verdana, sans-serif',
+                text: 'RICORDATI UN DOCUMENTO VALIDO'
+            }).addLayer({
+                type: 'text',
+                name: "prevendita",
+                groups: ["textGroup"],
+                index: 2,
+                fillStyle: '#000',
+                strokeStyle: '#000',
+                strokeWidth: 0,
+                x: 150, y: 370,
+                fontSize: 13,
+                fontFamily: 'Verdana, sans-serif',
+                text: myPrevendita
+            }).addLayer({
+                type: 'text',
+                name: "tipoPrevendita",
+                groups: ["textGroup"],
+                index: 2,                
+                fillStyle: '#000',
+                strokeStyle: '#000',
+                strokeWidth: 0,
+                x: 150, y: 390,
+                fontSize: 13,
+                fontFamily: 'Verdana, sans-serif',
+                text: nomeTipoPrevendita
+            }).drawLayers();
         }
 
         var disegnaCanvasErrore = function () {
@@ -126,7 +150,14 @@
             var idEvento = decodeURIComponent(url.searchParams.get("idEv"));
             var nome = decodeURIComponent(url.searchParams.get("nome"));
             var cognome = decodeURIComponent(url.searchParams.get("cognome"));
-            var data = decodeURIComponent(url.searchParams.get("data"));
+
+            var tmpData = url.searchParams.get("data");
+            var data = 'null';
+
+            if (tmpData != null) {
+                data = decodeURIComponent(tmpData);
+            }
+
             var codice = decodeURIComponent(url.searchParams.get("cod"));
             var nomeTipoPrevendita = decodeURIComponent(url.searchParams.get("nTipoP"));
 
@@ -136,10 +167,9 @@
             var codiceLegacy = decodeURIComponent(url.searchParams.get("codice"));
 
 
-            if(idPrevenditaLegacy !== 'null' && idEventoLegacy !== 'null' && codiceLegacy !== 'null')
-            {
+            if (idPrevenditaLegacy !== 'null' && idEventoLegacy !== 'null' && codiceLegacy !== 'null') {
                 //Modalità legacy
-                idPrevendita = idPrevenditaLegacy; 
+                idPrevendita = idPrevenditaLegacy;
                 idEvento = idEventoLegacy;
                 codice = codiceLegacy;
                 nomeTipoPrevendita = "";
@@ -154,10 +184,10 @@
             idEvento = isNaN(idEvento) ? -1 : idEvento;
             nome = nome === 'null' ? 'ND' : nome;
             cognome = cognome === 'null' ? 'ND' : cognome;
-            data = data === 'null' ? 'ND' : data;
+            data = data == 'null' ? 'XX-XX-XXXX' : data;
             codice = codice === 'null' ? 'ND' : codice;
             nomeTipoPrevendita = nomeTipoPrevendita === 'null' ? 'ND' : nomeTipoPrevendita;
-            
+
             //Generazione QR
             var netWEntrata = { idPrevendita: idPrevendita, idEvento: idEvento, codiceAccesso: codice };
 

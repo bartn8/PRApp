@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.ui.Result;
-import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.UiUtil;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
 
     private WEventoAdapter.ItemClickListener itemClickListener = this;
 
-    private UiUtils uiUtils;
+    private UiUtil uiUtil;
 
     @BindView(R.id.selectEventoRecyclerView)
     public RecyclerView selectEventoRecyclerView;
@@ -66,10 +66,10 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
             List<WEvento> success = listStaffResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             if (success != null) {
                 //Popolo la recycler view.
@@ -88,7 +88,7 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
 
         ButterKnife.bind(this);
 
-        uiUtils = UiUtils.getInstance(getApplicationContext());
+        uiUtil = new UiUtil(getApplicationContext());
 
         Intent intent = getIntent();
         searchPreferences = intent.getBooleanExtra(SEARCH_PREFERENCES_MESSAGE, false);

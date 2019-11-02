@@ -63,20 +63,29 @@ dependencies {
 
     //My implementations.
     //GSON: https://github.com/google/gson
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     //JODA TIME FOR ANDROID: https://github.com/dlew/joda-time-android
-    implementation 'net.danlew:android.joda:2.10.2'
+    implementation 'net.danlew:android.joda:2.10.3'
     //VOLLEY: https://github.com/google/volley
     implementation 'com.android.volley:volley:1.1.1'
 
     //BUTTERKNIKE: https://github.com/JakeWharton/butterknife
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 
-    //Libreria obsoleta: rimpiazzata da Google Play Services. Ci sarebbe ML kit ma troppo complicato
-    //implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
-    implementation 'com.google.android.gms:play-services-vision:19.0.0'
+    //Libreria per dialog bellini
+    //https://github.com/muigukenneth/ElegantDialog
+    implementation 'com.github.muigukenneth:ElegantDialog:1.1.5'
 
-    implementation 'org.jetbrains:annotations-java5:15.0'
-    implementation 'org.jetbrains:annotations-java5:15.0'
+    //Serve per gestire le immagini
+    //https://github.com/bumptech/glide
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+
+    //Scan QR + Gen QR
+    implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
+    implementation 'com.google.zxing:core:3.3.2'
+
+
+    implementation 'org.jetbrains:annotations:13.0'
 }

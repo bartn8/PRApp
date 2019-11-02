@@ -23,8 +23,10 @@ package com.prapp.ui.main.fragment.pr;
 import android.app.DatePickerDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,6 +50,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.prapp.barcodescanner.CustomBarcodeEncoder;
 import com.prapp.R;
 import com.prapp.model.db.enums.StatoPrevendita;
 import com.prapp.model.db.wrapper.WCliente;
@@ -59,7 +65,8 @@ import com.prapp.ui.main.adapter.WClienteAdapter;
 import com.prapp.ui.main.adapter.WTipoPrevenditaAdapter;
 import com.prapp.ui.utils.DatePickerFragment;
 import com.prapp.ui.utils.InterfaceHolder;
-import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.PopupUtil;
+import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.LocalDate;
@@ -84,9 +91,11 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
     private static final String TAG = PRFragment.class.getSimpleName();
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.fullDate();
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.shortDate();
 
     private static final StatoPrevendita DEFAULT_STATO_PREVENDITA = StatoPrevendita.PAGATA;
+
+    private static final Gson GSON = new Gson();
 
     /**
      * View-Model per interfacciarsi con il server.
@@ -101,11 +110,19 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     /**
      * Utilty per la grafica
      */
-    private UiUtils uiUtils;
+    private UiUtil uiUtil;
+
+    /**
+     * Utilty per popup.
+     */
+    private PopupUtil popupUtil;
+
+    private Bitmap qrCode;
 
     private WCliente selectCliente;
     private WTipoPrevendita selectTipoPrevendita;
     private StatoPrevendita selectStatoPrevendita = DEFAULT_STATO_PREVENDITA;    //Imposto a default
+    private WPrevendita nuovaPrevendita;
 
     @BindView(R.id.fragment_pr_cliente_toolbar)
     public Toolbar clientiToolbar;
@@ -165,10 +182,10 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
             List<WCliente> success = listVoidResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
 
             else if (success != null) {
@@ -190,10 +207,10 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
             List<WTipoPrevendita> success = listVoidResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
 
             else if (success != null) {
@@ -236,14 +253,41 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
             WPrevendita success = result.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if (success != null) {
-                //Prevendita aggiunta posso creare il QR e i tasti di condivisione.
-                uiUtils.makeToast("PREV OK");
+                nuovaPrevendita = success;  //Salvo la nuova prevendita in modo da utilizzarla dopo
+                String serialObj = GSON.toJson(success);    //Prevendita serializzata per QR.
+
+                String dataDiNascita;
+
+                if(selectCliente.getDataDiNascita() != null){
+                    dataDiNascita = selectCliente.getDataDiNascita().toString(DATE_FORMAT);
+                }else{
+                    dataDiNascita = getString(R.string.default_dataDiNascita);
+                }
+
+                String rigaPersona = getString(R.string.fragment_pr_qr_text_persona, selectCliente.getNome(), selectCliente.getCognome(), dataDiNascita);
+                String rigaWarning = getString(R.string.fragment_pr_qr_text_warning);
+                String rigaInfoPrev = getString(R.string.fragment_pr_qr_text_infoPrevendita, success.getId(), success.getIdEvento(), success.getCodice());
+                String rigaNomeTipoPrev = selectTipoPrevendita.getNome();
+
+                CustomBarcodeEncoder barcodeEncoder = new CustomBarcodeEncoder();
+
+                barcodeEncoder.add(rigaPersona, false);
+                barcodeEncoder.add(rigaWarning, true);
+                barcodeEncoder.add(rigaInfoPrev, false);
+                barcodeEncoder.add(rigaNomeTipoPrev, false);
+
+                try {
+                    qrCode = barcodeEncoder.encodeBitmap(serialObj, BarcodeFormat.QR_CODE, 400, 400);
+                    showSuccessPopup(qrCode);
+                } catch (WriterException e) {
+                    Log.v(TAG, e.toString());
+                }
             }
         }
     };
@@ -260,10 +304,10 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
             WCliente success = result.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if (success != null) {
                 //Aggiorno stato e schermata di cliente
@@ -330,7 +374,8 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        uiUtils = UiUtils.getInstance(context);
+        uiUtil = new UiUtil(context);
+        popupUtil = new PopupUtil(context);
     }
 
     @Override
@@ -723,6 +768,19 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         //Dato che il tasto è abilitato solo se i dati sono selezionati posso passare direttamente
         //All'inserimento della prevendita.
         viewModel.aggiungiPrevendita(selectCliente, selectTipoPrevendita, selectStatoPrevendita);
+    }
+
+    /**
+     * Mostra un popup di successo.
+     */
+    private void showSuccessPopup(Bitmap image) {
+        popupUtil.showQRPopup(getActivity(), image, this::onCondividiButtonClick, R.string.fragment_pr_popup_condividi);
+    }
+
+    private void onCondividiButtonClick(View view){
+        //Creo un testo di condivisone.
+        String shareText = getString(R.string.fragment_pr_qr_share_text, selectCliente.getNome(), selectCliente.getCognome(), nuovaPrevendita.getId(), nuovaPrevendita.getCodice(), viewModel.getEvento().getNome(), nuovaPrevendita.getStato());
+        viewModel.shareImage(getActivity(), qrCode, shareText);
     }
 
 }

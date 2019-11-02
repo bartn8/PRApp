@@ -27,14 +27,14 @@
     android:layout_gravity="center">
 
     <ImageView
-        android:id="@+id/esitoEntrataImage"
+        android:id="@+id/popup_esito_image"
         android:layout_width="350dp"
         android:layout_height="350dp"
         android:layout_gravity="center"
-        android:contentDescription="@string/fragment_cassiere_popup_image_description"/>
+        android:contentDescription="@string/popup_esito_image_description"/>
 
     <TextView
-        android:id="@+id/esitoEntrataText"
+        android:id="@+id/popup_esito_text"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="bottom"

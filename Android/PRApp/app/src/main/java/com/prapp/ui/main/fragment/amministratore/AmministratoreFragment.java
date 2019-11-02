@@ -46,7 +46,7 @@ import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.adapter.StatisticheMembroAdapter;
 import com.prapp.ui.main.adapter.WStatisticheEventoAdapter;
 import com.prapp.ui.utils.InterfaceHolder;
-import com.prapp.ui.utils.UiUtils;
+import com.prapp.ui.utils.UiUtil;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -69,7 +69,7 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
     private static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormat.shortDateTime();
 
     private AmministratoreViewModel viewModel;
-    private UiUtils uiUtils;
+    private UiUtil uiUtil;
     private Unbinder unbinder;
 
     /**
@@ -110,10 +110,10 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
             List<WStatisticheEvento> success = listResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if(success != null)
                 statisticheEventoRecyclerView.setAdapter(new WStatisticheEventoAdapter(success));
@@ -132,10 +132,10 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
             List<WUtente> success = listResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if(success != null)
             {
@@ -166,10 +166,10 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
             List<WStatistichePREvento> success = listResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if(success != null && listResult.isExtraPresent())
             {
@@ -192,10 +192,10 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
             WStatisticheCassiereEvento success = listResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if(success != null && listResult.isExtraPresent())
             {
@@ -253,7 +253,7 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        uiUtils = UiUtils.getInstance(context);
+        uiUtil = new UiUtil(context);
     }
 
     @Override

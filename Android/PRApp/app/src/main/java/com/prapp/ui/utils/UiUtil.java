@@ -27,20 +27,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class UiUtils {
-
-    private static UiUtils singleton;
-
-    public static UiUtils getInstance(@NotNull Context context) {
-        if (singleton == null)
-            singleton = new UiUtils(context);
-
-        return singleton;
-    }
+public class UiUtil {
 
     private Context context;
 
-    private UiUtils(Context context) {
+    public UiUtil(Context context) {
         this.context = context;
     }
 

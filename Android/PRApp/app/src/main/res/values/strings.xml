@@ -21,6 +21,9 @@
     <string name="app_name">PRApp</string>
     <string name="search_hint">Cerca</string>
 
+    <!-- Defaults -->
+    <string name="default_dataDiNascita">XX-XX-XXXX</string>
+
     <!-- Riferimenti agli stati -->
     <string name="statoPrevendita_consegnata">Consegnata</string>
     <string name="statoPrevendita_pagata">Pagata</string>
@@ -69,6 +72,14 @@
     <string name="invalid_username">Username non valido</string>
     <string name="invalid_password">Password non valida</string>
     <string name="login_failed">"Accesso Fallito"</string>
+
+    <!-- Popup Util -->
+    <string name="popup_esito_image_description">Esito</string>
+    <string name="popup_qr_image_description">QR</string>
+
+    <string name="popup_esito_errore_formatted">
+        Errore: <xliff:g id="errore">%1$s</xliff:g>
+    </string>
 
     <!-- WStaff List Item -->
     <string name="wstaff_list_item_nome">Staff</string>
@@ -218,6 +229,31 @@
 
     <string name="fragment_pr_aggiungiPrevendita_button_label">Aggiungi Prevendita</string>
 
+    <!-- Roba per il popup -->
+    <string name="fragment_pr_popup_success">Prevendita creata!</string>
+    <string name="fragment_pr_popup_condividi">CONDIVIDI</string>
+
+    <!-- Roba da aggiungere nel QR -->
+    <string name="fragment_pr_qr_text_persona">
+        <xliff:g example="Piero" id="nome">%1$s</xliff:g> <xliff:g example="Marconi" id="cognome">%2$s</xliff:g> - <xliff:g example="XX-XX-XXXX" id="dataDiNascita">%3$s</xliff:g>\n
+    </string>
+
+    <string name="fragment_pr_qr_text_warning">PRESENTARSI CON UN DOCUMENTO VALIDO ALL\'INGRESSO</string>
+
+    <string name="fragment_pr_qr_text_infoPrevendita">
+        <xliff:g example="123" id="idPrevendita">%1$d</xliff:g> - <xliff:g example="123" id="idEvento">%2$d</xliff:g> - <xliff:g example="XXX" id="codice">%3$s</xliff:g>\n
+    </string>
+
+    <!-- Roba per il testo di condivisione -->
+    <string name="fragment_pr_qr_share_text">
+        Ciao <xliff:g example="Piero" id="nome">%1$s</xliff:g> <xliff:g example="Marconi" id="cognome">%2$s</xliff:g>\n
+        Ecco il tuo QR Code\n
+        ID: <xliff:g example="123" id="idPrevendita">%3$d</xliff:g> Codice: <xliff:g example="bob" id="codice">%4$s</xliff:g>\n
+        Evento: <xliff:g example="Evento" id="evento">%5$s</xliff:g>\n
+        Stato Prevendita: <xliff:g example="Consegnata" id="statoPrevendita">%6$s</xliff:g>\n
+        -PRApp-
+    </string>
+
     <!-- FRAGMENT CASSIERE -->
 
     <!-- MENU -->
@@ -258,10 +294,6 @@
 
     <string name="fragment_cassiere_popup_success">Può entrare!</string>
 
-    <string name="fragment_cassiere_popup_errore_formatted">
-        Errore: <xliff:g id="errore">%1$s</xliff:g>
-    </string>
-
     <!-- Toast vari -->
 
     <string name="fragment_cassiere_impossibile_avviare_scanner">Impossibile avviare lo scanner!</string>
@@ -292,6 +324,7 @@
     <string name="fragment_amministratore_menu_aggiungiTipoPrevenditaItem">Aggiungi tipo prevendita</string>
     <string name="fragment_amministratore_menu_cambiaCodiceAccessoItem">Cambia codice accesso</string>
     <string name="fragment_amministratore_menu_statisticheEventoItem">Statistiche evento</string>
+
 
 
 </resources>

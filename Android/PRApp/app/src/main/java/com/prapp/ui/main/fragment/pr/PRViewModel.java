@@ -19,9 +19,19 @@
 
 package com.prapp.ui.main.fragment.pr;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.util.Log;
+
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.prapp.PRAppApplication;
 import com.prapp.R;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.enums.StatoPrevendita;
@@ -39,13 +49,16 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class PRViewModel extends AbstractViewModel {
 
     public static final String TAG = PRViewModel.class.getSimpleName();
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.fullDate();
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.shortDate();
 
     public static final int CLIENTE_SEARCH_MODE = 0;
     public static final int CLIENTE_ADD_MODE = 1;
@@ -54,6 +67,84 @@ public class PRViewModel extends AbstractViewModel {
     public static final int PREVENDITA_SELECT_MODE = 0;
     public static final int PREVENDITA_NOT_SELECT_MODE = 1;
     public static final int PREVENDITA_SEARCH_MODE = 1;
+
+    /**
+     * Classe usata per condividere l'immagine.
+     */
+    private final class ShareTask extends AsyncTask<Bitmap, Void, Uri>{
+
+        private Activity activity;
+        private String shareText;
+
+        public ShareTask(Activity activity, String shareText) {
+            this.activity = activity;
+            this.shareText = shareText;
+        }
+
+        //https://stackoverflow.com/questions/33222918/sharing-bitmap-via-android-intent
+
+        /**
+         * Saves the image as PNG to the app's private external storage folder.
+         * @param image Bitmap to save.
+         * @return Uri of the saved file or null
+         */
+        private Uri saveImageExternal(Bitmap image) {
+
+            Uri uri = null;
+            try {
+                File file = new File(PRAppApplication.getInstance().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "to-share.png");
+                FileOutputStream stream = new FileOutputStream(file);
+                image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+                stream.close();
+                //https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
+                uri = FileProvider.getUriForFile(PRAppApplication.getInstance(), PRAppApplication.FILE_PROVIDER, file);
+            } catch (IOException e) {
+                Log.d(TAG, "IOException while trying to write file for sharing: " + e.getMessage());
+            }
+            return uri;
+        }
+
+        /**
+         * Checks if the external storage is writable.
+         * @return true if storage is writable, false otherwise
+         */
+        public boolean isExternalStorageWritable() {
+            String state = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(state)) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Shares the PNG image from Uri.
+         * @param uri Uri of image to share.
+         */
+        private void shareImageUri(Uri uri){
+            //https://stackoverflow.com/questions/20333186/how-to-share-image-text-together-using-action-send-in-android
+            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_TEXT, shareText);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setType("image/png");
+            activity.startActivity(intent);
+        }
+
+        @Override
+        protected Uri doInBackground(Bitmap... bitmaps) {
+            Bitmap bitmap = bitmaps[0];
+            return saveImageExternal(bitmap);
+        }
+
+        @Override
+        protected void onPostExecute(Uri uri) {
+            super.onPostExecute(uri);
+
+            if(isExternalStorageWritable()){
+                shareImageUri(uri);
+            }
+        }
+    }
 
     //Roba di controlli
     private MutableLiveData<AggiungiClienteState> aggiungiClienteState = new MutableLiveData<>();
@@ -233,6 +324,11 @@ public class PRViewModel extends AbstractViewModel {
 
         //Accetto anche senza data di nascita.
         return true;
+    }
+
+    public void shareImage(Activity activty, Bitmap image, String shareText){
+        ShareTask shareTask = new ShareTask(activty, shareText);
+        shareTask.execute(image);
     }
 
 

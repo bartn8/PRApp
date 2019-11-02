@@ -21,32 +21,21 @@ package com.prapp.ui.main.fragment.cassiere;
 
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -59,28 +48,31 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.samples.vision.barcodereader.ui.camera.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.ResultPoint;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
+import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WEntrata;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.model.net.wrapper.NetWEntrata;
 import com.prapp.ui.Result;
-import com.prapp.ui.utils.UiUtils;
-import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.main.MainActivityInterface;
-import com.prapp.ui.main.MainViewModel;
 import com.prapp.ui.main.adapter.WPrevenditaPlusAdapter;
+import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.PopupUtil;
+import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -94,7 +86,7 @@ import butterknife.Unbinder;
  * create an instance of this fragment.
  */
 //https://github.com/journeyapps/zxing-android-embedded/blob/master/sample/src/main/java/example/zxing/CustomScannerActivity.java
-public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter.ButtonListener, InterfaceHolder<MainActivityInterface> {
+public class CassiereFragment extends Fragment implements DecoratedBarcodeView.TorchListener, WPrevenditaPlusAdapter.ButtonListener, InterfaceHolder<MainActivityInterface> {
 
     private static final String TAG = CassiereFragment.class.getSimpleName();
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormat.shortTime();
@@ -128,7 +120,12 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     /**
      * Utilty per la grafica
      */
-    private UiUtils uiUtils;
+    private UiUtil uiUtil;
+
+    /**
+     * Utily per generare popup.
+     */
+    private PopupUtil popupUtil;
 
     /**
      * Interfaccia usata per comunicare con l'activity madre.
@@ -148,25 +145,19 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     /**
      * Adattatore per far vedere nella recycler view le prevendite che si vogliono approvare.
      */
-    private WPrevenditaPlusAdapter recyclerAdapter = new WPrevenditaPlusAdapter(this, 1, true, true);//Imposto al massimo un elemento per volta.
-
-    /**
-     * Oggetto per il popup animato che dice l'esito dell'entrata.
-     */
-    private Dialog popupEsito;
+    private WPrevenditaPlusAdapter recyclerAdapter = new WPrevenditaPlusAdapter(this, 1, true, false);//Imposto al massimo un elemento per volta.
 
     private boolean isAutoApprovaOn = false;
 
     //ROBA PER SCANNER--------------------------------------------------
 
+    private Collection<BarcodeFormat> formats = Collections.singletonList(BarcodeFormat.QR_CODE);
+
     private boolean isScanOn = false;
     private boolean isFlashOn = false;
 
-    private BarcodeDetector detector;
-    private CameraSource cameraSource;
-
-    @BindView(R.id.scanner_surfaceview)
-    public SurfaceView scannerSurfaceView;
+    @BindView(R.id.scanner_barcodeview)
+    public DecoratedBarcodeView decoratedBarcodeView;
 
     @BindView(R.id.scansioneQRSwitch)
     public ToggleButton scansioneQRSwitch;
@@ -192,55 +183,34 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     public CardView autoApprovaWarning;
 
     /**
-     * Callback usato per rilasciare la camera quando si distrugge la view che mostra la camera.
-     */
-    private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
-        @Override
-        public void surfaceCreated(SurfaceHolder surfaceHolder) {
-            //Attivazione camera manuale.
-        }
-
-        @Override
-        public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-            cameraSource.stop();
-        }
-    };
-
-    /**
      * Callback usata quando il processore di QR ne trova uno:
      * Cerco di decodificare il codice QR tramite il formato JSON.
      * Poi lo passo al View-Model che ricava altre informazioni tramite server.
      */
-    private Detector.Processor<Barcode> detectorProcessor = new Detector.Processor<Barcode>() {
-        @Override
-        public void release() {
+    private BarcodeCallback callback = new BarcodeCallback() {
 
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            String text = result.getText();
+
+            if (text == null || text.isEmpty()) {
+                // Prevent duplicate scans
+                return;
+            }
+
+            //Decodifico il codice e lo mando
+            Gson gson = new Gson();
+            try {
+                NetWEntrata netWEntrata = gson.fromJson(text, NetWEntrata.class);
+                viewModel.getInformazioniPrevendita(netWEntrata);
+            } catch (JsonParseException e) {
+                //Non fare nulla.
+                //Non verrà aggiunta la lettura.
+            }
         }
 
         @Override
-        public void receiveDetections(Detector.Detections<Barcode> detections) {
-            final SparseArray<Barcode> items = detections.getDetectedItems();
-
-            if (items.size() != 0) {
-                //Decodifico il codice e lo mando
-                Gson gson = new Gson();
-
-                Barcode barcode = items.valueAt(0);
-
-                try {
-                    NetWEntrata netWEntrata = gson.fromJson(barcode.displayValue, NetWEntrata.class);
-                    viewModel.getInformazioniPrevendita(netWEntrata);
-                } catch (JsonParseException e) {
-                    //Non fare nulla.
-                    //Non verrà aggiunta la lettura.
-                }
-
-            }
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
 
         }
     };
@@ -264,10 +234,10 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
             WPrevenditaPlus success = wPrevenditaPlusResult.getSuccess();
 
             if (integerError != null)
-                uiUtils.showError(integerError);
+                uiUtil.showError(integerError);
 
             else if (error != null)
-                uiUtils.showError(error);
+                uiUtil.showError(error);
 
             else if (success != null) {
                 //Devo controllare se attivo Auto-Approva: in caso positivo approvo direttamente
@@ -308,7 +278,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
                     showErrorPopup(localizedMessage);
                 } else {
                     //Errore strano.
-                    uiUtils.makeToast(R.string.fragment_cassiere_toast_errore_formatted, localizedMessage);
+                    uiUtil.makeToast(R.string.fragment_cassiere_toast_errore_formatted, localizedMessage);
                 }
             } else if (wEntrataResult.isErrorPresent()) {
                 if (error.size() > 0) {
@@ -321,11 +291,11 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
                         showErrorPopup(localizedMessage);
                     } else {
                         //Errore strano.
-                        uiUtils.makeToast(R.string.fragment_cassiere_toast_errore_formatted, localizedMessage);
+                        uiUtil.makeToast(R.string.fragment_cassiere_toast_errore_formatted, localizedMessage);
                     }
                 }
             } else if (wEntrataResult.isSuccessPresent()) {
-                //uiUtils.makeToast(R.string.fragment_cassiere_toast_approvata_formatted, success.getTimestampEntrata().toString(TIME_FORMAT));
+                //uiUtil.makeToast(R.string.fragment_cassiere_toast_approvata_formatted, success.getTimestampEntrata().toString(TIME_FORMAT));
 
                 //Mostro il popup in modo da essere più incisivo
                 showSuccessPopup();
@@ -403,8 +373,8 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        uiUtils = UiUtils.getInstance(context);
-        this.popupEsito = new Dialog(context);
+        uiUtil = new UiUtil(context);
+        popupUtil = new PopupUtil(context);
     }
 
     @Override
@@ -432,33 +402,24 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         //Abilito il pulsante se disponibile il flash.
         flashlightSwitch.setEnabled(hasFlash());
 
-        //https://www.html.it/pag/63571/leggere-codici-a-barre-e-qr-code/
+        //Imposto la view responabile dello scanner qr.
+        decoratedBarcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
+        decoratedBarcodeView.initializeFromIntent(getActivity().getIntent());
+        decoratedBarcodeView.setTorchListener(this);
 
-        detector = new BarcodeDetector.Builder(getContext())
-                .setBarcodeFormats(Barcode.QR_CODE)
-                .build();
+        //Decodifica continuamente.
+        decoratedBarcodeView.decodeContinuous(callback);
 
-        if (!detector.isOperational()) {
-            //Lo scanner non funziona:
-            //Disabilito i pulsanti flash e attiva scansione.
-            scansioneQRSwitch.setEnabled(false);
-            flashlightSwitch.setEnabled(false);
-            //Invio anche un messaggio di errore.
-            uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
-        }
 
-        // istanziamo un oggetto CameraSource collegata al detector
-        cameraSource = new CameraSource
-                .Builder(getContext(), detector)
-                .setFacing(CameraSource.CAMERA_FACING_BACK)
-                //.setRequestedPreviewSize(scannerSurfaceView.getWidth(), scannerSurfaceView.getHeight())
-                .setRequestedFps(15.0f)
-                .setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO)
-                .build();
-
-        scannerSurfaceView.getHolder().addCallback(surfaceCallback);
-
-        detector.setProcessor(detectorProcessor);
+        //Devo capire come rimetterlo
+//        if (!detector.isOperational()) {
+//            //Lo scanner non funziona:
+//            //Disabilito i pulsanti flash e attiva scansione.
+//            scansioneQRSwitch.setEnabled(false);
+//            flashlightSwitch.setEnabled(false);
+//            //Invio anche un messaggio di errore.
+//            uiUtil.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
+//        }
 
         //---------------------------------------------------------------------------------------
 
@@ -545,7 +506,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
      */
     @Override
     public void onAnnullaClick(WPrevenditaPlusAdapter.WPrevenditaPlusWrapper prevendita) {
-        uiUtils.makeToast(R.string.fragment_cassiere_toast_annullata_label);
+        uiUtil.makeToast(R.string.fragment_cassiere_toast_annullata_label);
 
         //Levo semplicemente dagli archivi.
         viewModel.remove(prevendita.getData());
@@ -573,63 +534,15 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
             editTextIdPrevendita.getText().clear();
             editTextCodice.getText().clear();
         }catch (NumberFormatException ex){
-            uiUtils.makeToast(R.string.fragment_cassiere_entrata_manuale_dati_non_validi);
+            uiUtil.makeToast(R.string.fragment_cassiere_entrata_manuale_dati_non_validi);
         }
-    }
-
-    //https://www.awsrh.com/2017/10/custom-pop-up-window-with-android-studio.html
-
-    /**
-     * Mostra un popup personalizzato.
-     *
-     * @param imageResId ID immagine da visualizzare
-     * @param textResId ID testo da visualizzare
-     * @param text Testo custom da visualizzare (come arg di textResId)
-     */
-    private void showPopup(int imageResId, int textResId, String text) {
-        ImageView esitoImage;
-        TextView esitoText;
-
-        popupEsito.setContentView(R.layout.esito_entrata_popup);
-
-        esitoImage = popupEsito.findViewById(R.id.esitoEntrataImage);
-        esitoText = popupEsito.findViewById(R.id.esitoEntrataText);
-
-        //Imposto la schermata di successo
-        esitoImage.setImageResource(imageResId);
-
-        //Costruisco il testo se bisogno:
-        if (text != null) {
-            String esitoTextString = getContext().getString(textResId, text);
-            esitoText.setText(esitoTextString);
-        } else {
-            esitoText.setText(textResId);
-        }
-
-        //Faccio l'animazione bella.
-        RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF,
-                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(500);
-
-        esitoImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupEsito.dismiss();
-            }
-        });
-
-        popupEsito.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupEsito.show();
-
-        esitoImage.setAnimation(rotate);
-        esitoImage.animate();
     }
 
     /**
      * Mostra un popup di successo.
      */
     private void showSuccessPopup() {
-        showPopup(R.drawable.ic_iconfinder_success, R.string.fragment_cassiere_popup_success, null);
+        popupUtil.showEsitoPopup(getActivity(), R.drawable.ic_iconfinder_success, R.string.fragment_cassiere_popup_success, null);
     }
 
     /**
@@ -637,7 +550,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
      * @param error stringa con l'errore da mostrare.
      */
     private void showErrorPopup(String error) {
-        showPopup(R.drawable.ic_iconfinder_error, R.string.fragment_cassiere_popup_errore_formatted, error);
+        popupUtil.showEsitoPopup(getActivity(), R.drawable.ic_iconfinder_error, R.string.popup_esito_errore_formatted, error);
     }
 
 
@@ -649,21 +562,17 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     private void turnScan(boolean how) {
         if(how){
             if (ActivityCompat.checkSelfPermission(getContext(), NEEDED_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
-                try {
-                    cameraSource.start(scannerSurfaceView.getHolder());
-                    scansioneQRSwitch.setChecked(true);
-                    isScanOn = true;
-                } catch (IOException e) {
-                    uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
-                }
+                decoratedBarcodeView.resume();
+                scansioneQRSwitch.setChecked(true);
+                isScanOn = true;
             }else{
-                //uiUtils.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
+                //uiUtil.makeToast(R.string.fragment_cassiere_impossibile_avviare_scanner);
                 checkCameraPermission();
                 scansioneQRSwitch.setChecked(false);
                 isScanOn = false;
             }
         }else{
-            cameraSource.stop();
+            decoratedBarcodeView.pauseAndWait();
             scansioneQRSwitch.setChecked(false);
             isScanOn = false;
         }
@@ -686,13 +595,27 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
     private void turnFlash(boolean isOn) {
         //Verifico che la scansione sia attiva, altrimenti disattivo il flash.
         if(!isScanOn && isOn){
-            flashlightSwitch.setChecked(false);
             isFlashOn = false;
             return;
         }
 
-        cameraSource.setFlashMode(isOn ? Camera.Parameters.FLASH_MODE_TORCH : Camera.Parameters.FLASH_MODE_OFF);
+        if(isOn){
+            decoratedBarcodeView.setTorchOn();
+        }else{
+            decoratedBarcodeView.setTorchOff();
+        }
+
         isFlashOn = isOn;
+    }
+
+    @Override
+    public void onTorchOn() {
+        flashlightSwitch.setChecked(true);
+    }
+
+    @Override
+    public void onTorchOff() {
+        flashlightSwitch.setChecked(false);
     }
 
     //https://stackoverflow.com/questions/13950338/how-to-make-an-android-device-vibrate
@@ -744,7 +667,7 @@ public class CassiereFragment extends Fragment implements WPrevenditaPlusAdapter
         if (requestCode == PERMISSION_REQUEST_CAMERA) {
             // Request for camera permission.
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                uiUtils.makeToast(R.string.show_camera_permission_granted);
+                uiUtil.makeToast(R.string.show_camera_permission_granted);
             }
         }
         // END_INCLUDE(onRequestPermissionsResult)
