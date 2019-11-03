@@ -21,6 +21,7 @@ package com.prapp.ui.utils;
 
 public interface ItemClickListener<T> {
 
-    public void onItemClick(int id, T obj);
+    public void onItemClick(int pos, T obj);
+    public void onItemLongClick(int pos, T obj);
 
 }

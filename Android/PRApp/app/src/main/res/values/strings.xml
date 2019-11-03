@@ -157,6 +157,10 @@
     <string name="wstatisticheevento_list_item_prevenditeVendute">ND</string>
     <string name="wstatisticheevento_list_item_ricavo_label">Ricavo:</string>
     <string name="wstatisticheevento_list_item_ricavo">ND</string>
+    <string name="wstatisticheevento_list_item_prevenditeEntrate_label">Prevendite Entrate:</string>
+    <string name="wstatisticheevento_list_item_prevenditeEntrate">ND</string>
+    <string name="wstatisticheevento_list_item_prevenditeNonEntrate_label">Prevendite Non Entrate:</string>
+    <string name="wstatisticheevento_list_item_prevenditeNonEntrate">ND</string>
 
     <!-- MAIN ACTIVITY -->
     <string name="title_activity_main">PRApp</string>
@@ -253,6 +257,9 @@
         Stato Prevendita: <xliff:g example="Consegnata" id="statoPrevendita">%6$s</xliff:g>\n
         -PRApp-
     </string>
+
+    <!-- Sub Fragment Lista PR -->
+    <string name="subfragment_lista_pr_listaPrevendite_label">Prevendite</string>
 
     <!-- FRAGMENT CASSIERE -->
 

@@ -19,7 +19,6 @@
 
 package com.prapp.ui.main.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,16 +36,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StatistichePRAdapter extends RecyclerView.Adapter<StatistichePRAdapter.StatistichePRViewHolder> {
+public class StatistichePRAdapter extends AbstractAdapter<WStatistichePREvento, StatistichePRAdapter.StatistichePRViewHolder> {
 
     private static final String TAG = StatistichePRAdapter.class.getSimpleName();
     private static final NumberFormat LOCAL_CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
     private static final NumberFormat LOCAL_NUMBER_FORMAT = NumberFormat.getInstance();
 
-    public class StatistichePRViewHolder extends RecyclerView.ViewHolder {
+    public class StatistichePRViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        //private StatisticheMembroWrapper reference;
-        //private int position;
+        private WStatistichePREvento reference;
+        private int position;
 
         @BindView(R.id.statistichemembro_sub_list_pr_item_label_tipoPrevendita)
         public TextView textViewLabelTipoPrevendita;
@@ -71,36 +70,44 @@ public class StatistichePRAdapter extends RecyclerView.Adapter<StatistichePRAdap
             ButterKnife.bind(this, itemView);
         }
 
+
+        @Override
+        public void onClick(View view) {
+            onClickImpl(view, position, reference);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return onLongClickImpl(view, position, reference);
+        }
+
     }
 
-    private List<WStatistichePREvento> dataset;
-    private Context parentContex;
-
+    public StatistichePRAdapter() {
+        super();
+    }
 
     public StatistichePRAdapter(List<WStatistichePREvento> dataset) {
-        this.dataset = dataset;
+        super(dataset);
     }
 
     @NonNull
     @Override
     public StatistichePRViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        parentContex = parent.getContext();
+        setParentContex(parent.getContext());
 
-        LayoutInflater inflater = LayoutInflater.from(parentContex);
+        LayoutInflater inflater = LayoutInflater.from(getParentContex());
         View view = inflater.inflate(R.layout.statistichemembro_sub_list_pr_item, parent, false);
 
         return new StatistichePRViewHolder(view);
     }
 
-    public void setDataset(List<WStatistichePREvento> dataset)
-    {
-        this.dataset = dataset;
-        notifyDataSetChanged();
-    }
-
     @Override
     public void onBindViewHolder(@NonNull StatistichePRViewHolder holder, int position) {
-        WStatistichePREvento statistichePREvento = dataset.get(position);
+        WStatistichePREvento statistichePREvento = getElement(position);
+
+        holder.position = position;
+        holder.reference = statistichePREvento;
 
         holder.textViewLabelPrevenditeVendute.setText(R.string.statistichemembro_sub_list_pr_item_label_prevenditeVendute);
         holder.textViewLabelRicavo.setText(R.string.statistichemembro_sub_list_pr_item_label_ricavo);
@@ -109,11 +116,6 @@ public class StatistichePRAdapter extends RecyclerView.Adapter<StatistichePRAdap
         holder.textViewRicavo.setText(LOCAL_CURRENCY_FORMAT.format(statistichePREvento.getRicavo()));
         holder.textViewTipoPrevendita.setText(statistichePREvento.getNomeTipoPrevendita());
         holder.textViewPrevenditeVendute.setText(LOCAL_NUMBER_FORMAT.format(statistichePREvento.getPrevenditeVendute()));
-    }
-
-    @Override
-    public int getItemCount() {
-        return dataset.size();
     }
 
 }

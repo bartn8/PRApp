@@ -65,6 +65,7 @@ import com.prapp.ui.main.adapter.WClienteAdapter;
 import com.prapp.ui.main.adapter.WTipoPrevenditaAdapter;
 import com.prapp.ui.utils.DatePickerFragment;
 import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.ItemClickListener;
 import com.prapp.ui.utils.PopupUtil;
 import com.prapp.ui.utils.UiUtil;
 
@@ -400,12 +401,13 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.fragment_pr_menu_aggiungiPrevenditaItem:
-
-                return true;
-
             case R.id.fragment_pr_menu_listaPrevenditeItem:
-
+                //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite.
+                if(isInterfaceSet()){
+                    PRSubFragmentLista fragmentLista = PRSubFragmentLista.newInstance();
+                    fragmentLista.holdInterface(mainActivityInterface);
+                    mainActivityInterface.cambiaFragment(fragmentLista);
+                }
                 return true;
 
             case R.id.fragment_pr_menu_statisticheEventoItem:
@@ -421,13 +423,10 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
     private boolean onClientiMenuItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
+            //Ho pigiato il pulsante aggiungi cliente.
             case R.id.fragment_pr_cliente_menu_aggiungiClienteItem:
-                //Nascondo il recycler view.
-                clientiRecyclerView.setVisibility(View.GONE);
-
-                //Mostro la roba per aggiungere il cliente.
-                aggiungiClienteLayout.setVisibility(View.VISIBLE);
-
+                viewModel.setClienteMode(PRViewModel.CLIENTE_ADD_MODE);
+                switchPrevenditaModeView();
                 return true;
 
             default:
@@ -453,7 +452,19 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         viewModel.getAggiungiPrevenditaResult().observe(this, aggiungiPrevenditaResultObserver);
 
         //Impostazione recycler view clienti.
-        clientiAdapter = new WClienteAdapter(this::onSearchClienteItemClick);
+        clientiAdapter = new WClienteAdapter();
+        clientiAdapter.setClickListener(new ItemClickListener<WCliente>() {
+            @Override
+            public void onItemClick(int pos, WCliente obj) {
+                onSearchClienteItemClick(pos, obj);
+            }
+
+            @Override
+            public void onItemLongClick(int pos, WCliente obj) {
+
+            }
+        });
+
         clientiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         clientiRecyclerView.setHasFixedSize(false);
         clientiRecyclerView.setNestedScrollingEnabled(false);
@@ -533,7 +544,18 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         //Impostazioni prevendita.
 
         //Impostazione recycler view tipi prevendita.
-        tipoPrevenditaAdapter = new WTipoPrevenditaAdapter(this::onSearchTipoPrevenditaItemClick);
+        tipoPrevenditaAdapter = new WTipoPrevenditaAdapter();
+        tipoPrevenditaAdapter.setClickListener(new ItemClickListener<WTipoPrevendita>() {
+            @Override
+            public void onItemClick(int pos, WTipoPrevendita obj) {
+                onSearchTipoPrevenditaItemClick(pos, obj);
+            }
+
+            @Override
+            public void onItemLongClick(int pos, WTipoPrevendita obj) {
+
+            }
+        });
         tipiPrevenditaRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         tipiPrevenditaRecyclerView.setHasFixedSize(false);
         tipiPrevenditaRecyclerView.setNestedScrollingEnabled(false);
@@ -633,7 +655,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         return true;
     }
 
-    public void onSearchClienteItemClick(int id, WCliente obj) {
+    public void onSearchClienteItemClick(int pos, WCliente obj) {
         //Quando ho premuto su un cliente vuol dire che ho selezionato il cliente:
         //Aggiorno lo stato
         viewModel.setClienteMode(PRViewModel.CLIENTE_SELECT_MODE);
@@ -702,7 +724,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
                 aggiungiClienteDataDiNascitaEditText.getText().toString());
     }
 
-    public void onSearchTipoPrevenditaItemClick(int id, WTipoPrevendita obj) {
+    public void onSearchTipoPrevenditaItemClick(int pos, WTipoPrevendita obj) {
         //Quando ho premuto su un cliente vuol dire che ho selezionato il cliente:
         //Aggiorno lo stato
         viewModel.setPrevenditaMode(PRViewModel.PREVENDITA_SELECT_MODE);

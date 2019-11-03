@@ -19,7 +19,6 @@
 
 package com.prapp.ui.main.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,18 +35,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WUtenteAdapter extends RecyclerView.Adapter<WUtenteAdapter.WUtenteViewHolder> {
+public class WUtenteAdapter extends AbstractAdapter<WUtente, WUtenteAdapter.WUtenteViewHolder> {
 
-    /**
-     * The interface that receives onClick messages.
-     */
-    public interface ItemClickListener {
-        void onListItemClick(int clickedItemId);
-    }
+    public class WUtenteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-    public class WUtenteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public Integer utenteId;
+        public WUtente reference;
+        public int position;
 
         @BindView(R.id.wutente_list_item_nome)
         public TextView textViewNome;
@@ -66,43 +59,28 @@ public class WUtenteAdapter extends RecyclerView.Adapter<WUtenteAdapter.WUtenteV
 
         @Override
         public void onClick(View view) {
-            mOnClickListener.onListItemClick(utenteId);
+            onClickImpl(view, position, reference);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return onLongClickImpl(view, position, reference);
         }
     }
 
-    /*
-     * An on-click handler that we've defined to make it easy for an Activity to interface with
-     * our RecyclerView
-     */
-    private final ItemClickListener mOnClickListener;
-    private Context parentContex;
-    private WUtente[] dataset;
-
-    public WUtenteAdapter(WUtente[] dataset) {
-        this(dataset, clickedItemId -> {
-        });
+    public WUtenteAdapter() {
     }
 
     public WUtenteAdapter(List<WUtente> dataset) {
-        this(dataset, clickedItemId -> {
-        });
-    }
-
-    public WUtenteAdapter(List<WUtente> dataset, ItemClickListener mOnClickListener) {
-        this(dataset.toArray(new WUtente[0]), mOnClickListener);
-    }
-
-    public WUtenteAdapter(WUtente[] dataset, ItemClickListener mOnClickListener) {
-        this.mOnClickListener = mOnClickListener;
-        this.dataset = dataset;
+        super(dataset);
     }
 
     @NonNull
     @Override
     public WUtenteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        parentContex = parent.getContext();
+        setParentContex(parent.getContext());
 
-        LayoutInflater inflater = LayoutInflater.from(parentContex);
+        LayoutInflater inflater = LayoutInflater.from(getParentContex());
         View view = inflater.inflate(R.layout.wutente_list_item, parent, false);
 
         return new WUtenteViewHolder(view);
@@ -110,17 +88,14 @@ public class WUtenteAdapter extends RecyclerView.Adapter<WUtenteAdapter.WUtenteV
 
     @Override
     public void onBindViewHolder(@NonNull WUtenteViewHolder holder, int position) {
-        WUtente utente = dataset[position];
+        WUtente utente = getElement(position);
+
+        holder.position = position;
+        holder.reference = utente;
 
         holder.textViewNome.setText(utente.getNome());
         holder.textViewCognome.setText(utente.getCognome());
         holder.textViewTelefono.setText(utente.getTelefono());
-        holder.utenteId = utente.getId();
-    }
-
-    @Override
-    public int getItemCount() {
-        return dataset.length;
     }
 
 }

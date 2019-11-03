@@ -140,7 +140,8 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
             else if(success != null)
             {
                 //Ora che ho la lista dei membri posso fare l'adapter.
-                adapter = new StatisticheMembroAdapter(success);
+                adapter = new StatisticheMembroAdapter();
+                adapter.addMembri(success);
                 statisticheMembriRecyclerView.setAdapter(adapter);
 
                 //Faccio partire la ricerca delle statistiche.

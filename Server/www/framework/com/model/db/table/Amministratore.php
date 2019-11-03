@@ -850,11 +850,12 @@ EOT;
 
         //Query ALTERVISTA:
         $query = <<<EOT
-        SELECT T.idEvento, T.idTipoPrevendita, T.nomeTipoPrevendita, T.prevenditeVendute, T.ricavo 
-        FROM (SELECT evento.id AS idEvento, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, COUNT(prevendita.id) AS prevenditeVendute, SUM(tipoPrevendita.prezzo) AS ricavo 
+        SELECT T.idEvento, T.idTipoPrevendita, T.nomeTipoPrevendita, T.prevenditeVendute, T.ricavo, T.prevenditeEntrate, T.prevenditeNonEntrate
+        FROM (SELECT evento.id AS idEvento, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, COUNT(prevendita.id) AS prevenditeVendute, SUM(tipoPrevendita.prezzo) AS ricavo, COUNT(entrata.seq) AS prevenditeEntrate, COUNT(prevendita.id)-COUNT(entrata.seq) AS prevenditeNonEntrate
             FROM evento 
             INNER JOIN prevendita ON prevendita.idEvento = evento.id 
             INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita 
+            LEFT JOIN entrata ON entrata.idPrevendita = prevendita.id
             GROUP BY evento.id, prevendita.idTipoPrevendita) AS T
         WHERE T.idEvento = :idEvento
 EOT;

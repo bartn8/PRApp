@@ -19,7 +19,6 @@
 
 package com.prapp.ui.main.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,15 +36,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WStatisticheEventoAdapter extends RecyclerView.Adapter<WStatisticheEventoAdapter.WStatisticheEventoViewHolder> {
+public class WStatisticheEventoAdapter extends AbstractAdapter<WStatisticheEvento, WStatisticheEventoAdapter.WStatisticheEventoViewHolder> {
 
     private static final String TAG = WStatisticheEventoAdapter.class.getSimpleName();
     private static final NumberFormat LOCAL_CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
     private static final NumberFormat LOCAL_NUMBER_FORMAT = NumberFormat.getInstance();
 
-    public class WStatisticheEventoViewHolder extends RecyclerView.ViewHolder {
+    public class WStatisticheEventoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        public WStatisticheEvento statisticheEvento;
+        public WStatisticheEvento reference;
+        public int position;
 
         @BindView(R.id.wstatisticheevento_list_item_nomeTipoPrevendita_label)
         public TextView textViewNomeTipoPrevenditaLabel;
@@ -65,31 +65,48 @@ public class WStatisticheEventoAdapter extends RecyclerView.Adapter<WStatistiche
         @BindView(R.id.wstatisticheevento_list_item_ricavo)
         public TextView textViewRicavo;
 
+        @BindView(R.id.wstatisticheevento_list_item_prevenditeEntrate_label)
+        public TextView textViewPrevenditeEntrateLabel;
+
+        @BindView(R.id.wstatisticheevento_list_item_prevenditeEntrate)
+        public TextView textViewPrevenditeEntrate;
+
+        @BindView(R.id.wstatisticheevento_list_item_prevenditeNonEntrate_label)
+        public TextView textViewPrevenditeNonEntrateLabel;
+
+        @BindView(R.id.wstatisticheevento_list_item_prevenditeNonEntrate)
+        public TextView textViewPrevenditeNonEntrate;
+
         public WStatisticheEventoViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
+        @Override
+        public void onClick(View view) {
+            onClickImpl(view, position, reference);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return onLongClickImpl(view, position, reference);
+        }
+
     }
 
-    private Context parentContex;
-    private WStatisticheEvento[] dataset;
-
+    public WStatisticheEventoAdapter() {
+    }
 
     public WStatisticheEventoAdapter(List<WStatisticheEvento> dataset) {
-        this(dataset.toArray(new WStatisticheEvento[0]));
-    }
-
-    public WStatisticheEventoAdapter(WStatisticheEvento[] dataset) {
-        this.dataset = dataset;
+        super(dataset);
     }
 
     @NonNull
     @Override
     public WStatisticheEventoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        parentContex = parent.getContext();
+        setParentContex(parent.getContext());
 
-        LayoutInflater inflater = LayoutInflater.from(parentContex);
+        LayoutInflater inflater = LayoutInflater.from(getParentContex());
         View view = inflater.inflate(R.layout.wstatisticheevento_list_item, parent, false);
 
         return new WStatisticheEventoViewHolder(view);
@@ -97,7 +114,7 @@ public class WStatisticheEventoAdapter extends RecyclerView.Adapter<WStatistiche
 
     @Override
     public void onBindViewHolder(@NonNull WStatisticheEventoViewHolder holder, int position) {
-        WStatisticheEvento statisticheEvento = dataset[position];
+        WStatisticheEvento statisticheEvento = getElement(position);
 
         holder.textViewNomeTipoPrevenditaLabel.setText(R.string.wstatisticheevento_list_item_nomeTipoPrevendita_label);
         holder.textViewNomeTipoPrevendita.setText(statisticheEvento.getNomeTipoPrevendita());
@@ -107,11 +124,15 @@ public class WStatisticheEventoAdapter extends RecyclerView.Adapter<WStatistiche
 
         holder.textViewRicavoLabel.setText(R.string.wstatisticheevento_list_item_ricavo_label);
         holder.textViewRicavo.setText(LOCAL_CURRENCY_FORMAT.format(statisticheEvento.getRicavo()));
-    }
 
-    @Override
-    public int getItemCount() {
-        return dataset.length;
+        holder.textViewPrevenditeEntrateLabel.setText(R.string.wstatisticheevento_list_item_prevenditeEntrate_label);
+        holder.textViewPrevenditeEntrate.setText(LOCAL_NUMBER_FORMAT.format(statisticheEvento.getPrevenditeEntrate()));
+
+        holder.textViewPrevenditeNonEntrateLabel.setText(R.string.wstatisticheevento_list_item_prevenditeNonEntrate_label);
+        holder.textViewPrevenditeNonEntrate.setText(LOCAL_NUMBER_FORMAT.format(statisticheEvento.getPrevenditeNonEntrate()));
+
+        holder.position = position;
+        holder.reference = statisticheEvento;
     }
 
 }

@@ -19,7 +19,6 @@
 
 package com.prapp.ui.main.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,29 +31,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WTipoPrevendita;
-import com.prapp.ui.utils.ItemClickListener;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WTipoPrevenditaAdapter extends RecyclerView.Adapter<WTipoPrevenditaAdapter.WTipoPrevenditaViewHolder> implements Filterable {
+public class WTipoPrevenditaAdapter extends AbstractAdapter<WTipoPrevendita, WTipoPrevenditaAdapter.WTipoPrevenditaViewHolder> implements Filterable {
 
     private static final String TAG = WTipoPrevenditaAdapter.class.getSimpleName();
 
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormat.shortDateTime();
     private static final NumberFormat LOCAL_CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
 
-    public class WTipoPrevenditaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class WTipoPrevenditaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        public WTipoPrevendita wrapper;
+        public WTipoPrevendita reference;
+        public int position;
 
         @BindView(R.id.wtipoprevendita_list_item_nome)
         public TextView nomeTextView;
@@ -80,90 +78,12 @@ public class WTipoPrevenditaAdapter extends RecyclerView.Adapter<WTipoPrevendita
 
         @Override
         public void onClick(View view) {
-            mOnClickListener.onItemClick(wrapper.getId(), wrapper);
+            onClickImpl(view, position, reference);
         }
-    }
 
-    /*
-     * An on-click handler that we've defined to make it easy for an Activity to interface with
-     * our RecyclerView
-     */
-    private final ItemClickListener<WTipoPrevendita> mOnClickListener;
-    private Context parentContex;
-    private List<WTipoPrevendita> dataset;
-    private List<WTipoPrevendita> datasetFiltered;
-
-    public WTipoPrevenditaAdapter(WTipoPrevendita[] dataset) {
-        this(dataset, (clickedItemId,obj) -> {
-        });
-    }
-
-    public WTipoPrevenditaAdapter(List<WTipoPrevendita> dataset)
-    {
-        this(dataset, (clickedItemId,obj) -> {
-        });
-    }
-
-    public WTipoPrevenditaAdapter(List<WTipoPrevendita> dataset, ItemClickListener<WTipoPrevendita> mOnClickListener) {
-        this.mOnClickListener = mOnClickListener;
-        this.dataset = dataset;
-        this.datasetFiltered = dataset;
-    }
-
-    public WTipoPrevenditaAdapter(WTipoPrevendita[] dataset, ItemClickListener<WTipoPrevendita> mOnClickListener) {
-        this(Arrays.asList(dataset), mOnClickListener);
-    }
-
-    public WTipoPrevenditaAdapter(ItemClickListener<WTipoPrevendita> mOnClickListener){
-        this(new ArrayList<>(), mOnClickListener);
-    }
-
-
-    public void replace(WTipoPrevendita obj){
-        dataset.clear();
-        dataset.add(obj);
-        datasetFiltered = dataset;
-        notifyDataSetChanged();
-    }
-
-    public void replace(List<WTipoPrevendita> list){
-        dataset = list;
-        //Annulla qualsiasi filtro in corso.
-        datasetFiltered = list;
-        notifyDataSetChanged();
-    }
-
-    public void addAll(List<WTipoPrevendita> list){
-        if(dataset.addAll(list)){
-            //Annulla qualsiasi filtro in corso.
-            datasetFiltered = dataset;
-            notifyDataSetChanged();
-        }
-    }
-
-    public void add(WTipoPrevendita obj){
-        if(dataset.add(obj)){
-            //Annulla qualsiasi filtro in corso.
-            datasetFiltered = dataset;
-            notifyDataSetChanged();
-        }
-    }
-
-    public void remove(WTipoPrevendita obj){
-        if(dataset.remove(obj)){
-            //Annulla qualsiasi filtro in corso.
-            datasetFiltered = dataset;
-            notifyDataSetChanged();
-        }
-    }
-
-    public void remove(int position){
-        int size = dataset.size();
-        if(position >= 0 && position < size){
-            //Annulla qualsiasi filtro in corso.
-            dataset.remove(position);
-            datasetFiltered = dataset;
-            notifyDataSetChanged();
+        @Override
+        public boolean onLongClick(View view) {
+            return onLongClickImpl(view, position, reference);
         }
     }
 
@@ -171,9 +91,9 @@ public class WTipoPrevenditaAdapter extends RecyclerView.Adapter<WTipoPrevendita
     @NonNull
     @Override
     public WTipoPrevenditaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        parentContex = parent.getContext();
+        setParentContex(parent.getContext());
 
-        LayoutInflater inflater = LayoutInflater.from(parentContex);
+        LayoutInflater inflater = LayoutInflater.from(getParentContex());
         View view = inflater.inflate(R.layout.wtipoprevendita_list_item, parent, false);
 
         return new WTipoPrevenditaViewHolder(view);
@@ -181,26 +101,21 @@ public class WTipoPrevenditaAdapter extends RecyclerView.Adapter<WTipoPrevendita
 
     @Override
     public void onBindViewHolder(@NonNull WTipoPrevenditaViewHolder holder, int position) {
-        WTipoPrevendita tipoPrevendita = datasetFiltered.get(position);
+        WTipoPrevendita tipoPrevendita = getElement(position);
 
-        holder.wrapper = tipoPrevendita;
+        holder.reference = tipoPrevendita;
+        holder.position = position;
 
         holder.nomeTextView.setText(tipoPrevendita.getNome());
 
         holder.prezzoLabelTextView.setText(R.string.wtipoprevendita_list_item_prezzo_label);
         holder.prezzoTextView.setText(LOCAL_CURRENCY_FORMAT.format(tipoPrevendita.getPrezzo()));
 
-        String periodo = parentContex.getString(R.string.wtipoprevendita_list_item_periodoVendita, tipoPrevendita.getAperturaPrevendite().toString(DATETIME_FORMATTER), tipoPrevendita.getChiusuraPrevendite().toString(DATETIME_FORMATTER));
+        String periodo = getParentContex().getString(R.string.wtipoprevendita_list_item_periodoVendita, tipoPrevendita.getAperturaPrevendite().toString(DATETIME_FORMATTER), tipoPrevendita.getChiusuraPrevendite().toString(DATETIME_FORMATTER));
 
         holder.periodoVenditaLabelTextView.setText(R.string.wtipoprevendita_list_item_periodoVendita_label);
         holder.periodoVenditaTextView.setText(periodo);
     }
-
-    @Override
-    public int getItemCount() {
-        return datasetFiltered.size();
-    }
-
 
     /**
      * Usato per filtrare i tipo prevendita in base al nome.
@@ -215,34 +130,34 @@ public class WTipoPrevenditaAdapter extends RecyclerView.Adapter<WTipoPrevendita
                 String filterText = charSequence.toString().toLowerCase();
 
                 if (filterText.isEmpty()) {
-                    datasetFiltered = dataset;
+                    restoreFilteredDataset();
                 } else {
                     //Qui metto la lista che soddisfa il filtro.
                     List<WTipoPrevendita> filteredDataset = new ArrayList<>();
 
-                    for (WTipoPrevendita tipoPrevendita : dataset) {
+                    for (WTipoPrevendita tipoPrevendita : getOriginalDataset()) {
 
                         String nome = tipoPrevendita.getNome().toLowerCase();
 
                         //Ricerca per nome o cognome.
-                        if(nome.startsWith(filterText)){
+                        if (nome.startsWith(filterText)) {
                             filteredDataset.add(tipoPrevendita);
                         }
 
                     }
 
-                    datasetFiltered = filteredDataset;
+                    setDatasetFiltered(filteredDataset);
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = datasetFiltered;
+                filterResults.values = getDataset();
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                if(filterResults.values instanceof List){
-                    datasetFiltered = (List<WTipoPrevendita>) filterResults.values;
+                if (filterResults.values instanceof List) {
+                    setDatasetFiltered((List<WTipoPrevendita>) filterResults.values);
 
                     // refresh the list with filtered data
                     notifyDataSetChanged();

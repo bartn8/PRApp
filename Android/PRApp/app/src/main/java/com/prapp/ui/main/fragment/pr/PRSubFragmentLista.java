@@ -17,10 +17,11 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.prapp.ui.main.fragment.cassiere;
+package com.prapp.ui.main.fragment.pr;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -50,34 +54,30 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import be.digitalia.common.widgets.MultiChoiceHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class CassiereSubFragmentLista extends Fragment implements InterfaceHolder<MainActivityInterface>, ItemClickListener<WPrevenditaPlusAdapter.WPrevenditaPlusWrapper> {
+public class PRSubFragmentLista extends Fragment implements InterfaceHolder<MainActivityInterface>, ItemClickListener<WPrevenditaPlusAdapter.WPrevenditaPlusWrapper> {
 
-    public static final String MODE_KEY = "MODE";
-
-    public static final int MODE_LIST_TIMBRATE = 0;
-    public static final int MODE_LIST_NON_TIMBRATE = 1;
+    private static final String MULTI_CHOICE_KEY = "multiChoiceKey";
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param mode use CassiereSubFragmentLista.MODE_LIST_TIMBRATE or CassiereSubFragmentLista.MODE_LIST_NON_TIMBRATE
      *
-     * @return A new instance of fragment CassiereSubFragmentLista.
+     * @return A new instance of fragment PRSubFragmentLista.
      */
-    public static CassiereSubFragmentLista newInstance(int mode) {
-        CassiereSubFragmentLista fragment = new CassiereSubFragmentLista();
+    public static PRSubFragmentLista newInstance() {
+        PRSubFragmentLista fragment = new PRSubFragmentLista();
         Bundle args = new Bundle();
-        args.putInt(MODE_KEY, mode);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public CassiereSubFragmentLista() {
+    public PRSubFragmentLista() {
         // Required empty public constructor
     }
 
@@ -89,7 +89,7 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     /**
      * View-Model per interfacciarsi con il server.
      */
-    private CassiereViewModel viewModel;
+    private PRViewModel viewModel;
 
     /**
      * Robo per discollegarsi dalle view.
@@ -109,7 +109,12 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     /**
      * Adattatore per far vedere nella recycler view le prevendite che si vogliono approvare.
      */
-    private WPrevenditaPlusAdapter recyclerAdapter;
+    private WPrevenditaPlusAdapter recyclerAdapter = new WPrevenditaPlusAdapter();//Imposto al massimo un elemento per volta.
+
+    /**
+     * Usato per la selezione multipla.
+     */
+    private MultiChoiceHelper multiChoiceHelper;
 
     @Override
     public void holdInterface(MainActivityInterface mainActivityInterface){
@@ -127,7 +132,7 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     @BindView(R.id.subfragment_lista_recyclerView)
     public RecyclerView recyclerView;
 
-    private Observer<Result<List<WPrevenditaPlus>, Void>> getPrevenditeResultObserver = new Observer<Result<List<WPrevenditaPlus>, Void>>() {
+    private Observer<Result<List<WPrevenditaPlus>, Void>> listaPrevenditeResultObserver = new Observer<Result<List<WPrevenditaPlus>, Void>>() {
         @Override
         public void onChanged(Result<List<WPrevenditaPlus>, Void> wPrevenditaPlusResult) {
             if (wPrevenditaPlusResult == null) {
@@ -159,13 +164,6 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);    //Opzione menu
-
-        //Recupero argomenti.
-        Bundle args = getArguments();
-
-        if(args != null){
-            mode = args.getInt(MODE_KEY);
-        }
     }
 
     //ROBA MENU------------------------------------------------------------------------------
@@ -173,42 +171,22 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.cassiere_menu, menu);
+        inflater.inflate(R.menu.pr_menu, menu);
 
-        //Disattivo parti del menu:
-        menu.removeItem(R.id.cassiere_autoApprovaItem);
-
-        if(mode == MODE_LIST_TIMBRATE) menu.removeItem(R.id.cassiere_genteEntrataItem);
-        else if(mode == MODE_LIST_NON_TIMBRATE) menu.removeItem(R.id.cassiere_genteNonEntrataItem);
-
+        //Rimuovo elemento menu
+        menu.removeItem(R.id.fragment_pr_menu_listaPrevenditeItem);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.cassiere_scansionaItem:
-                //Ritorno al fragment cassiere.
-                mainActivityInterface.cambiaFragment(mainActivityInterface.getNavFragment(MainActivity.ID_FRAGMENT_CASSIERE));
+            case R.id.fragment_pr_menu_aggiungiPrevenditaItem:
+                //Ritorno al fragment pr.
+                mainActivityInterface.cambiaFragment(mainActivityInterface.getNavFragment(MainActivity.ID_FRAGMENT_PR));
                 return true;
-            case R.id.cassiere_genteEntrataItem:
-                //Non è il mio campo
-                if(mode == MODE_LIST_TIMBRATE) return super.onOptionsItemSelected(item);
 
-                //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite approvate.
-                mainActivityInterface.cambiaFragment(CassiereSubFragmentLista.newInstance(MODE_LIST_TIMBRATE));
-
-
-                return true;
-            case R.id.cassiere_genteNonEntrataItem:
-                //Non è il mio campo
-                if(mode == MODE_LIST_NON_TIMBRATE) return super.onOptionsItemSelected(item);
-
-                //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite non approvate.
-                mainActivityInterface.cambiaFragment(CassiereSubFragmentLista.newInstance(MODE_LIST_NON_TIMBRATE));
-
-                return true;
-            case R.id.cassiere_statisticheEventoItem:
+            case R.id.fragment_pr_menu_statisticheEventoItem:
 
                 return true;
             default:
@@ -235,8 +213,36 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         //Mitico butterknife per fare il collegamento tra XML e oggetti.
         unbinder = ButterKnife.bind(this, view);
 
-        recyclerAdapter = new WPrevenditaPlusAdapter();//Imposto al massimo un elemento per volta.
         recyclerAdapter.setClickListener(this);
+
+        //Imposto l'helper
+        multiChoiceHelper = new MultiChoiceHelper((AppCompatActivity) getActivity(), recyclerAdapter);
+        multiChoiceHelper.setMultiChoiceModeListener(new MultiChoiceHelper.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
 
         //Imposto il recyler view. Quello che fa vedere le prevendite.
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -245,19 +251,11 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         recyclerView.setAdapter(recyclerAdapter);
 
         //View model per richiamare il server.
-        viewModel = ViewModelProviders.of(getActivity()).get(CassiereViewModel.class);
-        viewModel.getPrevenditeResult().observe(this, this.getPrevenditeResultObserver);
+        viewModel = ViewModelProviders.of(getActivity()).get(PRViewModel.class);
+        viewModel.getListaPrevenditeResult().observe(this, this.listaPrevenditeResultObserver);
 
-        //Richiedo al server i dati.
-        if(mode == MODE_LIST_TIMBRATE){
-            label.setText(R.string.subfragment_lista_cassiere_listaTimbrate_label);
-            viewModel.getListaPrevenditeTimbrateEvento();
-        }
-        else if (mode == MODE_LIST_NON_TIMBRATE){
-            label.setText(R.string.subfragment_lista_cassiere_listaNonTimbrate_label);
-            viewModel.getListaPrevenditeNonTimbrateEvento();
-        }
-
+        label.setText(R.string.subfragment_lista_pr_listaPrevendite_label);
+        viewModel.getListaPrevenditeEvento();
 
         return view;
     }
@@ -270,6 +268,22 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         super.onDestroyView();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Parcelable parcelable = multiChoiceHelper.onSaveInstanceState();
+        outState.putParcelable(MULTI_CHOICE_KEY, parcelable);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if(savedInstanceState != null){
+            Parcelable parcelable = savedInstanceState.getParcelable(MULTI_CHOICE_KEY);
+            multiChoiceHelper.onRestoreInstanceState(parcelable);
+        }
+    }
 
     @Override
     public void onItemClick(int id, WPrevenditaPlusAdapter.WPrevenditaPlusWrapper obj) {
@@ -278,6 +292,6 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
 
     @Override
     public void onItemLongClick(int pos, WPrevenditaPlusAdapter.WPrevenditaPlusWrapper obj) {
-
+        multiChoiceHelper.toggleItemChecked(pos, true);
     }
 }

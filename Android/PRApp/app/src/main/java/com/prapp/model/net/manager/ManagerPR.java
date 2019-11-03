@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.prapp.PRAppApplication;
 import com.prapp.model.db.wrapper.WCliente;
 import com.prapp.model.db.wrapper.WPrevendita;
+import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
 import com.prapp.model.db.wrapper.WStatistichePRStaff;
 import com.prapp.model.db.wrapper.WStatistichePRTotali;
@@ -52,6 +53,7 @@ public class ManagerPR extends Manager {
     private static final String RESTITUISCI_LISTA_PREVENDITE_ARG_FILTRI = "filtri";
     private static final String RESTITUISCI_STATISTICHE_STAFF_ARG_STAFF = "staff";
     private static final String RESTITUISCI_STATISTICHE_EVENTO_ARG_EVENTO = "evento";
+    private static final String RESTITUISCI_PREVENDITE_EVENTO_ARG_EVENTO = "evento";
 
     private static ManagerPR singleton;
 
@@ -161,6 +163,27 @@ public class ManagerPR extends Manager {
         richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_EVENTO_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WStatistichePREvento.class)), onException, errorListener);
+
+        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
+
+        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
+    }
+
+    public void resitituisciPrevenditeEvento(int idEvento, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+        Comando comando = Comando.COMANDO_PR_RESTITUISCI_PREVENDITE_EVENTO;
+        final Richiesta richiesta = new Richiesta(comando);
+        NetWId netWId = new NetWId(idEvento);
+        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_PREVENDITE_EVENTO_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
+
+        ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
+            List<WPrevenditaPlus> myList = new ArrayList<>();
+
+            for (Risultato risultato : element) {
+                myList.add(risultato.castRisultato(WPrevenditaPlus.class));
+            }
+
+            onSuccess.onResponse(myList);
+        }, onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 

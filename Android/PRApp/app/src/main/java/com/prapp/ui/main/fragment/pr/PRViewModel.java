@@ -37,6 +37,7 @@ import com.prapp.model.MyContext;
 import com.prapp.model.db.enums.StatoPrevendita;
 import com.prapp.model.db.wrapper.WCliente;
 import com.prapp.model.db.wrapper.WPrevendita;
+import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.model.db.wrapper.WTipoPrevendita;
 import com.prapp.model.net.manager.ManagerMembro;
 import com.prapp.model.net.manager.ManagerPR;
@@ -191,6 +192,7 @@ public class PRViewModel extends AbstractViewModel {
     private MutableLiveData<Result<WCliente, Void>> aggiungiClienteResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WTipoPrevendita>, Void>> listaTipoPrevenditaResult = new MutableLiveData<>();
     private MutableLiveData<Result<WPrevendita, Void>> aggiungiPrevenditaResult = new MutableLiveData<>();
+    private MutableLiveData<Result<List<WPrevenditaPlus>, Void>> listaPrevenditeResult = new MutableLiveData<>();
 
     public LiveData<Result<List<WCliente>, Void>> getListaClientiResult() {
         return listaClientiResult;
@@ -206,6 +208,10 @@ public class PRViewModel extends AbstractViewModel {
 
     public LiveData<Result<WPrevendita, Void>> getAggiungiPrevenditaResult() {
         return aggiungiPrevenditaResult;
+    }
+
+    public LiveData<Result<List<WPrevenditaPlus>, Void>> getListaPrevenditeResult() {
+        return listaPrevenditeResult;
     }
 
 
@@ -279,6 +285,19 @@ public class PRViewModel extends AbstractViewModel {
             managerPR.aggiungiPrevendita(insertNetWPrevendita, new DefaultSuccessListener<>(aggiungiPrevenditaResult), new DefaultExceptionListener<>(aggiungiPrevenditaResult));
         } else {
             aggiungiPrevenditaResult.setValue(new Result<>(R.string.no_login));
+        }
+    }
+
+    public void getListaPrevenditeEvento(){
+        MyContext myContext = getMyContext();
+
+        if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
+            ManagerPR managerPR = getManagerPR();
+            Integer idEvento = getEvento().getId();
+           managerPR.resitituisciPrevenditeEvento(idEvento, new DefaultSuccessListener<>(listaPrevenditeResult), new DefaultExceptionListener<>(listaPrevenditeResult));
+
+        } else {
+            listaPrevenditeResult.setValue(new Result<>(R.string.no_login));
         }
     }
 

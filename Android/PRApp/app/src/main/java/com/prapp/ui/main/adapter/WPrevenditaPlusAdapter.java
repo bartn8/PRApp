@@ -19,7 +19,6 @@
 
 package com.prapp.ui.main.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,14 +35,13 @@ import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlusAdapter.WPrevenditaPlusViewHolder> {
+public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapter.WPrevenditaPlusWrapper, WPrevenditaPlusAdapter.WPrevenditaPlusViewHolder> {
 
     private static final String TAG = WPrevenditaPlusAdapter.class.getSimpleName();
     private static final NumberFormat LOCAL_CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
@@ -74,8 +72,7 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
             this.errore = errore;
         }
 
-        boolean isErroreSet()
-        {
+        boolean isErroreSet() {
             return this.errore != null;
         }
 
@@ -86,18 +83,18 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
     }
 
     /**
-     * The interface that receives onClick messages.
+     * The interface that receives button clicks.
      */
     public interface ButtonListener {
         void onApprovaClick(WPrevenditaPlusWrapper prevendita);
+
         void onAnnullaClick(WPrevenditaPlusWrapper prevendita);
     }
 
-    public class WPrevenditaPlusViewHolder extends RecyclerView.ViewHolder {
+    public class WPrevenditaPlusViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        private WPrevenditaPlusWrapper referencePrevendita;
+        private WPrevenditaPlusWrapper reference;
         private int position;
-        private Integer id, idEvento, idCliente, idTipoPrevendita;
 
         @BindView(R.id.wprevendita_plus_list_item_nomeEvento)
         public TextView textViewNomeEvento;
@@ -154,14 +151,24 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
 
         @OnClick(R.id.wprevendita_plus_list_item_approva)
         public void onApprovaClick(View view) {
-            if(mOnClickListener != null)
-                mOnClickListener.onApprovaClick(referencePrevendita);
+            if (buttonListener != null)
+                buttonListener.onApprovaClick(reference);
         }
 
         @OnClick(R.id.wprevendita_plus_list_item_annulla)
         public void onAnnullaClick(View view) {
-            if(mOnClickListener != null)
-                mOnClickListener.onAnnullaClick(referencePrevendita);
+            if (buttonListener != null)
+                buttonListener.onAnnullaClick(reference);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onClickImpl(view, position, reference);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return onLongClickImpl(view, position, reference);
         }
     }
 
@@ -169,9 +176,7 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
      * An on-click handler that we've defined to make it easy for an Activity to interface with
      * our RecyclerView
      */
-    private final ButtonListener mOnClickListener;
-    private List<WPrevenditaPlusWrapper> datasetPrevendita;
-    private Context parentContex;
+    private ButtonListener buttonListener;
 
     //Utilizzato per indicare quanti elementi devo mostare contemporaneamente.
     private int maxShownItems;
@@ -181,27 +186,30 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
     //Indica se mostrare l'errore.
     private boolean showError;
 
-    public WPrevenditaPlusAdapter(ButtonListener mOnClickListener) {
-        this(mOnClickListener, -1, false, false);
+    public WPrevenditaPlusAdapter() {
+        this(-1, false, false);
     }
 
-    public WPrevenditaPlusAdapter(ButtonListener mOnClickListener, int maxShownItems, boolean showButtons, boolean showError) {
-        this.datasetPrevendita = new ArrayList<>();
-        this.mOnClickListener = mOnClickListener;
+    public WPrevenditaPlusAdapter(int maxShownItems, boolean showButtons, boolean showError) {
+        super();
         this.maxShownItems = maxShownItems;
         this.showButtons = showButtons;
         this.showError = showError;
+    }
+
+    public void setButtonListener(@NotNull ButtonListener buttonListener) {
+        this.buttonListener = buttonListener;
     }
 
     public void add(WPrevenditaPlus wPrevenditaPlus) {
         add(wPrevenditaPlus, null);
     }
 
-    public void add(List<WPrevenditaPlus> list){
-        for(WPrevenditaPlus wPrevenditaPlus : list){
+    public void add(@NotNull List<WPrevenditaPlus> list) {
+        for (WPrevenditaPlus wPrevenditaPlus : list) {
             WPrevenditaPlusWrapper wPrevenditaPlusWrapper = new WPrevenditaPlusWrapper(wPrevenditaPlus);
             wPrevenditaPlusWrapper.setErrore(null);
-            datasetPrevendita.add(wPrevenditaPlusWrapper);
+            add(wPrevenditaPlusWrapper);
         }
 
         notifyDataSetChanged();
@@ -210,28 +218,15 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
     public void add(WPrevenditaPlus wPrevenditaPlus, String errore) {
         WPrevenditaPlusWrapper wPrevenditaPlusWrapper = new WPrevenditaPlusWrapper(wPrevenditaPlus);
         wPrevenditaPlusWrapper.setErrore(errore);
-        datasetPrevendita.add(wPrevenditaPlusWrapper);
-        notifyDataSetChanged();
-    }
-
-    public void remove(WPrevenditaPlusWrapper wPrevenditaPlus) {
-        datasetPrevendita.remove(wPrevenditaPlus);
-        notifyDataSetChanged();
-    }
-
-    public WPrevenditaPlusWrapper remove(int position)
-    {
-        WPrevenditaPlusWrapper remove = datasetPrevendita.remove(position);
-        notifyDataSetChanged();
-        return remove;
+        add(wPrevenditaPlusWrapper, true);
     }
 
     @NonNull
     @Override
     public WPrevenditaPlusViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        parentContex = parent.getContext();
+        setParentContex(parent.getContext());
 
-        LayoutInflater inflater = LayoutInflater.from(parentContex);
+        LayoutInflater inflater = LayoutInflater.from(getParentContex());
         View view = inflater.inflate(R.layout.wprevenditaplus_list_item, parent, false);
 
         return new WPrevenditaPlusViewHolder(view);
@@ -239,25 +234,25 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
 
     @Override
     public void onBindViewHolder(@NonNull WPrevenditaPlusViewHolder holder, int position) {
-        WPrevenditaPlusWrapper prevenditaPlusWrapper = datasetPrevendita.get(position);
+        WPrevenditaPlusWrapper prevenditaPlusWrapper = getElement(position);
         WPrevenditaPlus prevenditaPlus = prevenditaPlusWrapper.getData();
+
+        holder.reference = prevenditaPlusWrapper;
+        holder.position = position;
 
         holder.textViewNomeEventoLabel.setText(R.string.wprevendita_plus_list_item_nomeEvento_label);
         holder.textViewNomeEvento.setText(prevenditaPlus.getNomeEvento());
 
         holder.textViewNomePRLabel.setText(R.string.wprevendita_plus_list_item_nomePR_label);
-        String nomePR = parentContex.getString(R.string.wprevendita_plus_list_item_nomePR_formatted, prevenditaPlus.getNomePR(), prevenditaPlus.getCognomePR());
+        String nomePR = getParentContex().getString(R.string.wprevendita_plus_list_item_nomePR_formatted, prevenditaPlus.getNomePR(), prevenditaPlus.getCognomePR());
         holder.textViewNomePR.setText(nomePR);
 
-        if(prevenditaPlus.getNomeCliente() == null || prevenditaPlus.getCognomeCliente() == null)
-        {
+        if (prevenditaPlus.getNomeCliente() == null || prevenditaPlus.getCognomeCliente() == null) {
             holder.textViewNomeClienteLabel.setText(R.string.wprevendita_plus_list_item_nomeCliente_label);
             holder.textViewNomeCliente.setText(R.string.wprevendita_plus_list_item_nomeCliente);
-        }
-        else
-        {
+        } else {
             holder.textViewNomeClienteLabel.setText(R.string.wprevendita_plus_list_item_nomeCliente_label);
-            String nomeCliente = parentContex.getString(R.string.wprevendita_plus_list_item_nomeCliente_formatted, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente());
+            String nomeCliente = getParentContex().getString(R.string.wprevendita_plus_list_item_nomeCliente_formatted, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente());
             holder.textViewNomeCliente.setText(nomeCliente);
         }
 
@@ -271,52 +266,42 @@ public class WPrevenditaPlusAdapter extends RecyclerView.Adapter<WPrevenditaPlus
         holder.textViewStatoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_statoPrevendita_label);
         holder.textViewStatoPrevendita.setText(prevenditaPlus.getStato().getNome());
 
-        if(showError){
+        if (showError) {
             holder.textViewErroreLabel.setVisibility(View.VISIBLE);
             holder.textViewErrore.setVisibility(View.VISIBLE);
 
-            if(prevenditaPlusWrapper.isErroreSet())
-            {
+            if (prevenditaPlusWrapper.isErroreSet()) {
                 holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
                 holder.textViewErrore.setText(prevenditaPlusWrapper.getErrore());
-            }
-            else
-            {
+            } else {
                 holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
                 holder.textViewErrore.setText(R.string.wprevendita_plus_list_item_errore);
             }
-        }else{
+        } else {
             holder.textViewErroreLabel.setVisibility(View.GONE);
             holder.textViewErrore.setVisibility(View.GONE);
         }
 
         //Mostro i pulsanti solo se showButton abilitato
-        if(showButtons){
+        if (showButtons) {
             holder.buttonApprova.setEnabled(true);
             holder.buttonApprova.setVisibility(View.VISIBLE);
             holder.buttonAnnulla.setEnabled(true);
             holder.buttonAnnulla.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.buttonApprova.setEnabled(false);
             holder.buttonApprova.setVisibility(View.GONE);
             holder.buttonAnnulla.setEnabled(false);
             holder.buttonAnnulla.setVisibility(View.GONE);
         }
 
-        holder.id = prevenditaPlus.getId();
-        holder.idEvento = prevenditaPlus.getIdEvento();
-        holder.idTipoPrevendita = prevenditaPlus.getIdTipoPrevendita();
-        holder.idCliente = prevenditaPlus.getIdCliente();
-        holder.referencePrevendita = prevenditaPlusWrapper;
-        holder.position = position;
-
     }
 
     @Override
     public int getItemCount() {
-        int size = datasetPrevendita.size();
+        int size = getDataset().size();
 
-        if(maxShownItems <= 0)
+        if (maxShownItems <= 0)
             return size;
         else
             return size < maxShownItems ? size : maxShownItems;

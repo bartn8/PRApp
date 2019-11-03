@@ -145,7 +145,7 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
     /**
      * Adattatore per far vedere nella recycler view le prevendite che si vogliono approvare.
      */
-    private WPrevenditaPlusAdapter recyclerAdapter = new WPrevenditaPlusAdapter(this, 1, true, false);//Imposto al massimo un elemento per volta.
+    private WPrevenditaPlusAdapter recyclerAdapter;
 
     private boolean isAutoApprovaOn = false;
 
@@ -385,6 +385,9 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
 
         //Mitico butterknife per fare il collegamento tra XML e oggetti.
         unbinder = ButterKnife.bind(this, view);
+
+        recyclerAdapter = new WPrevenditaPlusAdapter(1, true, false);//Imposto al massimo un elemento per volta.
+        recyclerAdapter.setButtonListener(this);
 
         //View model per richiamare il server.
         viewModel = ViewModelProviders.of(getActivity()).get(CassiereViewModel.class);

@@ -30,7 +30,7 @@ public class WStatisticheEvento implements  DatabaseWrapper, Twinned, JSONSerial
 
     public WStatisticheEvento getEmpty()
     {
-        return new WStatisticheEvento(0,0, "", 0,0.00f);
+        return new WStatisticheEvento(0,0, "", 0,0.00f,0,0);
     }
 
     @SerializedName("idEvento")
@@ -48,12 +48,20 @@ public class WStatisticheEvento implements  DatabaseWrapper, Twinned, JSONSerial
     @SerializedName("ricavo")
     private float ricavo;
 
-    public WStatisticheEvento(Integer idEvento, Integer idTipoPrevendita, String nomeTipoPrevendita, Integer prevenditeVendute, float ricavo) {
+    @SerializedName("prevenditeEntrate")
+    private Integer prevenditeEntrate;
+
+    @SerializedName("prevenditeNonEntrate")
+    private Integer prevenditeNonEntrate;
+
+    public WStatisticheEvento(Integer idEvento, Integer idTipoPrevendita, String nomeTipoPrevendita, Integer prevenditeVendute, float ricavo, Integer prevenditeEntrate, Integer prevenditeNonEntrate) {
         this.idEvento = idEvento;
         this.idTipoPrevendita = idTipoPrevendita;
         this.nomeTipoPrevendita = nomeTipoPrevendita;
         this.prevenditeVendute = prevenditeVendute;
         this.ricavo = ricavo;
+        this.prevenditeEntrate = prevenditeEntrate;
+        this.prevenditeNonEntrate = prevenditeNonEntrate;
     }
 
     public Integer getIdTipoPrevendita() {
@@ -74,6 +82,14 @@ public class WStatisticheEvento implements  DatabaseWrapper, Twinned, JSONSerial
 
     public Integer getIdEvento() {
         return idEvento;
+    }
+
+    public Integer getPrevenditeEntrate() {
+        return prevenditeEntrate;
+    }
+
+    public Integer getPrevenditeNonEntrate() {
+        return prevenditeNonEntrate;
     }
 
     @Override

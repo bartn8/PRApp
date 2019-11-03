@@ -19,7 +19,6 @@
 
 package com.prapp.ui.main.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,12 +43,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMembroAdapter.StatisticheMembroViewHolder> {
+public class StatisticheMembroAdapter extends AbstractAdapter<StatisticheMembroAdapter.StatisticheMembroWrapper, StatisticheMembroAdapter.StatisticheMembroViewHolder> {
 
     private static final String TAG = StatisticheMembroAdapter.class.getSimpleName();
     private static final NumberFormat LOCAL_CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
     private static final NumberFormat LOCAL_NUMBER_FORMAT = NumberFormat.getInstance();
-
 
     public class StatisticheMembroWrapper {
 
@@ -102,7 +100,7 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
 
         @Override
         public boolean equals(Object obj) {
-            if(!(obj instanceof StatisticheMembroWrapper))
+            if (!(obj instanceof StatisticheMembroWrapper))
                 return false;
 
             StatisticheMembroWrapper wrapper = (StatisticheMembroWrapper) obj;
@@ -110,12 +108,10 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
         }
     }
 
+    public class StatisticheMembroViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-
-    public class StatisticheMembroViewHolder extends RecyclerView.ViewHolder {
-
-        //private StatisticheMembroWrapper reference;
-        //private int position;
+        private StatisticheMembroWrapper reference;
+        private int position;
 
         @BindView(R.id.statistichemembro_list_item_nomeMembro)
         public TextView textViewNomeMembro;
@@ -143,75 +139,65 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
             ButterKnife.bind(this, itemView);
         }
 
-    }
-
-    private List<StatisticheMembroWrapper> dataset;
-    private Context parentContex;
-
-
-    public StatisticheMembroAdapter(List<WUtente> partialDataset)
-    {
-        List<StatisticheMembroWrapper> myList = new ArrayList<>();
-
-        for(WUtente utente : partialDataset)
-        {
-            myList.add(new StatisticheMembroWrapper(utente));
+        @Override
+        public void onClick(View view) {
+            onClickImpl(view, position, reference);
         }
 
-        this.dataset = myList;
+        @Override
+        public boolean onLongClick(View view) {
+            return onLongClickImpl(view, position, reference);
+        }
     }
 
     public StatisticheMembroAdapter() {
-        this.dataset = new ArrayList<>();
+        super();
     }
 
-    public void add(StatisticheMembroWrapper wrapper) {
-        dataset.add(wrapper);
+    public StatisticheMembroAdapter(List<StatisticheMembroWrapper> dataset) {
+        super(dataset);
+    }
+
+    public void addMembri(List<WUtente> membri){
+        for (WUtente membro: membri){
+            StatisticheMembroWrapper wrapper = new StatisticheMembroWrapper(membro);
+            add(wrapper, false);
+        }
+
+        restoreFilteredDataset();
         notifyDataSetChanged();
     }
 
-    public void addStatistichePR(Integer idUtente, List<WStatistichePREvento> stat){
-        for(StatisticheMembroWrapper wrapper : dataset)
-        {
-            if(wrapper.getMembro().getId().intValue() == idUtente.intValue())
-            {
+    public void addStatistichePR(Integer idUtente, List<WStatistichePREvento> stat) {
+        for (StatisticheMembroWrapper wrapper : getDataset()) {
+            if (wrapper.getMembro().getId().intValue() == idUtente.intValue()) {
                 wrapper.setStatistichePR(stat);
             }
         }
 
+        //Annulla qualsiasi filtro in corso.
+        restoreFilteredDataset();
         notifyDataSetChanged();
     }
 
-    public void addStatisticheCassiere(Integer idUtente, WStatisticheCassiereEvento stat){
-        for(StatisticheMembroWrapper wrapper : dataset)
-        {
-            if(wrapper.getMembro().getId().intValue() == idUtente.intValue())
-            {
+    public void addStatisticheCassiere(Integer idUtente, WStatisticheCassiereEvento stat) {
+        for (StatisticheMembroWrapper wrapper : getDataset()) {
+            if (wrapper.getMembro().getId().intValue() == idUtente.intValue()) {
                 wrapper.setStatisticheCassiere(stat);
             }
         }
 
+        //Annulla qualsiasi filtro in corso.
+        restoreFilteredDataset();
         notifyDataSetChanged();
-    }
-
-    public void remove(StatisticheMembroWrapper wrapper) {
-        dataset.remove(wrapper);
-        notifyDataSetChanged();
-    }
-
-    public StatisticheMembroWrapper remove(int position)
-    {
-        StatisticheMembroWrapper remove = dataset.remove(position);
-        notifyDataSetChanged();
-        return remove;
     }
 
     @NonNull
     @Override
     public StatisticheMembroViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        parentContex = parent.getContext();
+        setParentContex(parent.getContext());
 
-        LayoutInflater inflater = LayoutInflater.from(parentContex);
+        LayoutInflater inflater = LayoutInflater.from(getParentContex());
         View view = inflater.inflate(R.layout.statistichemembro_list_item, parent, false);
 
         return new StatisticheMembroViewHolder(view);
@@ -219,9 +205,11 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
 
     @Override
     public void onBindViewHolder(@NonNull StatisticheMembroViewHolder holder, int position) {
-        StatisticheMembroWrapper wrapper = dataset.get(position);
-
+        StatisticheMembroWrapper wrapper = getElement(position);
         WUtente membro = wrapper.getMembro();
+
+        holder.position = position;
+        holder.reference = wrapper;
 
         holder.textViewNomeMembro.setText(membro.getNome());
         holder.textViewCognomeMembro.setText(membro.getCognome());
@@ -231,14 +219,11 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
         //Bug Risolto:
         //Non c'era l'else: la view veniva riciclata e veniva lascita ciò che c'era prima.
         //https://stackoverflow.com/questions/42688223/recycler-view-showing-wrong-data-when-scrolled-fast-have-added-images-for-the-sa
-        if(statisticheCassiere != null)
-        {
+        if (statisticheCassiere != null) {
             holder.textViewLabelCassiere.setText(R.string.statistichemembro_list_item_label_cassiere);
             holder.textViewLabelEntrateCassiere.setText(R.string.statistichemembro_list_item_label_entrateCassiere);
             holder.textViewEntrateCassiere.setText(LOCAL_NUMBER_FORMAT.format(statisticheCassiere.getEntrate()));
-        }
-        else
-        {
+        } else {
             holder.textViewLabelCassiere.setText(R.string.empty_string);
             holder.textViewLabelEntrateCassiere.setText(R.string.empty_string);
             holder.textViewEntrateCassiere.setText(R.string.empty_string);
@@ -254,33 +239,22 @@ public class StatisticheMembroAdapter extends RecyclerView.Adapter<StatisticheMe
         holder.recyclerViewStatistichePR.setNestedScrollingEnabled(false);
         holder.recyclerViewStatistichePR.setHasFixedSize(true);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(parentContex, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getParentContex(), LinearLayoutManager.HORIZONTAL, false);
         holder.recyclerViewStatistichePR.setLayoutManager(linearLayoutManager);
 
-        if(statistichePR != null)
-        {
-            if(!statistichePR.isEmpty())
-            {
+        if (statistichePR != null) {
+            if (!statistichePR.isEmpty()) {
                 holder.textViewLabelPR.setText(R.string.statistichemembro_list_item_label_pr);
                 holder.recyclerViewStatistichePR.setAdapter(new StatistichePRAdapter(statistichePR));
-            }
-            else
-            {
+            } else {
                 holder.textViewLabelPR.setText(R.string.empty_string);
                 holder.recyclerViewStatistichePR.setAdapter(new StatistichePRAdapter(new ArrayList<>()));
             }
-        }
-        else
-        {
+        } else {
             holder.textViewLabelPR.setText(R.string.empty_string);
             holder.recyclerViewStatistichePR.setAdapter(new StatistichePRAdapter(new ArrayList<>()));
         }
 
-    }
-
-    @Override
-    public int getItemCount() {
-        return dataset.size();
     }
 
 }

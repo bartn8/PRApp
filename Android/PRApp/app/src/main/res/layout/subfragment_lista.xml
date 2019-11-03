@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ PRApp  Copyright (C) 2019  Luca Bartolomei
   ~
   ~ This file is part of PRApp.
@@ -18,14 +17,11 @@
   ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
-    tools:context=".ui.main.fragment.cassiere.CassiereSubFragmentLista">
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,8 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:cardBackgroundColor="@color/primaryColorGrey"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+            app:cardBackgroundColor="@color/primaryColorGrey">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,26 +41,24 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/subfragment_lista_cassiere_label"
+                    android:id="@+id/subfragment_lista_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/primaryTextColor"
+                    android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textAlignment="center"/>
+                    android:textColor="@color/primaryTextColor" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Qui ci sparo le prevendite. -->
-
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/subfragment_lista_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/subfragment_lista_cassiere_recyclerView"
             android:clipToPadding="false"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
