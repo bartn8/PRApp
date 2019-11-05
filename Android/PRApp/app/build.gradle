@@ -86,6 +86,11 @@ dependencies {
     implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
     implementation 'com.google.zxing:core:3.3.2'
 
+    //Selezione multipla nel recyclerview
+    implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
+
+    //Animazione di loading
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
     implementation 'org.jetbrains:annotations:13.0'
 }

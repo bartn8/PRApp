@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.ui.Result;
+import com.prapp.ui.utils.PopupUtil;
 import com.prapp.ui.utils.UiUtil;
 
 import java.util.List;
@@ -50,6 +51,8 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
     private WStaffAdapter.ItemClickListener itemClickListener = this;
 
     private UiUtil uiUtil;
+
+    private PopupUtil popupUtil;
 
     @BindView(R.id.selectStaffRecyclerView)
     public RecyclerView selectStaffRecyclerView;
@@ -77,6 +80,8 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
                 selectStaffRecyclerView.setAdapter(adapter);
             }
 
+            popupUtil.hideLoadingPopup();
+
         }
     };
 
@@ -89,7 +94,8 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
 
         ButterKnife.bind(this);
 
-        uiUtil = new UiUtil(getApplicationContext());
+        uiUtil = new UiUtil(this);
+        popupUtil = new PopupUtil(this);
 
         Intent intent = getIntent();
         searchPreferences = intent.getBooleanExtra(SEARCH_PREFERENCES_MESSAGE, false);
@@ -109,10 +115,12 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
                 setResult(RESULT_OK);
                 finish();
             } else {
+                popupUtil.showLoadingPopup();
                 //Carico gli staff e procedo normalmente
                 selectStaffViewModel.getStaffMembri();
             }
         } else {
+            popupUtil.showLoadingPopup();
             //Carico gli staff e procedo normalmente
             selectStaffViewModel.getStaffMembri();
         }

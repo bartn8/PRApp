@@ -186,6 +186,9 @@
     <string name="fragment_utente_descrizioneEvento">Descrizione</string>
     <string name="fragment_utente_periodoEvento">Periodo</string>
 
+    <string name="fragment_utente_periodoEvento_placeholder">
+        <xliff:g example="01/01/01" id="inizio">%1$s</xliff:g> - <xliff:g example="01/01/01" id="fine">%2$s</xliff:g>
+    </string>
 
     <!-- FRAGMENT MEMBRO -->
     <string name="fragment_membro_title_membri">Membri dello Staff</string>
@@ -225,6 +228,9 @@
 
     <!-- MENU Toolbar Prevendita -->
     <string name="fragment_pr_prevendita_menu_searchItem">Cerca</string>
+
+    <!-- Contexual MENU Prevendita -->
+    <string name="fragment_pr_selection_prevendita_menu_editItem">Modifica</string>
 
     <!-- CardView Seleziona Tipo Prevendita -->
     <string name="fragment_pr_tipoPrevendita_label">Tipo Prevendita:</string>

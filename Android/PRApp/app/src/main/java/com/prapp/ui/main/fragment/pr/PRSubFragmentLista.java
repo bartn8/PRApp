@@ -19,24 +19,27 @@
 
 package com.prapp.ui.main.fragment.pr;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.Selection;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StableIdKeyProvider;
+import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,13 +51,13 @@ import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.adapter.WPrevenditaPlusAdapter;
 import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.utils.ItemClickListener;
+import com.prapp.ui.utils.PopupUtil;
 import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import be.digitalia.common.widgets.MultiChoiceHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -66,7 +69,6 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
      *
      * @return A new instance of fragment PRSubFragmentLista.
      */
@@ -101,6 +103,13 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
      */
     private UiUtil uiUtil;
 
+    private PopupUtil popupUtil;
+
+    /**
+     * Usato per tracciare la multi-selezione
+     */
+    private SelectionTracker<Long> tracker;
+
     /**
      * Interfaccia usata per comunicare con l'activity madre.
      */
@@ -109,20 +118,16 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
     /**
      * Adattatore per far vedere nella recycler view le prevendite che si vogliono approvare.
      */
-    private WPrevenditaPlusAdapter recyclerAdapter = new WPrevenditaPlusAdapter();//Imposto al massimo un elemento per volta.
+    private WPrevenditaPlusAdapter recyclerAdapter;
 
-    /**
-     * Usato per la selezione multipla.
-     */
-    private MultiChoiceHelper multiChoiceHelper;
 
     @Override
-    public void holdInterface(MainActivityInterface mainActivityInterface){
+    public void holdInterface(MainActivityInterface mainActivityInterface) {
         this.mainActivityInterface = mainActivityInterface;
     }
 
     @Override
-    public boolean isInterfaceSet(){
+    public boolean isInterfaceSet() {
         return this.mainActivityInterface != null;
     }
 
@@ -150,13 +155,15 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
                 uiUtil.showError(error);
 
             else if (success != null) {
-                if(success.isEmpty()){
+                if (success.isEmpty()) {
                     uiUtil.makeToast(R.string.subfragment_lista_cassiere_lista_vuota_toast);
-                }else{
+                } else {
                     //Applico al recycler view i dati.
                     recyclerAdapter.add(success);
                 }
             }
+
+            popupUtil.hideLoadingPopup();
         }
     };
 
@@ -198,13 +205,6 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
 
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        uiUtil = new UiUtil(context);
-    }
-
-
-    @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -213,42 +213,96 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
         //Mitico butterknife per fare il collegamento tra XML e oggetti.
         unbinder = ButterKnife.bind(this, view);
 
+        uiUtil = new UiUtil(getActivity());
+        popupUtil = new PopupUtil(getActivity());
+
+        recyclerAdapter = new WPrevenditaPlusAdapter();//Imposto al massimo un elemento per volta.
         recyclerAdapter.setClickListener(this);
-
-        //Imposto l'helper
-        multiChoiceHelper = new MultiChoiceHelper((AppCompatActivity) getActivity(), recyclerAdapter);
-        multiChoiceHelper.setMultiChoiceModeListener(new MultiChoiceHelper.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                return false;
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-
-            }
-        });
 
         //Imposto il recyler view. Quello che fa vedere le prevendite.
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(recyclerAdapter);
+
+        //Roba per multi selezione
+        SelectionTracker.Builder<Long> builder = new SelectionTracker.Builder<Long>("mySelection", recyclerView, new StableIdKeyProvider(recyclerView), new ItemDetailsLookup<Long>() {
+            @Nullable
+            @Override
+            public ItemDetails<Long> getItemDetails(@NonNull MotionEvent e) {
+                View childViewUnder = recyclerView.findChildViewUnder(e.getX(), e.getY());
+
+                if (childViewUnder != null) {
+                    return ((WPrevenditaPlusAdapter.WPrevenditaPlusViewHolder) recyclerView.getChildViewHolder(childViewUnder)).getItemDetails();
+                }
+                return null;
+            }
+        }, StorageStrategy.createLongStorage());
+
+        tracker = builder.build();
+
+        tracker.addObserver(new SelectionTracker.SelectionObserver() {
+
+            private ActionMode actionMode;
+
+            @Override
+            public void onSelectionRestored() {
+                super.onSelectionRestored();
+                actionMode.finish();
+                actionMode = null;
+            }
+
+            @Override
+            public void onSelectionChanged() {
+                super.onSelectionChanged();
+                Selection<Long> selection = tracker.getSelection();
+
+                if(!selection.isEmpty()){
+                    if(actionMode == null){
+                        actionMode = getActivity().startActionMode(new ActionMode.Callback() {
+                            @Override
+                            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                                MenuInflater inflater = actionMode.getMenuInflater();
+                                inflater.inflate(R.menu.pr_selection_prevendita_menu, menu);
+
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                                if(menuItem.getItemId() == R.id.fragment_pr_selection_prevendita_menu_editItem){
+                                    //Faccio aprire il contesto di modifica
+                                    uiUtil.makeToast("Modifica");
+                                    tracker.clearSelection();
+                                    actionMode.finish();
+                                    return true;
+                                }
+                                return false;
+                            }
+
+                            @Override
+                            public void onDestroyActionMode(ActionMode mode) {
+                                //Devo annullare la selezione
+                                tracker.clearSelection();
+                                actionMode = null;
+                            }
+                        });
+                    }
+                }else{
+                    //Se selezione vuota faccio il finish dell'action mode
+                    if(actionMode != null)
+                        actionMode.finish();
+                }
+            }
+        });
+
+
+        recyclerAdapter.setTracker(tracker);
 
         //View model per richiamare il server.
         viewModel = ViewModelProviders.of(getActivity()).get(PRViewModel.class);
@@ -256,6 +310,8 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
 
         label.setText(R.string.subfragment_lista_pr_listaPrevendite_label);
         viewModel.getListaPrevenditeEvento();
+
+        popupUtil.showLoadingPopup();
 
         return view;
     }
@@ -269,29 +325,12 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Parcelable parcelable = multiChoiceHelper.onSaveInstanceState();
-        outState.putParcelable(MULTI_CHOICE_KEY, parcelable);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if(savedInstanceState != null){
-            Parcelable parcelable = savedInstanceState.getParcelable(MULTI_CHOICE_KEY);
-            multiChoiceHelper.onRestoreInstanceState(parcelable);
-        }
-    }
-
-    @Override
     public void onItemClick(int id, WPrevenditaPlusAdapter.WPrevenditaPlusWrapper obj) {
 
     }
 
     @Override
     public void onItemLongClick(int pos, WPrevenditaPlusAdapter.WPrevenditaPlusWrapper obj) {
-        multiChoiceHelper.toggleItemChecked(pos, true);
+
     }
 }

@@ -20,7 +20,6 @@
 package com.prapp.ui.login;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.KeyEvent;
@@ -28,7 +27,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +36,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
+import com.prapp.ui.utils.PopupUtil;
+import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -50,6 +50,9 @@ import butterknife.OnEditorAction;
 import butterknife.OnTextChanged;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private PopupUtil popupUtil;
+    private UiUtil uiUtil;
 
     private LoginViewModel loginViewModel;
 
@@ -81,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    private Observer<Result<WUtente,Void>> loginResultObserver = loginResult -> {
+    private Observer<Result<WUtente, Void>> loginResultObserver = loginResult -> {
         if (loginResult == null) {
             return;
         }
@@ -93,6 +96,8 @@ public class LoginActivity extends AppCompatActivity {
         if (loginResult.getSuccess() != null) {
             showLoginSuccess(loginResult.getSuccess());
         }
+
+        popupUtil.hideLoadingPopup();
 
         //Ritorna allo splash
         setResult(Activity.RESULT_OK);
@@ -107,6 +112,9 @@ public class LoginActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        popupUtil = new PopupUtil(this);
+        uiUtil = new UiUtil(this);
+
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory()).get(LoginViewModel.class);
 
         //Quando si aggiorna lo stato del form si esegue sta roba
@@ -119,33 +127,32 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginSuccess(@NotNull WUtente model) {
         String welcome = getString(R.string.welcome, model.getNome());
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        uiUtil.makeToast(welcome);
     }
 
     private void showLoginFailed(@NotNull List<Exception> exceptionList) {
-        Context applicationContext = getApplicationContext();
-        for(Exception exception : exceptionList)
-            Toast.makeText(applicationContext, exception.getMessage(), Toast.LENGTH_SHORT).show();
+        uiUtil.showError(exceptionList);
     }
 
     @OnTextChanged(value = {R.id.username, R.id.password}, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    public void onTextChanged(Editable s)
-    {
+    public void onTextChanged(Editable s) {
         loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
                 passwordEditText.getText().toString());
     }
 
     @OnClick(R.id.login)
-    public void buttonClick(Button view)
-    {
+    public void buttonClick(Button view) {
+        popupUtil.showLoadingPopup();
+
         loginViewModel.login(usernameEditText.getText().toString(),
                 passwordEditText.getText().toString());
     }
 
     @OnEditorAction(R.id.password)
-    public boolean onEditorActionPassword(TextView v, int actionId, KeyEvent event)
-    {
+    public boolean onEditorActionPassword(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
+            popupUtil.showLoadingPopup();
+
             loginViewModel.login(usernameEditText.getText().toString(),
                     passwordEditText.getText().toString());
         }

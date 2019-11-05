@@ -27,6 +27,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prapp.R;
@@ -41,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+//https://github.com/marcosholgado/multiselection/blob/master/app/src/main/java/com/marcosholgado/multiselection/MainAdapter.kt
 public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapter.WPrevenditaPlusWrapper, WPrevenditaPlusAdapter.WPrevenditaPlusViewHolder> {
 
     private static final String TAG = WPrevenditaPlusAdapter.class.getSimpleName();
@@ -170,6 +173,86 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
         public boolean onLongClick(View view) {
             return onLongClickImpl(view, position, reference);
         }
+
+        public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
+            return new ItemDetailsLookup.ItemDetails<Long>() {
+                @Override
+                public int getPosition() {
+                    return position;
+                }
+
+                @Nullable
+                @Override
+                public Long getSelectionKey() {
+                    return (long) reference.getData().getId();
+                }
+            };
+        }
+
+        void bind(WPrevenditaPlusWrapper reference, int position, boolean isActivated) {
+            this.reference = reference;
+            this.position = position;
+            itemView.setActivated(isActivated);
+
+            WPrevenditaPlusViewHolder holder = this;
+            WPrevenditaPlusWrapper prevenditaPlusWrapper = reference;
+            WPrevenditaPlus prevenditaPlus = prevenditaPlusWrapper.getData();
+
+            holder.textViewNomeEventoLabel.setText(R.string.wprevendita_plus_list_item_nomeEvento_label);
+            holder.textViewNomeEvento.setText(prevenditaPlus.getNomeEvento());
+
+            holder.textViewNomePRLabel.setText(R.string.wprevendita_plus_list_item_nomePR_label);
+            String nomePR = getParentContex().getString(R.string.wprevendita_plus_list_item_nomePR_formatted, prevenditaPlus.getNomePR(), prevenditaPlus.getCognomePR());
+            holder.textViewNomePR.setText(nomePR);
+
+            if (prevenditaPlus.getNomeCliente() == null || prevenditaPlus.getCognomeCliente() == null) {
+                holder.textViewNomeClienteLabel.setText(R.string.wprevendita_plus_list_item_nomeCliente_label);
+                holder.textViewNomeCliente.setText(R.string.wprevendita_plus_list_item_nomeCliente);
+            } else {
+                holder.textViewNomeClienteLabel.setText(R.string.wprevendita_plus_list_item_nomeCliente_label);
+                String nomeCliente = getParentContex().getString(R.string.wprevendita_plus_list_item_nomeCliente_formatted, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente());
+                holder.textViewNomeCliente.setText(nomeCliente);
+            }
+
+
+            holder.textViewNomeTipoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_nomeTipoPrevendita_label);
+            holder.textViewNomeTipoPrevendita.setText(prevenditaPlus.getNomeTipoPrevendita());
+
+            holder.textViewPrezzoTipoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_prezzoTipoPrevendita_label);
+            holder.textViewPrezzoTipoPrevendita.setText(LOCAL_CURRENCY_FORMAT.format(prevenditaPlus.getPrezzoTipoPrevendita()));
+
+            holder.textViewStatoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_statoPrevendita_label);
+            holder.textViewStatoPrevendita.setText(prevenditaPlus.getStato().getNome());
+
+            if (showError) {
+                holder.textViewErroreLabel.setVisibility(View.VISIBLE);
+                holder.textViewErrore.setVisibility(View.VISIBLE);
+
+                if (prevenditaPlusWrapper.isErroreSet()) {
+                    holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
+                    holder.textViewErrore.setText(prevenditaPlusWrapper.getErrore());
+                } else {
+                    holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
+                    holder.textViewErrore.setText(R.string.wprevendita_plus_list_item_errore);
+                }
+            } else {
+                holder.textViewErroreLabel.setVisibility(View.GONE);
+                holder.textViewErrore.setVisibility(View.GONE);
+            }
+
+            //Mostro i pulsanti solo se showButton abilitato
+            if (showButtons) {
+                holder.buttonApprova.setEnabled(true);
+                holder.buttonApprova.setVisibility(View.VISIBLE);
+                holder.buttonAnnulla.setEnabled(true);
+                holder.buttonAnnulla.setVisibility(View.VISIBLE);
+            } else {
+                holder.buttonApprova.setEnabled(false);
+                holder.buttonApprova.setVisibility(View.GONE);
+                holder.buttonAnnulla.setEnabled(false);
+                holder.buttonAnnulla.setVisibility(View.GONE);
+            }
+        }
     }
 
     /*
@@ -186,6 +269,8 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
     //Indica se mostrare l'errore.
     private boolean showError;
 
+    private SelectionTracker<Long> tracker;
+
     public WPrevenditaPlusAdapter() {
         this(-1, false, false);
     }
@@ -195,6 +280,19 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
         this.maxShownItems = maxShownItems;
         this.showButtons = showButtons;
         this.showError = showError;
+
+        setHasStableIds(true);
+    }
+
+    public void setTracker(SelectionTracker<Long> tracker) {
+        this.tracker = tracker;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        WPrevenditaPlusWrapper element = getElement(position);
+        long id = (long) element.getData().getId();
+        return id;
     }
 
     public void setButtonListener(@NotNull ButtonListener buttonListener) {
@@ -237,64 +335,10 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
         WPrevenditaPlusWrapper prevenditaPlusWrapper = getElement(position);
         WPrevenditaPlus prevenditaPlus = prevenditaPlusWrapper.getData();
 
-        holder.reference = prevenditaPlusWrapper;
-        holder.position = position;
+        if (tracker != null) {
 
-        holder.textViewNomeEventoLabel.setText(R.string.wprevendita_plus_list_item_nomeEvento_label);
-        holder.textViewNomeEvento.setText(prevenditaPlus.getNomeEvento());
-
-        holder.textViewNomePRLabel.setText(R.string.wprevendita_plus_list_item_nomePR_label);
-        String nomePR = getParentContex().getString(R.string.wprevendita_plus_list_item_nomePR_formatted, prevenditaPlus.getNomePR(), prevenditaPlus.getCognomePR());
-        holder.textViewNomePR.setText(nomePR);
-
-        if (prevenditaPlus.getNomeCliente() == null || prevenditaPlus.getCognomeCliente() == null) {
-            holder.textViewNomeClienteLabel.setText(R.string.wprevendita_plus_list_item_nomeCliente_label);
-            holder.textViewNomeCliente.setText(R.string.wprevendita_plus_list_item_nomeCliente);
-        } else {
-            holder.textViewNomeClienteLabel.setText(R.string.wprevendita_plus_list_item_nomeCliente_label);
-            String nomeCliente = getParentContex().getString(R.string.wprevendita_plus_list_item_nomeCliente_formatted, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente());
-            holder.textViewNomeCliente.setText(nomeCliente);
         }
-
-
-        holder.textViewNomeTipoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_nomeTipoPrevendita_label);
-        holder.textViewNomeTipoPrevendita.setText(prevenditaPlus.getNomeTipoPrevendita());
-
-        holder.textViewPrezzoTipoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_prezzoTipoPrevendita_label);
-        holder.textViewPrezzoTipoPrevendita.setText(LOCAL_CURRENCY_FORMAT.format(prevenditaPlus.getPrezzoTipoPrevendita()));
-
-        holder.textViewStatoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_statoPrevendita_label);
-        holder.textViewStatoPrevendita.setText(prevenditaPlus.getStato().getNome());
-
-        if (showError) {
-            holder.textViewErroreLabel.setVisibility(View.VISIBLE);
-            holder.textViewErrore.setVisibility(View.VISIBLE);
-
-            if (prevenditaPlusWrapper.isErroreSet()) {
-                holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
-                holder.textViewErrore.setText(prevenditaPlusWrapper.getErrore());
-            } else {
-                holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
-                holder.textViewErrore.setText(R.string.wprevendita_plus_list_item_errore);
-            }
-        } else {
-            holder.textViewErroreLabel.setVisibility(View.GONE);
-            holder.textViewErrore.setVisibility(View.GONE);
-        }
-
-        //Mostro i pulsanti solo se showButton abilitato
-        if (showButtons) {
-            holder.buttonApprova.setEnabled(true);
-            holder.buttonApprova.setVisibility(View.VISIBLE);
-            holder.buttonAnnulla.setEnabled(true);
-            holder.buttonAnnulla.setVisibility(View.VISIBLE);
-        } else {
-            holder.buttonApprova.setEnabled(false);
-            holder.buttonApprova.setVisibility(View.GONE);
-            holder.buttonAnnulla.setEnabled(false);
-            holder.buttonAnnulla.setVisibility(View.GONE);
-        }
-
+        holder.bind(prevenditaPlusWrapper, position, tracker != null && tracker.isSelected((long) prevenditaPlus.getId()));
     }
 
     @Override

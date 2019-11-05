@@ -525,7 +525,6 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
     public void onEntrataManualeClick() {
         try{
             Integer idPrevendita = Integer.parseInt(editTextIdPrevendita.getText().toString());
-            //Integer idEvento = Integer.parseInt(editTextIdEvento.getText().toString());
             Integer idEvento = viewModel.getEvento().getId();
             String codice = editTextCodice.getText().toString();
 

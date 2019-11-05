@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.gurutouchlabs.kenneth.elegantdialog.ElegantActionListeners;
 import com.gurutouchlabs.kenneth.elegantdialog.ElegantDialog;
 import com.prapp.R;
@@ -44,10 +45,40 @@ public class PopupUtil {
 
     private Context context;
     private Dialog popup;
+    private Dialog popupLoading;
+    private boolean isPopupLoadingShowing = false;
 
     public PopupUtil(Context context) {
         this.context = context;
         this.popup = new Dialog(context);
+        this.popupLoading = new Dialog(context);
+    }
+
+    public void showLoadingPopup(){
+        if(!isPopupLoadingShowing){
+            popupLoading.setContentView(R.layout.loading_popup);
+
+            SpinKitView view = popupLoading.findViewById(R.id.loading_popup_view);
+
+            //Non fare nulla.
+            view.setOnClickListener((v)->{});
+
+            //Non può eliminarsi.
+            popupLoading.setCancelable(false);
+
+            //Mostro il popup
+            popupLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            popupLoading.show();
+
+            isPopupLoadingShowing = true;
+        }
+    }
+
+    public void hideLoadingPopup(){
+        if (isPopupLoadingShowing){
+            popupLoading.dismiss();
+            isPopupLoadingShowing = false;
+        }
     }
 
     //https://www.awsrh.com/2017/10/custom-pop-up-window-with-android-studio.html

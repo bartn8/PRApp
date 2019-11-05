@@ -20,7 +20,6 @@
 package com.prapp.ui.main.fragment.utente;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -46,6 +44,8 @@ import com.prapp.ui.Result;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.start.SplashActivity;
 import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.PopupUtil;
+import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.format.DateTimeFormat;
@@ -71,6 +71,9 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
 
     private UtenteViewModel viewModel;
     private Unbinder unbinder;
+
+    private UiUtil uiUtil;
+    private PopupUtil popupUtil;
 
     /**
      * Interfaccia usata per comunicare con l'activity madre.
@@ -114,45 +117,34 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
     @BindView(R.id.fragment_utente_logout)
     Button buttonLogout;
 
-    private Observer<Result<Void, Void>> logoutResultObserver = new Observer<Result<Void, Void>>() {
+    private Observer<Result<Void, Void>> logoutResultObserver = logoutResult -> {
+        if (logoutResult == null) {
+            return;
+        }
 
-        @Override
-        public void onChanged(Result<Void, Void> logoutResult) {
-            if (logoutResult == null) {
-                return;
-            }
+        Integer integerError = logoutResult.getIntegerError();
+        List<Exception> error = logoutResult.getError();
 
-            Integer integerError = logoutResult.getIntegerError();
-            List<Exception> error = logoutResult.getError();
+        if (integerError != null)
+            showError(integerError);
 
-            if (integerError != null)
-                showError(integerError);
+        else if (error != null)
+            showError(error);
+        else {
+            //Logout effettuato: devo ritornare allo splash.
+            startActivity(new Intent(getActivity(), SplashActivity.class));
 
-            else if (error != null)
-                showError(error);
-
-            else {
-                //Logout effettuato: devo ritornare allo splash.
-                startActivity(new Intent(getActivity(), SplashActivity.class));
-                getActivity().setResult(RESULT_OK);
-                getActivity().finish();
-            }
+            getActivity().setResult(RESULT_OK);
+            getActivity().finish();
         }
     };
 
     private void showError(@NotNull List<Exception> exceptionList) {
-        for (Exception exception : exceptionList)
-            makeToast(exception.getMessage());
+        uiUtil.showError(exceptionList);
     }
 
     private void showError(@NotNull Integer integerError) {
-        Resources resources = getResources();
-        String text = resources.getString(integerError);
-        makeToast(text);
-    }
-
-    private void makeToast(String text) {
-        Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+        uiUtil.showError(integerError);
     }
 
     public UtenteFragment() {
@@ -204,6 +196,9 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
         View view = inflater.inflate(R.layout.fragment_utente, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        uiUtil = new UiUtil(getActivity());
+        popupUtil = new PopupUtil(getActivity());
+
         viewModel = ViewModelProviders.of(getActivity()).get(UtenteViewModel.class);
         viewModel.getLogoutResult().observe(this, logoutResultObserver);
 
@@ -226,7 +221,7 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
                 WEvento evento = viewModel.getEvento();
                 textViewNomeEvento.setText(evento.getNome());
                 textViewDescrizioneEvento.setText(evento.getDescrizione());
-                textViewPeriodoEvento.setText(evento.getInizio().toString(DATE_FORMATTER) + " - " + evento.getFine().toString(DATE_FORMATTER));
+                textViewPeriodoEvento.setText(getString(R.string.fragment_utente_periodoEvento_placeholder, evento.getInizio().toString(DATE_FORMATTER), evento.getFine().toString(DATE_FORMATTER)));
             }
         }
 

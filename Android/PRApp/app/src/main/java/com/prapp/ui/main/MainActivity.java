@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     public static final int ID_FRAGMENT_AMMINISTRATORE = 4;
 
 
-
     private MainViewModel mainViewModel;
 
     private Set<Diritto> diritti;
@@ -199,6 +198,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         //Inizializzo i fragment
         amminisratoreFragment.holdInterface(this);
+        utenteFragment.holdInterface(this);
+        membroFragment.holdInterface(this);
+        prFragment.holdInterface(this);
+        cassiereFragment.holdInterface(this);
 
         //Inizializzo il view model e applico gli observer.
         mainViewModel = ViewModelProviders.of(this, new MainViewModelFactory()).get(MainViewModel.class);
@@ -231,12 +234,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navView.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
-
-        utenteFragment.holdInterface(this);
-        membroFragment.holdInterface(this);
-        prFragment.holdInterface(this);
-        cassiereFragment.holdInterface(this);
-        amminisratoreFragment.holdInterface(this);
 
     }
 

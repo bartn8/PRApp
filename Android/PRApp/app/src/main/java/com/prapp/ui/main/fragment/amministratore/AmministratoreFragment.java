@@ -20,7 +20,6 @@
 package com.prapp.ui.main.fragment.amministratore;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +45,7 @@ import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.adapter.StatisticheMembroAdapter;
 import com.prapp.ui.main.adapter.WStatisticheEventoAdapter;
 import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.PopupUtil;
 import com.prapp.ui.utils.UiUtil;
 
 import org.joda.time.format.DateTimeFormat;
@@ -70,6 +70,7 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
 
     private AmministratoreViewModel viewModel;
     private UiUtil uiUtil;
+    private PopupUtil popupUtil;
     private Unbinder unbinder;
 
     /**
@@ -152,6 +153,8 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
                     viewModel.getStatistichePREvento(membro.getId());
                 }
             }
+
+            popupUtil.hideLoadingPopup();
         }
     };
 
@@ -226,9 +229,6 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         setHasOptionsMenu(true);    //Opzione menu
     }
 
@@ -252,18 +252,15 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
     //--------------------------------------------------------------------------------------
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        uiUtil = new UiUtil(context);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_amministratore, container, false);
 
         unbinder = ButterKnife.bind(this, view);
+
+        uiUtil = new UiUtil(getActivity());
+        popupUtil = new PopupUtil(getActivity());
 
         //Imposto il recyler view. Quello che fa vedere le entrate.
         statisticheMembriRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -283,6 +280,8 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
 
         viewModel.getStatisticheAmministratoreEvento();
         viewModel.getMembriStaff();
+
+        popupUtil.showLoadingPopup();
 
         return view;
     }

@@ -19,7 +19,6 @@
 
 package com.prapp.ui.main.fragment.cassiere;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +43,7 @@ import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.adapter.WPrevenditaPlusAdapter;
 import com.prapp.ui.utils.InterfaceHolder;
 import com.prapp.ui.utils.ItemClickListener;
+import com.prapp.ui.utils.PopupUtil;
 import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -101,6 +101,8 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
      */
     private UiUtil uiUtil;
 
+    private PopupUtil popupUtil;
+
     /**
      * Interfaccia usata per comunicare con l'activity madre.
      */
@@ -152,6 +154,8 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
                     recyclerAdapter.add(success);
                 }
             }
+
+            popupUtil.hideLoadingPopup();
         }
     };
 
@@ -189,15 +193,19 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         switch (item.getItemId()) {
             case R.id.cassiere_scansionaItem:
                 //Ritorno al fragment cassiere.
-                mainActivityInterface.cambiaFragment(mainActivityInterface.getNavFragment(MainActivity.ID_FRAGMENT_CASSIERE));
+                if(isInterfaceSet())
+                    mainActivityInterface.cambiaFragment(mainActivityInterface.getNavFragment(MainActivity.ID_FRAGMENT_CASSIERE));
                 return true;
             case R.id.cassiere_genteEntrataItem:
                 //Non è il mio campo
                 if(mode == MODE_LIST_TIMBRATE) return super.onOptionsItemSelected(item);
 
                 //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite approvate.
-                mainActivityInterface.cambiaFragment(CassiereSubFragmentLista.newInstance(MODE_LIST_TIMBRATE));
-
+                if(isInterfaceSet()){
+                    CassiereSubFragmentLista cassiereSubFragmentLista = CassiereSubFragmentLista.newInstance(MODE_LIST_TIMBRATE);
+                    cassiereSubFragmentLista.holdInterface(mainActivityInterface);
+                    mainActivityInterface.cambiaFragment(cassiereSubFragmentLista);
+                }
 
                 return true;
             case R.id.cassiere_genteNonEntrataItem:
@@ -205,7 +213,11 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
                 if(mode == MODE_LIST_NON_TIMBRATE) return super.onOptionsItemSelected(item);
 
                 //Istanzio un nuovo fragment lista e lo inizializzo per le prevendite non approvate.
-                mainActivityInterface.cambiaFragment(CassiereSubFragmentLista.newInstance(MODE_LIST_NON_TIMBRATE));
+                if(isInterfaceSet()){
+                    CassiereSubFragmentLista cassiereSubFragmentLista = CassiereSubFragmentLista.newInstance(MODE_LIST_NON_TIMBRATE);
+                    cassiereSubFragmentLista.holdInterface(mainActivityInterface);
+                    mainActivityInterface.cambiaFragment(cassiereSubFragmentLista);
+                }
 
                 return true;
             case R.id.cassiere_statisticheEventoItem:
@@ -218,14 +230,6 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
 
     //----------------------------------------------------------------------------------
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        uiUtil = new UiUtil(context);
-    }
-
-
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -235,12 +239,15 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         //Mitico butterknife per fare il collegamento tra XML e oggetti.
         unbinder = ButterKnife.bind(this, view);
 
-        recyclerAdapter = new WPrevenditaPlusAdapter();//Imposto al massimo un elemento per volta.
+        uiUtil = new UiUtil(getActivity());
+        popupUtil = new PopupUtil(getActivity());
+
+        recyclerAdapter = new WPrevenditaPlusAdapter();
         recyclerAdapter.setClickListener(this);
 
         //Imposto il recyler view. Quello che fa vedere le prevendite.
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setAdapter(recyclerAdapter);
 
@@ -252,10 +259,12 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
         if(mode == MODE_LIST_TIMBRATE){
             label.setText(R.string.subfragment_lista_cassiere_listaTimbrate_label);
             viewModel.getListaPrevenditeTimbrateEvento();
+            popupUtil.showLoadingPopup();
         }
         else if (mode == MODE_LIST_NON_TIMBRATE){
             label.setText(R.string.subfragment_lista_cassiere_listaNonTimbrate_label);
             viewModel.getListaPrevenditeNonTimbrateEvento();
+            popupUtil.showLoadingPopup();
         }
 
 

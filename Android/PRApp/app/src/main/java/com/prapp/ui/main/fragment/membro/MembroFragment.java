@@ -20,7 +20,6 @@
 package com.prapp.ui.main.fragment.membro;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,6 +41,7 @@ import com.prapp.ui.Result;
 import com.prapp.ui.main.MainActivityInterface;
 import com.prapp.ui.main.adapter.WUtenteAdapter;
 import com.prapp.ui.utils.InterfaceHolder;
+import com.prapp.ui.utils.PopupUtil;
 import com.prapp.ui.utils.UiUtil;
 
 import java.util.List;
@@ -70,6 +70,7 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
 
     private MembroViewModel viewModel;
     private UiUtil uiUtil;
+    private PopupUtil popupUtil;
     private Unbinder unbinder;
 
     /**
@@ -111,6 +112,8 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
                 WUtenteAdapter myAdapter = new WUtenteAdapter(success);
                 membriRecyclerView.setAdapter(myAdapter);
             }
+
+            popupUtil.hideLoadingPopup();
         }
     };
 
@@ -145,12 +148,6 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
     //--------------------------------------------------------------------------------------
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        uiUtil = new UiUtil(context);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -158,12 +155,18 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
 
         unbinder = ButterKnife.bind(this, view);
 
+        uiUtil = new UiUtil(getActivity());
+        popupUtil = new PopupUtil(getActivity());
+
         membriRecyclerView.setHasFixedSize(true);
         membriRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         viewModel = ViewModelProviders.of(getActivity()).get(MembroViewModel.class);
         viewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
         viewModel.getMembriStaff();
+
+        popupUtil.showLoadingPopup();
+
         return view;
     }
 

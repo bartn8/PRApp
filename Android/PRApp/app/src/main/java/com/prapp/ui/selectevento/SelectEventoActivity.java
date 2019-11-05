@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.prapp.R;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.ui.Result;
+import com.prapp.ui.utils.PopupUtil;
 import com.prapp.ui.utils.UiUtil;
 
 import java.util.List;
@@ -50,6 +51,7 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
     private WEventoAdapter.ItemClickListener itemClickListener = this;
 
     private UiUtil uiUtil;
+    private PopupUtil popupUtil;
 
     @BindView(R.id.selectEventoRecyclerView)
     public RecyclerView selectEventoRecyclerView;
@@ -77,6 +79,8 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
                 selectEventoRecyclerView.setAdapter(adapter);
             }
 
+            popupUtil.hideLoadingPopup();
+
         }
     };
 
@@ -88,7 +92,9 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
 
         ButterKnife.bind(this);
 
-        uiUtil = new UiUtil(getApplicationContext());
+        uiUtil = new UiUtil(this);
+        popupUtil = new PopupUtil(this);
+
 
         Intent intent = getIntent();
         searchPreferences = intent.getBooleanExtra(SEARCH_PREFERENCES_MESSAGE, false);
@@ -108,10 +114,12 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
                 setResult(RESULT_OK);
                 finish();
             } else {
+                popupUtil.showLoadingPopup();
                 //Carico gli staff e procedo normalmente
                 selectEventoViewModel.getEventiStaff();
             }
         } else {
+            popupUtil.showLoadingPopup();
             //Carico gli staff e procedo normalmente
             selectEventoViewModel.getEventiStaff();
         }

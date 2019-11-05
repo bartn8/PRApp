@@ -18,8 +18,13 @@
   ~     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:color="@color/primaryLightColor" android:state_activated="true" />
-    <item android:color="@color/primaryColorGrey" />
-</selector>
+    <item
+        android:id="@+id/fragment_pr_selection_prevendita_menu_editItem"
+        android:icon="@drawable/ic_edit_dark"
+        app:showAsAction="ifRoom"
+        android:title="@string/fragment_pr_prevendita_menu_searchItem"/>
+
+</menu>
