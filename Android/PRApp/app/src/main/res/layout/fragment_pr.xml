@@ -22,7 +22,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.fragment.pr.PRFragment">
+    tools:context=".ui.activity.main.fragment.pr.PRFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

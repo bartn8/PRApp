@@ -56,15 +56,15 @@
         </provider>
 
         <activity
-            android:name=".ui.selectstaff.SelectStaffActivity"
+            android:name=".ui.activity.selectstaff.SelectStaffActivity"
             android:label="@string/select_staff_title" />
 
         <activity
-            android:name=".ui.selectevento.SelectEventoActivity"
+            android:name=".ui.activity.selectevento.SelectEventoActivity"
             android:label="@string/select_evento_title" />
 
         <activity
-            android:name=".ui.start.SplashActivity"
+            android:name=".ui.activity.start.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,10 +73,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.activity.login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.activity.main.MainActivity"
             android:label="@string/title_activity_main">
 
             <intent-filter>

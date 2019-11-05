@@ -25,7 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
-    tools:context=".ui.main.fragment.membro.MembroFragment">
+    tools:context=".ui.activity.main.fragment.membro.MembroFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

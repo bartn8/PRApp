@@ -20,6 +20,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">PRApp</string>
     <string name="search_hint">Cerca</string>
+    <string name="not_implemented_yet">Funzione non ancora implementata</string>
 
     <!-- Defaults -->
     <string name="default_dataDiNascita">XX-XX-XXXX</string>
