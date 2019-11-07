@@ -19,6 +19,7 @@
 
 package com.prapp.ui.activity.main.fragment.pr;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -44,6 +46,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prapp.R;
+import com.prapp.model.db.enums.StatoPrevendita;
+import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.ui.Result;
 import com.prapp.ui.activity.main.MainActivity;
@@ -62,7 +66,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class PRSubFragmentLista extends Fragment implements InterfaceHolder<MainActivityInterface>, ItemClickListener<WPrevenditaPlusAdapter.WPrevenditaPlusWrapper> {
+public class PRSubFragmentLista extends Fragment implements InterfaceHolder<MainActivityInterface>, ItemClickListener<WPrevenditaPlus> {
 
     private static final String MULTI_CHOICE_KEY = "multiChoiceKey";
 
@@ -137,16 +141,14 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
     @BindView(R.id.subfragment_lista_recyclerView)
     public RecyclerView recyclerView;
 
-    private Observer<Result<List<WPrevenditaPlus>, Void>> listaPrevenditeResultObserver = new Observer<Result<List<WPrevenditaPlus>, Void>>() {
-        @Override
-        public void onChanged(Result<List<WPrevenditaPlus>, Void> wPrevenditaPlusResult) {
-            if (wPrevenditaPlusResult == null) {
+    private Observer<Result<List<WPrevenditaPlus>, Void>> listaPrevenditeResultObserver = result -> {
+            if (result == null) {
                 return;
             }
 
-            Integer integerError = wPrevenditaPlusResult.getIntegerError();
-            List<Exception> error = wPrevenditaPlusResult.getError();
-            List<WPrevenditaPlus> success = wPrevenditaPlusResult.getSuccess();
+            Integer integerError = result.getIntegerError();
+            List<Exception> error = result.getError();
+            List<WPrevenditaPlus> success = result.getSuccess();
 
             if (integerError != null)
                 uiUtil.showError(integerError);
@@ -159,12 +161,37 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
                     uiUtil.makeToast(R.string.subfragment_lista_cassiere_lista_vuota_toast);
                 } else {
                     //Applico al recycler view i dati.
-                    recyclerAdapter.add(success);
+                    recyclerAdapter.replaceDataset(success);
                 }
             }
 
             popupUtil.hideLoadingPopup();
+    };
+
+    private Observer<Result<WPrevendita, WPrevenditaPlus>> modificaPrevenditaResultObserver = result -> {
+        if (result == null) {
+            return;
         }
+
+        Integer integerError = result.getIntegerError();
+        List<Exception> error = result.getError();
+        WPrevendita success = result.getSuccess();
+
+        if (integerError != null)
+            uiUtil.showError(integerError);
+
+        else if (error != null)
+            uiUtil.showError(error);
+
+        else if (success != null){
+            String message = getString(R.string.subfragment_lista_pr_modifica_toast, success.getId());
+            uiUtil.makeToast(message);
+
+            //Aggiorno la lista
+            recyclerAdapter.replaceElement(result.getExtra());
+        }
+
+        popupUtil.hideLoadingPopup();
     };
 
     @Override
@@ -275,9 +302,35 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
                             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                                 if(menuItem.getItemId() == R.id.fragment_pr_selection_prevendita_menu_editItem){
                                     //Faccio aprire il contesto di modifica
-                                    uiUtil.makeToast("Modifica");
-                                    tracker.clearSelection();
-                                    actionMode.finish();
+
+                                    AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                                    b.setTitle(R.string.subfragment_lista_pr_dialog_title);
+                                    String[] stringValues = StatoPrevendita.stringResValues();
+
+                                    b.setItems(stringValues, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+
+                                            StatoPrevendita stato = StatoPrevendita.parseId(i);
+
+                                            //Faccio partire un loading popup
+                                            popupUtil.showLoadingPopup();
+
+                                            for(Long selectedId : selection){
+                                                WPrevenditaPlus itemById = recyclerAdapter.getItemById(selectedId);
+                                                if(itemById != null){
+                                                    viewModel.modificaPrevendita(itemById, stato);
+                                                }
+                                            }
+
+                                            tracker.clearSelection();
+                                            actionMode.finish();
+                                        }
+                                    });
+
+                                    AlertDialog alertDialog = b.create();
+                                    alertDialog.show();
                                     return true;
                                 }
                                 return false;
@@ -305,6 +358,7 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
         //View model per richiamare il server.
         viewModel = ViewModelProviders.of(getActivity()).get(PRViewModel.class);
         viewModel.getListaPrevenditeResult().observe(this, this.listaPrevenditeResultObserver);
+        viewModel.getModificaPrevenditaResult().observe(this, this.modificaPrevenditaResultObserver);
 
         label.setText(R.string.subfragment_lista_pr_listaPrevendite_label);
         viewModel.getListaPrevenditeEvento();
@@ -323,12 +377,12 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
     }
 
     @Override
-    public void onItemClick(int id, WPrevenditaPlusAdapter.WPrevenditaPlusWrapper obj) {
+    public void onItemClick(int id, WPrevenditaPlus obj) {
 
     }
 
     @Override
-    public void onItemLongClick(int pos, WPrevenditaPlusAdapter.WPrevenditaPlusWrapper obj) {
+    public void onItemLongClick(int pos, WPrevenditaPlus obj) {
 
     }
 }

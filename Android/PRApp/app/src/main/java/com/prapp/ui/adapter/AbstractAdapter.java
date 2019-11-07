@@ -97,14 +97,31 @@ public abstract class AbstractAdapter<T, K extends RecyclerView.ViewHolder> exte
         this.clickListener = clickListener;
     }
 
-    public void replace(T obj){
+    @Override
+    public long getItemId(int position) {
+        return (long)position;
+    }
+
+    public T getItemById(long id){
+        return getElement((int)id);
+    }
+
+    public void replaceElement(T obj){
+        if(dataset.remove(obj)){
+            dataset.add(obj);
+            datasetFiltered = dataset;
+            notifyDataSetChanged();
+        }
+    }
+
+    public void replaceDataset(T obj){
         dataset.clear();
         dataset.add(obj);
         datasetFiltered = dataset;
         notifyDataSetChanged();
     }
 
-    public void replace(List<T> list){
+    public void replaceDataset(List<T> list){
         dataset = list;
         //Annulla qualsiasi filtro in corso.
         datasetFiltered = list;

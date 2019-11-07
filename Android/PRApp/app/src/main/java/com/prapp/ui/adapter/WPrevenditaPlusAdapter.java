@@ -44,59 +44,24 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 //https://github.com/marcosholgado/multiselection/blob/master/app/src/main/java/com/marcosholgado/multiselection/MainAdapter.kt
-public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapter.WPrevenditaPlusWrapper, WPrevenditaPlusAdapter.WPrevenditaPlusViewHolder> {
+public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlus, WPrevenditaPlusAdapter.WPrevenditaPlusViewHolder> {
 
     private static final String TAG = WPrevenditaPlusAdapter.class.getSimpleName();
     private static final NumberFormat LOCAL_CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
 
-    public class WPrevenditaPlusWrapper {
-
-        @NotNull
-        private WPrevenditaPlus data;
-
-        @Nullable
-        private String errore;
-
-        WPrevenditaPlusWrapper(@NotNull WPrevenditaPlus data) {
-            this.data = data;
-        }
-
-        @NotNull
-        public WPrevenditaPlus getData() {
-            return data;
-        }
-
-        @Nullable
-        String getErrore() {
-            return errore;
-        }
-
-        void setErrore(@Nullable String errore) {
-            this.errore = errore;
-        }
-
-        boolean isErroreSet() {
-            return this.errore != null;
-        }
-
-        @Override
-        public int hashCode() {
-            return data.hashCode();
-        }
-    }
 
     /**
      * The interface that receives button clicks.
      */
     public interface ButtonListener {
-        void onApprovaClick(WPrevenditaPlusWrapper prevendita);
+        void onApprovaClick(WPrevenditaPlus prevendita);
 
-        void onAnnullaClick(WPrevenditaPlusWrapper prevendita);
+        void onAnnullaClick(WPrevenditaPlus prevendita);
     }
 
     public class WPrevenditaPlusViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        private WPrevenditaPlusWrapper reference;
+        private WPrevenditaPlus reference;
         private int position;
 
         @BindView(R.id.wprevendita_plus_list_item_nomeEvento)
@@ -134,12 +99,6 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
 
         @BindView(R.id.wprevendita_plus_list_item_statoPrevendita_label)
         public TextView textViewStatoPrevenditaLabel;
-
-        @BindView(R.id.wprevendita_plus_list_item_errore)
-        public TextView textViewErrore;
-
-        @BindView(R.id.wprevendita_plus_list_item_errore_label)
-        public TextView textViewErroreLabel;
 
         @BindView(R.id.wprevendita_plus_list_item_approva)
         public Button buttonApprova;
@@ -184,19 +143,18 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
                 @Nullable
                 @Override
                 public Long getSelectionKey() {
-                    return (long) reference.getData().getId();
+                    return (long) reference.getId();
                 }
             };
         }
 
-        void bind(WPrevenditaPlusWrapper reference, int position, boolean isActivated) {
+        void bind(WPrevenditaPlus reference, int position, boolean isActivated) {
             this.reference = reference;
             this.position = position;
             itemView.setActivated(isActivated);
 
             WPrevenditaPlusViewHolder holder = this;
-            WPrevenditaPlusWrapper prevenditaPlusWrapper = reference;
-            WPrevenditaPlus prevenditaPlus = prevenditaPlusWrapper.getData();
+            WPrevenditaPlus prevenditaPlus = reference;
 
             holder.textViewNomeEventoLabel.setText(R.string.wprevendita_plus_list_item_nomeEvento_label);
             holder.textViewNomeEvento.setText(prevenditaPlus.getNomeEvento());
@@ -224,22 +182,6 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
             holder.textViewStatoPrevenditaLabel.setText(R.string.wprevendita_plus_list_item_statoPrevendita_label);
             holder.textViewStatoPrevendita.setText(prevenditaPlus.getStato().getNome());
 
-            if (showError) {
-                holder.textViewErroreLabel.setVisibility(View.VISIBLE);
-                holder.textViewErrore.setVisibility(View.VISIBLE);
-
-                if (prevenditaPlusWrapper.isErroreSet()) {
-                    holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
-                    holder.textViewErrore.setText(prevenditaPlusWrapper.getErrore());
-                } else {
-                    holder.textViewErroreLabel.setText(R.string.wprevendita_plus_list_item_errore_label);
-                    holder.textViewErrore.setText(R.string.wprevendita_plus_list_item_errore);
-                }
-            } else {
-                holder.textViewErroreLabel.setVisibility(View.GONE);
-                holder.textViewErrore.setVisibility(View.GONE);
-            }
-
             //Mostro i pulsanti solo se showButton abilitato
             if (showButtons) {
                 holder.buttonApprova.setEnabled(true);
@@ -266,20 +208,17 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
 
     //Indica se mostrare i pulsanti.
     private boolean showButtons;
-    //Indica se mostrare l'errore.
-    private boolean showError;
 
     private SelectionTracker<Long> tracker;
 
     public WPrevenditaPlusAdapter() {
-        this(-1, false, false);
+        this(-1, false);
     }
 
-    public WPrevenditaPlusAdapter(int maxShownItems, boolean showButtons, boolean showError) {
+    public WPrevenditaPlusAdapter(int maxShownItems, boolean showButtons) {
         super();
         this.maxShownItems = maxShownItems;
         this.showButtons = showButtons;
-        this.showError = showError;
 
         setHasStableIds(true);
     }
@@ -290,33 +229,24 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
 
     @Override
     public long getItemId(int position) {
-        WPrevenditaPlusWrapper element = getElement(position);
-        long id = (long) element.getData().getId();
+        WPrevenditaPlus element = getElement(position);
+        long id = (long) element.getId();
         return id;
+    }
+
+    @Override
+    public WPrevenditaPlus getItemById(long id){
+        List<WPrevenditaPlus> dataset = getDataset();
+
+        for(WPrevenditaPlus element : dataset){
+            if(element.getId() == id) return element;
+        }
+
+        return null;
     }
 
     public void setButtonListener(@NotNull ButtonListener buttonListener) {
         this.buttonListener = buttonListener;
-    }
-
-    public void add(WPrevenditaPlus wPrevenditaPlus) {
-        add(wPrevenditaPlus, null);
-    }
-
-    public void add(@NotNull List<WPrevenditaPlus> list) {
-        for (WPrevenditaPlus wPrevenditaPlus : list) {
-            WPrevenditaPlusWrapper wPrevenditaPlusWrapper = new WPrevenditaPlusWrapper(wPrevenditaPlus);
-            wPrevenditaPlusWrapper.setErrore(null);
-            add(wPrevenditaPlusWrapper);
-        }
-
-        notifyDataSetChanged();
-    }
-
-    public void add(WPrevenditaPlus wPrevenditaPlus, String errore) {
-        WPrevenditaPlusWrapper wPrevenditaPlusWrapper = new WPrevenditaPlusWrapper(wPrevenditaPlus);
-        wPrevenditaPlusWrapper.setErrore(errore);
-        add(wPrevenditaPlusWrapper, true);
     }
 
     @NonNull
@@ -332,13 +262,9 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlusAdapt
 
     @Override
     public void onBindViewHolder(@NonNull WPrevenditaPlusViewHolder holder, int position) {
-        WPrevenditaPlusWrapper prevenditaPlusWrapper = getElement(position);
-        WPrevenditaPlus prevenditaPlus = prevenditaPlusWrapper.getData();
+        WPrevenditaPlus prevenditaPlus = getElement(position);
 
-        if (tracker != null) {
-
-        }
-        holder.bind(prevenditaPlusWrapper, position, tracker != null && tracker.isSelected((long) prevenditaPlus.getId()));
+        holder.bind(prevenditaPlus, position, tracker != null && tracker.isSelected((long) prevenditaPlus.getId()));
     }
 
     @Override

@@ -43,6 +43,7 @@ import com.prapp.model.net.manager.ManagerMembro;
 import com.prapp.model.net.manager.ManagerPR;
 import com.prapp.model.net.wrapper.insert.InsertNetWCliente;
 import com.prapp.model.net.wrapper.insert.InsertNetWPrevendita;
+import com.prapp.model.net.wrapper.update.UpdateNetWPrevendita;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
@@ -193,6 +194,11 @@ public class PRViewModel extends AbstractViewModel {
     private MutableLiveData<Result<List<WTipoPrevendita>, Void>> listaTipoPrevenditaResult = new MutableLiveData<>();
     private MutableLiveData<Result<WPrevendita, Void>> aggiungiPrevenditaResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WPrevenditaPlus>, Void>> listaPrevenditeResult = new MutableLiveData<>();
+    private MutableLiveData<Result<WPrevendita, WPrevenditaPlus>> modificaPrevenditaResult = new MutableLiveData<>();
+
+    public LiveData<Result<WPrevendita, WPrevenditaPlus>> getModificaPrevenditaResult() {
+        return modificaPrevenditaResult;
+    }
 
     public LiveData<Result<List<WCliente>, Void>> getListaClientiResult() {
         return listaClientiResult;
@@ -285,6 +291,21 @@ public class PRViewModel extends AbstractViewModel {
             managerPR.aggiungiPrevendita(insertNetWPrevendita, new DefaultSuccessListener<>(aggiungiPrevenditaResult), new DefaultExceptionListener<>(aggiungiPrevenditaResult));
         } else {
             aggiungiPrevenditaResult.setValue(new Result<>(R.string.no_login));
+        }
+    }
+
+    public void modificaPrevendita(WPrevenditaPlus prevenditaPlus, StatoPrevendita nuovoStato){
+        MyContext myContext = getMyContext();
+
+        if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
+            ManagerPR managerPR = getManagerPR();
+
+            UpdateNetWPrevendita updateNetWPrevendita = new UpdateNetWPrevendita(prevenditaPlus.getId(), nuovoStato);
+
+            managerPR.modificaPrevendita(updateNetWPrevendita, new DefaultSuccessListener<>(modificaPrevenditaResult, prevenditaPlus), new DefaultExceptionListener<>(modificaPrevenditaResult, prevenditaPlus));
+
+        } else {
+            modificaPrevenditaResult.setValue(new Result<>(R.string.no_login));
         }
     }
 

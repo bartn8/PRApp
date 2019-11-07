@@ -267,6 +267,10 @@
 
     <!-- Sub Fragment Lista PR -->
     <string name="subfragment_lista_pr_listaPrevendite_label">Prevendite</string>
+    <string name="subfragment_lista_pr_dialog_title">Imposta stato prevendita</string>
+    <string name="subfragment_lista_pr_modifica_toast">
+        Modificata prevendita: <xliff:g example="123" id="idPrevendita">%1$d</xliff:g>
+    </string>
 
     <!-- FRAGMENT CASSIERE -->
 

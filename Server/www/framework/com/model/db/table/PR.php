@@ -345,21 +345,7 @@ class PR extends Table
 
         $conn = parent::getConnection(true);
 
-        // // Prima devo verificare che il tipo di prevendita sia compatibile.
-        // $stmtVerificaTipoPrevendita = $conn->prepare("SELECT COUNT(*) AS conto FROM tipoPrevendita INNER JOIN prevendita ON prevendita.idEvento = tipoPrevendita.idEvento WHERE prevendita.id = :idPrevendita AND tipoPrevendita.id = :idTipoPrevendita");
-        // $stmtVerificaTipoPrevendita->bindValue(":idPrevendita", $prevendita->getId(), PDO::PARAM_INT);
-        // $stmtVerificaTipoPrevendita->bindValue(":idTipoPrevendita", $prevendita->getIdTipoPrevendita(), PDO::PARAM_INT);
-        // $stmtVerificaTipoPrevendita->execute();
-        // $contoTipoPrevendita = (int) $stmtVerificaTipoPrevendita->fetch(PDO::FETCH_ASSOC)["conto"];
-
-        // if (1 !== $contoTipoPrevendita) {
-        // $conn = NULL;
-        // throw new InsertUpdateException("Prevendita non valida.");
-        // }
-
-        // Controllo che il nuovo tipo...
-
-        // Ora posso inserire i nuovi dati.
+        // posso inserire i nuovi dati.
         $stmtModifica = $conn->prepare("UPDATE prevendita SET stato = :stato, timestampUltimaModifica = CURRENT_TIMESTAMP WHERE id = :idPrevendita");
         $stmtModifica->bindValue(":stato", $prevendita->getStato()
             ->toString(), PDO::PARAM_STR);

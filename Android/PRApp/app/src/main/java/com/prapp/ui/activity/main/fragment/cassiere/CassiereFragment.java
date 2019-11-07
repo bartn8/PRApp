@@ -384,7 +384,7 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
         //Mitico butterknife per fare il collegamento tra XML e oggetti.
         unbinder = ButterKnife.bind(this, view);
 
-        recyclerAdapter = new WPrevenditaPlusAdapter(1, true, false);//Imposto al massimo un elemento per volta.
+        recyclerAdapter = new WPrevenditaPlusAdapter(1, true);//Imposto al massimo un elemento per volta.
         recyclerAdapter.setButtonListener(this);
 
         //View model per richiamare il server.
@@ -488,13 +488,13 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
      * @param prevendita Wrapper con la prevendita
      */
     @Override
-    public void onApprovaClick(WPrevenditaPlusAdapter.WPrevenditaPlusWrapper prevendita) {
+    public void onApprovaClick(WPrevenditaPlus prevendita) {
         //Faccio partire l'entrata. Levo temporaneamente dal recycler la prevendita:
         //Verrà riaggiunta in caso di errore
-        viewModel.timbraEntrata(prevendita.getData());
+        viewModel.timbraEntrata(prevendita);
 
         //Si può ri-scannerizzare perchè la cosa non è stata gradita dallo staff.
-        viewModel.remove(prevendita.getData());
+        viewModel.remove(prevendita);
         recyclerAdapter.remove(prevendita);
     }
 
@@ -506,11 +506,11 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
      * @param prevendita prevendita da rimuovere.
      */
     @Override
-    public void onAnnullaClick(WPrevenditaPlusAdapter.WPrevenditaPlusWrapper prevendita) {
+    public void onAnnullaClick(WPrevenditaPlus prevendita) {
         uiUtil.makeToast(R.string.fragment_cassiere_toast_annullata_label);
 
         //Levo semplicemente dagli archivi.
-        viewModel.remove(prevendita.getData());
+        viewModel.remove(prevendita);
         recyclerAdapter.remove(prevendita);
     }
 

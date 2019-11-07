@@ -19,10 +19,12 @@
 
 package com.prapp.model.net.wrapper.update;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.prapp.model.db.enums.StatoPrevendita;
 import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONSerializable;
+import com.prapp.model.net.serialize.adapter.StatoPrevenditaAdapter;
 import com.prapp.model.net.wrapper.NetWrapper;
 
 public class UpdateNetWPrevendita implements Twinned, NetWrapper, JSONSerializable {
@@ -31,30 +33,23 @@ public class UpdateNetWPrevendita implements Twinned, NetWrapper, JSONSerializab
 
     public static UpdateNetWPrevendita getEmpty()
     {
-        return new UpdateNetWPrevendita(0,0,StatoPrevendita.CONSEGNATA);
+        return new UpdateNetWPrevendita(0,StatoPrevendita.CONSEGNATA);
     }
 
-    @SerializedName("idPrevendita")
-    private Integer idPrevendita;
-
-    @SerializedName("idTipoPrevendita")
-    private Integer idTipoPrevendita;
+    @SerializedName("id")
+    private Integer id;
 
     @SerializedName("stato")
+    @JsonAdapter(StatoPrevenditaAdapter.class)
     private StatoPrevendita statoPrevendita;
 
-    public UpdateNetWPrevendita(Integer idPrevendita, Integer idTipoPrevendita, StatoPrevendita statoPrevendita) {
-        this.idPrevendita = idPrevendita;
-        this.idTipoPrevendita = idTipoPrevendita;
+    public UpdateNetWPrevendita(Integer id, StatoPrevendita statoPrevendita) {
+        this.id = id;
         this.statoPrevendita = statoPrevendita;
     }
 
-    public Integer getIdPrevendita() {
-        return idPrevendita;
-    }
-
-    public Integer getIdTipoPrevendita() {
-        return idTipoPrevendita;
+    public Integer getId() {
+        return id;
     }
 
     public StatoPrevendita getStatoPrevendita() {

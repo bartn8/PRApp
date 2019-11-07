@@ -103,7 +103,7 @@ public class WStaffAdapter extends RecyclerView.Adapter<WStaffAdapter.WStaffView
     @Override
     public void onBindViewHolder(WStaffViewHolder holder, int position) {
         // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+        // - replaceDataset the contents of the view with that element
         WStaff wStaff = dataset[position];
 
         holder.textViewNome.setText(wStaff.getNome());

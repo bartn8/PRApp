@@ -32,7 +32,7 @@ public enum StatoPrevendita {
 
     private static final int LENGTH = 4;
 
-    private static final SparseArray<StatoPrevendita> mappaId = new SparseArray<>();
+    private static final SparseArray<StatoPrevendita> mappaId = new SparseArray<>(LENGTH);
 
     static {
         //Inizializzo le mappe
@@ -40,11 +40,23 @@ public enum StatoPrevendita {
         mappaId.put(StatoPrevendita.PAGATA.getId(), StatoPrevendita.PAGATA);
         mappaId.put(StatoPrevendita.ANNULLATA.getId(), StatoPrevendita.ANNULLATA);
         mappaId.put(StatoPrevendita.RIMBORSATA.getId(), StatoPrevendita.RIMBORSATA);
+
+
     }
 
     @Nullable
     public static StatoPrevendita parseId(int id) {
         return mappaId.get(id);
+    }
+
+    public static String[] stringResValues(){
+        String[] stringValues = new String[LENGTH];
+
+        for(int i = 0; i < LENGTH; i++){
+            stringValues[i] = parseId(i).getResValue();
+        }
+
+        return stringValues;
     }
 
     private int id;

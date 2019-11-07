@@ -54,7 +54,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class CassiereSubFragmentLista extends Fragment implements InterfaceHolder<MainActivityInterface>, ItemClickListener<WPrevenditaPlusAdapter.WPrevenditaPlusWrapper> {
+public class CassiereSubFragmentLista extends Fragment implements InterfaceHolder<MainActivityInterface>, ItemClickListener<WPrevenditaPlus> {
 
     public static final String MODE_KEY = "MODE";
 
@@ -151,7 +151,7 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
                     uiUtil.makeToast(R.string.subfragment_lista_cassiere_lista_vuota_toast);
                 }else{
                     //Applico al recycler view i dati.
-                    recyclerAdapter.add(success);
+                    recyclerAdapter.replaceDataset(success);
                 }
             }
 
@@ -279,12 +279,12 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
 
 
     @Override
-    public void onItemClick(int id, WPrevenditaPlusAdapter.WPrevenditaPlusWrapper obj) {
+    public void onItemClick(int id, WPrevenditaPlus obj) {
 
     }
 
     @Override
-    public void onItemLongClick(int pos, WPrevenditaPlusAdapter.WPrevenditaPlusWrapper obj) {
+    public void onItemLongClick(int pos, WPrevenditaPlus obj) {
 
     }
 }

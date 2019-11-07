@@ -42,27 +42,13 @@ class UpdateNetWPrevendita implements NetWrapper
      * @throws InvalidArgumentException
      * @return UpdateNetWPrevendita
      */
-    private static function make($id, /* $idCliente,  $idTipoPrevendita,  $codice, */ $stato)
+    private static function make($id, $stato)
     {
-        if (is_null($id) /*|| is_null($idTipoPrevendita)  || is_null($codice) */ || is_null($stato))
-            throw new InvalidArgumentException("Uno o pi� parametri nulli");
+        if (is_null($id) || is_null($stato))
+            throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) /*|| ! is_int($idTipoPrevendita)*/ || ! ($stato instanceof StatoPrevendita) /* || !is_string($codice) */)
-            throw new InvalidArgumentException("Uno o pi� parametri non del tipo giusto");
-
-        // if (! is_null($idCliente)) {
-        // if (! is_int($idCliente))
-        // throw new InvalidArgumentException("Uno o pi� parametri non del tipo giusto");
-
-        // if ($idCliente <= 0)
-        // throw new InvalidArgumentException("ID Cliente non valido");
-        // }
-
-        // if (strlen($codice) > parent::CODICE_MAX)
-        // throw new InvalidArgumentException("Codice non valido (MAX)");
-
-        // if ($idTipoPrevendita <= 0)
-        // throw new InvalidArgumentException("ID Tipo Prevendita non valido");
+        if (! is_int($id) || ! ($stato instanceof StatoPrevendita))
+            throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if ($id <= 0)
             throw new InvalidArgumentException("ID non valido");
@@ -78,13 +64,10 @@ class UpdateNetWPrevendita implements NetWrapper
         if (! array_key_exists("id", $array))
             throw new InvalidArgumentException("Dato id non trovato.");
 
-//         if (! array_key_exists("idTipoPrevendita", $array))
-//             throw new InvalidArgumentException("Dato idTipoPrevendita non trovato.");
-
         if (! array_key_exists("stato", $array))
             throw new InvalidArgumentException("Dato stato non trovato.");
 
-        return self::make((int) $array["id"], /* (int) $array["idTipoPrevendita"] ,*/ StatoPrevendita::of($array["stato"]));
+        return self::make((int) $array["id"], StatoPrevendita::of($array["stato"]));
     }
 
     /**
@@ -94,13 +77,6 @@ class UpdateNetWPrevendita implements NetWrapper
      * @var int|NULL
      */
     private $id;
-
-//     /**
-//      * Identificativo del tipo della prevendita.(>0).
-//      *
-//      * @var int
-//      */
-//     private $idTipoPrevendita;
 
     /**
      * Rappresenta lo stato della prevendita.
@@ -112,7 +88,6 @@ class UpdateNetWPrevendita implements NetWrapper
     private function __construct($id, $stato)
     {
         $this->id = $id;
-//         $this->idTipoPrevendita = $idTipoPrevendita;
         $this->stato = $stato;
     }
 
@@ -124,15 +99,6 @@ class UpdateNetWPrevendita implements NetWrapper
     {
         return $this->id;
     }
-
-//     /**
-//      *
-//      * @return number
-//      */
-//     public function getIdTipoPrevendita()
-//     {
-//         return $this->idTipoPrevendita;
-//     }
 
     /**
      *

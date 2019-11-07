@@ -190,7 +190,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
 
             else if (success != null) {
-                clientiAdapter.replace(success);
+                clientiAdapter.replaceDataset(success);
             }
         }
     };
@@ -215,7 +215,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
 
             else if (success != null) {
-                tipoPrevenditaAdapter.replace(success);
+                tipoPrevenditaAdapter.replaceDataset(success);
             }
         }
     };
@@ -314,7 +314,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
                 //Aggiorno stato e schermata di cliente
                 viewModel.setClienteMode(PRViewModel.CLIENTE_SELECT_MODE);
                 switchClienteModeView();
-                clientiAdapter.replace(success);
+                clientiAdapter.replaceDataset(success);
 
                 selectCliente = success;
             }
@@ -409,11 +409,8 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
                     mainActivityInterface.cambiaFragment(fragmentLista);
                 }
                 return true;
-
-            case R.id.fragment_pr_menu_statisticheEventoItem:
-
-                return true;
             default:
+                uiUtil.makeToast(R.string.not_implemented_yet);
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -430,7 +427,6 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
                 return true;
 
             default:
-                uiUtil.makeToast(R.string.not_implemented_yet);
                 return false;
         }
     }
@@ -667,7 +663,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         item.collapseActionView();
 
         //Pulisco il recycler view e lascio solo quello selezionato:
-        clientiAdapter.replace(obj);
+        clientiAdapter.replaceDataset(obj);
 
         selectCliente = obj;
     }
@@ -736,7 +732,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         item.collapseActionView();
 
         //Pulisco il recycler view e lascio solo quello selezionato:
-        tipoPrevenditaAdapter.replace(obj);
+        tipoPrevenditaAdapter.replaceDataset(obj);
         //Imposto il text view.
         tipoPrevenditaEditText.setText(obj.getNome());
 
