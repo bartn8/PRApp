@@ -34,39 +34,9 @@ class StatoPrevendita extends BasicEnum /*implements JsonSerializable,ArrayDeser
 
     public const RIMBORSATA = 3;
 
-//     public static function of($array)
-//     {
-//         if (! is_array($array))
-//             throw new \InvalidArgumentException("L'argomento non è array");
-
-//         if (count($array) == 0)
-//             return null;
-
-//         $tmp = array();
-
-//         foreach ($array as $value) 
-//         {
-//             $tmp[] = StatoPrevendita::of($value);
-//         }
-        
-//         return $tmp;
-//     }
-
     public function __construct($name, $id)
     {
         parent::__construct($name, $id);
     }
 
-    // public function jsonSerialize()
-    // {
-    // $thisClass = new ReflectionClass(get_class());
-    // $props = $thisClass->getProperties();
-    // $array = array();
-
-    // foreach ($props as $prop) {
-    // $array[$prop->getName()] = $this->{$prop->getName()};
-    // }
-
-    // return $array;
-    // }
 }

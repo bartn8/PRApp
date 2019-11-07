@@ -167,13 +167,7 @@ abstract class BasicEnum implements JsonSerializable
     protected $id;
 
     protected function __construct($name, $id)
-    {
-//         if (! self::isValidName($name, TRUE))
-//             throw new ParseException("Nome non valido.");
-        
-//         if (! self::isValidId($id))
-//             throw new ParseException("ID non valido.");
-        
+    {        
         $this->name = $name;
         $this->id = $id;
     }

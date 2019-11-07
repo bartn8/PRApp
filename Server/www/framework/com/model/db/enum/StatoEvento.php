@@ -39,17 +39,5 @@ class StatoEvento extends BasicEnum implements JsonSerializable
         parent::__construct($name, $id);
     }
 
-//     public function jsonSerialize()
-//     {
-//         $thisClass = new ReflectionClass(get_class());
-//         $props = $thisClass->getProperties();
-//         $array = array();
-        
-//         foreach ($props as $prop) {
-//             $array[$prop->getName()] = $this->{$prop->getName()};
-//         }
-        
-//         return $array;
-//     }
 }
 
