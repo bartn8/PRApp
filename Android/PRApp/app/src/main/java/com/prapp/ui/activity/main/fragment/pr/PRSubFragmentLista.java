@@ -55,6 +55,7 @@ import com.prapp.barcodescanner.CustomBarcodeEncoder;
 import com.prapp.model.db.enums.StatoPrevendita;
 import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
+import com.prapp.model.net.wrapper.NetWEntrata;
 import com.prapp.ui.Result;
 import com.prapp.ui.activity.main.MainActivity;
 import com.prapp.ui.activity.main.MainActivityInterface;
@@ -187,21 +188,25 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
         List<Exception> error = result.getError();
         WPrevendita success = result.getSuccess();
 
-        if (integerError != null)
+        if (integerError != null){
             uiUtil.showError(integerError);
+            popupUtil.hideLoadingPopup();
+        }
 
-        else if (error != null)
+
+        else if (error != null){
             uiUtil.showError(error);
+            popupUtil.hideLoadingPopup();
+        }
+
 
         else if (success != null){
             String message = getString(R.string.subfragment_lista_pr_modifica_toast, success.getId());
             uiUtil.makeToast(message);
 
             //Aggiorno la lista
-            recyclerAdapter.replaceElement(result.getExtra());
+            viewModel.getListaPrevenditeEvento();
         }
-
-        popupUtil.hideLoadingPopup();
     };
 
     @Override
@@ -388,8 +393,10 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
 
     @Override
     public void onItemClick(int id, WPrevenditaPlus prevenditaPlus) {
-        //Prevendita serializzata per QR.
-        String serialObj = GSON.toJson(prevenditaPlus.getWPrevendita());
+        //Devo serializzare una NetWEntrata
+        NetWEntrata entrata = new NetWEntrata(prevenditaPlus.getId(), prevenditaPlus.getIdEvento(), prevenditaPlus.getCodice());
+
+        String serialObj = GSON.toJson(entrata);
 
         String dataDiNascita = getString(R.string.default_dataDiNascita);
 

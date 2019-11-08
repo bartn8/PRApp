@@ -137,7 +137,7 @@ public abstract class AbstractAdapter<T, K extends RecyclerView.ViewHolder> exte
     }
 
     public void add(T obj){
-        add(obj, false);
+        add(obj, true);
     }
 
     public void add(T obj, boolean notify){

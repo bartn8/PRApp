@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ PRApp  Copyright (C) 2019  Luca Bartolomei
   ~
   ~ This file is part of PRApp.
@@ -19,19 +18,21 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="350dp"
     android:layout_height="400dp"
+    android:layout_gravity="center"
     android:background="@color/primaryLightColorGrey"
-    android:padding="5dp"
-    android:layout_gravity="center">
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/popup_esito_image"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_gravity="center"
-        android:contentDescription="@string/popup_esito_image_description"/>
+        android:contentDescription="@string/popup_esito_image_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_iconfinder_success" />
 
     <TextView
         android:id="@+id/popup_esito_text"

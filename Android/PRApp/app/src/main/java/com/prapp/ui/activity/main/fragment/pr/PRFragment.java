@@ -59,6 +59,7 @@ import com.prapp.model.db.enums.StatoPrevendita;
 import com.prapp.model.db.wrapper.WCliente;
 import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WTipoPrevendita;
+import com.prapp.model.net.wrapper.NetWEntrata;
 import com.prapp.ui.Result;
 import com.prapp.ui.activity.main.MainActivityInterface;
 import com.prapp.ui.adapter.WClienteAdapter;
@@ -261,7 +262,11 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
             else if (success != null) {
                 nuovaPrevendita = success;  //Salvo la nuova prevendita in modo da utilizzarla dopo
-                String serialObj = GSON.toJson(success);    //Prevendita serializzata per QR.
+
+                //Devo serializzare una NetWEntrata
+                NetWEntrata entrata = new NetWEntrata(nuovaPrevendita.getId(), nuovaPrevendita.getIdEvento(), nuovaPrevendita.getCodice());
+
+                String serialObj = GSON.toJson(entrata);
 
                 String dataDiNascita;
 
