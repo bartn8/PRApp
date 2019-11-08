@@ -25,16 +25,26 @@ class UiUtils extends GeneralUiUtils {
     popolaLista(listaStaff) {
         var $lista = $("#listaStaff");
 
+        var selectedStaff = ajax.getStaff();
+
         for (let index = 0; index < listaStaff.length; index++) {
             const staff = listaStaff[index];
-            var $elemento = $("<li class=\"list-group-item\">" + staff.nome + "</li>");
+            var $elemento = $("<a href=\"#\" class=\"list-group-item list-group-item-action\">" + staff.nome + "</>");
+
+            if(staff.id === selectedStaff.id){
+                $elemento.addClass("active");   //Ho già scelto lo staff.
+            }
 
             $elemento.click(function () {
-                ajax.setStaff(staff);
-                //Devo resettare l'evento scelto.
-                ajax.restoreDefaultEvento();
+                ajax.setStaff(staff);           //Seleziono lo staff nell'oggetto AJAX
+                ajax.restoreDefaultEvento();    //Devo resettare l'evento scelto.
                 uiUtils.impostaScritta("Hai scelto: " + staff.nome);
-                console.log("Selected staff: " + JSON.stringify(staff));
+
+                
+                $lista.children().removeClass("active");    //Devo rimuovere la classe active da tutti i figli di lista.
+                $elemento.addClass("active");               //Aggiungo la classe active solo a quello selezionato.
+
+                //console.log("Selected staff: " + JSON.stringify(staff));
             });
 
             $lista.append($elemento);

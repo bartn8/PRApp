@@ -25,14 +25,24 @@ class UiUtils extends GeneralUiUtils {
     popolaLista(listaEventi) {
         var $lista = $("#listaEventi");
 
+        var selectedEvento = ajax.getEvento();
+
         for (let index = 0; index < listaEventi.length; index++) {
             const evento = listaEventi[index];
-            var $elemento = $("<li class=\"list-group-item\">" + evento.nome + "</li>");
+            var $elemento = $("<a href=\"#\" class=\"list-group-item list-group-item-action\">" + evento.nome + "</>");
+
+            if(evento.id === selectedEvento.id){
+                $elemento.addClass("active");   //Ho già scelto l'evento.
+            }
 
             $elemento.click(function () {
-                ajax.setEvento(evento);
+                ajax.setEvento(evento);                                 //Seleziono l'evento nell'oggetto AJAX
                 uiUtils.impostaScritta("Hai scelto: " + evento.nome);
-                console.log("Selected evento: " + JSON.stringify(evento));
+
+                $lista.children().removeClass("active");    //Devo rimuovere la classe active da tutti i figli di lista.
+                $elemento.addClass("active");               //Aggiungo la classe active solo a quello selezionato.
+
+                //console.log("Selected evento: " + JSON.stringify(evento));
             });
 
             $lista.append($elemento);

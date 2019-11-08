@@ -28,11 +28,6 @@ class UiUtils extends GeneralUiUtils {
         var $listaAnnullate = $("#listaPrevenditeAnnullate");
         var $listaRimborsate = $("#listaPrevenditeRimborsate");
 
-        var $textConsegnate = $("#textConsegnate");
-        var $textPagate = $("#textPagate");
-        var $textAnnullate = $("#textAnnullate");
-        var $textRimborsate = $("#textRimborsate");
-
         var counterConsegnate = 0;
         var counterPagate = 0;
         var counterAnnullate = 0;
@@ -57,43 +52,158 @@ class UiUtils extends GeneralUiUtils {
 
             var link = generaLink(prevendita.id, prevendita.idEvento, prevendita.nomeCliente, prevendita.cognomeCliente, "RL", prevendita.codice, "RL");
 
-            var $elemento = $("<li class=\"list-group-item\"> <a href=\"" + link + "\" target=\"_blank\">" + scritta + "</a></li>");
+            var $elemento = $("<a class=\"list-group-item d-flex justify-content-between\" href=\"#\"><p class=\"p-0 m-0 flex-grow-1\">" + scritta + "</p><button type=\"button\" class=\"btn btn-primary\"><span class=\"fas fa-eye\" aria-hidden=\"true\"></span></button></a>");
+
+            $elemento.find("button").click(function (event) {
+                var win = window.open(link, '_blank');
+                if (win) {
+                    //Browser has allowed it to be opened
+                    win.focus();
+                }
+
+                event.stopPropagation();
+            });
+
+
+            //https://stackoverflow.com/questions/16091823/get-clicked-element-using-jquery-on-event
+            //https://stackoverflow.com/questions/38373842/bootstrap-buttons-inside-list-group-item?rq=1
+            //https://getbootstrap.com/docs/4.0/components/buttons/
+
+            var $buttonPagata = $("<button type=\"button\" class=\"btn btn-success\"><span class=\"fas fa-euro-sign\" aria-hidden=\"true\"></span></button>");
+            var $buttonAnnullata = $("<button type=\"button\" class=\"btn btn-danger\"><span class=\"fas fa-trash\" aria-hidden=\"true\"></span></button>");
+            var $buttonRimborsata = $("<button type=\"button\" class=\"btn btn-danger\"><span class=\"fas fa-trash\" aria-hidden=\"true\"></span></button>");
+
+
+            $buttonPagata.click(function (event) {
+                //Ha cliccato su PAGATA: modifico la prevendita.
+
+                var $myButton = $(this);
+                var conferma = confirm("Premi OK per confermare il pagamento di: "+prevendita.nomeCliente+" "+prevendita.cognomeCliente+" ("+prevendita.id+")");
+
+                if(!conferma){
+                    event.stopPropagation();
+                    return;
+                }
+
+                ajax.modificaPrevendita(prevendita.id, 1, function (response) {
+                    //Devo spostare la lista sulle pagate e modificare i pulsanti.
+                    var $modElement = $myButton.parent();   //Ricavo l'elemento padre.
+                    $modElement.children().remove();        //Rimuvo i pulsanti.
+                    $modElement.append($buttonRimborsata);  //Aggiungo il pulsante rimborsa
+                    $modElement.remove();                   //Rimuovo dalla lista precedente.
+                    uiUtils.impostaScritta("Prevendita modificata, nuovo stato: PAGATA, aggiorna la pagina.");
+                    //$listaPagate.append($modElement);       //Aggiungo alla lista delle pagate.
+
+                }, function (responseError) {
+                    uiUtils.impostaErrore("Impossibile modificare prevendita " + prevendita.id + ": " + responseError.exceptions[0].msg);
+                });
+
+                event.stopPropagation();
+            });
+
+
+            $buttonAnnullata.click(function (event) {
+                //Ha cliccato su ANNULLATA: modifico la prevendita.
+
+                var $myButton = $(this);
+                var conferma = confirm("Premi OK per confermare l'annullamento di: "+prevendita.nomeCliente+" "+prevendita.cognomeCliente+" ("+prevendita.id+")");
+
+                if(!conferma){
+                    event.stopPropagation();
+                    return;
+                }
+
+                ajax.modificaPrevendita(prevendita.id, 2, function (response) {
+                    //Devo spostare la lista sulle pagate e modificare i pulsanti.
+                    var modElement = $myButton.parent();    //Ricavo l'elemento padre.
+                    $modElement.children().remove();        //Rimuvo i pulsanti.
+                    $modElement.remove();                   //Rimuovo dalla lista precedente.
+                    uiUtils.impostaScritta("Prevendita modificata, nuovo stato: ANNULLATA, aggiorna la pagina.");
+                    //$listaAnnullate.append($modElement);    //Aggiungo alla lista delle annullate.
+                }, function (responseError) {
+                    uiUtils.impostaErrore("Impossibile modificare prevendita " + prevendita.id + ": " + responseError.exceptions[0].msg);
+                });
+
+                event.stopPropagation();
+            });
+
+
+            $buttonRimborsata.click(function (event) {
+                //Ha cliccato su PAGATA: modifico la prevendita.
+
+                var $myButton = $(this);
+                var conferma = confirm("Premi OK per confermare il rimborso di: "+prevendita.nomeCliente+" "+prevendita.cognomeCliente+" ("+prevendita.id+")");
+
+                if(!conferma){
+                    event.stopPropagation();
+                    return;
+                }
+
+                ajax.modificaPrevendita(prevendita.id, 3, function (response) {
+                    //Devo spostare la lista sulle pagate e modificare i pulsanti.
+                    var $modElement = $myButton.parent();   //Ricavo l'elemento padre.
+                    $modElement.children().remove();        //Rimuvo i pulsanti.
+                    $modElement.remove();                   //Rimuovo dalla lista precedente.
+                    uiUtils.impostaScritta("Prevendita modificata, nuovo stato: RIMBORSATA, aggiorna la pagina.");
+                    //$listaRimborsate.append($modElement);   //Aggiungo alla lista delle rimborsate.
+                }, function (responseError) {
+                    uiUtils.impostaErrore("Impossibile modificare prevendita " + prevendita.id + ": " + responseError.exceptions[0].msg);
+                });
+
+                event.stopPropagation();
+            });
 
             //Smisto le prevendite in base allo stato della prevendita.
-            switch(prevendita.stato)
-            {
+            switch (prevendita.stato) {
                 //CONSEGNATA
                 case 0:
+                    //Aggiungo i pulsanti di PAGATA e ANNULLATA
+                    $elemento.append($buttonPagata);
+                    $elemento.append($buttonAnnullata);
+
                     counterConsegnate++;
                     $listaConsegnate.append($elemento);
-                break;
+                    break;
 
                 //PAGATA
                 case 1:
+                    //Aggiungo il pulsante di RIMBORSATA
+                    $elemento.append($buttonRimborsata);
+
                     counterPagate++;
                     $listaPagate.append($elemento);
-                break;
+                    break;
 
                 //ANNULLATA
                 case 2:
                     counterAnnullate++;
                     $listaAnnullate.append($elemento);
-                break;
+                    break;
 
                 //RIMBORSATA
                 case 3:
                     counterRimborsate++;
                     $listaRimborsate.append($elemento);
-                break;
+                    break;
                 default: break;
             }
         }
 
         //Scrivo un messaggio di riassunto per ogni stato.
-        $textConsegnate.text("Ci sono "+ counterConsegnate + " prevendite consegnate.");
-        $textPagate.text("Ci sono "+ counterPagate + " prevendite pagate.");
-        $textAnnullate.text("Ci sono "+ counterAnnullate + " prevendite annullate.");
-        $textRimborsate.text("Ci sono "+ counterRimborsate + " prevendite rimborsate.");
+        this.aggiornaContatoriPrevendite(counterConsegnate, counterPagate, counterAnnullate, counterRimborsate);
+    }
+
+    aggiornaContatoriPrevendite(counterConsegnate, counterPagate, counterAnnullate, counterRimborsate) {
+        var $textConsegnate = $("#textConsegnate");
+        var $textPagate = $("#textPagate");
+        var $textAnnullate = $("#textAnnullate");
+        var $textRimborsate = $("#textRimborsate");
+
+        //Scrivo un messaggio di riassunto per ogni stato.
+        $textConsegnate.text("Ci sono " + counterConsegnate + " prevendite consegnate.");
+        $textPagate.text("Ci sono " + counterPagate + " prevendite pagate.");
+        $textAnnullate.text("Ci sono " + counterAnnullate + " prevendite annullate.");
+        $textRimborsate.text("Ci sono " + counterRimborsate + " prevendite rimborsate.");
     }
 }
 

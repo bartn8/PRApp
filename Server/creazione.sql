@@ -557,9 +557,11 @@ FOR EACH ROW BEGIN
     ELSEIF (statoEvento <> 'VALIDO' AND (NEW.stato = 'CONSEGNATA' OR NEW.stato = 'PAGATA'))  THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = "Stato non valido: la prevendita deve essere CONSEGNATA o PAGATA quando l\'evento è VALIDO!";
-	ELSEIF (NEW.stato = 'ANNULLATA' AND (OLD.stato <> 'CONSEGNATA' AND OLD.stato <> 'PAGATA')) THEN
+	ELSEIF (NEW.stato = 'ANNULLATA' AND (OLD.stato <> 'CONSEGNATA' /*AND OLD.stato <> 'PAGATA')*/)) THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita si può annullare solo se nello stato CONSEGNATA o PAGATA!';
+		SET MESSAGE_TEXT = 'Stato non valido: una prevendita si può annullare solo se nello stato CONSEGNATA!';
+        /*SET MESSAGE_TEXT = 'Stato non valido: una prevendita si può annullare solo se nello stato CONSEGNATA o PAGATA!';*/
+		/* Se PAGATA solo RIMBORSATA: non ha senso annullarla se ti hanno dato i soldi. */
 	ELSEIF (NEW.stato = 'RIMBORSATA' AND OLD.stato <> 'PAGATA') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Stato non valido: una prevendita PAGATA può essere solo RIMBORSATA!';

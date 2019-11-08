@@ -611,6 +611,47 @@ class AjaxRequest {
         });
     }
 
+    modificaPrevendita(myIdPrevendita, myStato, onSuccess, onError){
+        //Devo essere loggato.
+        if(this.utente.id === 0)
+            return;
+
+        var data = {
+            command: 204,
+            args: JSON.stringify([{
+                name: "prevendita",
+                type: "com\\model\\net\\wrapper\\update\\UpdateNetWPrevendita",
+                value: {id: parseInt(myIdPrevendita), stato: parseInt(myStato)}
+            }])
+        };
+
+        var context = {
+            context: this,
+            onSuccess: onSuccess,
+            onError: onError
+        };
+
+        $.ajax({
+            type: "POST",
+            url: this.url,
+            data: data,
+            context: context,
+            success: function (response) {
+                switch (response.status) {
+                    case 0:
+                        this.onSuccess(response);
+                        break;
+                    case 2:
+                        this.onError(response);
+                        break;
+                    default:
+                        break;
+                }
+            },
+            dataType: "json"
+        });
+    }
+
     restituisciPrevendite(onSuccess, onError) {
         //Devo essere loggato.
         if(this.utente.id === 0)
