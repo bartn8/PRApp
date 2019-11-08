@@ -68,6 +68,8 @@ public class StatistichePRAdapter extends AbstractAdapter<WStatistichePREvento, 
         public StatistichePRViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
 

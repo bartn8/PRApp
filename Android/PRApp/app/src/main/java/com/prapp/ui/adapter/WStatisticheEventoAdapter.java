@@ -80,6 +80,8 @@ public class WStatisticheEventoAdapter extends AbstractAdapter<WStatisticheEvent
         public WStatisticheEventoViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override

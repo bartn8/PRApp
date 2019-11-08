@@ -564,7 +564,7 @@ FOR EACH ROW BEGIN
 		/* Se PAGATA solo RIMBORSATA: non ha senso annullarla se ti hanno dato i soldi. */
 	ELSEIF (NEW.stato = 'RIMBORSATA' AND OLD.stato <> 'PAGATA') THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita PAGATA può essere solo RIMBORSATA!';
+        SET MESSAGE_TEXT = 'Stato non valido: una prevendita è RIMBORSATA solo se era PAGATA!';
 	ELSEIF (NEW.stato = 'PAGATA' AND OLD.stato <> 'CONSEGNATA') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Stato non valido: una prevendita può andare in PAGATA solo se in CONSEGNATA.';

@@ -19,10 +19,10 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/membro_listaMembriItem"
+    <item android:id="@+id/fragment_membro_menu_listaMembriItem"
         android:title="@string/fragment_membro_menu_listaMembriItem"/>
-    <item android:id="@+id/membro_listaClientiItem"
+    <item android:id="@+id/fragment_membro_menu_listaClientiItem"
         android:title="@string/fragment_membro_menu_listaClientiItem"/>
-    <item android:id="@+id/membro_listaTipoPrevenditaItem"
+    <item android:id="@+id/fragment_membro_menu_listaTipoPrevenditaItem"
         android:title="@string/fragment_membro_menu_listaTipoPrevenditaItem"/>
 </menu>

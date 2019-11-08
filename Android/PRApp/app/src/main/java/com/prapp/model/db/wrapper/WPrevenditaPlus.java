@@ -29,6 +29,8 @@ import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONDeserializable;
 import com.prapp.model.net.serialize.adapter.StatoPrevenditaAdapter;
 
+import org.joda.time.DateTime;
+
 import java.text.ParseException;
 
 public class WPrevenditaPlus implements DatabaseWrapper, Twinned, JSONDeserializable {
@@ -178,6 +180,10 @@ public class WPrevenditaPlus implements DatabaseWrapper, Twinned, JSONDeserializ
         return CLASS_PATH;
     }
 
+
+    public WPrevendita getWPrevendita(){
+        return new WPrevendita(id, idEvento, idPR, idCliente, idTipoPrevendita, codice, stato, new DateTime());
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

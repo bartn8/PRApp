@@ -242,7 +242,7 @@ var funzionePrincipale = function () {
 
     }, function (response) {
         uiUtils.impostaErrore("Errore: " + response.exceptions[0].msg);
-        console.log("Get list prevendite failed: " + response.exceptions[0].msg);
+        //console.log("Get list prevendite failed: " + response.exceptions[0].msg);
     });
 };
 

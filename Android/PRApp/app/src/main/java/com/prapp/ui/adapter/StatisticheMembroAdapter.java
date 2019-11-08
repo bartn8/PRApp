@@ -137,6 +137,8 @@ public class StatisticheMembroAdapter extends AbstractAdapter<StatisticheMembroA
         public StatisticheMembroViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override

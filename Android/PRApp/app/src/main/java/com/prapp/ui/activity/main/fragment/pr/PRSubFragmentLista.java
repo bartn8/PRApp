@@ -20,7 +20,9 @@
 package com.prapp.ui.activity.main.fragment.pr;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,7 +47,11 @@ import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
 import com.prapp.R;
+import com.prapp.barcodescanner.CustomBarcodeEncoder;
 import com.prapp.model.db.enums.StatoPrevendita;
 import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
@@ -59,6 +65,8 @@ import com.prapp.ui.utils.PopupUtil;
 import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -68,7 +76,9 @@ import butterknife.Unbinder;
 
 public class PRSubFragmentLista extends Fragment implements InterfaceHolder<MainActivityInterface>, ItemClickListener<WPrevenditaPlus> {
 
-    private static final String MULTI_CHOICE_KEY = "multiChoiceKey";
+    private static final Gson GSON = new Gson();
+    private static final String TAG = PRSubFragmentLista.class.getSimpleName();
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.shortDate();
 
     /**
      * Use this factory method to create a new instance of
@@ -377,8 +387,34 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
     }
 
     @Override
-    public void onItemClick(int id, WPrevenditaPlus obj) {
+    public void onItemClick(int id, WPrevenditaPlus prevenditaPlus) {
+        //Prevendita serializzata per QR.
+        String serialObj = GSON.toJson(prevenditaPlus.getWPrevendita());
 
+        String dataDiNascita = getString(R.string.default_dataDiNascita);
+
+        String rigaPersona = getString(R.string.fragment_pr_qr_text_persona, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente(), dataDiNascita);
+        String rigaWarning = getString(R.string.fragment_pr_qr_text_warning);
+        String rigaInfoPrev = getString(R.string.fragment_pr_qr_text_infoPrevendita, prevenditaPlus.getId(), prevenditaPlus.getIdEvento(), prevenditaPlus.getCodice());
+        String rigaNomeTipoPrev = prevenditaPlus.getNomeTipoPrevendita();
+
+        CustomBarcodeEncoder barcodeEncoder = new CustomBarcodeEncoder();
+
+        barcodeEncoder.add(rigaPersona, false);
+        barcodeEncoder.add(rigaWarning, true);
+        barcodeEncoder.add(rigaInfoPrev, false);
+        barcodeEncoder.add(rigaNomeTipoPrev, false);
+
+        try {
+            Bitmap qrCode = barcodeEncoder.encodeBitmap(serialObj, BarcodeFormat.QR_CODE, 400, 400);
+            popupUtil.showQRPopup(getActivity(), qrCode, view -> {
+                //Creo un testo di condivisone.
+                String shareText = getString(R.string.fragment_pr_qr_share_text, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente(), prevenditaPlus.getId(), prevenditaPlus.getCodice(), viewModel.getEvento().getNome(), prevenditaPlus.getStato());
+                viewModel.shareImage(getActivity(), qrCode, shareText);
+            }, R.string.fragment_pr_popup_condividi);
+        } catch (WriterException e) {
+            Log.v(TAG, e.toString());
+        }
     }
 
     @Override

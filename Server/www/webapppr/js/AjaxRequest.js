@@ -528,6 +528,10 @@ class AjaxRequest {
         //Devo essere loggato.
         if(this.utente.id === 0)
             return;
+
+        //Devo aver scelto lo staff
+        if(this.staff.id === 0)
+            return;
         
         var data = {
             command: 202,
@@ -535,6 +539,51 @@ class AjaxRequest {
                 name: "cliente",
                 type: "com\\model\\net\\wrapper\\insert\\InsertNetWCliente",
                 value: {idStaff: this.staff.id, nome: myNome, cognome: myCognome, dataDiNascita: myDataDiNascita}
+            }])
+        };
+
+        var context = {
+            context: this,
+            onSuccess: onSuccess,
+            onError: onError
+        };
+
+        $.ajax({
+            type: "POST",
+            url: this.url,
+            data: data,
+            context: context,
+            success: function (response) {
+                switch (response.status) {
+                    case 0:
+                        this.onSuccess(response);
+                        break;
+                    case 2:
+                        this.onError(response);
+                        break;
+                    default:
+                        break;
+                }
+            },
+            dataType: "json"
+        });
+    }
+
+    listaClienti(onSuccess, onError){
+        //Devo essere loggato.
+        if(this.utente.id === 0)
+            return;
+
+        //Devo aver scelto lo staff
+        if(this.staff.id === 0)
+            return;
+        
+        var data = {
+            command: 107,
+            args: JSON.stringify([{
+                name: "staff",
+                type: "com\\model\\net\\wrapper\\NetWId",
+                value: {id: this.staff.id}
             }])
         };
 

@@ -134,6 +134,8 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.membro_menu, menu);
+
+        menu.removeItem(R.id.fragment_membro_menu_listaMembriItem);
     }
 
     @Override

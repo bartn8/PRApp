@@ -286,6 +286,14 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
                 try {
                     qrCode = barcodeEncoder.encodeBitmap(serialObj, BarcodeFormat.QR_CODE, 400, 400);
                     showSuccessPopup(qrCode);
+
+                    //Devo pulire i dati
+                    viewModel.setClienteMode(viewModel.CLIENTE_ADD_MODE);
+//                    viewModel.setPrevenditaMode(viewModel.PREVENDITA_SELECT_MODE);
+
+                    switchClienteModeView();
+//                    switchPrevenditaModeView();
+
                 } catch (WriterException e) {
                     Log.v(TAG, e.toString());
                 }
@@ -423,7 +431,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
             //Ho pigiato il pulsante aggiungi cliente.
             case R.id.fragment_pr_cliente_menu_aggiungiClienteItem:
                 viewModel.setClienteMode(PRViewModel.CLIENTE_ADD_MODE);
-                switchPrevenditaModeView();
+                switchClienteModeView();
                 return true;
 
             default:

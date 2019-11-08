@@ -66,6 +66,7 @@ public class WClienteAdapter extends AbstractAdapter<WCliente, WClienteAdapter.W
 
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override

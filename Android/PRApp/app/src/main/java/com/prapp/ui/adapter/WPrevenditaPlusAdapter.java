@@ -109,6 +109,8 @@ public class WPrevenditaPlusAdapter extends AbstractAdapter<WPrevenditaPlus, WPr
         public WPrevenditaPlusViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @OnClick(R.id.wprevendita_plus_list_item_approva)

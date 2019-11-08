@@ -55,6 +55,7 @@ public class WUtenteAdapter extends AbstractAdapter<WUtente, WUtenteAdapter.WUte
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override

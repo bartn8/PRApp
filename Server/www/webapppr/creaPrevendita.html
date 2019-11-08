@@ -26,6 +26,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet">
 
@@ -89,19 +90,32 @@
                 <img src="../logo.png" class="img-fluid mx-auto d-block" alt="logo">
                 <p id="text">Effettua il login.</p>
 
+                <ul class="nav nav-tab justify-content-center" style="background: #FFF;">
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menuAggiungiCliente" id="aggiungiClienteMenuItem">Aggiungi Cliente</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menuCercaCliente" id="cercaClienteMenuItem">Cerca Cliente</a></li>
+                </ul>
 
-                <div class="form-group">
-                    <label for="nomeCliente">Nome Cliente:</label>
-                    <input type="text" class="form-control" id="nomeCliente">
-                </div>
-                <div class="form-group">
-                    <label for="cognomeCliente">Cognome Cliente:</label>
-                    <input type="text" class="form-control" id="cognomeCliente">
-                </div>
-                <div class="form-group">
-                    <label for="dataDiNascita">Data Di Nascita:</label>
-                    <input type="text" data-provide="datepicker" class="form-control" id="dataDiNascita">
-                </div>
+                <div class="tab-content">
+                    <div id="menuAggiungiCliente" class="tab-pane fade">
+                        <div class="form-group">
+                            <label for="nomeCliente">Nome Cliente:</label>
+                            <input type="text" class="form-control" id="nomeCliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="cognomeCliente">Cognome Cliente:</label>
+                            <input type="text" class="form-control" id="cognomeCliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="dataDiNascita">Data Di Nascita:</label>
+                            <input type="text" data-provide="datepicker" class="form-control" id="dataDiNascita">
+                        </div>
+                    </div>
+                    <div id="menuCercaCliente" class="tab-pane fade">
+                        <p id="textListaCienti">Lista dei clienti.</p>
+                        <div class="list-group" id="listaClienti"></div>    
+                    </div>
+                  </div>
+
                 <div class="form-group">
                     <label for="tipoPrevendita">Tipo Prevendita:</label>
                     <select class="form-control" id="tipoPrevendita"></select>
@@ -159,9 +173,9 @@
     <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
 
     <!-- JS di supporto. -->
-    <script type="text/javascript" src="js/AjaxRequest.js?2310191916"></script>
+    <script type="text/javascript" src="js/AjaxRequest.js?0811191533"></script>
     <script type="text/javascript" src="js/GeneralUiUtils.js?1308192103"></script>
-    <script type="text/javascript" src="js/creaPrevendita.js?0211191558"></script>
+    <script type="text/javascript" src="js/creaPrevendita.js?0811191553"></script>
 
 
 </body>

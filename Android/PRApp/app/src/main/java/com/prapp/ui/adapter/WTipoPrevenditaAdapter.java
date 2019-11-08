@@ -74,6 +74,7 @@ public class WTipoPrevenditaAdapter extends AbstractAdapter<WTipoPrevendita, WTi
 
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override

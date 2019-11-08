@@ -103,8 +103,9 @@ class UiUtils extends GeneralUiUtils {
         var myPerson = nome + " " + cognome + " - " + data;
         var myPrevendita = idPrevendita + " - " + idEvento + " - " + codice;
 
+        $("#myCanvas").removeLayers();
         $("#myCanvas").clearCanvas();
-
+        
         $("#myCanvas").addLayer({
             type: 'rectangle',
             name: "background",
@@ -202,8 +203,6 @@ class UiUtils extends GeneralUiUtils {
         $dataDiNascitaClienteText.addClass("has-error");
         $dataDiNascitaClienteText.addClass("has-feedback");
         $dataDiNascitaClienteText.append($errorIcon);
-
-
     }
 
     resetFieldsCliente() {
@@ -222,6 +221,85 @@ class UiUtils extends GeneralUiUtils {
         $dataDiNascitaClienteText.removeClass("has-error");
         $dataDiNascitaClienteText.removeClass("has-feedback");
         $dataDiNascitaClienteText.remove("span");
+    }
+
+    impostaTabs(){
+        $("#aggiungiClienteMenuItem").click(function(event){
+            tabPressed = 0;
+        });
+
+        $("#cercaClienteMenuItem").click(function(event){
+            tabPressed = 1;
+        });
+    }
+
+    attivaTabListaClienti(){
+        var reference = this;
+
+        $("#cercaClienteMenuItem").removeClass("disabled");
+
+        $("#cercaClienteMenuItem").click(function(event){
+            tabPressed = 1;
+
+            //Aggiorno la lista dei clienti
+            ajax.listaClienti(function(response){
+                listaClienti = response.results;
+                reference.popolaListaClienti(listaClienti);
+            }, function(responseError){
+                reference.impostaErrore("Errore: " + responseError.exceptions[0].msg);
+            });
+        });
+    }
+
+    disattivaTabListaClienti(){
+        $("#cercaClienteMenuItem").addClass("disabled");
+        $("#cercaClienteMenuItem").click(function(event){
+            tabPressed = 1;
+        });
+    }
+
+    popolaListaClienti(myListaClienti){
+        var $listaClienti = $("#listaClienti");
+        var $textListaClienti = $("#textListaCienti");
+
+        var counter = 0;
+
+        for(let index = 0; index < myListaClienti.length; index++){
+            const cliente = myListaClienti[index];
+
+            var scritta = cliente.nome + " " + cliente.cognome + "-" + cliente.dataDiNascita;
+
+            var $elemento = $("<a class=\"list-group-item d-flex justify-content-between\" href=\"#\"><p class=\"p-0 m-0 flex-grow-1\">" + scritta + "</p><button index=\""+index+"\" type=\"button\" class=\"btn btn-primary\"><span class=\"fas fa-plus\" aria-hidden=\"true\"></span></button></a>");
+            
+            $elemento.find("button").click(function (event) {
+                //Ho selezionato il cliente: ripopolo la lista con solo questo cliente.
+
+                var $thisButton = $(this);
+                var $thisElement = $thisButton.parent();
+
+                //Aggiungo selezione
+                $thisElement.addClass("active");
+                
+                //Rimuovo il pulsante di aggiunta.
+                $thisButton.remove();
+
+                //Aggiorno la lista.
+                $listaClienti.children().remove();
+                $listaClienti.append($thisElement);
+
+                clienteSelezionato = parseInt($thisButton.attr("index"));
+
+                event.stopPropagation();
+            });
+
+
+            $listaClienti.append($elemento);
+
+            counter++;
+        }
+
+        //Aggiorno la scritta dei clienti.
+        $textListaClienti.text("Ci sono "+counter+" clienti.");
     }
 
 }
@@ -252,13 +330,6 @@ var generaLink = function (idPrevendita, idEvento, nome, cognome, data, codice, 
 }
 
 var onCopiaLinkClick = function () {
-    /*
-    var $myHiddenInput = $("#myHiddenInput");
-    $myHiddenInput.attr("value", link);
-    $myHiddenInput.select();
-    document.execCommand("copy");
-    */
-
     /* Get the text field */
     var copyText = document.getElementById("myLink");
 
@@ -285,6 +356,13 @@ var convertiData = function (inputFormat) {
 
 var uiUtils = new UiUtils();
 var ajax = new AjaxRequest();
+
+//Usato per tenere in memoria la lista dei clienti.
+var listaClienti = [];
+var clienteSelezionato = -1;
+
+//Usato per identificare la tab corrente.
+var tabPressed = 0;
 
 //Roba per ricordare il cliente precedente.
 var nomeClientePrecedente = "";
@@ -328,11 +406,12 @@ var loginToken = function (needRenew) {
 
 var funzionePrincipale = function () {
     uiUtils.impostaLogout();
+    uiUtils.impostaTabs();
     uiUtils.attivaMenu();
+    uiUtils.attivaTabListaClienti();
 
     if (ajax.isEventoSelected()) {
         uiUtils.impostaScritta("Aggiungi una prevendita");
-
 
         //Carico le prevenidite.
         ajax.getListaTipoPrevenditaEvento(function (response) {
@@ -354,38 +433,10 @@ var funzionePrincipale = function () {
 };
 
 var creaPrevenditaButtonClick = function () {
-    var nomeCliente = $("#nomeCliente").val();
 
-    //Check 
-    if (nomeCliente == "") {
-        //nomeCliente = null;
-        //invio un messaggio sull'edit text.
-        //uiUtils.erroreNomeCliente();
-
-        alert("Nome cliente non valido");
-
-        return;
-    }
-
-    var cognomeCliente = $("#cognomeCliente").val();
-
-    //Check 
-    if (cognomeCliente == "") {
-        //cognomeCliente = null;
-        //invio un messaggio sull'edit text.
-        //uiUtils.erroreCognomeCliente();
-
-        alert("Cognome cliente non valido");
-
-        return;
-    }
-
-    var dataDiNascita = $("#dataDiNascita").val();
-
-    //Check 
-    if (dataDiNascita == "") {
-        dataDiNascita = null;
-    }
+    var nomeCliente = "";
+    var cognomeCliente = "";
+    var dataDiNascita = "";
 
     var idTipoPrevendita = $("#tipoPrevendita").val();
     var nomeTipoPrevendita = $("#tipoPrevendita").children("option:selected").text();
@@ -393,35 +444,124 @@ var creaPrevenditaButtonClick = function () {
     var codice = Math.random().toString(36).substring(2, 5);
     var stato = $("#statoPrevendita").val();
 
+    if(tabPressed == 0){
+        nomeCliente = $("#nomeCliente").val();
 
-    //Prima controllo che si siano inseriti nome e cognome diversi:
-    //Se uguali invio un messaggio di conferma:
-    if (nomeCliente == nomeClientePrecedente && cognomeCliente == cognomeClientePrecedente) {
-        var conferma = confirm("La prevendita in creazione ha gli stessi dati di quella precedente (" + nomeCliente + " " + cognomeCliente + ") Continuo?");
-
-        //Se l'utente preme annulla non faccio la prevendita.
-        if (!conferma) {
-            alert("PREVENDITA ANNULLATA");
+        //Check 
+        if (nomeCliente == "") {
+            //nomeCliente = null;
+            //invio un messaggio sull'edit text.
+            //uiUtils.erroreNomeCliente();
+    
+            alert("Nome cliente non valido");
+    
             return;
         }
-    }
-
-    ajax.aggiungiCliente(nomeCliente, cognomeCliente, dataDiNascita, function (response) {
-        console.log("add cliente ok: " + JSON.stringify(response.results[0]));
-
-        //Posso ricavare il cliente e aggiungere la prevendita:
-        var idCliente = response.results[0].id;
+    
+        cognomeCliente = $("#cognomeCliente").val();
+    
+        //Check 
+        if (cognomeCliente == "") {
+            //cognomeCliente = null;
+            //invio un messaggio sull'edit text.
+            //uiUtils.erroreCognomeCliente();
+    
+            alert("Cognome cliente non valido");
+    
+            return;
+        }
+    
+        dataDiNascita = $("#dataDiNascita").val();
+    
+        //Check 
+        if (dataDiNascita == "") {
+            dataDiNascita = null;
+        }
+    
+        //Prima controllo che si siano inseriti nome e cognome diversi:
+        //Se uguali invio un messaggio di conferma:
+        if (nomeCliente == nomeClientePrecedente && cognomeCliente == cognomeClientePrecedente) {
+            var conferma = confirm("La prevendita in creazione ha gli stessi dati di quella precedente (" + nomeCliente + " " + cognomeCliente + ") Continuo?");
+    
+            //Se l'utente preme annulla non faccio la prevendita.
+            if (!conferma) {
+                alert("PREVENDITA ANNULLATA");
+                return;
+            }
+        }
+    
+        ajax.aggiungiCliente(nomeCliente, cognomeCliente, dataDiNascita, function (response) {
+            console.log("add cliente ok: " + JSON.stringify(response.results[0]));
+    
+            //Posso ricavare il cliente e aggiungere la prevendita:
+            var idCliente = response.results[0].id;
+    
+            //Aggiorno i clienti precedenti.
+            nomeClientePrecedente = nomeCliente;
+            cognomeClientePrecedente = cognomeCliente;
+    
+            ajax.aggiungiPrevendita(idCliente, idTipoPrevendita, codice, stato, function (response2) {
+                //ho aggiunto la prevendita, pulisco i campi.
+                uiUtils.pulisciCampi();
+    
+                //Imposto un messaggio:
+                uiUtils.impostaScritta("Prevendita aggiunta: " + nomeCliente + " " + cognomeCliente);
+    
+                //Creo le info per il qr.
+                var prevendita = response2.results[0];
+                var myIdPrevendita = parseInt(prevendita.id);
+                var myIdEvento = parseInt(prevendita.idEvento);
+                var netWEntrata = { idPrevendita: myIdPrevendita, idEvento: myIdEvento, codiceAccesso: codice };
+    
+                //Creo il qr code.
+                var typeNumber = 4;
+                var errorCorrectionLevel = 'L';
+                var qr = qrcode(typeNumber, errorCorrectionLevel);
+                qr.addData(JSON.stringify(netWEntrata));
+                qr.make();
+    
+                var myDataDiNascita = convertiData(dataDiNascita);
+                var qrCodeImage = qr.createDataURL(8, 36);
+    
+                uiUtils.disegnaCanvas(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita, qrCodeImage);
+    
+                //Attivo i pulsanti di qr code.
+                var link = generaLink(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, dataDiNascita != null ? myDataDiNascita : null, codice, nomeTipoPrevendita);
+    
+                uiUtils.attivaButtonCondividiQrCode(myIdPrevendita, nomeCliente, cognomeCliente, codice, link);
+                uiUtils.impostaLink(link);
+    
+                //Non posso inserire qua il link: prima devo generare il canvas
+                //Aggiorno il pulsante dopo timeout (2sec).
+                setTimeout(function () {
+                    uiUtils.attivaButtonScaricaQrCode(myIdPrevendita, nomeCliente, cognomeCliente, uiUtils.scaricaCanvas());
+                }, 2000);
+    
+                //Messaggio di log.
+                console.log("add prevendita ok: " + JSON.stringify(prevendita));
+    
+            }, function (response2) {
+                console.log("error: " + JSON.stringify(response2.exceptions));
+                uiUtils.impostaErrore("Errore:" + response2.exceptions[0].msg);
+            });
+    
+        }, function (response) {
+            console.log("error: " + JSON.stringify(response.exceptions));
+            uiUtils.impostaErrore("Errore:" + response.exceptions[0].msg);
+        });
+    }else if (tabPressed == 1){
+        var cliente = listaClienti[clienteSelezionato];
 
         //Aggiorno i clienti precedenti.
-        nomeClientePrecedente = nomeCliente;
-        cognomeClientePrecedente = cognomeCliente;
+        nomeClientePrecedente = cliente.nome;
+        cognomeClientePrecedente = cliente.cognome;
 
-        ajax.aggiungiPrevendita(idCliente, idTipoPrevendita, codice, stato, function (response2) {
+        ajax.aggiungiPrevendita(cliente.id, idTipoPrevendita, codice, stato, function (response2) {
             //ho aggiunto la prevendita, pulisco i campi.
             uiUtils.pulisciCampi();
 
             //Imposto un messaggio:
-            uiUtils.impostaScritta("Prevendita aggiunta: " + nomeCliente + " " + cognomeCliente);
+            uiUtils.impostaScritta("Prevendita aggiunta: " + cliente.nome + " " + cliente.cognome);
 
             //Creo le info per il qr.
             var prevendita = response2.results[0];
@@ -436,21 +576,21 @@ var creaPrevenditaButtonClick = function () {
             qr.addData(JSON.stringify(netWEntrata));
             qr.make();
 
-            var myDataDiNascita = convertiData(dataDiNascita);
+            var myDataDiNascita = convertiData(cliente.dataDiNascita);
             var qrCodeImage = qr.createDataURL(8, 36);
 
-            uiUtils.disegnaCanvas(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, myDataDiNascita, codice, nomeTipoPrevendita, qrCodeImage);
+            uiUtils.disegnaCanvas(myIdPrevendita, myIdEvento, cliente.nome, cliente.cognome, myDataDiNascita, codice, nomeTipoPrevendita, qrCodeImage);
 
             //Attivo i pulsanti di qr code.
-            var link = generaLink(myIdPrevendita, myIdEvento, nomeCliente, cognomeCliente, dataDiNascita != null ? myDataDiNascita : null, codice, nomeTipoPrevendita);
+            var link = generaLink(myIdPrevendita, myIdEvento, cliente.nome, cliente.cognome, dataDiNascita != null ? myDataDiNascita : null, codice, nomeTipoPrevendita);
 
-            uiUtils.attivaButtonCondividiQrCode(myIdPrevendita, nomeCliente, cognomeCliente, codice, link);
+            uiUtils.attivaButtonCondividiQrCode(myIdPrevendita, cliente.nome, cliente.cognome, codice, link);
             uiUtils.impostaLink(link);
 
             //Non posso inserire qua il link: prima devo generare il canvas
             //Aggiorno il pulsante dopo timeout (2sec).
             setTimeout(function () {
-                uiUtils.attivaButtonScaricaQrCode(myIdPrevendita, nomeCliente, cognomeCliente, uiUtils.scaricaCanvas());
+                uiUtils.attivaButtonScaricaQrCode(myIdPrevendita, cliente.nome, cliente.cognome, uiUtils.scaricaCanvas());
             }, 2000);
 
             //Messaggio di log.
@@ -460,11 +600,9 @@ var creaPrevenditaButtonClick = function () {
             console.log("error: " + JSON.stringify(response2.exceptions));
             uiUtils.impostaErrore("Errore:" + response2.exceptions[0].msg);
         });
+    }
 
-    }, function (response) {
-        console.log("error: " + JSON.stringify(response.exceptions));
-        uiUtils.impostaErrore("Errore:" + response.exceptions[0].msg);
-    });
+
 };
 
 if (ajax.isStorageEnabled()) {
