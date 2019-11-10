@@ -241,6 +241,27 @@ class UiUtils extends GeneralUiUtils {
         $("#cercaClienteMenuItem").click(function(event){
             tabPressed = 1;
 
+            //Imposto la barra di ricerca.
+            //https://stackoverflow.com/questions/8777855/how-do-i-create-a-search-filter-text-box-in-jquery
+            $("#ricercaCliente").bind("keyup", function() {
+                var text = $(this).val().toLowerCase();
+                var $listaClienti = $("#listaClienti");
+            
+                //first, hide all:
+                var $clienti = $listaClienti.children();
+                $clienti.addClass("d-none");
+                $clienti.removeClass("d-flex");
+
+            
+                //show only those matching user input:
+                var $clientiFiltrati = $listaClienti.children().filter(function () {
+                    return $(this).find("p").text().toLowerCase().indexOf(text) == 0;
+                });
+
+                $clientiFiltrati.removeClass("d-none");
+                $clientiFiltrati.addClass("d-flex");
+            });
+
             //Aggiorno la lista dei clienti
             ajax.listaClienti(function(response){
                 listaClienti = response.results;
