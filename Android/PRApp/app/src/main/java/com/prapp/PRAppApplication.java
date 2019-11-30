@@ -29,6 +29,8 @@ import com.prapp.model.db.enums.Diritto;
 import com.prapp.model.db.enums.StatoEvento;
 import com.prapp.model.db.enums.StatoPrevendita;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.jetbrains.annotations.Contract;
 
 import java.net.CookieHandler;
@@ -58,7 +60,14 @@ public class PRAppApplication extends Application {
         myInstance = this;
         initCookieManager();
         initEnumsResources();
+		initJodaTime();
     }
+	
+	private void initJodaTime(){
+		//Inizializzo JodaTime
+        //https://stackoverflow.com/questions/31775276/joda-time-resource-not-found-error
+        JodaTimeAndroid.init(getApplicationContext());
+	}
 
     private void initCookieManager(){
         //Devo eliminare i cookie: Rimane PHPSESSID.

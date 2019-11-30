@@ -402,9 +402,9 @@ class Amministratore extends Table
         // Devo essere sincronizzato con il database riguardo il fuso orario: aperturaVendite e chiusuraVendite sono influenzate dal fuso orario.
         $conn = parent::getConnection(TRUE);
 
-        var_dump($tipoPrevendita->getAperturaVendite()
-            ->getDateTimeImmutable()
-            ->format(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP));
+        // var_dump($tipoPrevendita->getAperturaVendite()
+        //     ->getDateTimeImmutable()
+        //     ->format(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP));
         
         $stmtInserimento = $conn->prepare("INSERT INTO tipoPrevendita (idEvento, nome, descrizione, prezzo, aperturaPrevendite, chiusuraPrevendite, idModificatore) VALUES (:idEvento, :nome, :descrizione, :prezzo, :aperturaPrevendite, :chiusuraPrevendite, :idModificatore)");
         $stmtInserimento->bindValue(":idEvento", $tipoPrevendita->getIdEvento(), PDO::PARAM_INT);
@@ -651,7 +651,7 @@ class Amministratore extends Table
 
             // Posso scrivere i diritti che sono presenti.
             foreach ($dirittiUtente->getDiritti() as $diritto) {
-                $stmtInserimento = $conn->prepare(str_replace(":tabella:", $diritto->toString(), $queryInserimento));
+                $stmtInserimento = $conn->prepare(str_replace(":tabella:", strtolower($diritto->toString()), $queryInserimento));
                 $stmtInserimento->bindValue(":idStaff", $dirittiUtente->getIdStaff(), PDO::PARAM_INT);
                 $stmtInserimento->bindValue(":idUtente", $dirittiUtente->getIdUtente(), PDO::PARAM_INT);
 
@@ -662,11 +662,11 @@ class Amministratore extends Table
                     // Teoricamente non serve il rollback...
                     if ($ex->getCode() != Amministratore::UNIQUE_CODE && $ex->getCode() != Amministratore::INTEGRITY_CODE) // Codice di integrità.
                     {
-                        // Qui serve il rollback...
-                        $conn->rollBack();
+                        // // Qui serve il rollback...
+                        // $conn->rollBack();
 
-                        // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
-                        $conn = NULL;
+                        // // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
+                        // $conn = NULL;
 
                         throw $ex;
                     }
@@ -675,7 +675,7 @@ class Amministratore extends Table
 
             // Passo all'eliminazione dei diritti non presenti.
             foreach (Diritto::complement($dirittiUtente->getDiritti()) as $diritto) {
-                $stmtRimozione = $conn->prepare(str_replace(":tabella:", $diritto->toString(), $queryRimozione));
+                $stmtRimozione = $conn->prepare(str_replace(":tabella:", strtolower($diritto->toString()), $queryRimozione));
                 $stmtRimozione->bindValue(":idStaff", $dirittiUtente->getIdStaff(), PDO::PARAM_INT);
                 $stmtRimozione->bindValue(":idUtente", $dirittiUtente->getIdUtente(), PDO::PARAM_INT);
                 $stmtRimozione->execute();

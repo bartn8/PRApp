@@ -64,8 +64,10 @@ dependencies {
     //My implementations.
     //GSON: https://github.com/google/gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
     //JODA TIME FOR ANDROID: https://github.com/dlew/joda-time-android
     implementation 'net.danlew:android.joda:2.10.3'
+
     //VOLLEY: https://github.com/google/volley
     implementation 'com.android.volley:volley:1.1.1'
 

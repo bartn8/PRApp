@@ -32,13 +32,11 @@ import com.prapp.model.db.wrapper.WDirittiUtente;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
-import com.prapp.ui.utils.UiUtil;
 import com.prapp.ui.activity.login.LoginActivity;
 import com.prapp.ui.activity.main.MainActivity;
 import com.prapp.ui.activity.selectevento.SelectEventoActivity;
 import com.prapp.ui.activity.selectstaff.SelectStaffActivity;
-
-import net.danlew.android.joda.JodaTimeAndroid;
+import com.prapp.ui.utils.UiUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -180,10 +178,6 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Inizializzo JodaTime
-        //https://stackoverflow.com/questions/31775276/joda-time-resource-not-found-error
-        JodaTimeAndroid.init(getApplicationContext());
 
         uiUtil = new UiUtil(getApplicationContext());
 

@@ -77,8 +77,15 @@ public class ApplicationPreferences {
     public WToken getLastStoredToken() {
         if(isTokenSaved())
         {
-            String tokenJson = new String(passwordStorage.getData(TOKEN_KEY), StandardCharsets.UTF_8);
-            return GSON_OBJECT.fromJson(tokenJson, WToken.class);
+            byte[] storageData = passwordStorage.getData(TOKEN_KEY);
+
+            if(storageData != null){
+                String tokenJson = new String(storageData, StandardCharsets.UTF_8);
+                return GSON_OBJECT.fromJson(tokenJson, WToken.class);
+            }else{
+                return WToken.getEmpty();
+            }
+
         }
 
         //return WToken.getEmpty();
