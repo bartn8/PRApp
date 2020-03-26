@@ -18,12 +18,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace com\model;
 
 use Exception;
 use InvalidArgumentException;
 use com\model\db\wrapper\WUtente;
+use com\model\session\UserSession;
 
 /**
  * Gestisce il contesto di un utente.
@@ -38,10 +38,9 @@ class Context
     /**
      * Crea un contesto.
      *
-     * @param string $userID
-     *            identificativo utente
-     * @throws Exception Lanciata se la sessione non è attiva
-     * @throws InvalidArgumentException Lanciata se l'identificativo non è valido
+     * @param WUtente $utente utente
+     * @throws Exception Lanciata se la sessione non é attiva
+     * @throws InvalidArgumentException Lanciata se l'identificativo non é valido
      */
     public static function createContext($utente)
     {
@@ -49,10 +48,10 @@ class Context
             throw new Exception("Sessione non attiva");
         
         if (! ($utente instanceof WUtente))
-            throw new InvalidArgumentException("$utente non valido.");
+            throw new InvalidArgumentException("utente non valido.");
         
         $_SESSION["valid"] = TRUE;
-        $_SESSION["utente"] = $utente;
+        $_SESSION["userSession"] = new UserSession($utente);
     }
 
     /**
@@ -66,8 +65,8 @@ class Context
         if (session_status() != PHP_SESSION_ACTIVE)
             throw new Exception("Sessione non attiva");
         
-        if (array_key_exists("valid", $_SESSION) && array_key_exists("utente", $_SESSION)) {
-            return new Context($_SESSION["utente"], $_SESSION["valid"]);
+        if (array_key_exists("valid", $_SESSION) && array_key_exists("userSession", $_SESSION)) {
+            return new Context($_SESSION["userSession"], $_SESSION["valid"]);
         }
         
         return new Context(NULL, FALSE);
@@ -85,15 +84,15 @@ class Context
             throw new Exception("Sessione non attiva");
         
         $_SESSION["valid"] = FALSE;
-        $_SESSION["utente"] = NULL;
+        $_SESSION["userSession"] = NULL;
     }
 
     /**
      * Utente della sessione.
      *
-     * @var WUtente
+     * @var UserSession
      */
-    private $utente;
+    private $userSession;
 
     /**
      * Indica se il contesto è valido.
@@ -116,13 +115,13 @@ class Context
     }
 
     /**
-     * Restituisce l'utente.
+     * Restituisce la sessione dell'utente.
      *
-     * @return WUtente
+     * @return UserSession
      */
-    function getUtente()
+    function getUserSession()
     {
-        return $this->utente;
+        return $this->userSession;
     }
 
     /**

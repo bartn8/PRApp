@@ -164,21 +164,6 @@ class Utente extends Table
     }
 
     /**
-     * Effettua il logout.
-     *
-     * @throws NotAvailableOperationException l'utente non è loggato.
-     */
-    public static function logout()
-    {
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Elimino il contesto.
-        Context::deleteContext();
-    }
-
-    /**
      * Crea un nuovo staff e inserisce automaticamente l'utente come amministratore.
      *
      * @param InsertNetWStaff $staff
@@ -541,7 +526,25 @@ class Utente extends Table
         throw new AuthorizationException("Token non valido.");
     }
     
-
+    public static function getStaff(int $utente, int $staff){
+        // Recupero i dati degli staff.
+        $conn = parent::getConnection();
+        
+        $stmtSelezione = $conn->prepare("SELECT s.id, s.nome, s.timestampCreazione FROM staff AS s INNER JOIN membro AS m ON s.id = m.idStaff WHERE s.id = :idStaff AND m.idUtente = :idUtente");
+        $stmtSelezione->bindValue(":idUtente", $utente, PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idStaff", $staff, PDO::PARAM_INT);
+        $stmtSelezione->execute();
+        
+        $result = NULL;
+        
+        if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
+            $result = WStaff::of($riga);
+        }
+        
+        $conn = NULL;
+        
+        return $result;
+    }
 
     private function __construct()
     {}

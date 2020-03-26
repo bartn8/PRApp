@@ -59,6 +59,8 @@ class ControllerUtente extends Controller
     public const CMD_LOGIN_TOKEN_ARG_0 = "token";
 
     public const CMD_RESTITUISCI_UTENTE = 11;
+	
+	public const CMD_SCEGLI_STAFF = 8;
 
     public function __construct($printer, $retriver)
     {
@@ -113,6 +115,10 @@ class ControllerUtente extends Controller
             case ControllerUtente::CMD_RESTITUISCI_UTENTE:
                 $this->cmd_restituisci_utente($command);
                 break;
+				
+            case ControllerUtente::CMD_SCEGLI_STAFF:
+                $this->cmd_scegli_staff($command);
+                break;
 
             default:
                 break;
@@ -131,6 +137,7 @@ class ControllerUtente extends Controller
             case ControllerUtente::CMD_GET_TOKEN:
             case ControllerUtente::CMD_LOGIN_TOKEN:
             case ControllerUtente::CMD_RESTITUISCI_UTENTE:
+			case ControllerUtente::CMD_SCEGLI_STAFF:
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
             
@@ -157,13 +164,18 @@ class ControllerUtente extends Controller
         {
             throw new InvalidArgumentException("Argomenti non validi");
         }
-        
+        //Da modificare
         parent::getPrinter()->addResult(Utente::login($command->getArgs()[ControllerUtente::CMD_LOGIN_ARG_0]->getValue()));
     }
 
     private function cmd_logout($command)
     {
-        Utente::logout();
+                // Verifico che si è loggati nel sistema.
+        if (! Context::getContext()->isValid())
+            throw new NotAvailableOperationException("Utente non loggato.");
+
+        // Elimino il contesto.
+        Context::deleteContext();
     }
 
     private function cmd_crea_staff($command)
@@ -227,5 +239,37 @@ class ControllerUtente extends Controller
 
         parent::getPrinter()->addResult($context->getUtente());
     }
+	
+	private function cmd_scegli_staff($command){
+        if(!array_key_exists("staff", $command->getArgs()))
+        {
+            throw new InvalidArgumentException("Argomenti non validi");
+        }
+        
+        // Verifico che si è loggati nel sistema.
+        if (! Context::getContext()->isValid())
+            throw new NotAvailableOperationException("Utente non loggato.");
+            
+        $utente =  Context::getContext()->getUserSession()->getUtente();
+        $staff =  $command->getArgs()['staff']->getValue();
+        
+        if (! ($staff instanceof NetWId))
+            throw new InvalidArgumentException("Parametri non validi. (staff)");
+                
+        $staffScelto = Utente::getStaff($utente->getId(), $staff->getId());
+               
+        if($staffScelto == NULL){
+            throw new AuthorizationException("Non puoi accedere allo staff");
+        }else{
+            Context::getContext()->getUserSession()->setStaffScelto($staffScelto);
+            
+            //Ricavo anche i diritti dell'utente
+            
+            
+            parent::getPrinter()->addResults([$staffScelto, $dirittiStaff]);
+        }
+        
+    }
+	
 }
 

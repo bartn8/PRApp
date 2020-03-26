@@ -30,19 +30,20 @@ class ControllerMembro extends Controller
 {
 
     // Divisione dei comandi: (1-100 utente) (101-200 membro) (201-300 pr) (301-400 cassiere) (401-500 amministratore)
-//     const CMD_IS_MEMBRO = 101;
 
-    const CMD_RESTITUISCI_LISTA_UTENTI = 102;
+    public const CMD_RESTITUISCI_LISTA_UTENTI = 102;
 
-    const CMD_RESTITUISCI_DIRITTI_PERSONALI = 103;
+    public const CMD_RESTITUISCI_DIRITTI_PERSONALI = 103;
 
-    const CMD_RESTITUISCI_DIRITTI_UTENTE = 104;
+    public const CMD_RESTITUISCI_DIRITTI_UTENTE = 104;
 
-    const CMD_RESTITUISCI_LISTA_EVENTI = 105;
+    public const CMD_RESTITUISCI_LISTA_EVENTI = 105;
 
-    const CMD_RESTITUISCI_TIPI_PREVENDITA = 106;
+    public const CMD_RESTITUISCI_TIPI_PREVENDITA = 106;
 
-    const CMD_RESTITUISCI_LISTA_CLIENTI = 107;
+    public const CMD_RESTITUISCI_LISTA_CLIENTI = 107;
+
+    public const CMD_SCEGLI_EVENTO = 108;	
 
     public function __construct($printer, $retriver)
     {
@@ -53,10 +54,7 @@ class ControllerMembro extends Controller
     {
         
         switch ($command->getCommand()) {
-//             case ControllerMembro::CMD_IS_MEMBRO:
-//                 $this->cmd_is_membro($command);
-//                 break;
-            
+
             case ControllerMembro::CMD_RESTITUISCI_LISTA_UTENTI:
                 $this->cmd_restituisci_lista_utenti($command);
                 break;
@@ -80,19 +78,23 @@ class ControllerMembro extends Controller
             case ControllerMembro::CMD_RESTITUISCI_LISTA_CLIENTI:
                 $this->cmd_restituisci_lista_clienti($command);
                 break;
+				
+            case ControllerMembro::CMD_SCEGLI_EVENTO:
+                $this->cmd_scegli_evento($command);
+                break;				
             
             default:
                 break;
         }
         
         switch ($command->getCommand()) {
-//             case ControllerMembro::CMD_IS_MEMBRO:
             case ControllerMembro::CMD_RESTITUISCI_LISTA_UTENTI:
             case ControllerMembro::CMD_RESTITUISCI_DIRITTI_PERSONALI:
             case ControllerMembro::CMD_RESTITUISCI_DIRITTI_UTENTE:
             case ControllerMembro::CMD_RESTITUISCI_LISTA_EVENTI:
             case ControllerMembro::CMD_RESTITUISCI_TIPI_PREVENDITA:
             case ControllerMembro::CMD_RESTITUISCI_LISTA_CLIENTI:
+			case ControllerMembro::CMD_SCEGLI_EVENTO:
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
             
@@ -102,16 +104,6 @@ class ControllerMembro extends Controller
         }
         
     }
-
-//     private function cmd_is_membro($command)
-//     {
-//         if(!array_key_exists("staff", $command->getArgs()))
-//         {
-//             throw new InvalidArgumentException("Argomenti non validi");
-//         }
-        
-//         parent::getPrinter()->addResult(Membro::isMembro($command->getArgs()['staff']->getValue()));
-//     }
     
     private function cmd_restituisci_lista_utenti($command)
     {
@@ -181,6 +173,32 @@ class ControllerMembro extends Controller
         }
         
         parent::getPrinter()->addResults(Membro::getListaClienti($command->getArgs()['staff']->getValue()));
+    }
+	
+	    private function cmd_scegli_evento($command){
+        if(!array_key_exists("evento", $command->getArgs()))
+        {
+            throw new InvalidArgumentException("Argomenti non validi");
+        }
+                
+        // Verifico che si è loggati nel sistema.
+        if (! Context::getContext()->isValid())
+            throw new NotAvailableOperationException("Utente non loggato.");
+            
+        $utente =  Context::getContext()->getUserSession()->getUtente();
+        $evento =  $command->getArgs()['evento']->getValue();
+            
+        if (! ($evento instanceof NetWId))
+            throw new InvalidArgumentException("Parametri non validi. (evento)");
+        
+        $eventoScelto = Membro::getEvento($utente->getId(), $evento->getId());
+        
+        if($eventoScelto == NULL){
+            throw new AuthorizationException("Non puoi accedere all'evento");
+        }else{
+            Context::getContext()->getUserSession()->setEventoScelto($eventoScelto);
+            parent::getPrinter()->addresult($eventoScelto);
+        }
     }
 }
 
