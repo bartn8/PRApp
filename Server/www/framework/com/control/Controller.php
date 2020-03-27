@@ -21,11 +21,14 @@
 
 namespace com\control;
 
+use com\model\Context;
 use com\handler\Retriver;
-use com\model\handler\Command;
 use com\view\printer\Printer;
-// use com\model\handler\Argument;
 use \InvalidArgumentException;
+use com\model\db\table\Membro;
+use com\model\db\table\Utente;
+use com\model\handler\Command;
+use com\model\session\exception\SessionExpiredException;
 
 abstract class Controller
 {
@@ -80,7 +83,55 @@ abstract class Controller
      * @param Command $command
      * @param array $args Array dei parametri grezzo
      */
-    public abstract function handle($command);
+    public function handle(Command $command){
+        //Ricavo il contesto: verrà utilizzato sotto dai sotto controllori.
+        $context = Context::getContext();
+
+        //Prima devo verificare se devo aggiornare il contesto.
+        if($context->isWatchdogTriggered()){
+            //Devo aggiornare il trigger!
+
+            $utente = $context->getUserSession()->getUtente();
+            $staffScelto = $context->getUserSession()->getStaffScelto();
+            $eventoScelto = $context->getUserSession()->getEventoScelto();
+
+            //Per prima cosa guardo se sono ancora dentro lo staff.
+            $richiestaStaff = Utente::getStaff($utente->getId(), $staff->getId());
+
+            if($staffScelto == NULL){
+                //Sessione da aggiornare
+                Context::deleteContext();
+                throw new SessionExpiredException("La sessione è scaduta (staff non disponibile)");
+            }
+
+            //Poi controllo l'evento.
+            $richiestaEvento = Membro::getEvento($utente->getId(), $evento->getId());
+
+            if($richiestaEvento == NULL){
+                //Sessione da aggiornare
+                Context::deleteContext();
+                throw new SessionExpiredException("La sessione è scaduta (evento non disponibile)");
+            }
+
+            //Adesso controllo i diritti: qui non è necessario rimuovere la sessione
+            $dirittiPersonaliAggiornati = Membro::getDiritti($utente->getId(), $staffScelto->getId());
+            $context->getUserSession()->setDirittiUtente($dirittiPersonaliAggiornati);
+
+            //Applico le modifiche.
+            $context->apply();
+        }
+
+        $this->internalHandle($command, $context);
+    }
+
+    /**
+     * Metodo implementato dalle classi controllori reali.
+     * Passa il comando da elaborare e il contesto corrente.
+     * 
+     * @param Command comando da elaborare
+     * @param Context contesto attuale.
+     */
+    protected abstract function internalHandle(Command $command, Context $context);
             
 }
 

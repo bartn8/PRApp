@@ -27,13 +27,24 @@ use com\model\session\UserSession;
 
 /**
  * Gestisce il contesto di un utente.
- * L'oggetto restituito è immutabile.
  * Ha una factory interna per la creazione, restituzione e cancellazione del contesto.
+ * Contiene un watchdog per l'aggiornamento durante la sessione.
+ * Dopo ogni aggiornamento bisogna utilizzare il metodo apply per salvare le modifche
  *
  * @author Luca Bartolomei bartn8@hotmail.it
  */
 class Context
 {
+
+    /**
+     * Indica dopo quando far entrare in funzione il watchdog.
+     */
+    private static $watchdogThreshold = 20;
+
+    private static function loadParameters(){
+        if(isset($GLOBALS['watchdogThreshold']))
+            Context::$watchdogThreshold = $GLOBALS['watchdogThreshold'];
+    }
 
     /**
      * Crea un contesto.
@@ -49,9 +60,13 @@ class Context
         
         if (! ($utente instanceof WUtente))
             throw new InvalidArgumentException("utente non valido.");
+
+        loadParameters();
         
-        $_SESSION["valid"] = TRUE;
-        $_SESSION["userSession"] = new UserSession($utente);
+        $userSession = new UserSession($utente);
+        $context = new Context($userSession, TRUE);
+
+        $_SESSION["context"] = $context;
     }
 
     /**
@@ -65,8 +80,15 @@ class Context
         if (session_status() != PHP_SESSION_ACTIVE)
             throw new Exception("Sessione non attiva");
         
-        if (array_key_exists("valid", $_SESSION) && array_key_exists("userSession", $_SESSION)) {
-            return new Context($_SESSION["userSession"], $_SESSION["valid"]);
+        if (array_key_exists("context", $_SESSION)) {
+            $context = $_SESSION["context"];
+
+            if($context instanceof Context){
+                //Ogni volta che si richiede il contesto aggiorno il watchdog.
+                $context->updateWatchdog();
+
+                return $context;
+            }
         }
         
         return new Context(NULL, FALSE);
@@ -83,8 +105,7 @@ class Context
         if (session_status() != PHP_SESSION_ACTIVE)
             throw new Exception("Sessione non attiva");
         
-        $_SESSION["valid"] = FALSE;
-        $_SESSION["userSession"] = NULL;
+        $_SESSION['context'] = NULL;
     }
 
     /**
@@ -100,6 +121,11 @@ class Context
      * @var boolean
      */
     private $valid;
+
+    /**
+     * Se superato, la sessione va aggiornata.
+     */
+    private $watchdogCounter;
 
     /**
      * Genera un contesto.
@@ -119,7 +145,7 @@ class Context
      *
      * @return UserSession
      */
-    function getUserSession()
+    public function getUserSession()
     {
         return $this->userSession;
     }
@@ -129,8 +155,43 @@ class Context
      *
      * @return boolean
      */
-    function isValid()
+    public function isValid()
     {
         return $this->valid;
     }
+
+    /**
+     * Indica se il watchdog è stato attivato.
+     * 
+     * @return boolean
+     */
+    public function isWatchdogTriggered(){
+        return $this->watchdogCounter >= Context::$watchdogThreshold;
+    }
+
+    /**
+     * Aggiorna il watchdog
+     */
+    public function updateWatchdog(){
+        $this->watchdogCounter++;
+    }
+
+    /**
+     * Resetta il watchdog.
+     */
+    public function resetWatchdog(){
+        $this->watchdogCounter = 0;
+    }
+
+    /**
+     * Utilizzato quando si vuole salvare le modifiche al contesto.
+     */
+    public function apply(){
+        if (session_status() != PHP_SESSION_ACTIVE)
+            throw new Exception("Sessione non attiva");
+
+        if($this->isValid())
+            $_SESSION["context"] = $this;
+    }
+
 }

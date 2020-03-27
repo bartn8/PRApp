@@ -66,13 +66,9 @@ class ControllerAmministratore extends Controller
         parent::__construct($printer, $retriver);
     }
 
-    public function handle($command)
+    public function internalHandle($command)
     {
-        switch ($command->getCommand()) {
-//             case ControllerAmministratore::CMD_IS_AMMINISTRATORE:
-//                 $this->cmd_is_amministratore($command);
-//                 break;
-            
+        switch ($command->getCommand()) {            
             case ControllerAmministratore::CMD_RIMUOVI_CLIENTE:
                 $this->cmd_rimuovi_cliente($command);
                 break;
@@ -138,7 +134,6 @@ class ControllerAmministratore extends Controller
         }
         
         switch ($command->getCommand()) {
-//             case ControllerAmministratore::CMD_IS_AMMINISTRATORE:
             case ControllerAmministratore::CMD_RIMUOVI_CLIENTE:
             case ControllerAmministratore::CMD_AGGIUNGI_EVENTO:
             case ControllerAmministratore::CMD_MODIFICA_EVENTO:
@@ -161,16 +156,6 @@ class ControllerAmministratore extends Controller
                 break;
         }
     }
-
-//     private function cmd_is_amministratore($command)
-//     {
-//         if(!array_key_exists("staff", $command->getArgs()))
-//         {
-//             throw new InvalidArgumentException("Argomenti non validi");
-//         }
-        
-//         parent::getPrinter()->addResult(Amministratore::isAmministratore($command->getArgs()['staff']->getValue()));
-//     }
 
     private function cmd_rimuovi_cliente($command)
     {
@@ -321,5 +306,16 @@ class ControllerAmministratore extends Controller
         
         parent::getPrinter()->addResult(Amministratore::getStatisticheCassiereEvento($command->getArgs()['evento']->getValue(), $command->getArgs()['cassiere']->getValue()));
     }
+
+    private function cmd_restituisci_diritti_utente(Command $command, Context $context)
+    {
+        if(!array_key_exists("utente", $command->getArgs()) || !array_key_exists("staff", $command->getArgs()))
+        {
+            throw new InvalidArgumentException("Argomenti non validi");
+        }
+        
+        parent::getPrinter()->addResult(Membro::getDirittiUtente($command->getArgs()['utente']->getValue(), $command->getArgs()['staff']->getValue()));
+    }
+
 }
 

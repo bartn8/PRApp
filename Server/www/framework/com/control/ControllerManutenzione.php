@@ -27,9 +27,12 @@ use com\utils\DateTimeImmutableAdapterJSON;
 class ControllerManutenzione extends Controller
 {
     // Divisione dei comandi: (1-100 utente) (101-200 membro) (201-300 pr) (301-400 cassiere) (401-500 amministratore) (951-1000 manutenzione)
-    private const CMD_ECHO = 951;
+    public const CMD_ECHO = 951;
     
-    private const CMD_TIMESTAMP = 952;
+    public const CMD_TIMESTAMP = 952;
+
+    //Restituisce gli aggiornamenti effettuati dall'utlimo backup
+    public const CMD_AGGIORNA_BACKUP_STAFF = 953;
     
 
     public function __construct($printer, $retriver)

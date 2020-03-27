@@ -4,19 +4,6 @@ require_once 'config.php';
 
 header('Content-type: text/plain; charset=utf-8');
 
-
-
-/*
-function __autoload($class)
-{
-	// Cartella corrente.
-	if (file_exists($class . ".php"))
-		include_once $class . '.php';
-
-}
-*/
-
-
 spl_autoload_register('MyAutoloader'); 
 
 function MyAutoloader ($class)

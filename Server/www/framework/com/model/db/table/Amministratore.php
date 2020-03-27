@@ -149,29 +149,6 @@ class Amministratore extends Table
         return $count === 1;
     }
 
-    // /**
-    // * Verifica se l'utente è un amministratore dello staff.
-    // *
-    // * @param WStaff $staff
-    // * @throws InvalidArgumentException parametri nulli o non validi
-    // * @throws NotAvailableOperationException non si è loggati nel sistema
-    // * @throws PDOException problemi del database (errore di connessione, errore nel database)
-    // * @return boolean
-    // */
-    // public static function isAmministratore(WStaff $staff): bool
-    // {
-    // if (is_null($staff))
-    // throw new InvalidArgumentException("Parametri nulli.");
-
-    // if (! ($staff instanceof WStaff))
-    // throw new InvalidArgumentException("Parametri non validi.");
-
-    // // Verifico che si è loggati nel sistema.
-    // if (!Context::getContext()->isValid())
-    // throw new NotAvailableOperationException("Utente non loggato.");
-
-    // return self::_isAmministratore($staff->getId());
-    // }
 
     /**
      * Rimuove un cliente dallo staff.

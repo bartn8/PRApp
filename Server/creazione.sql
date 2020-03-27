@@ -51,6 +51,13 @@ CREATE TABLE amministratore (
   FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
 
+CREATE TABLE macchina (
+	idUtente int NOT NULL,
+	idStaff int NOT NULL,
+	PRIMARY KEY(idUtente, idStaff),
+	FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
+);
+
 CREATE TABLE cliente (
   id int NOT NULL AUTO_INCREMENT,
   idStaff int NOT NULL,

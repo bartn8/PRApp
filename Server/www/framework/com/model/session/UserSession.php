@@ -80,7 +80,7 @@ class UserSession {
     //Non metto il setter dell'utente, unico per la sessione.
     
     /**
-     * @param \com\model\db\wrapper\WStaff|NULL $staffScelto
+     * @param \com\model\db\wrapper\WStaff $staffScelto
      */
     public function setStaffScelto($staffScelto)
     {
@@ -88,7 +88,7 @@ class UserSession {
     }
 
     /**
-     * @param \com\model\db\wrapper\WEvento|NULL $eventoScelto
+     * @param \com\model\db\wrapper\WEvento $eventoScelto
      */
     public function setEventoScelto($eventoScelto)
     {
@@ -104,7 +104,7 @@ class UserSession {
     }
 
     /**
-     * @param Ambigous <\com\model\db\wrapper\WDirittiUtente, NULL> $dirittiUtente
+     * @param \com\model\db\wrapper\WDirittiUtente $dirittiUtente
      */
     public function setDirittiUtente($dirittiUtente)
     {

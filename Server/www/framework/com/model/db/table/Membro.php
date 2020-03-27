@@ -86,59 +86,15 @@ class Membro extends Table
         return $count === 1;
     }
 
-    // /**
-    // * Verifica se l'utente è membro dello staff.
-    // *
-    // * @param WStaff $staff
-    // * @throws InvalidArgumentException parametri nulli o non validi
-    // * @throws NotAvailableOperationException non si è loggati nel sistema
-    // * @throws PDOException problemi del database (errore di connessione, errore nel database)
-    // * @return boolean
-    // */
-    // public static function isMembro(WStaff $staff): bool
-    // {
-    // if (is_null($staff))
-    // throw new InvalidArgumentException("Parametri nulli.");
-
-    // if (! ($staff instanceof WStaff))
-    // throw new InvalidArgumentException("Parametri non validi.");
-
-    // // Verifico che si è loggati nel sistema.
-    // if (!Context::getContext()->isValid())
-    // throw new NotAvailableOperationException("Utente non loggato.");
-
-    // return self::_isMembro($staff->getId());
-    // }
-
     /**
      * Restituisce la lista dei membri dello staff.
      *
-     * @param NetWId $staff
+     * @param WStaff $staff
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException non si è loggati nel sistema
-     * @throws AuthorizationException non si fa parte dello staff
      * @return \com\model\db\wrapper\WUtente[] Lista dei membri dello staff
      */
-    public static function getListaUtenti(NetWId $staff): array
+    public static function getListaUtenti(WStaff $staff) : array
     {
-        // Verifico i parametri
-        if (is_null($staff))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($staff instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia membro dello staff.
-        if (! self::_isMembro($staff->getId()))
-            throw new AuthorizationException("L'utente non fa parte dello staff.");
-
-        // ---------------------------------------------------------------------------
-
         $conn = parent::getConnection();
 
         $stmtSelezione = $conn->prepare("SELECT id, nome, cognome, telefono FROM utente INNER JOIN membro ON membro.idUtente = utente.id WHERE membro.idStaff = :idStaff");
@@ -157,25 +113,8 @@ class Membro extends Table
     }
 
     // Utilizzo sto metodo per i due metodi pubblici qua sotto.
-    private static function getDiritti(int $idUtente, int $idStaff): ?WDirittiUtente
+    public static function getDiritti(int $idUtente, int $idStaff): ?WDirittiUtente
     {
-        // Verifico i parametri
-        if (is_null($idUtente) || is_null($idStaff))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! is_int($idUtente) || ! is_int($idStaff))
-            throw new InvalidArgumentException("Parametri non del tipo giusto.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia membro dello staff.
-        if (! self::_isMembro($idStaff))
-            throw new AuthorizationException("L'utente non fa parte dello staff.");
-
-        // ---------------------------------------------------------------------------
-
         $conn = parent::getConnection();
 
         //Query per XAMPP:
@@ -213,85 +152,18 @@ EOT;
     }
 
     /**
-     * Restituisce i diritti dell'utente.
-     *
-     * @param NetWId $staff
-     * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException non si è loggati nel sistema
-     * @throws AuthorizationException non si fa parte dello staff
-     * @return ?WDirittiUtente wrapper dei diritti dell'utente
-     */
-    public static function getDirittiPersonali(NetWId $staff): ?WDirittiUtente
-    {
-        // Devo per forza verificare che l'utente sia loggato.
-        // Altrimenti non riesco a restituire il context.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico anche il parametro.
-        if (! ($staff instanceof NetWId))
-            throw new InvalidArgumentException("Parametro non valido (INSTANCE).");
-
-        return self::getDiritti(Context::getContext()->getUtente()->getId(), $staff->getId());
-    }
-
-    /**
-     * Restituisce i diritti di un utente.
-     *
-     * @param NetWId $utente
-     * @param NetWId $staff
-     * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException non si è loggati nel sistema
-     * @throws AuthorizationException non si fa parte dello staff
-     * @return ?WDirittiUtente wrapper dei diritti
-     */
-    public static function getDirittiUtente(NetWId $utente, NetWId $staff): ?WDirittiUtente
-    {
-        // Verifico i parametri
-        if (is_null($utente) || is_null($staff))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($utente instanceof NetWId) || ! ($staff instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        return self::getDiritti($utente->getId(), $staff->getId());
-    }
-
-    /**
      * Restituisce gli eventi prodotti dallo staff.
      *
-     * @param NetWId $staff
+     * @param int $staff
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException non si è loggati nel sistema
-     * @throws AuthorizationException non si fa parte dello staff
      * @return WEvento[] Lista degli eventi
      */
-    public static function getListaEventi(NetWId $staff): array
+    public static function getListaEventi(int $staff): array
     {
-        // Verifico i parametri
-        if (is_null($staff))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($staff instanceof NetWId))
-            throw new InvalidArgumentException("Parametro non valido (INSTANCE).");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia membro dello staff.
-        if (! self::_isMembro($staff->getId()))
-            throw new AuthorizationException("L'utente non fa parte dello staff.");
-
-        // ---------------------------------------------------------------------------
-
         $conn = parent::getConnection();
 
         $stmtSelezione = $conn->prepare("SELECT id, idStaff, idCreatore, nome, inizio, descrizione, fine, indirizzo, stato, timestampUltimaModifica, idModificatore FROM evento WHERE idStaff = :idStaff");
-        $stmtSelezione->bindValue(":idStaff", $staff->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idStaff", $staff, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $lista = array();
@@ -308,36 +180,16 @@ EOT;
     /**
      * Restituisce i tipi di prevendita disponibili per un evento
      *
-     * @param NetWId $evento
+     * @param int $evento
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException non si è loggati nel sistema
-     * @throws AuthorizationException non si fa parte dello staff
      * @return \com\model\db\wrapper\WTipoPrevendita[] Lista dei tipi di prevendita per l'evento
      */
-    public static function getTipiPrevendita(NetWId $evento): array
+    public static function getTipiPrevendita(int $evento) : array
     {
-        // Verifico i parametri
-        if (is_null($evento))
-            throw new InvalidArgumentException("Parametro nullo.");
-
-        if (! ($evento instanceof NetWId))
-            throw new InvalidArgumentException("Parametro non valido.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia membro dello staff.
-        if (! self::_isMembroByEvento($evento->getId()))
-            throw new AuthorizationException("L'utente non fa parte dello staff.");
-
-        // ---------------------------------------------------------------------------
-
         $conn = parent::getConnection();
 
         $stmtSelezione = $conn->prepare("SELECT id, idEvento, nome, descrizione, prezzo, aperturaPrevendite, chiusuraPrevendite, idModificatore, timestampUltimaModifica FROM tipoPrevendita WHERE idEvento = :idEvento");
-        $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idEvento", $evento, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $lista = array();
@@ -354,36 +206,16 @@ EOT;
     /**
      * Restituisce la lista dei clienti di uno staff.
      *
-     * @param NetWId $staff
+     * @param int $staff
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException non si è loggati nel sistema
-     * @throws AuthorizationException non si fa parte dello staff
      * @return \com\model\db\wrapper\WCliente[] Lista dei clienti di uno staff.
      */
-    public static function getListaClienti(NetWId $staff): array
+    public static function getListaClienti(int $staff): array
     {
-        // Verifico i parametri
-        if (is_null($staff))
-            throw new InvalidArgumentException("Parametro nullo.");
-
-            if (! ($staff instanceof NetWId))
-            throw new InvalidArgumentException("Parametro non valido.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia membro dello staff.
-        if (! self::_isMembro($staff->getId()))
-            throw new AuthorizationException("L'utente non fa parte dello staff.");
-
-        // ---------------------------------------------------------------------------
-
         $conn = parent::getConnection();
 
         $stmtSelezione = $conn->prepare("SELECT id, idStaff, nome, cognome, telefono, dataDiNascita, codiceFiscale, timestampInserimento FROM cliente WHERE idStaff = :idStaff");
-        $stmtSelezione->bindValue(":idStaff", $staff->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idStaff", $staff, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $lista = array();
@@ -395,6 +227,38 @@ EOT;
         $conn = NULL;
 
         return $lista;
+    }
+
+    /**
+     * Restituisce l'evento dall'id
+     * Restitusice solo se l'utente fa parte dello staff associato.
+     * Restitusice solo se l'evento fa parte dello staff associato.
+     * 
+     * @param int $utente
+     * @param int $staff
+     * @param int $evento
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     * 
+     * @return WEvento evento richiesto
+     */
+    public static function getEvento(int $utente, int $staff, int $evento) : WEvento {
+        $conn = parent::getConnection();
+        
+        $stmtSelezione = $conn->prepare("SELECT e.id, e.idStaff, e.idCreatore, e.nome, e.inizio, e.descrizione, e.fine, e.indirizzo, e.stato, e.timestampUltimaModifica, e.idModificatore FROM evento AS e INNER JOIN membro AS m ON m.idStaff = e.idStaff WHERE e.id = :idEvento AND m.idUtente = :idUtente AND m.idStaff = :idStaff");
+        $stmtSelezione->bindValue(":idUtente", $utente, PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idStaff", $staff, PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idEvento", $evento, PDO::PARAM_INT);
+        $stmtSelezione->execute();
+        
+        $result = NULL;
+        
+        if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
+            $result = WEvento::of($riga);
+        }
+        
+        $conn = NULL;
+        
+        return $result;
     }
 
     private function __construct()

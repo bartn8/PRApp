@@ -1,6 +1,5 @@
 <?php
 
-//TODO: forse meglio UTC: dopo impostare connessione database con utc e restituire con formato iso8061
 //define('TIMEZONE', 'Europe/Rome');
 define('TIMEZONE', 'UTC');
 date_default_timezone_set(TIMEZONE);
@@ -17,6 +16,7 @@ $GLOBALS['databaseType'] = "mysql";
 $GLOBALS['databaseName'] = "my_prapp";
 $GLOBALS['username'] = "prapp";
 
-
 $GLOBALS['password'] = "";
 $GLOBALS['charset'] = "utf8";
+
+$GLOBALS['watchdogThreshold'] = 20;
