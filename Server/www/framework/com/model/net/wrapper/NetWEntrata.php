@@ -34,30 +34,27 @@ class NetWEntrata implements NetWrapper
         if (is_null($array) || ! is_array($array))
             throw new InvalidArgumentException("Array nullo o non valido.");
 
-        if (! array_key_exists("idEvento", $array))
-            throw new InvalidArgumentException("Dato idEvento non trovato.");
-
         if (! array_key_exists("idPrevendita", $array))
             throw new InvalidArgumentException("Dato idPrevendita non trovato.");
 
         if (! array_key_exists("codiceAccesso", $array))
             throw new InvalidArgumentException("Dato codiceAccesso non trovato.");
 
-        return self::make((int) $array["idPrevendita"], (int) $array["idEvento"], $array["codiceAccesso"]);
+        return self::make((int) $array["idPrevendita"], $array["codiceAccesso"]);
     }
 
-    public static function make(int $idPrevendita, int $idEvento, string $codiceAccesso): NetWEntrata
+    public static function make(int $idPrevendita, string $codiceAccesso): NetWEntrata
     {
-        if (is_null($idPrevendita) || is_null($idEvento) || is_null($codiceAccesso))
+        if (is_null($idPrevendita) || is_null($codiceAccesso))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($idPrevendita) || ! is_int($idEvento) || ! is_string($codiceAccesso))
+        if (! is_int($idPrevendita) || ! is_string($codiceAccesso))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if (strlen($codiceAccesso) > WPrevendita::CODICE_MAX)
             throw new InvalidArgumentException("Username non valido (MAX)");
 
-        return new NetWEntrata($idPrevendita, $idEvento, $codiceAccesso);
+        return new NetWEntrata($idPrevendita, $codiceAccesso);
     }
 
     /**
@@ -67,29 +64,23 @@ class NetWEntrata implements NetWrapper
      */
     private $idPrevendita;
 
-    /**
-     * Identificativo dell'evento a cui risponde il cassiere.
-     *
-     * @var int
-     */
-    private $idEvento;
+    //Prima c'era $idEvento: ora è l'evento selezionato dal cassiere.
 
     /**
      * Codice di accesso della prevendita.
      *
-     * @var string
+     * @var string|NULL
      */
     private $codiceAccesso;
 
-    private function __construct($idPrevendita, $idEvento, $codiceAccesso)
+    private function __construct($idPrevendita, $codiceAccesso)
     {
         $this->idPrevendita = $idPrevendita;
-        $this->idEvento = $idEvento;
         $this->codiceAccesso = $codiceAccesso;
     }
 
     /**
-     *
+     * Restituisce l'id della prevendita associata all'entrata
      * @return number
      */
     public function getIdPrevendita()
@@ -98,17 +89,10 @@ class NetWEntrata implements NetWrapper
     }
 
     /**
-     *
-     * @return number
-     */
-    public function getIdEvento()
-    {
-        return $this->idEvento;
-    }
-
-    /**
-     *
-     * @return string
+     * Restituisce il codice di accesso.
+     * Potrebbe essere 
+     * 
+     * @return string|NULL
      */
     public function getCodiceAccesso()
     {
@@ -120,7 +104,7 @@ class NetWEntrata implements NetWrapper
      */
     public function clear()
     {
-        unset($this->codiceAccesso);
+        $this->codiceAccesso = NULL;
     }
 
     /**

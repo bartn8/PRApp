@@ -25,6 +25,10 @@ use Exception;
 
 //Nell'handler incapsula la pdo e rilancia l'eccezione.
 
+/**
+ * Si verifica quando il database fa i capricci e non vuole fare ciò che dovrebbe fare.
+ * Teoricamente non si dovrebbe mai verificare, ma se succede...
+ */
 class DatabaseException extends Exception
 {
     

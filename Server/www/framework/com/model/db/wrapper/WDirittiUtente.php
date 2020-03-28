@@ -1,7 +1,7 @@
 <?php
 
 /*
- * PRApp  Copyright (C) 2019  Luca Bartolomei
+ * PRApp  Copyright (C) 2020  Luca Bartolomei
  *
  * This file is part of PRApp.
  *
@@ -165,7 +165,7 @@ class WDirittiUtente implements DatabaseWrapper
     }
 
     /**
-     *
+     * Restituisce l'id dell'utente a cui sono associati i diritti nello staff
      * @return int
      */
     public function getIdUtente()
@@ -174,7 +174,7 @@ class WDirittiUtente implements DatabaseWrapper
     }
 
     /**
-     *
+     * Restituisce l'id dello staff a cui sono associati i diritti dell'utente
      * @return int
      */
     public function getIdStaff()
@@ -183,12 +183,60 @@ class WDirittiUtente implements DatabaseWrapper
     }
 
     /**
-     *
+     * Restituisce i diritti dell'utente.
      * @return Diritto[]
      */
-    public function getDiritti()
+    public function getDiritti() : array
     {
         return $this->diritti;
+    }
+
+    /**
+     * Dice se l'utente è cassiere nello staff.
+     * 
+     * @return boolean
+     */
+    public function isCassiere() : boolean
+    {
+        foreach($this->diritti as $diritto){
+            if(Diritto::CASSIERE == $diritto->getId()){
+                return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Dice se l'utente è PR nello staff.
+     * 
+     * @return boolean
+     */
+    public function isPR() : boolean
+    {
+        foreach($this->diritti as $diritto){
+            if(Diritto::PR == $diritto->getId()){
+                return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Dice se l'utente è amministratore nello staff.
+     * 
+     * @return boolean
+     */
+    public function isAmministratore() : boolean
+    {
+        foreach($this->diritti as $diritto){
+            if(Diritto::AMMINISTRATORE == $diritto->getId()){
+                return TRUE;
+            }
+        }
+
+        return FALSE;
     }
 }
 

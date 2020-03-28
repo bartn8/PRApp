@@ -66,67 +66,67 @@ class ControllerAmministratore extends Controller
         parent::__construct($printer, $retriver);
     }
 
-    public function internalHandle($command)
+    public function internalHandle(Command $command, Context $context)
     {
         switch ($command->getCommand()) {            
             case ControllerAmministratore::CMD_RIMUOVI_CLIENTE:
-                $this->cmd_rimuovi_cliente($command);
+                $this->cmd_rimuovi_cliente($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_AGGIUNGI_EVENTO:
-                $this->cmd_aggiungi_evento($command);
+                $this->cmd_aggiungi_evento($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_MODIFICA_EVENTO:
-                $this->cmd_modifica_evento($command);
+                $this->cmd_modifica_evento($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_AGGIUNGI_TIPO_PREVENDITA:
-                $this->cmd_aggiungi_tipo_prevendita($command);
+                $this->cmd_aggiungi_tipo_prevendita($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_MODIFICA_TIPO_PREVENDITA:
-                $this->cmd_modifica_tipo_prevendita($command);
+                $this->cmd_modifica_tipo_prevendita($command, $context);
                 break;
                 
             case ControllerAmministratore::CMD_ELIMINA_TIPO_PREVENDITA:
-                $this->cmd_elimina_tipo_prevendita($command);
+                $this->cmd_elimina_tipo_prevendita($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_MODIFICA_DIRITTI_UTENTE:
-                $this->cmd_modifica_diritti_utente($command);
+                $this->cmd_modifica_diritti_utente($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR:
-                $this->cmd_restituisci_statistiche_pr($command);
+                $this->cmd_restituisci_statistiche_pr($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_CASSIERE:
-                $this->cmd_restituisci_statistiche_cassiere($command);
+                $this->cmd_restituisci_statistiche_cassiere($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_EVENTO:
-                $this->cmd_restituisci_statistiche_evento($command);
+                $this->cmd_restituisci_statistiche_evento($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_RESTITUISCI_PREVENDITE:
-                $this->cmd_restituisci_prevendite($command);
+                $this->cmd_restituisci_prevendite($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_RIMUOVI_MEMBRO:
-                $this->cmd_rimuovi_membro($command);
+                $this->cmd_rimuovi_membro($command, $context);
                 break;
                 
             case ControllerAmministratore::CMD_MODIFICA_CODICE_ACCESSO:
-                $this->cmd_modifica_codice_accesso($command);
+                $this->cmd_modifica_codice_accesso($command, $context);
                 break;
 
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR_EVENTO:
-                $this->cmd_restituisci_statistiche_pr_evento($command);
+                $this->cmd_restituisci_statistiche_pr_evento($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO:
-                $this->cmd_restituisci_statistiche_cassiere_evento($command);
+                $this->cmd_restituisci_statistiche_cassiere_evento($command, $context);
                 break;
                 
             default:
@@ -157,7 +157,7 @@ class ControllerAmministratore extends Controller
         }
     }
 
-    private function cmd_rimuovi_cliente($command)
+    private function cmd_rimuovi_cliente(Command $command, Context $context)
     {
         if(!array_key_exists("cliente", $command->getArgs()))
         {
@@ -167,7 +167,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::rimuoviCliente($command->getArgs()['cliente']->getValue()));
     }
 
-    private function cmd_aggiungi_evento($command)
+    private function cmd_aggiungi_evento(Command $command, Context $context)
     {
         if(!array_key_exists("evento", $command->getArgs()))
         {
@@ -177,7 +177,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::aggiungiEvento($command->getArgs()['evento']->getValue()));
     }
 
-    private function cmd_modifica_evento($command)
+    private function cmd_modifica_evento(Command $command, Context $context)
     {
         if(!array_key_exists("evento", $command->getArgs()))
         {
@@ -187,7 +187,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::modificaEvento($command->getArgs()['evento']->getValue()));
     }
 
-    private function cmd_aggiungi_tipo_prevendita($command)
+    private function cmd_aggiungi_tipo_prevendita(Command $command, Context $context)
     {
         if(!array_key_exists("tipoPrevendita", $command->getArgs()))
         {
@@ -197,7 +197,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::aggiungiTipoPrevendita($command->getArgs()['tipoPrevendita']->getValue()));
     }
 
-    private function cmd_modifica_tipo_prevendita($command)
+    private function cmd_modifica_tipo_prevendita(Command $command, Context $context)
     {
         if(!array_key_exists("tipoPrevendita", $command->getArgs()))
         {
@@ -207,7 +207,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::modificaTipoPrevendita($command->getArgs()['tipoPrevendita']->getValue()));
     }
     
-    private function cmd_elimina_tipo_prevendita($command)
+    private function cmd_elimina_tipo_prevendita(Command $command, Context $context)
     {
         if(!array_key_exists("tipoPrevendita", $command->getArgs()))
         {
@@ -217,7 +217,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::eliminaTipoPrevendita($command->getArgs()['tipoPrevendita']->getValue()));
     }
 
-    private function cmd_modifica_diritti_utente($command)
+    private function cmd_modifica_diritti_utente(Command $command, Context $context)
     {
         if(!array_key_exists("dirittiUtente", $command->getArgs()))
         {
@@ -227,7 +227,7 @@ class ControllerAmministratore extends Controller
         Amministratore::modificaDirittiUtente($command->getArgs()['dirittiUtente']->getValue());
     }
 
-    private function cmd_restituisci_statistiche_pr($command)
+    private function cmd_restituisci_statistiche_pr(Command $command, Context $context)
     {
         if(!array_key_exists("staff", $command->getArgs()) || !array_key_exists("pr", $command->getArgs()))
         {
@@ -237,7 +237,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::getStatistichePR($command->getArgs()['pr']->getValue(), $command->getArgs()['staff']->getValue()));
     }
 
-    private function cmd_restituisci_statistiche_cassiere($command)
+    private function cmd_restituisci_statistiche_cassiere(Command $command, Context $context)
     {
         if(!array_key_exists("staff", $command->getArgs()) || !array_key_exists("cassiere", $command->getArgs()))
         {
@@ -247,7 +247,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::getStatisticheCassiere($command->getArgs()['cassiere']->getValue(), $command->getArgs()['staff']->getValue()));
     }
 
-    private function cmd_restituisci_statistiche_evento($command)
+    private function cmd_restituisci_statistiche_evento(Command $command, Context $context)
     {
         if(!array_key_exists("evento", $command->getArgs()))
         {
@@ -257,7 +257,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResults(Amministratore::getStatisticheEvento($command->getArgs()['evento']->getValue()));
     }
 
-    private function cmd_restituisci_prevendite($command)
+    private function cmd_restituisci_prevendite(Command $command, Context $context)
     {
         if(!array_key_exists("evento", $command->getArgs()))
         {
@@ -267,7 +267,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::getPrevendite($command->getArgs()['evento']->getValue()));
     }
     
-    private function cmd_rimuovi_membro($command)
+    private function cmd_rimuovi_membro(Command $command, Context $context)
     {
         if(!array_key_exists("staff", $command->getArgs()) || !array_key_exists("membro", $command->getArgs()))
         {
@@ -277,7 +277,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::rimuoviMembro($command->getArgs()['membro']->getValue(), $command->getArgs()['staff']->getValue()));
     }
     
-    private function cmd_modifica_codice_accesso($command)
+    private function cmd_modifica_codice_accesso(Command $command, Context $context)
     {
         if(!array_key_exists("staff", $command->getArgs()))
         {
@@ -287,7 +287,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::modificaCodiceAccesso($command->getArgs()['staff']->getValue()));
     }
 
-    private function cmd_restituisci_statistiche_pr_evento($command)
+    private function cmd_restituisci_statistiche_pr_evento(Command $command, Context $context)
     {
         if(!array_key_exists("evento", $command->getArgs()) || !array_key_exists("pr", $command->getArgs()))
         {
@@ -297,7 +297,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResults(Amministratore::getStatistichePREvento($command->getArgs()['evento']->getValue(), $command->getArgs()['pr']->getValue()));
     }
 
-    private function cmd_restituisci_statistiche_cassiere_evento($command)
+    private function cmd_restituisci_statistiche_cassiere_evento(Command $command, Context $context)
     {
         if(!array_key_exists("evento", $command->getArgs()) || !array_key_exists("cassiere", $command->getArgs()))
         {

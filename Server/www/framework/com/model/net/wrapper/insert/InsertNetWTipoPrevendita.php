@@ -33,7 +33,6 @@ class InsertNetWTipoPrevendita implements NetWrapper
     /**
      * Metodo factory senza l'id, utlizzato quando si deve inserire un tipo di prevendita.
      *
-     * @param int $idEvento
      * @param string $nome
      * @param string $descrizione
      * @param float $prezzo
@@ -42,16 +41,13 @@ class InsertNetWTipoPrevendita implements NetWrapper
      * @throws InvalidArgumentException
      * @return InsertNetWTipoPrevendita
      */
-    private static function make($idEvento, $nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite)
+    private static function make($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite)
     {
-        if (is_null($idEvento) || is_null($nome) || is_null($prezzo) || is_null($aperturaVendite) || is_null($chiusuraVendite))
+        if (is_null($nome) || is_null($prezzo) || is_null($aperturaVendite) || is_null($chiusuraVendite))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($idEvento) || ! is_string($nome) || ! is_string($descrizione) || ! is_float($prezzo) || ! ($aperturaVendite instanceof DateTimeImmutableAdapterJSON) || ! ($chiusuraVendite instanceof DateTimeImmutableAdapterJSON))
+        if (! is_string($nome) || ! is_string($descrizione) || ! is_float($prezzo) || ! ($aperturaVendite instanceof DateTimeImmutableAdapterJSON) || ! ($chiusuraVendite instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
-
-        if ($idEvento <= 0)
-            throw new InvalidArgumentException("ID Evento non valido");
 
         if (strlen($nome) > WTipoPrevendita::NOME_MAX)
             throw new InvalidArgumentException("Nome non valido (MAX)");
@@ -64,16 +60,13 @@ class InsertNetWTipoPrevendita implements NetWrapper
         if (strlen($descrizione) > WTipoPrevendita::DESCRIZIONE_MAX)
             throw new InvalidArgumentException("Descrizione non valida (MAX)");
 
-        return new InsertNetWTipoPrevendita($idEvento, $nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite);
+        return new InsertNetWTipoPrevendita($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite);
     }
 
     public static function of($array)
     {
         if (is_null($array) || ! is_array($array))
             throw new InvalidArgumentException("Array nullo o non valido.");
-
-        if (! array_key_exists("idEvento", $array))
-            throw new InvalidArgumentException("Dato idEvento non trovato.");
 
         if (! array_key_exists("nome", $array))
             throw new InvalidArgumentException("Dato nome non trovato.");
@@ -93,16 +86,10 @@ class InsertNetWTipoPrevendita implements NetWrapper
         $aperturaPrevendite = new DateTimeImmutableAdapterJSON(new \DateTimeImmutable($array["aperturaPrevendite"]));   //ISO8061
         $chiusuraVendite = new DateTimeImmutableAdapterJSON(new \DateTimeImmutable($array["chiusuraPrevendite"]));      //ISO8061
 
-        return self::make((int) $array["idEvento"], $array["nome"], $array["descrizione"], (float) $array["prezzo"], $aperturaPrevendite, $chiusuraVendite);
+        return self::make($array["nome"], $array["descrizione"], (float) $array["prezzo"], $aperturaPrevendite, $chiusuraVendite);
     }
 
-    /**
-     * Identificativo dell'evento associato.
-     * (>0).
-     *
-     * @var int|NULL
-     */
-    private $idEvento;
+    //Prima c'era idEvento: ora sostituito da evento selezionato.
 
     /**
      * Nome del tipo di prevendita.
@@ -139,23 +126,13 @@ class InsertNetWTipoPrevendita implements NetWrapper
      */
     private $chiusuraVendite;
 
-    private function __construct($idEvento, $nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite)
+    private function __construct($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite)
     {
-        $this->idEvento = $idEvento;
         $this->nome = $nome;
         $this->descrizione = $descrizione;
         $this->prezzo = $prezzo;
         $this->aperturaVendite = $aperturaVendite;
         $this->chiusuraVendite = $chiusuraVendite;
-    }
-
-    /**
-     *
-     * @return Ambigous <number, NULL>
-     */
-    public function getIdEvento()
-    {
-        return $this->idEvento;
     }
 
     /**
@@ -203,9 +180,9 @@ class InsertNetWTipoPrevendita implements NetWrapper
         return $this->chiusuraVendite;
     }
 
-    public function getWTipoPrevendita($id, $idModificatore, $timestampUltimaModifica): WTipoPrevendita
+    public function getWTipoPrevendita($id, $idEvento, $idModificatore, $timestampUltimaModifica): WTipoPrevendita
     {
-        return WTipoPrevendita::make($id, self::getIdEvento(), self::getNome(), self::getDescrizione(), self::getPrezzo(), self::getAperturaVendite(), self::getChiusuraVendite(), $idModificatore, $timestampUltimaModifica);
+        return WTipoPrevendita::make($id, $idEvento, self::getNome(), self::getDescrizione(), self::getPrezzo(), self::getAperturaVendite(), self::getChiusuraVendite(), $idModificatore, $timestampUltimaModifica);
     }
 }
 

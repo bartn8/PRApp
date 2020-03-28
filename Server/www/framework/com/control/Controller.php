@@ -88,7 +88,7 @@ abstract class Controller
         $context = Context::getContext();
 
         //Prima devo verificare se devo aggiornare il contesto.
-        if($context->isWatchdogTriggered()){
+        if($context->isWatchdogTriggered() && $context->isValid()){
             //Devo aggiornare il trigger!
 
             $utente = $context->getUserSession()->getUtente();

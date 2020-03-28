@@ -122,32 +122,14 @@ class Cassiere extends Table
      * Timbra una prevendita.
      *
      * @param NetWEntrata $entrata
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException l'utente non è loggato nel sistema.
-     * @throws AuthorizationException l'utente non è cassiere per lo staff
-     * @throws InsertUpdateException la prevendita è già stata timbrata
+     * @param int $utente
+     * @throws InsertUpdateException la prevendita è già stata timbrata oppure non valida
+     * @throws NotAvailableOperationException dati non congruenti
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return \com\model\db\wrapper\WEntrata Timbro d'entrata
      */
-    public static function timbraEntrata(NetWEntrata $entrata): WEntrata
+    public static function timbraEntrata(NetWEntrata $entrata, int $utente, int $idEvento): WEntrata
     {
-        // Verifico i parametri
-        if (is_null($entrata))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($entrata instanceof NetWEntrata))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia cassiere dello staff.
-        if (! self::_isCassiereByPrevendita($entrata->getIdPrevendita()))
-            throw new AuthorizationException("L'utente non è cassiere dello staff.");
-
-        // ---------------------------------------------------------------------------
-
         $ora = new \DateTimeImmutable("now");
 
         // Richiedo connessione con timestamp sincronizzato.
@@ -163,35 +145,24 @@ class Cassiere extends Table
 
         $fetch = $stmtVerifica->fetch(PDO::FETCH_ASSOC);
 
-        if ($fetch["idEvento"] != $entrata->getIdEvento()) {
+        if ($fetch["idEvento"] != $idEvento) {
             $conn = NULL;
-            throw new InsertUpdateException("Prevendita non valida: Evento non corrispondente.");
+            //Ho usato NotAvailableOperationException perché:
+            //AuthorizationException si riferisce all'accesso di dati non consentito
+            //InsertUpdateException riguarda quando il db restituisce errori di integrità
+            throw new NotAvailableOperationException("L'evento non corrisponde a quello selezionato");
         }
 
         if ($fetch["codice"] !== $entrata->getCodiceAccesso()) {
             $conn = NULL;
-            throw new InsertUpdateException("Prevendita non valida: Codice non valido.");
+            throw new NotAvailableOperationException("Prevendita non valida: Codice non valido.");
         }
 
-        $statoPrevendita = StatoPrevendita::parse($fetch["stato"]);  
-
-        // Verifico la data di timbratura.
-        //Verifico anche che l'evento sia valido.
-        $stmtVerificaTempo = $conn->prepare("SELECT inizio, fine, stato FROM evento WHERE id = :idEvento");
-        $stmtVerificaTempo->bindValue(":idEvento", $fetch["idEvento"], PDO::PARAM_INT);
-        $stmtVerificaTempo->execute();
-
-        $fetch = $stmtVerificaTempo->fetch(PDO::FETCH_ASSOC);
-
-        $inizio = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $fetch["inizio"]));
-        $fine = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $fetch["fine"]));
-
-        $statoEvento = StatoEvento::parse($fetch["stato"]);
+        //data timbratura e verifica stato già verificati da db.
 
         // Ora che ho verificato il codice posso TIMBRARE la prevendita.
         $stmtTimbro = $conn->prepare("INSERT INTO entrata (idCassiere, idPrevendita) VALUES (:idCassiere, :idPrevendita)");
-        $stmtTimbro->bindValue(":idCassiere", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
+        $stmtTimbro->bindValue(":idCassiere", $utente, PDO::PARAM_INT);
         $stmtTimbro->bindValue(":idPrevendita", $entrata->getIdPrevendita(), PDO::PARAM_INT);
 
         // Verifico che la prevendita non sia già stata inserita.
@@ -212,47 +183,35 @@ class Cassiere extends Table
 
         $conn = NULL;
 
-        return $entrata->getWEntrata(Context::getContext()->getUtente()
-            ->getId(), new DateTimeImmutableAdapterJSON(new \DateTimeImmutable("now")));
+        return $entrata->getWEntrata($utente, new DateTimeImmutableAdapterJSON(new \DateTimeImmutable("now")));
     }
 
     /**
      * Restituisce i dati del cliente associati alla prevendita inserita.
      *
-     * @param NetWId prevendita
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException l'utente non è loggato nel sistema.
-     * @throws AuthorizationException l'utente non è cassiere per lo staff
+     * @param int prevendita
+     * @param int evento da convalidare
+     * @throws NotAvailableOperationException dati non congruenti
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return ?WCliente Restituisce i dati del cliente associati. Restituisce NULL se i dati non sono stati trovati.
      */
-    public static function getDatiCliente(NetWId $prevendita): ?WCliente
+    public static function getDatiCliente(int $prevendita, int $evento): ?WCliente
     {
-        // Verifico i parametri
-        if (is_null($prevendita))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($prevendita instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia cassiere dello staff.
-        if (! self::_isCassiereByPrevendita($prevendita->getId()))
-            throw new AuthorizationException("L'utente non è cassiere dello staff.");
-
-        // ---------------------------------------------------------------------------
-
         $conn = parent::getConnection();
 
         // Prima recupero l'identificativo del cliente dal database. Non mi fido del wrapper.
-        $stmtRecuperoDati = $conn->prepare("SELECT idCliente FROM prevendita WHERE id = :idPrevendita");
-        $stmtRecuperoDati->bindValue(":idPrevendita", $prevendita->getId(), PDO::PARAM_INT);
+        //Ricavo anche l'evento per fare un check sul membro.
+        $stmtRecuperoDati = $conn->prepare("SELECT idCliente, idEvento FROM prevendita WHERE id = :idPrevendita");
+        $stmtRecuperoDati->bindValue(":idPrevendita", $prevendita, PDO::PARAM_INT);
         $stmtRecuperoDati->execute();
 
         $idCliente = $stmtRecuperoDati->fetch(PDO::FETCH_ASSOC)["idCliente"];
+        $idEvento = $stmtRecuperoDati->fetch(PDO::FETCH_ASSOC)["idEvento"];
+
+        //Check che l'evento della prevendita sia quello selezionato dall'utente.
+        if($idEvento != $evento){
+            throw new NotAvailableOperationException("Evento della prevendita non selezionato.");
+        }
 
         $stmtSelezione = $conn->prepare("SELECT id, idStaff, nome, cognome, telefono, dataDiNascita, codiceFiscale, timestampInserimento FROM cliente WHERE id = :idCliente");
         $stmtSelezione->bindValue(":idCliente", $idCliente);
@@ -272,16 +231,12 @@ class Cassiere extends Table
     /**
      * Restituisce le statistiche totali del cassiere.
      *
-     * @throws NotAvailableOperationException l'utente non è loggato nel sistema.
+     * @param int $utente membro che ha richiesto le statistiche
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return ?WStatisticheCassiereTotali Restituisce il wrapper. Se non sono disponibili statistiche restituisce NULL.
      */
-    public static function getStatisticheCassiereTotali(): ?WStatisticheCassiereTotali
+    public static function getStatisticheCassiereTotali(int $utente): ?WStatisticheCassiereTotali
     {
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
         $conn = parent::getConnection();
 
         //Query XAMPP:
@@ -305,8 +260,7 @@ class Cassiere extends Table
 EOT;
 
         $stmtSelezione = $conn->prepare("SELECT idUtente, entrate FROM statisticheCassiereTotali WHERE idUtente = :idUtente");
-        $stmtSelezione->bindValue(":idUtente", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idUtente", $utente, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = NULL;
@@ -323,25 +277,13 @@ EOT;
     /**
      * Restituisce le statistiche del cassiere in uno staff.
      *
-     * @param NetWId $staff
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException l'utente non è loggato nel sistema.
+     * @param int $utente
+     * @param int $staff
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return ?WStatisticheCassiereStaff Restituisce il wrapper. Se non sono disponibili statistiche restituisce NULL.
      */
-    public static function getStatisticheCassiereStaff(NetWId $staff): ?WStatisticheCassiereStaff
+    public static function getStatisticheCassiereStaff(int $utente, int $staff): ?WStatisticheCassiereStaff
     {
-        // Verifico i parametri
-        if (is_null($staff))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($staff instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
         $conn = parent::getConnection();
 
         //Query XAMPP:
@@ -362,9 +304,8 @@ EOT;
 EOT;
 
         $stmtSelezione = $conn->prepare($query);
-        $stmtSelezione->bindValue(":idUtente", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
-        $stmtSelezione->bindValue(":idStaff", $staff->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idUtente", $utente, PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idStaff", $staff, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = NULL;
@@ -381,25 +322,13 @@ EOT;
     /**
      * Restituisce le statistiche del cassiere in un evento.
      *
-     * @param NetWId $evento
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException l'utente non è loggato nel sistema.
+     * @param int $utente
+     * @param int $evento
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return ?WStatisticheCassiereEvento Restituisce il wrapper. Se non sono disponibili statistiche restituisce NULL.
      */
-    public static function getStatisticheCassiereEvento(NetWId $evento): ?WStatisticheCassiereEvento
+    public static function getStatisticheCassiereEvento(int $utente, int $evento): ?WStatisticheCassiereEvento
     {
-        // Verifico i parametri
-        if (is_null($evento))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($evento instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
         $conn = parent::getConnection();
 
         //Query XAMPP:
@@ -418,9 +347,8 @@ EOT;
 EOT;
 
         $stmtSelezione = $conn->prepare($query);
-        $stmtSelezione->bindValue(":idUtente", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
-        $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idUtente", $utente, PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idEvento", $evento, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = NULL;
@@ -437,31 +365,18 @@ EOT;
     /**
      * Restitusice la lista delle entrate svolte dal cassire.
      *
-     * @param NetWId $evento
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException l'utente non è loggato nel sistema.
+     * @param int $utente
+     * @param int $evento
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return WEntrata[] Lista con le entrate per l'evento svolte
      */
-    public static function getEntrateSvolte(NetWId $evento): array
+    public static function getEntrateSvolte(int $utente, int $evento): array
     {
-        // Verifico i parametri
-        if (is_null($evento))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($evento instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
         $conn = parent::getConnection();
 
         $stmtSelezione = $conn->prepare("SELECT idCassiere, idPrevendita, timestampEntrata FROM entrata INNER JOIN prevendita ON prevendita.id = entrata.idPrevendita WHERE entrata.idCassiere = :idCassiere AND prevendita.idEvento = :idEvento");
-        $stmtSelezione->bindValue(":idCassiere", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
-        $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idCassiere", $utente, PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idEvento", $evento, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = array();
@@ -479,30 +394,12 @@ EOT;
      * Restituisce la lista delle prevendite di un evento.
      * Da utilizzare in caso di inserimento manuale.
      *
-     * @param NetWId $evento
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException l'utente non è loggato nel sistema.
+     * @param int $evento
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws AuthorizationException l'utente non è cassiere per lo staff
      * @return array Lista delle prevendite dell'evento.
      */
-    public static function getPrevenditeEvento(NetWId $evento): array
+    public static function getPrevenditeEvento(int $evento): array
     {
-        // Verifico i parametri
-        if (is_null($evento))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($evento instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia cassiere dello staff.
-        if (! self::_isCassiereByEvento($evento->getId()))
-            throw new AuthorizationException("L'utente non è cassiere dello staff.");
-
         $conn = parent::getConnection();
 
         //Vecchia Query: 
@@ -520,7 +417,7 @@ EOT;
 */
 
         $stmtSelezione = $conn->prepare($query);
-        $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idEvento", $evento, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = array();
@@ -534,24 +431,16 @@ EOT;
         return $result;
     }
 
-
-    public static function getInformazioniPrevendita(NetWId $prevendita) : ?WPrevenditaPlus
+    /**
+     * Restituisce le informazioni su una prevendita.
+     * Non effettua alcun controllo.
+     * 
+     * @param int $prevendita
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     * @return WPrevenditaPlus|NULL prevendita con info aggiuntive
+     */
+    public static function getInformazioniPrevendita(int $prevendita) : ?WPrevenditaPlus
     {
-        // Verifico i parametri
-        if (is_null($prevendita))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($prevendita instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia cassiere dello staff.
-        if (! self::_isCassiereByPrevendita($prevendita->getId()))
-            throw new AuthorizationException("L'utente non è cassiere dello staff.");
-
         $conn = parent::getConnection();
 
         $query = <<<EOT
@@ -568,7 +457,7 @@ EOT;
 EOT;
 
         $stmtSelezione = $conn->prepare($query);
-        $stmtSelezione->bindValue(":idPrevendita", $prevendita->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idPrevendita", $prevendita, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = NULL;
@@ -582,23 +471,15 @@ EOT;
         return $result;
     }
 
-    public static function getListaPrevenditeEntrate(NetWId $evento) : array
+    /**
+     * Restituisce la lista delle prevendite entrate
+     * 
+     * @param int $evento
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     * @return WPrevenditaPlus[] Lista delle prevendite dell'evento.
+     */
+    public static function getListaPrevenditeEntrate(int $evento) : array
     {
-        // Verifico i parametri
-        if (is_null($evento))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($evento instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia cassiere dello staff.
-        if (! self::_isCassiereByEvento($evento->getId()))
-            throw new AuthorizationException("L'utente non è cassiere dello staff.");
-
         $conn = parent::getConnection();
 
         //Query: 
@@ -618,7 +499,7 @@ EOT;
 EOT;
 
         $stmtSelezione = $conn->prepare($query);
-        $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idEvento", $evento, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = array();
@@ -632,23 +513,15 @@ EOT;
         return $result;
     }
 
-    public static function getListaPrevenditeNonEntrate(NetWId $evento) : array
+    /**
+     * Restituisce la lista delle prevendite non entrate
+     * 
+     * @param int $evento
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     * @return WPrevenditaPlus[] Lista delle prevendite non dell'evento.
+     */
+    public static function getListaPrevenditeNonEntrate(int $evento) : array
     {
-        // Verifico i parametri
-        if (is_null($evento))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($evento instanceof NetWId))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia cassiere dello staff.
-        if (! self::_isCassiereByEvento($evento->getId()))
-            throw new AuthorizationException("L'utente non è cassiere dello staff.");
-
         $conn = parent::getConnection();
 
         //Query: 
@@ -666,7 +539,7 @@ EOT;
 EOT;
 
         $stmtSelezione = $conn->prepare($query);
-        $stmtSelezione->bindValue(":idEvento", $evento->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idEvento", $evento, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = array();

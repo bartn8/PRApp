@@ -33,36 +33,35 @@ class InsertNetWPrevendita implements NetWrapper
     /**
      * Meotodo factory per l'inserimento.
      *
-     * @param int $idEvento
-     * @param int $idPR
-     * @param int $idCliente
+     * @param string $nomeCliente
+     * @param string $cognomeCliente
      * @param int $idTipoPrevendita
      * @param string $codice
      * @param StatoPrevendita $stato
      * @throws InvalidArgumentException
      * @return insertWPrevendita
      */
-    private static function make($idEvento, $idCliente, $idTipoPrevendita, $codice, $stato)
+    private static function make($nomeCliente, $cognomeCliente, $idTipoPrevendita, $codice, $stato)
     {
-        if (is_null($idCliente) || is_null($idEvento) || is_null($idTipoPrevendita) || is_null($codice) || is_null($stato))
+        if (is_null($nomeCliente) || is_null($cognomeCliente) || is_null($idTipoPrevendita) || is_null($codice) || is_null($stato))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($idCliente) || ! is_int($idEvento) || ! is_int($idTipoPrevendita) || ! ($stato instanceof StatoPrevendita) || ! is_string($codice))
+        if (! is_int($idTipoPrevendita) || ! is_string($nomeCliente) || ! is_string($cognomeCliente) ||  ! ($stato instanceof StatoPrevendita) || ! is_string($codice))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
-        if ($idCliente <= 0)
-            throw new InvalidArgumentException("ID Cliente non valido");
-
-        if (strlen($codice) > WPrevendita::CODICE_MAX)
+        if (strlen($codice) > WPrevendita::CODICE_MAX_LENGTH)
             throw new InvalidArgumentException("Codice non valido (MAX)");
 
-        if ($idEvento <= 0)
-            throw new InvalidArgumentException("ID Evento non valido");
+        if (strlen($nomeCliente) > self::NOME_MAX_LENGTH)
+            throw new InvalidArgumentException("Nome cliente non valido (MAX)");            
+
+        if (strlen($cognomeCliente) > self::COGNOME_MAX_LENGTH)
+            throw new InvalidArgumentException("Cognome cliente non valido (MAX)");               
 
         if ($idTipoPrevendita <= 0)
             throw new InvalidArgumentException("ID Tipo Prevendita non valido");
 
-        return new InsertNetWPrevendita($idEvento, $idCliente, $idTipoPrevendita, $codice, $stato);
+        return new InsertNetWPrevendita($nomeCliente, $cognomeCliente, $idTipoPrevendita, $codice, $stato);
     }
 
     public static function of($array)
@@ -70,11 +69,11 @@ class InsertNetWPrevendita implements NetWrapper
         if (is_null($array) || ! is_array($array))
             throw new InvalidArgumentException("Array nullo o non valido.");
 
-        if (! array_key_exists("idEvento", $array))
-            throw new InvalidArgumentException("Dato idEvento non trovato.");
+        if (! array_key_exists("nomeCliente", $array))
+            throw new InvalidArgumentException("Dato nomeCliente non trovato.");
 
-        if (! array_key_exists("idCliente", $array))
-            throw new InvalidArgumentException("Dato idCliente non trovato.");
+        if (! array_key_exists("cognomeCliente", $array))
+            throw new InvalidArgumentException("Dato cognomeCliente non trovato.");   
 
         if (! array_key_exists("idTipoPrevendita", $array))
             throw new InvalidArgumentException("Dato idTipoPrevendita non trovato.");
@@ -85,25 +84,26 @@ class InsertNetWPrevendita implements NetWrapper
         if (! array_key_exists("stato", $array))
             throw new InvalidArgumentException("Dato stato non trovato.");
 
-        return self::make((int) $array["idEvento"], (int) $array["idCliente"], (int) $array["idTipoPrevendita"], $array["codice"], StatoPrevendita::of($array["stato"]));
+        return self::make($array["nomeCliente"], $array["cognomeCliente"], (int) $array["idTipoPrevendita"], $array["codice"], StatoPrevendita::of($array["stato"]));
     }
     
-    /**
-     * Identificativo dell'evento.
-     * (>0).
-     *
-     * @var int
-     */
-    private $idEvento;
+    //Prima c'era idEvento: ora sostituito da evento selezionato.
+    //Prima c'era idPR: ora sostituito da membro che ha inserito la prevendita
         
-    /**
-     * Identificativo del cliente che ha comprato la prevendita.
-     * (>0). (OZPTIONALE)
-     *
-     * @var int|NULL
-     */
-    private $idCliente;
+    //Tabella cliente integrata.
     
+    /**
+     * Nome del cliente
+     * @var string
+     */
+    private $nomeCliente;
+
+    /**
+     * Cognome del cliente
+     * @var string
+     */
+    private $cognomeCliente;
+
     /**
      * Identificativo del tipo della prevendita.(>0).
      *
@@ -126,28 +126,33 @@ class InsertNetWPrevendita implements NetWrapper
     private $stato;
     
     
-    private function __construct($idEvento, $idCliente, $idTipoPrevendita, $codice, $stato)
+    private function __construct($nomeCliente, $cognomeCliente, $idTipoPrevendita, $codice, $stato)
     {
-        $this->idEvento = $idEvento;
-        $this->idCliente = $idCliente;
+        $this->nomeCliente = $nomeCliente;
+        $this->cognomeCliente = $cognomeCliente;
         $this->idTipoPrevendita = $idTipoPrevendita;
         $this->codice = $codice;
         $this->stato = $stato;
     }
+
     /**
-     * @return number
-     */
-    public function getIdEvento()
+     * Get nome del cliente
+     *
+     * @return  string
+     */ 
+    public function getNomeCliente()
     {
-        return $this->idEvento;
+        return $this->nomeCliente;
     }
 
     /**
-     * @return Ambigous <number, NULL>
-     */
-    public function getIdCliente()
+     * Get cognome del cliente
+     *
+     * @return  string
+     */ 
+    public function getCognomeCliente()
     {
-        return $this->idCliente;
+        return $this->cognomeCliente;
     }
 
     /**

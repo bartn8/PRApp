@@ -23,6 +23,12 @@ namespace com\model\db\exception;
 
 use Exception;
 
+/**
+ * Si verifica quando una condizione sopraggiunge e interrompe l'avvenimento di un'operazione.
+ * Si tratta dell'eccezione più generale e usata più di frequente:
+ * ) Contesto non valido
+ * ) Dati non congruenti
+ */
 class NotAvailableOperationException extends Exception
 {
 

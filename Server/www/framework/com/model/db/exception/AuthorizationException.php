@@ -23,6 +23,9 @@ namespace com\model\db\exception;
 
 use Exception;
 
+/**
+ * Classe exception usata quando si cerca di accedere a dati autorizzati.
+ */
 class AuthorizationException extends Exception
 {
 

@@ -38,10 +38,10 @@ class InsertNetWStaff implements NetWrapper
     private static function make($nome, $codiceAccesso)
     {
         if (is_null($nome) || is_null($codiceAccesso))
-            throw new InvalidArgumentException("Uno o pi� parametri nulli");
+            throw new InvalidArgumentException("Uno o più parametri nulli");
 
         if (! is_string($nome) || ! is_string($codiceAccesso))
-            throw new InvalidArgumentException("Uno o pi� parametri non del tipo giusto");
+            throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if (strlen($nome) > WStaff::NOME_MAX)
             throw new InvalidArgumentException("Nome non valido (MAX)");

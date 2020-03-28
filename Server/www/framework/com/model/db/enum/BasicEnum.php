@@ -177,8 +177,6 @@ abstract class BasicEnum implements JsonSerializable
         return $this->id;
     }
     
-    
-    
     /**
      * @return mixed
      */

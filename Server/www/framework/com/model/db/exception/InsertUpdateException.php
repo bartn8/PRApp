@@ -23,6 +23,11 @@ namespace com\model\db\exception;
 
 use Exception;
 
+/**
+ * Si verifica quando non è stato possibile inserire o aggiornare un elemento nel database,
+ * perchè non rispetta i vincoli di integrità.
+ * Usata dopo un catch che rileva problemi di integrità.
+ */
 class InsertUpdateException extends Exception
 {
 

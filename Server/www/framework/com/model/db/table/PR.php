@@ -120,180 +120,33 @@ class PR extends Table
         return $count === 1;
     }
 
-    // /**
-    // * Verifica se l'utente è un PR dello staff.
-    // *
-    // * @param WStaff $staff
-    // * @throws InvalidArgumentException parametri nulli o non validi
-    // * @throws NotAvailableOperationException non si è loggati nel sistema
-    // * @throws PDOException problemi del database (errore di connessione, errore nel database)
-    // * @return boolean
-    // */
-    // public static function isPR(WStaff $staff): bool
-    // {
-    // if (is_null($staff))
-    // throw new InvalidArgumentException("Parametri nulli.");
-
-    // if (! ($staff instanceof WStaff))
-    // throw new InvalidArgumentException("Parametri non validi.");
-
-    // // Verifico che si è loggati nel sistema.
-    // if (Context::getContext()->isValid())
-    // throw new NotAvailableOperationException("Utente non loggato.");
-
-    // return self::_isPR($staff->getId());
-    // }
-
-    /**
-     * Aggiunge un cliente per lo staff.
-     *
-     * @param InsertNetWCliente $cliente
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException non si è loggati nel sistema
-     * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws AuthorizationException l'utente non è PR per lo staff
-     * @throws InsertUpdateException cliente già inserito
-     * @return \com\model\db\wrapper\WCliente
-     */
-    public static function aggiungiCliente(InsertNetWCliente $cliente): WCliente
-    {
-        if (is_null($cliente))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($cliente instanceof InsertNetWCliente))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia membro dello staff.
-        if (! self::_isPR($cliente->getIdStaff()))
-            throw new AuthorizationException("L'utente non è un pr dello staff.");
-
-        $conn = parent::getConnection();
-
-        $stmtInserimento = $conn->prepare("INSERT INTO cliente (idStaff, nome, cognome, telefono, dataDiNascita, codiceFiscale) VALUES (:idStaff, :nome, :cognome, :telefono, :dataDiNascita, :codiceFiscale)");
-        $stmtInserimento->bindValue(":idStaff", $cliente->getIdStaff(), PDO::PARAM_INT);
-        $stmtInserimento->bindValue(":nome", $cliente->getNome(), PDO::PARAM_STR);
-        $stmtInserimento->bindValue(":cognome", $cliente->getCognome(), PDO::PARAM_STR);
-        $stmtInserimento->bindValue(":telefono", $cliente->getTelefono(), PDO::PARAM_STR);
-
-        //Data di nascita opzionale:
-        if(!is_null($cliente->getDataDiNascita())){
-            $stmtInserimento->bindValue(":dataDiNascita", $cliente->getDataDiNascita()
-            ->getDateTimeImmutable()
-            ->format(DateTimeImmutableAdapterJSON::MYSQL_DATE), PDO::PARAM_STR);
-        }else{
-            $stmtInserimento->bindValue(":dataDiNascita", null, PDO::PARAM_STR);
-        }
-        
-        $stmtInserimento->bindValue(":codiceFiscale", $cliente->getCodiceFiscale(), PDO::PARAM_STR);
-
-        try {
-            $stmtInserimento->execute();
-        } catch (PDOException $ex) {
-            // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
-            $conn = NULL;
-
-            if ($ex->getCode() == PR::UNIQUE_CODE || $ex->getCode() == PR::INTEGRITY_CODE) // Codici di integrità.
-                throw new InsertUpdateException("Cliente già inserito.");
-
-            throw $ex;
-        }
-
-        $id = (int) $conn->lastInsertId();
-
-        $conn = NULL;
-
-        return WCliente::makeNoChecks($id, $cliente->getIdStaff(), $cliente->getNome(), $cliente->getCognome(), $cliente->getTelefono(), $cliente->getDataDiNascita(), $cliente->getCodiceFiscale(), new DateTimeImmutableAdapterJSON(new \DateTimeImmutable()));
-    }
+    //Rimosso aggiungiCliente
 
     /**
      * Aggiunge una prevendita per un cliente.
      *
      * @param InsertNetWPrevendita $prevendita
-     * @throws InvalidArgumentException parametri nulli o non validi
-     * @throws NotAvailableOperationException non si è loggati nel sistema
+     * @param int idEvento
+     * @param int idUtente pr che sta aggiungendo la prevendita
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws AuthorizationException l'utente non è PR per lo staff
      * @throws InsertUpdateException la prevendita non è valida per l'inserimento
      * @return WPrevendita Prevendita completa
      */
-    public static function aggiungiPrevendita(InsertNetWPrevendita $prevendita): WPrevendita
+    public static function aggiungiPrevendita(InsertNetWPrevendita $prevendita, int $idEvento, int $idUtente): WPrevendita
     {
-        if (is_null($prevendita))
-            throw new InvalidArgumentException("Parametri nulli.");
-
-        if (! ($prevendita instanceof InsertNetWPrevendita))
-            throw new InvalidArgumentException("Parametri non validi.");
-
-        // Verifico che si è loggati nel sistema.
-        if (! Context::getContext()->isValid())
-            throw new NotAvailableOperationException("Utente non loggato.");
-
-        // Verifico che l'utente sia membro dello staff.
-        if (! self::_isPRByEvento($prevendita->getIdEvento()))
-            throw new AuthorizationException("L'utente non è un pr dello staff.");
-
         $conn = parent::getConnection(true); // Richiedo sincronismo con il timezone
 
-        // // Prima devo verificare che il tipo di prevendita e il cliente sia compatibile.
-        // $stmtVerificaTipoPrevendita = $conn->prepare("SELECT COUNT(*) AS conto FROM tipoPrevendita WHERE idEvento = :idEvento AND id = :idTipoPrevendita");
-        // $stmtVerificaTipoPrevendita->bindValue(":idEvento", $prevendita->getIdEvento(), PDO::PARAM_INT);
-        // $stmtVerificaTipoPrevendita->bindValue(":idTipoPrevendita", $prevendita->getIdTipoPrevendita(), PDO::PARAM_INT);
-        // $stmtVerificaTipoPrevendita->execute();
-        // $contoTipoPrevendita = (int) $stmtVerificaTipoPrevendita->fetch(PDO::FETCH_ASSOC)["conto"];
+        //Verifica tipo prevendita, data inserimento, cliente, validità evento fatto dal db.
 
-        // $stmtVerificaCliente = $conn->prepare("SELECT COUNT(*) AS conto FROM cliente INNER JOIN evento ON evento.idStaff = cliente.idStaff WHERE evento.id = :idEvento AND cliente.id = :idCliente");
-        // $stmtVerificaCliente->bindValue(":idEvento", $prevendita->getIdEvento(), PDO::PARAM_INT);
-        // $stmtVerificaCliente->bindValue(":idCliente", $prevendita->getIdCliente(), PDO::PARAM_INT);
-        // $stmtVerificaCliente->execute();
-        // $contoCliente = (int) $stmtVerificaCliente->fetch(PDO::FETCH_ASSOC)["conto"];
-
-        // if (1 !== $contoTipoPrevendita || 1 !== $contoCliente) {
-        // $conn = NULL;
-        // throw new InsertUpdateException("Prevendita non valida.");
-        // }
-
-        // // Devo verificare che l'evento sia valido.
-
-        // $stmtVerificaValiditàEvento = $conn->prepare("SELECT statoEvento FROM evento WHERE id = :idEvento");
-        // $stmtVerificaValiditàEvento->bindValue(":idEvento", $prevendita->getIdEvento(), PDO::PARAM_INT);
-        // $stmtVerificaValiditàEvento->execute();
-
-        // if ((StatoEvento::parse($stmtVerificaValiditàEvento->fetch(PDO::FETCH_ASSOC)["statoEvento"]))->getId() != (StatoEvento::VALIDO)) {
-        // $conn = NULL;
-        // throw new InsertUpdateException("Evento annullato.");
-        // }
-
-        // // Dovrei verificare che le vendite siano nell'intervallo di vendibilità.
-
-        // $stmtVerificaTempoVendite = $conn->prepare("SELECT aperturaPrevendite, chiusuraPrevendite FROM tipoPrevendita WHERE id = :idTipoPrevendita");
-        // $stmtVerificaTempoVendite->bindValue(":idTipoPrevendita", $prevendita->getIdTipoPrevendita(), PDO::PARAM_INT);
-        // $stmtVerificaTempoVendite->execute();
-
-        // $tmp1 = $stmtVerificaTempoVendite->fetch(PDO::FETCH_ASSOC);
-
-        // $aperturaPrevendite = \DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $tmp1["aperturaPrevendite"]);
-        // $chiusuraPrevendite = \DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $tmp1["chiusuraPrevendite"]);
-
-        // if ($ora < $aperturaPrevendite || $ora > $chiusuraPrevendite) {
-        // $conn = NULL;
-        // throw new InsertUpdateException("Tipo di prevendita non disponibile.");
-        // }
-
-        $idUtente = Context::getContext()->getUtente()->getId();
-
-        $stmtInserimento = $conn->prepare("INSERT INTO prevendita (idEvento, idPR, idCliente, idTipoPrevendita, codice, stato, timestampCreazione) VALUES (:idEvento, :idPR, :idCliente, :idTipoPrevendita, :codice, :stato, CURRENT_TIMESTAMP)");
-        $stmtInserimento->bindValue(":idEvento", $prevendita->getIdEvento(), PDO::PARAM_INT);
+        $stmtInserimento = $conn->prepare("INSERT INTO prevendita (idEvento, idPR, nomeCliente, cognomeCliente, idTipoPrevendita, codice, stato, timestampCreazione) VALUES (:idEvento, :idPR, :nomeCliente, :cognomeCliente, :idTipoPrevendita, :codice, :stato, CURRENT_TIMESTAMP)");
+        $stmtInserimento->bindValue(":idEvento", $idEvento, PDO::PARAM_INT);
         $stmtInserimento->bindValue(":idPR", $idUtente, PDO::PARAM_INT);
+        $stmtInserimento->bindValue(":nomeCliente", $prevendita->getNomeCliente(), PDO::PARAM_STR);
+        $stmtInserimento->bindValue(":cognomeCliente", $prevendita->getCognomeCliente(), PDO::PARAM_STR);
         $stmtInserimento->bindValue(":idTipoPrevendita", $prevendita->getIdTipoPrevendita(), PDO::PARAM_INT);
         $stmtInserimento->bindValue(":codice", $prevendita->getCodice(), PDO::PARAM_STR);
-        $stmtInserimento->bindValue(":stato", $prevendita->getStato()
-            ->toString(), PDO::PARAM_STR);
-        $stmtInserimento->bindValue(":idCliente", $prevendita->getIdCliente(), PDO::PARAM_INT);
-
+        $stmtInserimento->bindValue(":stato", $prevendita->getStato()->toString(), PDO::PARAM_STR);
+        
         try {
             $stmtInserimento->execute();
         } catch (PDOException $ex) {
@@ -310,7 +163,7 @@ class PR extends Table
 
         $conn = NULL;
 
-        return WPrevendita::make($id, $prevendita->getIdEvento(), $idUtente, $prevendita->getIdCliente(), $prevendita->getIdTipoPrevendita(), $prevendita->getCodice(), $prevendita->getStato(), new DateTimeImmutableAdapterJSON(new \DateTimeImmutable()));
+        return WPrevendita::make($id, $idEvento, $idUtente, $prevendita->getIdCliente(), $prevendita->getIdTipoPrevendita(), $prevendita->getCodice(), $prevendita->getStato(), new DateTimeImmutableAdapterJSON(new \DateTimeImmutable()));
     }
 
     /**

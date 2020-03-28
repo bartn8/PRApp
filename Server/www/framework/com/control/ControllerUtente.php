@@ -22,20 +22,24 @@
 
 namespace com\control;
 
-use com\model\db\exception\NotAvailableOperationException;
 use com\model\Context;
-use com\model\db\table\Utente;
-use com\model\db\table\Membro;
-use \InvalidArgumentException;
+use com\handler\Command;
+use com\control\Controller;
 use com\view\printer\Printer;
+use \InvalidArgumentException;
+use com\model\db\table\Membro;
+use com\model\db\table\Utente;
 use com\model\db\wrapper\WStaff;
-use com\model\db\wrapper\WUtente;
 use com\model\db\wrapper\WToken;
+use com\control\ControllerUtente;
+use com\model\db\wrapper\WUtente;
 use com\model\net\wrapper\NetWLogin;
 use com\model\net\wrapper\NetWToken;
-use com\model\net\wrapper\insert\InsertNetWStaff;
 use com\model\net\wrapper\NetWStaffAccess;
+use com\model\net\wrapper\insert\InsertNetWStaff;
+use com\model\db\exception\AuthorizationException;
 use com\model\net\wrapper\insert\InsertNetWUtente;
+use com\model\db\exception\NotAvailableOperationException;
 
 class ControllerUtente extends Controller
 {
@@ -158,14 +162,14 @@ class ControllerUtente extends Controller
 
     private function cmd_registrazione(Command $command, Context $context)
     {
-        if(!array_key_exists(ControllerUtente::CMD_REGISTRAZIONE_ARG_0, $command->getArgs()))
-        {
+        if(!array_key_exists(ControllerUtente::CMD_REGISTRAZIONE_ARG_0, $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
 
         // Verifico che non si è loggati nel sistema.
-        if ($context->isValid())
+        if ($context->isValid()){
             throw new NotAvailableOperationException("Utente loggato.");
+        }
     
         $registrazione = $command->getArgs()[ControllerUtente::CMD_REGISTRAZIONE_ARG_0]->getValue();
 
@@ -179,14 +183,14 @@ class ControllerUtente extends Controller
 
     private function cmd_login(Command $command, Context $context)
     {       
-        if(!array_key_exists(ControllerUtente::CMD_LOGIN_ARG_0, $command->getArgs()))
-        {
+        if(!array_key_exists(ControllerUtente::CMD_LOGIN_ARG_0, $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
 
         // Verifico che non si è loggati nel sistema.
-        if ($context->isValid())
+        if ($context->isValid()){
             throw new NotAvailableOperationException("Utente loggato.");
+        }
 
         $login = $command->getArgs()[ControllerUtente::CMD_LOGIN_ARG_0]->getValue();
 
@@ -206,8 +210,9 @@ class ControllerUtente extends Controller
     private function cmd_logout(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
         // Elimino il contesto.
         Context::deleteContext();
@@ -215,42 +220,44 @@ class ControllerUtente extends Controller
 
     private function cmd_crea_staff(Command $command, Context $context)
     {
-        if(!array_key_exists(ControllerUtente::CMD_CREA_STAFF_ARG_0, $command->getArgs()))
-        {
+        if(!array_key_exists(ControllerUtente::CMD_CREA_STAFF_ARG_0, $command->getArgs())){
             throw new InvalidArgumentException("Argomento non valido");
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! ($context->isValid()))
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
     
         $staff = $command->getArgs()[ControllerUtente::CMD_CREA_STAFF_ARG_0]->getValue();
         $utente = $context->getUserSession()->getUtente();
 
         // Verifico i parametri
-        if (! ($staff instanceof InsertNetWStaff))
+        if (! ($staff instanceof InsertNetWStaff)){
             throw new InvalidArgumentException("Parametro non valido.");
+        }
         
         parent::getPrinter()->addResult(Utente::creaStaff($utente, $staff));
     }
 
     private function cmd_accedi_staff(Command $command, Context $context)
     {
-        if(!array_key_exists(ControllerUtente::CMD_ACCEDI_STAFF_ARG_0, $command->getArgs()))
-        {
+        if(!array_key_exists(ControllerUtente::CMD_ACCEDI_STAFF_ARG_0, $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
         $staff = $command->getArgs()[ControllerUtente::CMD_ACCEDI_STAFF_ARG_0]->getValue();
         $utente = $context->getUserSession()->getUtente();
 
         // Verifico i parametri
-        if (! ($staff instanceof NetWStaffAccess))
+        if (! ($staff instanceof NetWStaffAccess)){
             throw new InvalidArgumentException("Parametri non validi.");        
+        }
         
         parent::getPrinter()->addResult(Utente::accediStaff($utente, $staff));
     }
@@ -258,8 +265,9 @@ class ControllerUtente extends Controller
     private function cmd_restituisci_lista_staff(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
         parent::getPrinter()->addResults(Utente::getListaStaff());
     }
@@ -267,8 +275,9 @@ class ControllerUtente extends Controller
     private function cmd_restituisci_lista_staff_membri(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
         $utente = $context->getUserSession()->getUtente();
 
@@ -278,8 +287,9 @@ class ControllerUtente extends Controller
     private function cmd_renew_token(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
         $utente = $context->getUserSession()->getUtente();
         
@@ -289,8 +299,9 @@ class ControllerUtente extends Controller
     private function cmd_get_token(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
         $utente = $context->getUserSession()->getUtente();
 
@@ -299,20 +310,21 @@ class ControllerUtente extends Controller
 
     private function cmd_login_token(Command $command, Context $context)
     {
-        if(!array_key_exists(ControllerUtente::CMD_LOGIN_TOKEN_ARG_0, $command->getArgs()))
-        {
+        if(!array_key_exists(ControllerUtente::CMD_LOGIN_TOKEN_ARG_0, $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
 
         // Verifico che non si è loggati nel sistema.
-        if ($context->isValid())
+        if ($context->isValid()){
             throw new NotAvailableOperationException("Utente loggato.");
+        }
 
         $token = $command->getArgs()[ControllerUtente::CMD_LOGIN_TOKEN_ARG_0]->getValue();
 
         // Verifico i parametri
-        if (! ($token instanceof NetWToken))
+        if (! ($token instanceof NetWToken)){
             throw new InvalidArgumentException("Parametri non validi.");
+        }
 
         $utente = Utente::loginToken($token);
 
@@ -324,8 +336,7 @@ class ControllerUtente extends Controller
 
     private function cmd_restituisci_utente(Command $command, Context $context)
     {
-        if(!$context->isValid())
-        {
+        if(!$context->isValid()) {
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -333,20 +344,21 @@ class ControllerUtente extends Controller
     }
 	
 	private function cmd_scegli_staff(Command $command, Context $context){
-        if(!array_key_exists(ControllerUtente::CMD_SCEGLI_STAFF_ARG_0, $command->getArgs()))
-        {
+        if(!array_key_exists(ControllerUtente::CMD_SCEGLI_STAFF_ARG_0, $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
         
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if(!$context->isValid()) {
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
             
         $utente = $context->getUserSession()->getUtente();
         $staff = $command->getArgs()[ControllerUtente::CMD_SCEGLI_STAFF_ARG_0]->getValue();
         
-        if (! ($staff instanceof NetWId))
+        if (! ($staff instanceof NetWId)){
             throw new InvalidArgumentException("Parametri non validi. (staff)");
+        }
                 
         $staffScelto = Utente::getStaff($utente->getId(), $staff->getId());
                

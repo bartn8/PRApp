@@ -30,7 +30,9 @@ use com\utils\DateTimeImmutableAdapterJSON;
 class WPrevendita implements DatabaseWrapper
 {
 
-    const CODICE_MAX = 10;
+    const CODICE_MAX_LENGTH = 10;
+    const NOME_MAX_LENGTH = 150;
+    const COGNOME_MAX_LENGTH = 150;
 
     /**
      * Meotodo factory.
@@ -38,31 +40,30 @@ class WPrevendita implements DatabaseWrapper
      * @param int $id
      * @param int $idEvento
      * @param int $idPR
-     * @param int $idCliente
+     * @param string $nomeCliente
+     * @param string $cognomeCliente
      * @param int $idTipoPrevendita
      * @param string $codice
      * @param StatoPrevendita $stato
      * @throws InvalidArgumentException
      * @return \com\model\db\wrapper\WPrevendita
      */
-    public static function make($id, $idEvento, $idPR, $idCliente, $idTipoPrevendita, $codice, $stato, $timestampUltimaModifica)
+    public static function make($id, $idEvento, $idPR, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $codice, $stato, $timestampUltimaModifica)
     {
-        if (is_null($id) || is_null($idEvento) || is_null($idPR) || is_null($idTipoPrevendita) || is_null($codice) || is_null($stato) || is_null($timestampUltimaModifica))
+        if (is_null($id) || is_null($idEvento) || is_null($idPR) || is_null($nomeCliente) || is_null($cognomeCliente) || is_null($idTipoPrevendita) || is_null($codice) || is_null($stato) || is_null($timestampUltimaModifica))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) || ! is_int($idEvento) || ! is_int($idPR) || ! is_int($idTipoPrevendita) || ! ($stato instanceof StatoPrevendita) || ! ($timestampUltimaModifica instanceof DateTimeImmutableAdapterJSON))
+        if (! is_int($id) || ! is_int($idEvento) || ! is_int($idPR) || ! is_string($nomeCliente) || ! is_string($cognomeCliente) || ! is_int($idTipoPrevendita) || ! ($stato instanceof StatoPrevendita) || ! ($timestampUltimaModifica instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
-        if (! is_null($idCliente)) {
-            if (! is_int($idCliente))
-                throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
-
-            if ($idCliente <= 0)
-                throw new InvalidArgumentException("ID Cliente non valido: ".$idCliente);
-        }
-
-        if (strlen($codice) > self::CODICE_MAX)
+        if (strlen($codice) > self::CODICE_MAX_LENGTH)
             throw new InvalidArgumentException("Codice non valido (MAX)");
+
+        if (strlen($nomeCliente) > self::NOME_MAX_LENGTH)
+            throw new InvalidArgumentException("Nome cliente non valido (MAX)");            
+
+        if (strlen($cognomeCliente) > self::COGNOME_MAX_LENGTH)
+            throw new InvalidArgumentException("Cognome cliente non valido (MAX)");   
 
         if ($id <= 0)
             throw new InvalidArgumentException("ID non valido");
@@ -76,7 +77,7 @@ class WPrevendita implements DatabaseWrapper
         if ($idTipoPrevendita <= 0)
             throw new InvalidArgumentException("ID Tipo Prevendita non valido");
 
-        return new WPrevendita($id, $idEvento, $idPR, $idCliente, $idTipoPrevendita, $codice, $stato, $timestampUltimaModifica);
+        return new WPrevendita($id, $idEvento, $idPR, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $codice, $stato, $timestampUltimaModifica);
     }
 
     /**
@@ -100,9 +101,11 @@ class WPrevendita implements DatabaseWrapper
         if (! array_key_exists("idPR", $array))
             throw new InvalidArgumentException("Dato idPR non trovato.");
 
-        if (! array_key_exists("idCliente", $array))
-			$array["idCliente"] = null;
-            //throw new InvalidArgumentException("Dato idCliente non trovato.");
+        if (! array_key_exists("nomeCliente", $array))
+            throw new InvalidArgumentException("Dato nomeCliente non trovato.");
+
+        if (! array_key_exists("cognomeCliente", $array))
+            throw new InvalidArgumentException("Dato cognomeCliente non trovato.");            
 
         if (! array_key_exists("idTipoPrevendita", $array))
             throw new InvalidArgumentException("Dato idTipoPrevendita non trovato.");
@@ -118,7 +121,7 @@ class WPrevendita implements DatabaseWrapper
 
         $idCliente = is_null($array["idCliente"]) ? NULL : (int) $array["idCliente"];
 
-        return self::make((int) $array["id"], (int) $array["idEvento"], (int) $array["idPR"], $idCliente, (int) $array["idTipoPrevendita"], $array["codice"], StatoPrevendita::parse($array["stato"]), new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampUltimaModifica"])));
+        return self::make((int) $array["id"], (int) $array["idEvento"], (int) $array["idPR"], $array["nomeCliente"], $array["cognomeCliente"], (int) $array["idTipoPrevendita"], $array["codice"], StatoPrevendita::parse($array["stato"]), new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampUltimaModifica"])));
     }
 
     /**
@@ -145,13 +148,19 @@ class WPrevendita implements DatabaseWrapper
      */
     private $idPR;
 
+    //Tabella cliente integrata
+
     /**
-     * Identificativo del cliente che ha comprato la prevendita.
-     * (>0). (OZPTIONALE)
-     *
-     * @var int|NULL
+     * Nome del cliente
+     * @var string
      */
-    private $idCliente;
+    private $nomeCliente;
+
+    /**
+     * Cognome del cliente
+     * @var string
+     */
+    private $cognomeCliente;
 
     /**
      * Identificativo del tipo della prevendita.(>0).
@@ -181,12 +190,13 @@ class WPrevendita implements DatabaseWrapper
      */
     private $timestampUltimaModifica;
 
-    protected function __construct($id, $idEvento, $idPR, $idCliente, $idTipoPrevendita, $codice, $stato, $timestampUltimaModifica)
+    protected function __construct($id, $idEvento, $idPR, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $codice, $stato, $timestampUltimaModifica)
     {
         $this->id = $id;
         $this->idEvento = $idEvento;
         $this->idPR = $idPR;
-        $this->idCliente = $idCliente;
+        $this->nomeCliente = $nomeCliente;
+        $this->cognomeCliente = $cognomeCliente;
         $this->idTipoPrevendita = $idTipoPrevendita;
         $this->codice = $codice;
         $this->stato = $stato;
@@ -237,12 +247,23 @@ class WPrevendita implements DatabaseWrapper
     }
 
     /**
+     * Get nome del cliente
      *
-     * @return number|boolean
-     */
-    public function getIdCliente()
+     * @return  string
+     */ 
+    public function getNomeCliente()
     {
-        return is_null($this->idCliente) ? NULL : $this->idCliente;
+        return $this->nomeCliente;
+    }
+
+    /**
+     * Get cognome del cliente
+     *
+     * @return  string
+     */ 
+    public function getCognomeCliente()
+    {
+        return $this->cognomeCliente;
     }
 
     /**
@@ -299,7 +320,7 @@ class WPrevendita implements DatabaseWrapper
         if ($id <= 0)
             throw new InvalidArgumentException("ID non valido");
 
-        return new WPrevendita($id, $this->idEvento, $this->idPR, $this->idCliente, $this->idTipoPrevendita, $this->codice, $this->stato, $this->timestampUltimaModifica);
+        return new WPrevendita($id, $this->idEvento, $this->idPR, $this->nomeCliente, $this->cognomeCliente, $this->idTipoPrevendita, $this->codice, $this->stato, $this->timestampUltimaModifica);
     }
 
     /**
@@ -320,7 +341,7 @@ class WPrevendita implements DatabaseWrapper
         if ($idTipoPrevendita <= 0)
             throw new InvalidArgumentException("ID Tipo Prevendita non valido");
 
-        return new WPrevendita($this->id, $this->idEvento, $this->idPR, $this->idCliente, $idTipoPrevendita, $this->codice, $this->stato, $this->timestampUltimaModifica);
+        return new WPrevendita($this->id, $this->idEvento, $this->idPR, $this->nomeCliente, $this->cognomeCliente, $idTipoPrevendita, $this->codice, $this->stato, $this->timestampUltimaModifica);
     }
 
     /**
@@ -338,7 +359,7 @@ class WPrevendita implements DatabaseWrapper
         if (! ($stato instanceof StatoPrevendita))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
-        return new WPrevendita($this->id, $this->idEvento, $this->idPR, $this->idCliente, $this->idTipoPrevendita, $this->codice, $stato, $this->timestampUltimaModifica);
+        return new WPrevendita($this->id, $this->idEvento, $this->idPR, $this->nomeCliente, $this->cognomeCliente, $this->idTipoPrevendita, $this->codice, $stato, $this->timestampUltimaModifica);
     }
 
     /**
@@ -356,7 +377,7 @@ class WPrevendita implements DatabaseWrapper
         if (! ($timestampUltimaModifica instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Parametro timestampUltimaModifica non del tipo giusto!");
 
-        return new WPrevendita($this->id, $this->idEvento, $this->idPR, $this->idCliente, $this->idTipoPrevendita, $this->codice, $this->stato, $timestampUltimaModifica);
+        return new WPrevendita($this->id, $this->idEvento, $this->idPR, $this->nomeCliente, $this->cognomeCliente, $this->idTipoPrevendita, $this->codice, $this->stato, $timestampUltimaModifica);
     }
 }
 

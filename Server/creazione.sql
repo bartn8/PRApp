@@ -58,19 +58,18 @@ CREATE TABLE macchina (
 	FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
 
-CREATE TABLE cliente (
-  id int NOT NULL AUTO_INCREMENT,
-  idStaff int NOT NULL,
-  nome varchar(150) NOT NULL, /* Skerzo */
-  cognome varchar(150) NOT NULL,
-  telefono varchar(80),
-  dataDiNascita date, /* Data di nascita diviene opzionale */
-  codiceFiscale varchar(16),
-  timestampInserimento timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  FOREIGN KEY(idStaff) REFERENCES staff(id)
-  /*CONSTRAINT chkCodiceFiscale UNIQUE(idStaff, codiceFiscale)*/
-);
+/*Tabella cliente rimossa: I dati sono inseriti nella prevendita.*/
+/*
+	CREATE TABLE cliente (
+	  id int NOT NULL AUTO_INCREMENT,
+	  idStaff int NOT NULL,
+	  nome varchar(150) NOT NULL,
+	  cognome varchar(150) NOT NULL,
+	  timestampInserimento timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	  PRIMARY KEY (id),
+	  FOREIGN KEY(idStaff) REFERENCES staff(id)
+	);
+*/
 
 CREATE TABLE evento (
   id int NOT NULL AUTO_INCREMENT,
@@ -112,7 +111,9 @@ CREATE TABLE prevendita (
   id int NOT NULL AUTO_INCREMENT,
   idEvento int NOT NULL,
   idPR int NOT NULL,
-  idCliente int,
+  /* Inclusione della tabella cliente */
+  nomeCliente varchar(150) NOT NULL,
+  cognomeCliente varchar(150) NOT NULL,
   idTipoPrevendita int NOT NULL,
   timestampCreazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   codice varchar(10) NOT NULL,
@@ -121,7 +122,6 @@ CREATE TABLE prevendita (
   PRIMARY KEY (id),
   FOREIGN KEY (idEvento) REFERENCES evento(id),
   FOREIGN KEY (idPR) REFERENCES utente(id),
-  FOREIGN KEY (idCliente) REFERENCES cliente(id) ON DELETE SET NULL,
   FOREIGN KEY (idTipoPrevendita) REFERENCES tipoPrevendita(id)/*,*/
   /*CONSTRAINT chkUnicitàPrevendita UNIQUE(idEvento, idCliente), Da rimuovere perché l'unique considera il NULL... Dopo tutto non importa se il cliente compra più prevendite...*/
   /*CONSTRAINT chkUnicitàCodice UNIQUE(codice)*/
@@ -491,7 +491,7 @@ DELIMITER ;
 
 /*
 Verifica che la prevendita appena inserita sia effettivamente vendibile, cioè:
-  1)I dati devono essere congruenti: evento e tipo prevendita compatibile. Cliente dello giusto staff.
+  1)I dati devono essere congruenti: evento e tipo prevendita compatibile.
   2)La data della vendita deve rientrare nel periodo di vendita.
   3)L'evento deve essere VALIDO.
   4)La prevendita deve essere consegnata o pagata.
@@ -510,7 +510,7 @@ FOR EACH ROW BEGIN
     DECLARE ora timestamp;
         
 	SELECT COUNT(t.id) INTO verificaConteggio1 FROM tipoPrevendita t WHERE t.idEvento = NEW.idEvento AND t.id = NEW.idTipoPrevendita;
-	SELECT COUNT(e.id) INTO verificaConteggio2 FROM cliente c, evento e WHERE e.idStaff = c.idStaff AND e.id = NEW.idEvento AND c.id = NEW.idCliente;
+	SELECT COUNT(e.id) INTO verificaConteggio2 FROM evento e WHERE e.id = NEW.idEvento;
 	
   	SELECT aperturaPrevendite, chiusuraPrevendite INTO apertura, chiusura FROM tipoPrevendita WHERE id = NEW.idTipoPrevendita;
     SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;

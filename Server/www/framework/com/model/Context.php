@@ -124,6 +124,8 @@ class Context
 
     /**
      * Se superato, la sessione va aggiornata.
+     * 
+     * @var int
      */
     private $watchdogCounter;
 

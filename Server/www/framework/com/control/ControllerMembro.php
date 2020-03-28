@@ -23,6 +23,7 @@
 namespace com\control;
 
 use com\model\Context;
+use com\handler\Command;
 use com\control\Controller;
 use com\view\printer\Printer;
 use \InvalidArgumentException;
@@ -110,11 +111,13 @@ class ControllerMembro extends Controller
         //Precedentemente richiedevo all'utente lo staff: ora deve sceglierlo prima
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
-        if (! $context->getUserSession()->isStaffScelto())
+        if (! $context->getUserSession()->isStaffScelto()){
             throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }
             
         $staff = $context->getUserSession()->getStaffScelto();
 
@@ -126,11 +129,13 @@ class ControllerMembro extends Controller
         //Precedentemente richiedevo all'utente lo staff: ora deve sceglierlo prima
         
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
-        if (! $context->getUserSession()->isStaffScelto())
-            throw new NotAvailableOperationException("Non hai scelto lo staff");
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }
 
         $utente = $context->getUserSession()->getUtente();
         $staff = $context->getUserSession()->getStaffScelto();
@@ -143,11 +148,13 @@ class ControllerMembro extends Controller
         //Precedentemente richiedevo all'utente lo staff: ora deve sceglierlo prima
         
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
-        if (! $context->getUserSession()->isStaffScelto())
-            throw new NotAvailableOperationException("Non hai scelto lo staff");
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }
 
         $staff = $context->getUserSession()->getStaffScelto();
 
@@ -159,11 +166,13 @@ class ControllerMembro extends Controller
     private function cmd_restituisci_tipi_prevendita(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
-        if (! $context->getUserSession()->isEventoScelto())
+        if (! $context->getUserSession()->isEventoScelto()){
             throw new NotAvailableOperationException("Non hai scelto l'evento");
+        }
         
         $evento = $context->getUserSession()->getEventoScelto();
 
@@ -173,11 +182,13 @@ class ControllerMembro extends Controller
     private function cmd_restituisci_lista_clienti(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
-        if (! $context->getUserSession()->isStaffScelto())
-            throw new NotAvailableOperationException("Non hai scelto lo staff");
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }
 
         $staff = $context->getUserSession()->getStaffScelto();
         
@@ -185,18 +196,19 @@ class ControllerMembro extends Controller
     }
 	
 	private function cmd_scegli_evento(Command $command, Context $context){
-        if(!array_key_exists("evento", $command->getArgs()))
-        {
+        if(!array_key_exists("evento", $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
                 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid())
+        if (! $context->isValid()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
 
         //Prima devo aver scelto lo staff.
-        if (! $context->getUserSession()->isStaffScelto())
-            throw new NotAvailableOperationException("Non hai scelto lo staff");
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }
             
         $utente = $context->getUserSession()->getUtente();
         $staff = $context->getUserSession()->getStaffScelto();

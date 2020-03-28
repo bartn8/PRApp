@@ -22,9 +22,16 @@
 
 namespace com\control;
 
+use com\model\Context;
+use com\handler\Command;
 use com\model\db\table\PR;
+use com\control\Controller;
+use com\control\ControllerPR;
 use com\view\printer\Printer;
 use \InvalidArgumentException;
+use com\model\db\exception\AuthorizationException;
+use com\model\net\wrapper\insert\InsertNetWCliente;
+use com\model\db\exception\NotAvailableOperationException;
 
 class ControllerPR extends Controller
 {
@@ -32,7 +39,8 @@ class ControllerPR extends Controller
     // Divisione dei comandi: (1-100 utente) (101-200 membro) (201-300 pr) (301-400 cassiere) (401-500 amministratore)
     //const CMD_IS_PR = 201;
 
-    const CMD_AGGIUNGI_CLIENTE = 202;
+    //Comando rimosso: integrato in aggiungi prevedita.
+    //const CMD_AGGIUNGI_CLIENTE = 202;
 
     const CMD_AGGIUNGI_PREVENDITA = 203;
 
@@ -53,39 +61,35 @@ class ControllerPR extends Controller
         parent::__construct($printer, $retriver);
     }
     
-    public function handle($command)
+    public function internalHandle(Command $command, Context $context)
     {
-        switch ($command->getCommand()) {            
-            case ControllerPR::CMD_AGGIUNGI_CLIENTE:
-                $this->cmd_aggiungi_cliente($command);
-                break;
-            
+        switch ($command->getCommand()) {               
             case ControllerPR::CMD_AGGIUNGI_PREVENDITA:
-                $this->cmd_aggiungi_prevendita($command);
+                $this->cmd_aggiungi_prevendita($command, $context);
                 break;
             
             case ControllerPR::CMD_MODIFICA_PREVENDITA:
-                $this->cmd_modifica_prevendita($command);
+                $this->cmd_modifica_prevendita($command, $context);
                 break;
             
             case ControllerPR::CMD_RESTITUISCI_PREVENDITE:
-                $this->cmd_restituisci_prevedite($command);
+                $this->cmd_restituisci_prevedite($command, $context);
                 break;
             
             case ControllerPR::CMD_RESTITUISCI_STATISTICHE_PR_TOTALI:
-                $this->cmd_restituisci_statistiche_pr_totali($command);
+                $this->cmd_restituisci_statistiche_pr_totali($command, $context);
                 break;
             
             case ControllerPR::CMD_RESTITUISCI_STATISTICHE_PR_STAFF:
-                $this->cmd_restituisci_statistiche_pr_staff($command);
+                $this->cmd_restituisci_statistiche_pr_staff($command, $context);
                 break;
             
             case ControllerPR::CMD_RESTITUISCI_STATISTICHE_PR_EVENTO:
-                $this->cmd_restituisci_statistiche_pr_evento($command);
+                $this->cmd_restituisci_statistiche_pr_evento($command, $context);
                 break;
             
             case ControllerPR::CMD_RESTITUISCI_PREVENDITE_EVENTO:
-                $this->cmd_restituisci_prevedite_evento($command);
+                $this->cmd_restituisci_prevedite_evento($command, $context);
                 break;
 
             default:
@@ -93,7 +97,6 @@ class ControllerPR extends Controller
         }
         
         switch ($command->getCommand()) {
-            case ControllerPR::CMD_AGGIUNGI_CLIENTE:
             case ControllerPR::CMD_AGGIUNGI_PREVENDITA:
             case ControllerPR::CMD_MODIFICA_PREVENDITA:
             case ControllerPR::CMD_RESTITUISCI_PREVENDITE:
@@ -109,27 +112,40 @@ class ControllerPR extends Controller
         }
     }
 
-    private function cmd_aggiungi_cliente($command)
+    private function cmd_aggiungi_prevendita(Command $command, Context $context)
     {
-        if(!array_key_exists("cliente", $command->getArgs()))
-        {
-            throw new InvalidArgumentException("Argomento cliente non esistente");
-        }
-        
-        parent::getPrinter()->addResult(PR::aggiungiCliente($command->getArgs()['cliente']->getValue()));
-    }
-
-    private function cmd_aggiungi_prevendita($command)
-    {
-        if(!array_key_exists("prevendita", $command->getArgs()))
-        {
+        if(!array_key_exists("prevendita", $command->getArgs())) {
             throw new \InvalidArgumentException("Argomento prevendita non esistente");
         }
         
-        parent::getPrinter()->addResult(PR::aggiungiPrevendita($command->getArgs()['prevendita']->getValue()));
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }             
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");
+        }
+
+        $eventoSelezionato = $context->getUserSession()->getEventoScelto();
+
+        //Controllo i diritti dell'utente.
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        if(! $dirittiUtente->isPR()){
+            throw new AuthorizationException("L'utente non è PR dello staff.");
+        }
+
+        $prevendita = $command->getArgs()['prevendita']->getValue();
+
+        if (! ($prevendita instanceof InsertNetWPrevendita)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }
+            
+        parent::getPrinter()->addResult(PR::aggiungiPrevendita());
     }
 
-    private function cmd_modifica_prevendita($command)
+    private function cmd_modifica_prevendita(Command $command, Context $context)
     {
         if(!array_key_exists("prevendita", $command->getArgs()))
         {
@@ -139,7 +155,7 @@ class ControllerPR extends Controller
         parent::getPrinter()->addResult(PR::modificaPrevendita($command->getArgs()['prevendita']->getValue()));
     }
 
-    private function cmd_restituisci_prevedite($command)
+    private function cmd_restituisci_prevedite(Command $command, Context $context)
     {
         if(!array_key_exists("filtri", $command->getArgs()))
         {
@@ -149,12 +165,12 @@ class ControllerPR extends Controller
         parent::getPrinter()->addResults(PR::getPrevendite($command->getArgs()['filtri']->getValue()));
     }
 
-    private function cmd_restituisci_statistiche_pr_totali($command)
+    private function cmd_restituisci_statistiche_pr_totali(Command $command, Context $context)
     {
         parent::getPrinter()->addResult(PR::getStatistichePRTotali());
     }
 
-    private function cmd_restituisci_statistiche_pr_staff($command)
+    private function cmd_restituisci_statistiche_pr_staff(Command $command, Context $context)
     {
         if(!array_key_exists("staff", $command->getArgs()))
         {
@@ -164,7 +180,7 @@ class ControllerPR extends Controller
         parent::getPrinter()->addResult(PR::getStatistichePRStaff($command->getArgs()['staff']->getValue()));
     }
 
-    private function cmd_restituisci_statistiche_pr_evento($command)
+    private function cmd_restituisci_statistiche_pr_evento(Command $command, Context $context)
     {
         if(!array_key_exists("evento", $command->getArgs()))
         {
@@ -174,7 +190,7 @@ class ControllerPR extends Controller
         parent::getPrinter()->addResults(PR::getStatistichePREvento($command->getArgs()['evento']->getValue()));
     }
 
-    private function cmd_restituisci_prevedite_evento($command)
+    private function cmd_restituisci_prevedite_evento(Command $command, Context $context)
     {
         if(!array_key_exists("evento", $command->getArgs()))
         {
