@@ -41,7 +41,8 @@ class ControllerCassiere extends Controller
 
     const CMD_TIMBRA_ENTRATA = 302;
 
-    const CMD_RESTITUISCI_DATI_CLIENTE = 303;
+    //Rimosso perché incluso in prevendita
+    //const CMD_RESTITUISCI_DATI_CLIENTE = 303;
 
     const CMD_RESTITUISCI_STATISTICHE_CASSIERE_TOTALI = 304;
 
@@ -70,10 +71,6 @@ class ControllerCassiere extends Controller
         switch ($command->getCommand()) {
             case ControllerCassiere::CMD_TIMBRA_ENTRATA:
                 $this->cmd_timbra_entrata($command, $context);
-                break;
-            
-            case ControllerCassiere::CMD_RESTITUISCI_DATI_CLIENTE:
-                $this->cmd_restituisci_dati_cliente($command, $context);
                 break;
             
             case ControllerCassiere::CMD_RESTITUISCI_STATISTICHE_CASSIERE_TOTALI:
@@ -114,7 +111,6 @@ class ControllerCassiere extends Controller
         
         switch ($command->getCommand()) {
             case ControllerCassiere::CMD_TIMBRA_ENTRATA:
-            case ControllerCassiere::CMD_RESTITUISCI_DATI_CLIENTE:
             case ControllerCassiere::CMD_RESTITUISCI_STATISTICHE_CASSIERE_TOTALI:
             case ControllerCassiere::CMD_RESTITUISCI_STATISTICHE_CASSIERE_STAFF:
             case ControllerCassiere::CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO:
@@ -172,40 +168,6 @@ class ControllerCassiere extends Controller
 
         //Passo anche l'evento per un check sulla prevendita.
         parent::getPrinter()->addResult(Cassiere::timbraEntrata($entrata, $utente->getId(), $eventoSelezionato->getId()));
-    }
-
-    private function cmd_restituisci_dati_cliente(Command $command, Context $context)
-    {
-        if(!array_key_exists("prevendita", $command->getArgs())){
-            throw new InvalidArgumentException("Argomenti non validi");
-        }
-
-        // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
-            throw new NotAvailableOperationException("Utente non loggato.");
-        }
-
-        if (! $context->getUserSession()->isEventoScelto()){
-            throw new NotAvailableOperationException("Non hai scelto l'evento");
-        }
-
-        $prevendita = $command->getArgs()['prevendita']->getValue();
-
-        if (! ($prevendita instanceof NetWId)){
-            throw new InvalidArgumentException("Parametri non validi.");        
-        }
-
-        //Controllo i diritti dell'utente.
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
-
-        //Usato per un check sul membro che richiede i dati del cliente.
-        $eventoSelezionato = $context->getUserSession()->getEventoScelto();
-
-        if(! $dirittiUtente->isCassiere()){
-            throw new AuthorizationException("L'utente non è cassiere dello staff.");
-        }
-        
-        parent::getPrinter()->addResult(Cassiere::getDatiCliente($prevendita->getId(), $eventoSelezionato->getId()));
     }
 
     private function cmd_restituisci_statistiche_cassiere_totali(Command $command, Context $context)

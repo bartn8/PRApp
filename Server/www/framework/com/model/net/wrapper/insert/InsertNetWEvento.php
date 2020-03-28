@@ -45,7 +45,7 @@ class InsertNetWEvento implements NetWrapper
      * @throws InvalidArgumentException
      * @return InsertNetWEvento
      */
-    private static function make($idStaff, $nome, $descrizione, $inizio, $fine, $indirizzo, $stato)
+    private static function make($nome, $descrizione, $inizio, $fine, $indirizzo, $stato)
     {
         if (is_null($nome) || is_null($inizio) || is_null($fine) || is_null($indirizzo) || is_null($stato))
             throw new InvalidArgumentException("Uno o più parametri nulli");
@@ -87,8 +87,6 @@ class InsertNetWEvento implements NetWrapper
 
         if (! array_key_exists("stato", $array))
             throw new InvalidArgumentException("Dato stato non trovato.");
-
-        //TODO: da fare su tutti gli insert e update.
 
         $inizio = new DateTimeImmutableAdapterJSON(new \DateTimeImmutable($array["inizio"]));   //ISO8061
         $fine = new DateTimeImmutableAdapterJSON(new \DateTimeImmutable($array["fine"]));       //ISO8061

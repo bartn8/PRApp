@@ -36,56 +36,6 @@ use com\model\net\wrapper\NetWId;
 
 class Membro extends Table
 {
-
-    /**
-     * Verifica se l'utente fa parte dello staff.
-     *
-     * @param int $idStaff
-     * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws \Exception
-     * @return boolean
-     */
-    private static function _isMembro(int $idStaff): bool
-    {
-        $conn = parent::getConnection();
-
-        $stmt = $conn->prepare("SELECT COUNT(*) AS conto FROM membro WHERE idUtente = :idUtente AND idStaff = :idStaff");
-        $stmt->bindValue(":idUtente", Context::getContext()->getUtente()->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(":idStaff", $idStaff, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["conto"];
-
-        $conn = NULL;
-
-        return $count === 1;
-    }
-
-    /**
-     * Verifica se l'utente fa parte dello staff.
-     *
-     * @param int $idEvento
-     * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws \Exception
-     * @return boolean
-     */
-    private static function _isMembroByEvento(int $idEvento): bool
-    {
-        $conn = parent::getConnection();
-
-        $stmt = $conn->prepare("SELECT COUNT(*) AS conto FROM membro INNER JOIN evento ON membro.idStaff = evento.idStaff WHERE evento.id = :idEvento AND membro.idUtente = :idUtente");
-        $stmt->bindValue(":idUtente", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(":idEvento", $idEvento, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["conto"];
-
-        $conn = NULL;
-
-        return $count === 1;
-    }
-
     /**
      * Restituisce la lista dei membri dello staff.
      *
@@ -112,7 +62,6 @@ class Membro extends Table
         return $lista;
     }
 
-    // Utilizzo sto metodo per i due metodi pubblici qua sotto.
     public static function getDiritti(int $idUtente, int $idStaff): ?WDirittiUtente
     {
         $conn = parent::getConnection();
@@ -203,31 +152,7 @@ EOT;
         return $lista;
     }
 
-    /**
-     * Restituisce la lista dei clienti di uno staff.
-     *
-     * @param int $staff
-     * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @return \com\model\db\wrapper\WCliente[] Lista dei clienti di uno staff.
-     */
-    public static function getListaClienti(int $staff): array
-    {
-        $conn = parent::getConnection();
-
-        $stmtSelezione = $conn->prepare("SELECT id, idStaff, nome, cognome, telefono, dataDiNascita, codiceFiscale, timestampInserimento FROM cliente WHERE idStaff = :idStaff");
-        $stmtSelezione->bindValue(":idStaff", $staff, PDO::PARAM_INT);
-        $stmtSelezione->execute();
-
-        $lista = array();
-
-        while (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
-            $lista[] = WCliente::of($riga);
-        }
-
-        $conn = NULL;
-
-        return $lista;
-    }
+    //Lista clienti rimossa
 
     /**
      * Restituisce l'evento dall'id

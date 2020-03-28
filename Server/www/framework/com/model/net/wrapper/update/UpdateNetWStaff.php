@@ -26,18 +26,15 @@ use com\model\net\wrapper\NetWrapper;
 class UpdateNetWStaff implements NetWrapper
 {
 
-    public static function make($id, $codiceAccesso)
+    public static function make($codiceAccesso)
     {
-        if (is_null($id) || is_null($codiceAccesso))
+        if ( is_null($codiceAccesso))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) || ! is_string($codiceAccesso))
+        if ( ! is_string($codiceAccesso))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
-        if ($id <= 0)
-            throw new InvalidArgumentException("ID non valido");
-
-        return new UpdateNetWStaff($id, $codiceAccesso);
+        return new UpdateNetWStaff($codiceAccesso);
     }
 
     public static function of($array)
@@ -45,21 +42,13 @@ class UpdateNetWStaff implements NetWrapper
         if (is_null($array) || ! is_array($array))
             throw new InvalidArgumentException("Array nullo o non valido.");
 
-        if (! array_key_exists("id", $array))
-            throw new InvalidArgumentException("Dato id non trovato.");
-
         if (! array_key_exists("codiceAccesso", $array))
             throw new InvalidArgumentException("Dato codiceAccesso non trovato.");
 
-        return self::make((int) $array["id"], $array["codiceAccesso"]);
+        return self::make($array["codiceAccesso"]);
     }
 
-    /**
-     * Id dello staff.
-     *
-     * @var int
-     */
-    private $id;
+    //Rimosso idStaff: si usa quello selezionato.
 
     /**
      * Codice per accedere allo staff.
@@ -68,19 +57,9 @@ class UpdateNetWStaff implements NetWrapper
      */
     private $codiceAccesso;
 
-    private function __construct($id, $codiceAccesso)
+    private function __construct($codiceAccesso)
     {
-        $this->id = $id;
         $this->codiceAccesso = $codiceAccesso;
-    }
-
-    /**
-     *
-     * @return number
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

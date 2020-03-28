@@ -719,3 +719,27 @@ END$$
 
 DELIMITER ;
 
+
+/* Elimino un membro amministratore solo se c'è rimasto un amministratore */
+
+DELIMITER $$
+
+CREATE TRIGGER eliminaMembroAmministratore
+BEFORE DELETE ON membro
+FOR EACH ROW BEGIN
+	
+	DECLARE conteggioAmministratori int;
+	DECLARE isAmministratore int;
+    
+	SELECT COUNT(idUtente) INTO conteggioAmministratori FROM amministratore WHERE idStaff = OLD.idStaff;
+	SELECT COUNT(idUtente) INTO isAmministratore FROM amministratore WHERE idStaff = OLD.idStaff AND idUtente = OLD.idUtente;
+    
+	/* Se i conteggi sono uguali allora l'unico amministratore rimasto è quello da eliminare */
+	
+	IF (conteggioAmministratori = isAmministratore) THEN
+		SIGNAL SQLSTATE '70003'
+		SET MESSAGE_TEXT = 'Impossibile eliminare membro: rimasto solo lui amministratore';
+	END IF;
+END$$
+
+DELIMITER ;

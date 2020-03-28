@@ -21,102 +21,32 @@
 
 namespace com\model\db\table;
 
-use com\model\Context;
-use com\model\db\enum\StatoPrevendita;
-use com\model\db\enum\StatoEvento;
-use com\model\db\exception\AuthorizationException;
-use com\model\db\exception\InsertUpdateException;
-use com\model\db\exception\NotAvailableOperationException;
-use com\model\db\wrapper\WCliente;
-use com\model\db\wrapper\WEntrata;
-use com\model\db\wrapper\WEvento;
-use com\model\db\wrapper\WPrevendita;
-use com\model\db\wrapper\WPrevenditaPlus;
-use com\model\db\wrapper\WStaff;
-use com\model\db\wrapper\WStatisticheCassiereEvento;
-use com\model\db\wrapper\WStatisticheCassiereStaff;
-use com\model\db\wrapper\WStatisticheCassiereTotali;
-use com\model\net\wrapper\NetWEntrata;
-use com\utils\DateTimeImmutableAdapterJSON;
-use InvalidArgumentException;
 use PDO;
 use PDOException;
+use com\model\Context;
+use com\model\db\table\Table;
+use InvalidArgumentException;
+use com\model\db\table\Cassiere;
+use com\model\db\wrapper\WStaff;
+use com\model\db\wrapper\WEvento;
 use com\model\net\wrapper\NetWId;
+use com\model\db\enum\StatoEvento;
+use com\model\db\wrapper\WCliente;
+use com\model\db\wrapper\WEntrata;
+use com\model\db\wrapper\WPrevendita;
+use com\model\db\enum\StatoPrevendita;
+use com\model\net\wrapper\NetWEntrata;
+use com\model\db\wrapper\WPrevenditaPlus;
+use com\utils\DateTimeImmutableAdapterJSON;
+use com\model\db\exception\InsertUpdateException;
+use com\model\db\exception\AuthorizationException;
+use com\model\db\wrapper\WStatisticheCassiereStaff;
+use com\model\db\wrapper\WStatisticheCassiereEvento;
+use com\model\db\wrapper\WStatisticheCassiereTotali;
+use com\model\db\exception\NotAvailableOperationException;
 
 class Cassiere extends Table
 {
-
-    /**
-     * Verifica se l'utente è un cassiere dello staff.
-     *
-     * @param int $idStaff
-     * @return boolean
-     * @throws \Exception
-     */
-    private static function _isCassiere(int $idStaff): bool
-    {
-        $conn = parent::getConnection();
-
-        $stmt = $conn->prepare("SELECT COUNT(*) AS conto FROM cassiere WHERE idUtente = :idUtente AND idStaff = :idStaff");
-        $stmt->bindValue(":idUtente", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(":idStaff", $idStaff, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["conto"];
-
-        $conn = NULL;
-
-        return $count === 1;
-    }
-
-    /**
-     * Verifica se l'utente è un cassiere dello staff.
-     *
-     * @param int $idPrevendita
-     * @return boolean
-     * @throws \Exception
-     */
-    private static function _isCassiereByPrevendita(int $idPrevendita): bool
-    {
-        $conn = parent::getConnection();
-
-        $stmt = $conn->prepare("SELECT COUNT(*) AS conto FROM cassiere INNER JOIN evento ON evento.idStaff = cassiere.idStaff INNER JOIN prevendita ON prevendita.idEvento = evento.id WHERE cassiere.idUtente = :idUtente AND prevendita.id = :idPrevendita");
-        $stmt->bindValue(":idUtente", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(":idPrevendita", $idPrevendita, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["conto"];
-
-        $conn = NULL;
-
-        return $count === 1;
-    }
-
-    /**
-     * Verifica se l'utente è un cassiere dello staff.
-     *
-     * @param int $idEvento
-     * @return boolean
-     * @throws \Exception
-     */
-    private static function _isCassiereByEvento(int $idEvento): bool
-    {
-        $conn = parent::getConnection();
-
-        $stmt = $conn->prepare("SELECT COUNT(*) AS conto FROM cassiere INNER JOIN evento ON evento.idStaff = cassiere.idStaff WHERE cassiere.idUtente = :idUtente AND evento.id = :idEvento");
-        $stmt->bindValue(":idUtente", Context::getContext()->getUtente()
-            ->getId(), PDO::PARAM_INT);
-        $stmt->bindValue(":idEvento", $idEvento, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["conto"];
-
-        $conn = NULL;
-
-        return $count === 1;
-    }
 
     /**
      * Timbra una prevendita.
@@ -143,19 +73,23 @@ class Cassiere extends Table
         $stmtVerifica->bindValue(":idPrevendita", $entrata->getIdPrevendita(), PDO::PARAM_INT);
         $stmtVerifica->execute();
 
-        $fetch = $stmtVerifica->fetch(PDO::FETCH_ASSOC);
+        if ($stmtVerifica->rowCount() > 0) {
+            $fetch = $stmtVerifica->fetch(PDO::FETCH_ASSOC);
 
-        if ($fetch["idEvento"] != $idEvento) {
-            $conn = NULL;
-            //Ho usato NotAvailableOperationException perché:
-            //AuthorizationException si riferisce all'accesso di dati non consentito
-            //InsertUpdateException riguarda quando il db restituisce errori di integrità
-            throw new NotAvailableOperationException("L'evento non corrisponde a quello selezionato");
-        }
-
-        if ($fetch["codice"] !== $entrata->getCodiceAccesso()) {
-            $conn = NULL;
-            throw new NotAvailableOperationException("Prevendita non valida: Codice non valido.");
+            if ($fetch["idEvento"] != $idEvento) {
+                $conn = NULL;
+                //Ho usato NotAvailableOperationException perché:
+                //AuthorizationException si riferisce all'accesso di dati non consentito
+                //InsertUpdateException riguarda quando il db restituisce errori di integrità
+                throw new NotAvailableOperationException("L'evento non corrisponde a quello selezionato");
+            }
+    
+            if ($fetch["codice"] !== $entrata->getCodiceAccesso()) {
+                $conn = NULL;
+                throw new NotAvailableOperationException("Prevendita non valida: Codice non valido.");
+            }
+        }else{
+            throw new NotAvailableOperationException("Prevendita non trovata");
         }
 
         //data timbratura e verifica stato già verificati da db.
@@ -186,47 +120,7 @@ class Cassiere extends Table
         return $entrata->getWEntrata($utente, new DateTimeImmutableAdapterJSON(new \DateTimeImmutable("now")));
     }
 
-    /**
-     * Restituisce i dati del cliente associati alla prevendita inserita.
-     *
-     * @param int prevendita
-     * @param int evento da convalidare
-     * @throws NotAvailableOperationException dati non congruenti
-     * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @return ?WCliente Restituisce i dati del cliente associati. Restituisce NULL se i dati non sono stati trovati.
-     */
-    public static function getDatiCliente(int $prevendita, int $evento): ?WCliente
-    {
-        $conn = parent::getConnection();
-
-        // Prima recupero l'identificativo del cliente dal database. Non mi fido del wrapper.
-        //Ricavo anche l'evento per fare un check sul membro.
-        $stmtRecuperoDati = $conn->prepare("SELECT idCliente, idEvento FROM prevendita WHERE id = :idPrevendita");
-        $stmtRecuperoDati->bindValue(":idPrevendita", $prevendita, PDO::PARAM_INT);
-        $stmtRecuperoDati->execute();
-
-        $idCliente = $stmtRecuperoDati->fetch(PDO::FETCH_ASSOC)["idCliente"];
-        $idEvento = $stmtRecuperoDati->fetch(PDO::FETCH_ASSOC)["idEvento"];
-
-        //Check che l'evento della prevendita sia quello selezionato dall'utente.
-        if($idEvento != $evento){
-            throw new NotAvailableOperationException("Evento della prevendita non selezionato.");
-        }
-
-        $stmtSelezione = $conn->prepare("SELECT id, idStaff, nome, cognome, telefono, dataDiNascita, codiceFiscale, timestampInserimento FROM cliente WHERE id = :idCliente");
-        $stmtSelezione->bindValue(":idCliente", $idCliente);
-        $stmtSelezione->execute();
-
-        $result = NULL;
-
-        if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
-            $result = WCliente::of($riga);
-        }
-
-        $conn = NULL;
-
-        return $result;
-    }
+    //getDatiCliente rimosso
 
     /**
      * Restituisce le statistiche totali del cassiere.

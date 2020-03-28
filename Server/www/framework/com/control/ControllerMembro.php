@@ -48,7 +48,8 @@ class ControllerMembro extends Controller
 
     public const CMD_RESTITUISCI_TIPI_PREVENDITA = 106;
 
-    public const CMD_RESTITUISCI_LISTA_CLIENTI = 107;
+    //Rimossa per cancellazione tabella
+    //public const CMD_RESTITUISCI_LISTA_CLIENTI = 107;
 
     public const CMD_SCEGLI_EVENTO = 108;	
 
@@ -76,11 +77,7 @@ class ControllerMembro extends Controller
             case ControllerMembro::CMD_RESTITUISCI_TIPI_PREVENDITA:
                 $this->cmd_restituisci_tipi_prevendita($command, $context);
                 break;
-            
-            case ControllerMembro::CMD_RESTITUISCI_LISTA_CLIENTI:
-                $this->cmd_restituisci_lista_clienti($command, $context);
-                break;
-				
+            				
             case ControllerMembro::CMD_SCEGLI_EVENTO:
                 $this->cmd_scegli_evento($command, $context);
                 break;				
@@ -94,7 +91,6 @@ class ControllerMembro extends Controller
             case ControllerMembro::CMD_RESTITUISCI_DIRITTI_PERSONALI:
             case ControllerMembro::CMD_RESTITUISCI_LISTA_EVENTI:
             case ControllerMembro::CMD_RESTITUISCI_TIPI_PREVENDITA:
-            case ControllerMembro::CMD_RESTITUISCI_LISTA_CLIENTI:
 			case ControllerMembro::CMD_SCEGLI_EVENTO:
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
@@ -177,22 +173,6 @@ class ControllerMembro extends Controller
         $evento = $context->getUserSession()->getEventoScelto();
 
         parent::getPrinter()->addResults(Membro::getTipiPrevendita($evento->getId()));
-    }
-
-    private function cmd_restituisci_lista_clienti(Command $command, Context $context)
-    {
-        // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
-            throw new NotAvailableOperationException("Utente non loggato.");
-        }
-
-        if (! $context->getUserSession()->isStaffScelto()){
-            throw new NotAvailableOperationException("Non hai scelto lo staff");            
-        }
-
-        $staff = $context->getUserSession()->getStaffScelto();
-        
-        parent::getPrinter()->addResults(Membro::getListaClienti($staff->getId()));
     }
 	
 	private function cmd_scegli_evento(Command $command, Context $context){

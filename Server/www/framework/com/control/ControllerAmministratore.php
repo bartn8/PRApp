@@ -21,9 +21,19 @@
 
 namespace com\control;
 
-use com\model\db\table\Amministratore;
+use com\model\Context;
+use com\handler\Command;
+use com\control\Controller;
 use com\view\printer\Printer;
 use \InvalidArgumentException;
+use com\model\net\wrapper\NetWId;
+use com\model\db\table\Amministratore;
+use com\control\ControllerAmministratore;
+use com\model\db\exception\AuthorizationException;
+use com\model\net\wrapper\insert\InsertNetWEvento;
+use com\model\net\wrapper\update\UpdateNetWEvento;
+use com\model\db\exception\NotAvailableOperationException;
+use com\model\net\wrapper\insert\InsertNetWTipoPrevendita;
 
 class ControllerAmministratore extends Controller
 {
@@ -31,35 +41,38 @@ class ControllerAmministratore extends Controller
     // Divisione dei comandi: (1-100 utente) (101-200 membro) (201-300 pr) (301-400 cassiere) (401-500 amministratore)
 //     const CMD_IS_AMMINISTRATORE = 401;
 
-    const CMD_RIMUOVI_CLIENTE = 402;
+    //Rimosso perché tabella eliminata
+    //public const CMD_RIMUOVI_CLIENTE = 402;
 
-    const CMD_AGGIUNGI_EVENTO = 403;
+    public const CMD_AGGIUNGI_EVENTO = 403;
 
-    const CMD_MODIFICA_EVENTO = 404;
+    public const CMD_MODIFICA_EVENTO = 404;
 
-    const CMD_AGGIUNGI_TIPO_PREVENDITA = 405;
+    public const CMD_AGGIUNGI_TIPO_PREVENDITA = 405;
 
-    const CMD_MODIFICA_TIPO_PREVENDITA = 406;
+    public const CMD_MODIFICA_TIPO_PREVENDITA = 406;
 
-    const CMD_ELIMINA_TIPO_PREVENDITA = 407;
+    public const CMD_ELIMINA_TIPO_PREVENDITA = 407;
 
-    const CMD_MODIFICA_DIRITTI_UTENTE = 408;
+    public const CMD_MODIFICA_DIRITTI_UTENTE = 408;
 
-    const CMD_RESTITUISCI_STATISTICHE_PR = 409;
+    public const CMD_RESTITUISCI_STATISTICHE_PR = 409;
 
-    const CMD_RESTITUISCI_STATISTICHE_CASSIERE = 410;
+    public const CMD_RESTITUISCI_STATISTICHE_CASSIERE = 410;
 
-    const CMD_RESTITUISCI_STATISTICHE_EVENTO = 411;
+    public const CMD_RESTITUISCI_STATISTICHE_EVENTO = 411;
 
-    const CMD_RESTITUISCI_PREVENDITE = 412;
+    public const CMD_RESTITUISCI_PREVENDITE = 412;
     
-    const CMD_RIMUOVI_MEMBRO = 413;
+    public const CMD_RIMUOVI_MEMBRO = 413;
     
-    const CMD_MODIFICA_CODICE_ACCESSO = 414;
+    public const CMD_MODIFICA_CODICE_ACCESSO = 414;
 
-    const CMD_RESTITUISCI_STATISTICHE_PR_EVENTO = 415;
+    public const CMD_RESTITUISCI_STATISTICHE_PR_EVENTO = 415;
 
-    const CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO = 416;
+    public const CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO = 416;
+
+    public const CMD_RESTITUISCI_DIRITTI_UTENTE = 417;
 
     public function __construct($printer, $retriver)
     {
@@ -68,11 +81,7 @@ class ControllerAmministratore extends Controller
 
     public function internalHandle(Command $command, Context $context)
     {
-        switch ($command->getCommand()) {            
-            case ControllerAmministratore::CMD_RIMUOVI_CLIENTE:
-                $this->cmd_rimuovi_cliente($command, $context);
-                break;
-            
+        switch ($command->getCommand()) {                        
             case ControllerAmministratore::CMD_AGGIUNGI_EVENTO:
                 $this->cmd_aggiungi_evento($command, $context);
                 break;
@@ -129,12 +138,15 @@ class ControllerAmministratore extends Controller
                 $this->cmd_restituisci_statistiche_cassiere_evento($command, $context);
                 break;
                 
+            case ControllerAmministratore::CMD_RESTITUISCI_DIRITTI_UTENTE:
+                $this->cmd_restituisci_diritti_utente($command, $context);
+                break;
+
             default:
                 break;
         }
         
         switch ($command->getCommand()) {
-            case ControllerAmministratore::CMD_RIMUOVI_CLIENTE:
             case ControllerAmministratore::CMD_AGGIUNGI_EVENTO:
             case ControllerAmministratore::CMD_MODIFICA_EVENTO:
             case ControllerAmministratore::CMD_AGGIUNGI_TIPO_PREVENDITA:                
@@ -148,6 +160,7 @@ class ControllerAmministratore extends Controller
             case ControllerAmministratore::CMD_MODIFICA_CODICE_ACCESSO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR_EVENTO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO:
+            case ControllerAmministratore::CMD_RESTITUISCI_DIRITTI_UTENTE:                
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
                 
@@ -157,164 +170,470 @@ class ControllerAmministratore extends Controller
         }
     }
 
-    private function cmd_rimuovi_cliente(Command $command, Context $context)
-    {
-        if(!array_key_exists("cliente", $command->getArgs()))
-        {
-            throw new InvalidArgumentException("Argomenti non validi");
-        }
-        
-        parent::getPrinter()->addResult(Amministratore::rimuoviCliente($command->getArgs()['cliente']->getValue()));
-    }
-
     private function cmd_aggiungi_evento(Command $command, Context $context)
     {
-        if(!array_key_exists("evento", $command->getArgs()))
-        {
+        if(!array_key_exists("evento", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }        
+
+        $utente = $context->getUserSession()->getUtente();
+        $staff = $context->getUserSession()->getStaffScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();    
+
+        $evento = $command->getArgs()['evento']->getValue();
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        if (! ($evento instanceof InsertNetWEvento)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }
         
-        parent::getPrinter()->addResult(Amministratore::aggiungiEvento($command->getArgs()['evento']->getValue()));
+        parent::getPrinter()->addResult(Amministratore::aggiungiEvento($evento, $utente->getId(), $staff->getId()));
     }
 
     private function cmd_modifica_evento(Command $command, Context $context)
     {
-        if(!array_key_exists("evento", $command->getArgs()))
-        {
+        if(!array_key_exists("evento", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");            
+        }        
+
+        $utente = $context->getUserSession()->getUtente();
+        $staffScelto = $context->getUserSession()->getStaffScelto();
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        $evento = $command->getArgs()['evento']->getValue();
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        if (! ($evento instanceof UpdateNetWEvento)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }        
         
-        parent::getPrinter()->addResult(Amministratore::modificaEvento($command->getArgs()['evento']->getValue()));
+        parent::getPrinter()->addResult(Amministratore::modificaEvento($evento, $utente->getId(), $staffScelto->getId(), $eventoScelto->getId()));
     }
 
     private function cmd_aggiungi_tipo_prevendita(Command $command, Context $context)
     {
-        if(!array_key_exists("tipoPrevendita", $command->getArgs()))
-        {
+        if(!array_key_exists("tipoPrevendita", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");            
+        }        
+
+        $utente = $context->getUserSession()->getUtente();
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        $tipoPrevendita = $command->getArgs()['tipoPrevendita']->getValue();       
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        if (! ($tipoPrevendita instanceof InsertNetWTipoPrevendita)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }
         
-        parent::getPrinter()->addResult(Amministratore::aggiungiTipoPrevendita($command->getArgs()['tipoPrevendita']->getValue()));
+        parent::getPrinter()->addResult(Amministratore::aggiungiTipoPrevendita($tipoPrevendita, $utente->getId(), $eventoScelto->getId()));
     }
 
     private function cmd_modifica_tipo_prevendita(Command $command, Context $context)
     {
-        if(!array_key_exists("tipoPrevendita", $command->getArgs()))
-        {
+        if(!array_key_exists("tipoPrevendita", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
         
-        parent::getPrinter()->addResult(Amministratore::modificaTipoPrevendita($command->getArgs()['tipoPrevendita']->getValue()));
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }        
+
+        $utente = $context->getUserSession()->getUtente();
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        $tipoPrevendita = $command->getArgs()['tipoPrevendita']->getValue();    
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        if (! ($tipoPrevendita instanceof UpdateNetWTipoPrevendita)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }
+
+        //Mi serve un check ulteriore SQL sull'idEvento del tipo prevendita
+        parent::getPrinter()->addResult(Amministratore::modificaTipoPrevendita($tipoPrevendta, $utente->getId(), $eventoScelto->getId()));
     }
     
     private function cmd_elimina_tipo_prevendita(Command $command, Context $context)
     {
-        if(!array_key_exists("tipoPrevendita", $command->getArgs()))
-        {
+        if(!array_key_exists("tipoPrevendita", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");            
+        }        
+
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        $tipoPrevendita = $command->getArgs()['tipoPrevendita']->getValue();       
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        if (! ($tipoPrevendita instanceof NetWId)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }       
         
-        parent::getPrinter()->addResult(Amministratore::eliminaTipoPrevendita($command->getArgs()['tipoPrevendita']->getValue()));
+        //Mi serve un check ulteriore SQL sull'idEvento del tipo prevendita
+        parent::getPrinter()->addResult(Amministratore::eliminaTipoPrevendita($evento->getId(), $eventoScelto->getId()));
     }
 
     private function cmd_modifica_diritti_utente(Command $command, Context $context)
     {
-        if(!array_key_exists("dirittiUtente", $command->getArgs()))
-        {
+        if(!array_key_exists("dirittiUtente", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }        
+
+        $staff = $context->getUserSession()->getStaffScelto();
+        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+
+        if(! $dirittiUtenteMiei->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        $dirittiUtente = $command->getArgs()['dirittiUtente']->getValue();
+
+        if (! ($dirittiUtente instanceof UpdateNetWDirittiUtente)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }
         
-        Amministratore::modificaDirittiUtente($command->getArgs()['dirittiUtente']->getValue());
+        Amministratore::modificaDirittiUtente($evento, $staff->getId());
     }
 
     private function cmd_restituisci_statistiche_pr(Command $command, Context $context)
     {
-        if(!array_key_exists("staff", $command->getArgs()) || !array_key_exists("pr", $command->getArgs()))
-        {
+        //Prima richiedeva lo staff: ora uso quello selezionato
+
+        if(!array_key_exists("pr", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }        
+
+        $staff = $context->getUserSession()->getStaffScelto();
+        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+
+        if(! $dirittiUtenteMiei->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        $pr = $command->getArgs()['pr']->getValue();
+
+        if (! ($pr instanceof NetWId)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }       
         
-        parent::getPrinter()->addResult(Amministratore::getStatistichePR($command->getArgs()['pr']->getValue(), $command->getArgs()['staff']->getValue()));
+        parent::getPrinter()->addResult(Amministratore::getStatistichePR($pr->getId(), $staff->getId()));
     }
 
     private function cmd_restituisci_statistiche_cassiere(Command $command, Context $context)
     {
-        if(!array_key_exists("staff", $command->getArgs()) || !array_key_exists("cassiere", $command->getArgs()))
-        {
+        //Prima richiedeva lo staff: ora uso quello selezionato
+
+        if(!array_key_exists("cassiere", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
-        
-        parent::getPrinter()->addResult(Amministratore::getStatisticheCassiere($command->getArgs()['cassiere']->getValue(), $command->getArgs()['staff']->getValue()));
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }        
+
+        $staff = $context->getUserSession()->getStaffScelto();
+        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+
+        if(! $dirittiUtenteMiei->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        $cassiere = $command->getArgs()['cassiere']->getValue();
+
+        if (! ($cassiere instanceof NetWId)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }       
+
+        parent::getPrinter()->addResult(Amministratore::getStatisticheCassiere($cassiere->getId(), $staff->getId()));
     }
 
     private function cmd_restituisci_statistiche_evento(Command $command, Context $context)
     {
-        if(!array_key_exists("evento", $command->getArgs()))
-        {
-            throw new InvalidArgumentException("Argomenti non validi");
+        //Prima richiedeva l'evento: ora uso quello selezionato
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
         }
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");            
+        }        
+
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }        
         
-        parent::getPrinter()->addResults(Amministratore::getStatisticheEvento($command->getArgs()['evento']->getValue()));
+        parent::getPrinter()->addResults(Amministratore::getStatisticheEvento($eventoScelto->getId()));
     }
 
     private function cmd_restituisci_prevendite(Command $command, Context $context)
     {
-        if(!array_key_exists("evento", $command->getArgs()))
-        {
-            throw new InvalidArgumentException("Argomenti non validi");
+        //Prima richiedeva l'evento: ora uso quello selezionato
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");            
+        }        
+
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
         
-        parent::getPrinter()->addResult(Amministratore::getPrevendite($command->getArgs()['evento']->getValue()));
+        parent::getPrinter()->addResult(Amministratore::getPrevendite($eventoScelto->getId()));
     }
     
     private function cmd_rimuovi_membro(Command $command, Context $context)
     {
-        if(!array_key_exists("staff", $command->getArgs()) || !array_key_exists("membro", $command->getArgs()))
-        {
+        if(!array_key_exists("membro", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }        
+
+        $staff = $context->getUserSession()->getStaffScelto();
+        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+
+        if(! $dirittiUtenteMiei->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }        
         
-        parent::getPrinter()->addResult(Amministratore::rimuoviMembro($command->getArgs()['membro']->getValue(), $command->getArgs()['staff']->getValue()));
+        $membroElimina = $command->getArgs()['membro']->getValue();
+
+        if (! ($membroElimina instanceof NetWId)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }  
+
+        parent::getPrinter()->addResult(Amministratore::rimuoviMembro($membroElimina->getId(), $staff->getId()));
     }
     
     private function cmd_modifica_codice_accesso(Command $command, Context $context)
     {
-        if(!array_key_exists("staff", $command->getArgs()))
-        {
+        if(!array_key_exists("staff", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }        
+
+        $staffScelto = $context->getUserSession()->getStaffScelto();
+        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+
+        if(! $dirittiUtenteMiei->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }        
         
-        parent::getPrinter()->addResult(Amministratore::modificaCodiceAccesso($command->getArgs()['staff']->getValue()));
+        $staff = $command->getArgs()['staff']->getValue();
+
+        if (! ($staff instanceof UpdateNetWStaff)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }  
+        
+        parent::getPrinter()->addResult(Amministratore::modificaCodiceAccesso($staff, $staffScelto->getId()));
     }
 
     private function cmd_restituisci_statistiche_pr_evento(Command $command, Context $context)
     {
-        if(!array_key_exists("evento", $command->getArgs()) || !array_key_exists("pr", $command->getArgs()))
-        {
+        if(!array_key_exists("pr", $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
         
-        parent::getPrinter()->addResults(Amministratore::getStatistichePREvento($command->getArgs()['evento']->getValue(), $command->getArgs()['pr']->getValue()));
+        //Prima richiedeva l'evento: ora uso quello selezionato
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");            
+        }        
+
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }
+
+        $pr = $command->getArgs()['pr']->getValue();
+
+        if (! ($pr instanceof NetWId)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }  
+
+        parent::getPrinter()->addResults(Amministratore::getStatistichePREvento($eventoScelto->getId(), $pr->getId()));
     }
 
     private function cmd_restituisci_statistiche_cassiere_evento(Command $command, Context $context)
     {
-        if(!array_key_exists("evento", $command->getArgs()) || !array_key_exists("cassiere", $command->getArgs()))
-        {
+        if(!array_key_exists("cassiere", $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
-        
-        parent::getPrinter()->addResult(Amministratore::getStatisticheCassiereEvento($command->getArgs()['evento']->getValue(), $command->getArgs()['cassiere']->getValue()));
+
+        //Prima richiedeva l'evento: ora uso quello selezionato
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");            
+        }        
+
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        if(! $dirittiUtente->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }        
+
+        $cassiere = $command->getArgs()['cassiere']->getValue();
+
+        if (! ($cassiere instanceof NetWId)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }  
+
+        parent::getPrinter()->addResult(Amministratore::getStatisticheCassiereEvento($eventoScelto->getId(), $cassiere->getId()));
     }
 
     private function cmd_restituisci_diritti_utente(Command $command, Context $context)
     {
-        if(!array_key_exists("utente", $command->getArgs()) || !array_key_exists("staff", $command->getArgs()))
-        {
+        //Prima richiedeva lo staff: ora uso quello selezionato
+
+        if(!array_key_exists("utente", $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }        
+
+        $staffScelto = $context->getUserSession()->getStaffScelto();
+        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+
+        if(! $dirittiUtenteMiei->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }      
+
+        $membro = $command->getArgs()['utente']->getValue();
+
+        if (! ($membro instanceof NetWId)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }  
         
-        parent::getPrinter()->addResult(Membro::getDirittiUtente($command->getArgs()['utente']->getValue(), $command->getArgs()['staff']->getValue()));
+        parent::getPrinter()->addResult(Amministratore::getDiritti($membro->getId(), $staffScelto->getId()));
     }
 
 }

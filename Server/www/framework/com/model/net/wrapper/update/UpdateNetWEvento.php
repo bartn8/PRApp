@@ -21,12 +21,13 @@
 
 namespace com\model\net\wrapper\update;
 
-use com\model\db\enum\StatoEvento;
-use com\model\db\wrapper\WEvento;
-use com\model\net\wrapper\NetWrapper;
-use com\utils\DateTimeImmutableAdapterJSON;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use com\model\db\wrapper\WEvento;
+use com\model\db\enum\StatoEvento;
+use com\model\net\wrapper\NetWrapper;
+use com\utils\DateTimeImmutableAdapterJSON;
+use com\model\net\wrapper\update\UpdateNetWEvento;
 
 class UpdateNetWEvento implements NetWrapper
 {
@@ -34,7 +35,6 @@ class UpdateNetWEvento implements NetWrapper
     /**
      * Metodo factory utlizzato quando si deve modificare un evento.
      *
-     * @param string $nome
      * @param string $descrizione
      * @param DateTimeImmutableAdapterJSON $inizio
      * @param DateTimeImmutableAdapterJSON $fine
@@ -43,12 +43,12 @@ class UpdateNetWEvento implements NetWrapper
      * @throws InvalidArgumentException
      * @return UpdateNetWEvento
      */
-    public static function make($id, $descrizione, $inizio, $fine, $indirizzo, $stato)
+    public static function make($descrizione, $inizio, $fine, $indirizzo, $stato)
     {
-        if (is_null($id) || is_null($inizio) || is_null($fine) || is_null($indirizzo) || is_null($stato))
+        if (is_null($inizio) || is_null($fine) || is_null($indirizzo) || is_null($stato))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) || (! is_null($descrizione) && ! is_string($descrizione)) || ! ($inizio instanceof DateTimeImmutableAdapterJSON) || ! ($fine instanceof DateTimeImmutableAdapterJSON) || ! is_string($indirizzo) || ! ($stato instanceof StatoEvento))
+        if ((! is_null($descrizione) && ! is_string($descrizione)) || ! ($inizio instanceof DateTimeImmutableAdapterJSON) || ! ($fine instanceof DateTimeImmutableAdapterJSON) || ! is_string($indirizzo) || ! ($stato instanceof StatoEvento))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if ($id <= 0)
@@ -60,16 +60,13 @@ class UpdateNetWEvento implements NetWrapper
         if (strlen($descrizione) > WEvento::DESCRIZIONE_MAX)
             throw new InvalidArgumentException("Descrizione non valida (MAX)");
 
-        return new UpdateNetWEvento($id, $descrizione, $inizio, $fine, $indirizzo, $stato);
+        return new UpdateNetWEvento($descrizione, $inizio, $fine, $indirizzo, $stato);
     }
 
     public static function of($array)
     {
         if (is_null($array) || ! is_array($array))
             throw new InvalidArgumentException("Array nullo o non valido.");
-
-        if (! array_key_exists("id", $array))
-            throw new InvalidArgumentException("Dato id non trovato.");
 
         if (! array_key_exists("descrizione", $array))
             throw new InvalidArgumentException("Dato descrizione non trovato.");
@@ -86,16 +83,10 @@ class UpdateNetWEvento implements NetWrapper
         if (! array_key_exists("stato", $array))
             throw new InvalidArgumentException("Dato stato non trovato.");
 
-        return self::make((int) $array["id"], $array["descrizione"], new DateTimeImmutableAdapterJSON(DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["inizio"])), new DateTimeImmutableAdapterJSON(DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["fine"])), $array["indirizzo"], StatoEvento::of($array["stato"]));
+        return self::make($array["descrizione"], new DateTimeImmutableAdapterJSON(DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["inizio"])), new DateTimeImmutableAdapterJSON(DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["fine"])), $array["indirizzo"], StatoEvento::of($array["stato"]));
     }
 
-    /**
-     * Identificativo dell'evento.
-     * (>0).
-     *
-     * @var int|NULL
-     */
-    private $id;
+    //Rimosso idEvento: Si prende da evento scelto.
 
     /**
      * Descrizione dell'evento.
@@ -133,23 +124,13 @@ class UpdateNetWEvento implements NetWrapper
      */
     private $stato;
 
-    private function __construct($id, $descrizione, $inizio, $fine, $indirizzo, $stato)
+    private function __construct($descrizione, $inizio, $fine, $indirizzo, $stato)
     {
-        $this->id = $id;
         $this->descrizione = $descrizione;
         $this->inizio = $inizio;
         $this->fine = $fine;
         $this->indirizzo = $indirizzo;
         $this->stato = $stato;
-    }
-
-    /**
-     *
-     * @return number|NULL
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -197,9 +178,9 @@ class UpdateNetWEvento implements NetWrapper
         return $this->stato;
     }
 
-    public function getWEvento($idStaff, $idCreatore, $nome, $idModificatore, $timestampUltimaModifica) : WEvento
+    public function getWEvento($idEvento, $idStaff, $idCreatore, $nome, $idModificatore, $timestampUltimaModifica) : WEvento
     {
-        return WEvento::make(self::getId(), $idStaff, $idCreatore, $nome, self::getDescrizione(), self::getInizio(), self::getFine(), self::getIndirizzo(), self::getStato(), $idModificatore, $timestampUltimaModifica);
+        return WEvento::make($idEvento, $idStaff, $idCreatore, $nome, self::getDescrizione(), self::getInizio(), self::getFine(), self::getIndirizzo(), self::getStato(), $idModificatore, $timestampUltimaModifica);
     }
 }
 

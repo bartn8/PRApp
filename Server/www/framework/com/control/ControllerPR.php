@@ -31,6 +31,8 @@ use com\view\printer\Printer;
 use \InvalidArgumentException;
 use com\model\db\exception\AuthorizationException;
 use com\model\net\wrapper\insert\InsertNetWCliente;
+use com\model\net\wrapper\NetWFiltriStatoPrevendita;
+use com\model\net\wrapper\update\UpdateNetWPrevendita;
 use com\model\db\exception\NotAvailableOperationException;
 
 class ControllerPR extends Controller
@@ -127,6 +129,7 @@ class ControllerPR extends Controller
             throw new NotAvailableOperationException("Non hai scelto l'evento");
         }
 
+        $utente = $context->getUserSession()->getUtente();
         $eventoSelezionato = $context->getUserSession()->getEventoScelto();
 
         //Controllo i diritti dell'utente.
@@ -142,62 +145,126 @@ class ControllerPR extends Controller
             throw new InvalidArgumentException("Parametri non validi.");
         }
             
-        parent::getPrinter()->addResult(PR::aggiungiPrevendita());
+        parent::getPrinter()->addResult(PR::aggiungiPrevendita($prevendita, $eventoSelezionato->getId(), $utente->getId()));
     }
 
     private function cmd_modifica_prevendita(Command $command, Context $context)
     {
-        if(!array_key_exists("prevendita", $command->getArgs()))
-        {
+        if(!array_key_exists("prevendita", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
-        
-        parent::getPrinter()->addResult(PR::modificaPrevendita($command->getArgs()['prevendita']->getValue()));
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        //Controllo i diritti dell'utente.
+        $utente = $context->getUserSession()->getUtente();
+        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+
+        if(! $dirittiUtente->isPR()){
+            throw new AuthorizationException("L'utente non è PR dello staff.");
+        }
+
+        $prevendita = $command->getArgs()['prevendita']->getValue();
+
+        if (! ($prevendita instanceof UpdateNetWPrevendita)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }
+
+        parent::getPrinter()->addResult(PR::modificaPrevendita($prevendita, $utente->getId()));
     }
 
     private function cmd_restituisci_prevedite(Command $command, Context $context)
     {
-        if(!array_key_exists("filtri", $command->getArgs()))
-        {
+        if(!array_key_exists("filtri", $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }        
         
-        parent::getPrinter()->addResults(PR::getPrevendite($command->getArgs()['filtri']->getValue()));
+        $filtri = $command->getArgs()['filtri']->getValue();
+
+        if (! ($filtri instanceof NetWFiltriStatoPrevendita))
+            throw new InvalidArgumentException("Parametro filtri non valido.");        
+
+
+        $utente = $context->getUserSession()->getUtente();
+
+        parent::getPrinter()->addResults(PR::getPrevendite($filtri, $utente->getId()));
     }
 
     private function cmd_restituisci_statistiche_pr_totali(Command $command, Context $context)
     {
-        parent::getPrinter()->addResult(PR::getStatistichePRTotali());
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }     
+
+        $utente = $context->getUserSession()->getUtente();
+
+        parent::getPrinter()->addResult(PR::getStatistichePRTotali($utente->getId()));
     }
 
     private function cmd_restituisci_statistiche_pr_staff(Command $command, Context $context)
     {
-        if(!array_key_exists("staff", $command->getArgs()))
-        {
-            throw new InvalidArgumentException("Argomenti non validi");
+        //Prima richiedeva lo staff: ora uso quello selezionato
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }             
+
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");
         }
+
+        $utente = $context->getUserSession()->getUtente();
+        $staffSelezionato = $context->getUserSession()->getStaffScelto();
         
-        parent::getPrinter()->addResult(PR::getStatistichePRStaff($command->getArgs()['staff']->getValue()));
+        parent::getPrinter()->addResult(PR::getStatistichePRStaff($utente->getId(), $staffSelezionato->getId()));
     }
 
     private function cmd_restituisci_statistiche_pr_evento(Command $command, Context $context)
     {
-        if(!array_key_exists("evento", $command->getArgs()))
-        {
-            throw new InvalidArgumentException("Argomenti non validi");
+        //Prima richiedeva l'evento: ora uso quello selezionato
+    
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
         }
-        
-        parent::getPrinter()->addResults(PR::getStatistichePREvento($command->getArgs()['evento']->getValue()));
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");
+        }
+
+        $utente = $context->getUserSession()->getUtente();
+        $eventoSelezionato = $context->getUserSession()->getEventoScelto();
+
+        parent::getPrinter()->addResults(PR::getStatistichePREvento($utente->getId(), $eventoSelezionato->getId()));
     }
 
     private function cmd_restituisci_prevedite_evento(Command $command, Context $context)
     {
-        if(!array_key_exists("evento", $command->getArgs()))
-        {
-            throw new InvalidArgumentException("Argomenti non validi");
+        //Prima richiedeva l'evento: ora uso quello selezionato
+    
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
         }
-        
-        parent::getPrinter()->addResults(PR::getPrevenditeEvento($command->getArgs()['evento']->getValue()));
+
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");
+        }
+
+        $utente = $context->getUserSession()->getUtente();
+        $eventoSelezionato = $context->getUserSession()->getEventoScelto();
+
+        parent::getPrinter()->addResults(PR::getPrevenditeEvento($utente->getId(), $eventoSelezionato->getId()));
     }
 }
 
