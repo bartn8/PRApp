@@ -197,3 +197,6 @@ class Context
     }
 
 }
+
+//Caricamento statico dei parametri.
+Context::loadParameters();

@@ -30,10 +30,7 @@ class ControllerManutenzione extends Controller
     public const CMD_ECHO = 951;
     
     public const CMD_TIMESTAMP = 952;
-
-    //Restituisce gli aggiornamenti effettuati dall'utlimo backup
-    public const CMD_AGGIORNA_BACKUP_STAFF = 953;
-    
+   
 
     public function __construct($printer, $retriver)
     {

@@ -1,9 +1,11 @@
 CREATE TABLE staff (
   id int NOT NULL AUTO_INCREMENT,
+  idCreatore int NOT NULL,
   nome varchar(150) NOT NULL,
-  timestampCreazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   hash varchar(255) NOT NULL,
-  PRIMARY KEY (id)
+  timestampCreazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (idCreatore) REFERENCES utente(id)
 );
 
 CREATE TABLE utente (
@@ -25,6 +27,7 @@ CREATE TABLE utente (
 CREATE TABLE membro (
   idUtente int NOT NULL,
   idStaff int NOT NULL,
+  timestampRegistrazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idUtente, idStaff),
   FOREIGN KEY(idUtente) REFERENCES utente(id) ON DELETE CASCADE,
   FOREIGN KEY(idStaff) REFERENCES staff(id) ON DELETE CASCADE
@@ -33,6 +36,7 @@ CREATE TABLE membro (
 CREATE TABLE pr (
   idUtente int NOT NULL,
   idStaff int NOT NULL,
+  timestampRegistrazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idUtente, idStaff),
   FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
@@ -40,6 +44,7 @@ CREATE TABLE pr (
 CREATE TABLE cassiere (
   idUtente int NOT NULL,
   idStaff int NOT NULL,
+  timestampRegistrazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idUtente, idStaff),
   FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
@@ -47,6 +52,7 @@ CREATE TABLE cassiere (
 CREATE TABLE amministratore (
   idUtente int NOT NULL,
   idStaff int NOT NULL,
+  timestampRegistrazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (idUtente, idStaff),
   FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
@@ -54,6 +60,7 @@ CREATE TABLE amministratore (
 CREATE TABLE macchina (
 	idUtente int NOT NULL,
 	idStaff int NOT NULL,
+	timestampRegistrazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(idUtente, idStaff),
 	FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
@@ -739,6 +746,28 @@ FOR EACH ROW BEGIN
 	IF (conteggioAmministratori = isAmministratore) THEN
 		SIGNAL SQLSTATE '70003'
 		SET MESSAGE_TEXT = 'Impossibile eliminare membro: rimasto solo lui amministratore';
+	END IF;
+END$$
+
+DELIMITER ;
+
+/* Un utente può creare al massimo uno staff */
+
+DELIMITER $$
+
+CREATE TRIGGER aggiungiStaff
+BEFORE INSERT ON staff
+FOR EACH ROW BEGIN
+	
+	DECLARE conteggioStaff int;
+	
+	SELECT COUNT(id) INTO conteggioStaff FROM staff WHERE idCreatore = NEW.idCreatore;
+    
+	/* Se i conteggi sono uguali allora l'unico amministratore rimasto è quello da eliminare */
+	
+	IF (conteggioStaff > 0) THEN
+		SIGNAL SQLSTATE '70003'
+		SET MESSAGE_TEXT = 'Impossibile aggiungere staff: limite raggiunto';
 	END IF;
 END$$
 

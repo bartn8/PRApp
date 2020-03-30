@@ -82,7 +82,6 @@ abstract class Table
         $tmp->query('SET character_set_results = utf8;'); 
         $tmp->query('SET CHARACTER SET utf8');
 
-        //TODO: forse meglio assegnare al database UTC?
         if ($syncTimezone) {
             // https://stackoverflow.com/questions/34428563/set-timezone-in-php-and-mysql
             $tz = (new \DateTime('now', new \DateTimeZone(TIMEZONE)))->format('P');
@@ -94,4 +93,5 @@ abstract class Table
     }
 }
 
+//Caricamento statico dei parametri.
 Table::loadParameters();

@@ -21,18 +21,20 @@
 
 namespace com\model\db\table;
 
-use com\model\Context;
-use com\model\db\exception\NotAvailableOperationException;
-use com\model\db\exception\AuthorizationException;
-use com\model\db\wrapper\WUtente;
-use com\model\db\wrapper\WCliente;
-use com\model\db\wrapper\WEvento;
-use com\model\db\wrapper\WTipoPrevendita;
-use InvalidArgumentException;
 use PDO;
 use PDOException;
-use com\model\db\wrapper\WDirittiUtente;
+use com\model\Context;
+use com\model\db\table\Table;
+use InvalidArgumentException;
+use com\model\db\wrapper\WStaff;
+use com\model\db\wrapper\WEvento;
+use com\model\db\wrapper\WUtente;
 use com\model\net\wrapper\NetWId;
+use com\model\db\wrapper\WCliente;
+use com\model\db\wrapper\WDirittiUtente;
+use com\model\db\wrapper\WTipoPrevendita;
+use com\model\db\exception\AuthorizationException;
+use com\model\db\exception\NotAvailableOperationException;
 
 class Membro extends Table
 {

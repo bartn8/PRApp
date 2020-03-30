@@ -50,7 +50,9 @@ class WEntrata implements DatabaseWrapper
         if (! array_key_exists("timestampEntrata", $array))
             throw new InvalidArgumentException("Dato timestampEntrata non trovato.");
 
-        return self::make((int) $array["idCassiere"], (int) $array["idPrevendita"], new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampEntrata"])));
+        $timestampEntrata = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampEntrata"]));
+
+        return self::make((int) $array["idCassiere"], (int) $array["idPrevendita"], $timestampEntrata);
     }
 
     /**
@@ -78,7 +80,6 @@ class WEntrata implements DatabaseWrapper
         return new WEntrata($idCassiere, $idPrevendita, $timestampEntrata);
     }
 
-    //TODO: da sparare agli altri wrapper.
     public static function makeNoChecks($idCassiere, $idPrevendita, $timestampEntrata)
     {
         return new WEntrata($idCassiere, $idPrevendita, $timestampEntrata);

@@ -144,12 +144,12 @@ class Utente extends Table
     /**
      * Crea un nuovo staff e inserisce automaticamente l'utente come amministratore.
      *
-     * @param WUtente $utente
+     * @param int $idUtente
      * @param InsertNetWStaff $staff
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return \com\model\db\wrapper\WStaff Wrapper dello staff appena creato. Il timestamp non è corretto
      */
-    public static function creaStaff(WUtente $utente, InsertNetWStaff $staff) : WStaff
+    public static function creaStaff(int $idUtente, InsertNetWStaff $staff) : WStaff
     {
         // Creo l'hash relativo al codice.
         $hash = Hash::getSingleton()->hashPassword($staff->getCodiceAccesso());
@@ -166,7 +166,8 @@ class Utente extends Table
             // --OPERAZIONE DI INSERIMENTO DELLO STAFF--
 
             {
-                $stmtInserimentoStaff = $conn->prepare("INSERT INTO staff (nome, hash) VALUES (:nome, :hash)");
+                $stmtInserimentoStaff = $conn->prepare("INSERT INTO staff (idCreatore, nome, hash) VALUES (:idCreatore, :nome, :hash)");
+                $stmtInserimentoStaff->bindValue(":idCreatore", $idUtente, PDO::PARAM_INT);
                 $stmtInserimentoStaff->bindValue(":nome", $staff->getNome(), PDO::PARAM_STR);
                 $stmtInserimentoStaff->bindValue(":hash", $hash, PDO::PARAM_STR);
                 $stmtInserimentoStaff->execute();
@@ -178,7 +179,7 @@ class Utente extends Table
             // --OPERAZIONE DI INSERIMENTO DEL MEMBRO--
             {
                 $stmtInserimentoMembro = $conn->prepare("INSERT INTO membro (idUtente, idStaff) VALUES(:idUtente, :idStaff)");
-                $stmtInserimentoMembro->bindValue(":idUtente", $utente->getId(), PDO::PARAM_INT); // Sessione già verificata precedentemente.
+                $stmtInserimentoMembro->bindValue(":idUtente", $idUtente, PDO::PARAM_INT); // Sessione già verificata precedentemente.
                 $stmtInserimentoMembro->bindValue(":idStaff", $idStaff, PDO::PARAM_INT);
                 $stmtInserimentoMembro->execute();
             }
@@ -186,13 +187,18 @@ class Utente extends Table
             // --OPERAZIONE DI INSERIMENTO DELL'AMMINISTRATORE--
             {
                 $stmtInserimentoAmministratore = $conn->prepare("INSERT INTO amministratore (idUtente, idStaff) VALUES(:idUtente, :idStaff)");
-                $stmtInserimentoAmministratore->bindValue(":idUtente", $utente->getId(), PDO::PARAM_INT); // Sessione già verificata precedentemente.
+                $stmtInserimentoAmministratore->bindValue(":idUtente", $idUtente, PDO::PARAM_INT); // Sessione già verificata precedentemente.
                 $stmtInserimentoAmministratore->bindValue(":idStaff", $idStaff, PDO::PARAM_INT);
                 $stmtInserimentoAmministratore->execute();
             }
         } catch (\PDOException $ex) {
             //Annullo le modifiche
             $conn->rollBack();
+
+            if ($ex->getCode() == Utente::VINCOLO_CODE){
+                throw new InsertUpdateException("Hai già creato uno staff");
+            }
+
             throw $ex;
         }
 
@@ -210,7 +216,7 @@ class Utente extends Table
     /**
      * Permette all'utente di accedere come membro allo staff se il codice è corretto.
      *
-     * @param WUtente $utente
+     * @param int $idUtente
      * @param NetWStaffAccess $wrapper
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @throws InsertUpdateException si è già inscritti nello staff
@@ -218,7 +224,7 @@ class Utente extends Table
      * 
      * @return WStaff Staff a cui abbiamo avuto accesso.
      */
-    public static function accediStaff(WUtente $utente, NetWStaffAccess $staff) : WStaff
+    public static function accediStaff(int $idUtente, NetWStaffAccess $staff) : WStaff
     {
         // Recupero i dati dello staff.
         $conn = parent::getConnection();
@@ -236,7 +242,7 @@ class Utente extends Table
             if (Hash::getSingleton()->evalutatePassword($staff->getCodiceAccesso(), $riga["hash"])) {
                 // Hash verificato! Inserisco l'utente nei membri.
                 $stmtInserimento = $conn->prepare("INSERT INTO membro (idUtente, idStaff) VALUES (:idUtente, :idStaff)");
-                $stmtInserimento->bindValue(":idUtente", $utente->getId(), PDO::PARAM_INT);
+                $stmtInserimento->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
                 $stmtInserimento->bindValue(":idStaff", $staff->getIdStaff(), PDO::PARAM_INT);
 
                 try {
@@ -249,8 +255,9 @@ class Utente extends Table
                     // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
                     $conn = NULL;
 
-                    if ($ex->getCode() == Utente::UNIQUE_CODE || $ex->getCode() == Utente::INTEGRITY_CODE) // Codice di integrità.
+                    if ($ex->getCode() == Utente::UNIQUE_CODE || $ex->getCode() == Utente::INTEGRITY_CODE){ // Codice di integrità.
                         throw new InsertUpdateException("Sei già membro dello staff.");
+                    }
 
                     throw $ex;
                 }
@@ -260,7 +267,7 @@ class Utente extends Table
 
                 //Recupero i dati dello staff e li restituisco.
 
-                $stmtSelezione = $conn->prepare("SELECT id, nome, timestampCreazione FROM staff WHERE id = :idStaff");
+                $stmtSelezione = $conn->prepare("SELECT id, idCreatore, nome, timestampCreazione FROM staff WHERE id = :idStaff");
                 $stmtSelezione->bindValue(":idStaff", $staff->getIdStaff(), PDO::PARAM_INT);
                 $stmtSelezione->execute();
 
@@ -293,7 +300,7 @@ class Utente extends Table
         // Recupero i dati degli staff.
         $conn = parent::getConnection();
 
-        $stmtSelezione = $conn->prepare("SELECT id, nome, timestampCreazione FROM staff");
+        $stmtSelezione = $conn->prepare("SELECT id, idCreatore, nome, timestampCreazione FROM staff");
         $stmtSelezione->execute();
 
         $lista = array();
@@ -310,18 +317,18 @@ class Utente extends Table
     /**
      * Restituisce la lista degli staff di cui si è membro.
      *
-     * @param WUtente $utente
+     * @param int $idUtente
      * 
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return WStaff[] Lista degli staff di cui si è membro
      */
-    public static function getListaStaffMembri(WUtente $utente) : array
+    public static function getListaStaffMembri(int $idUtente) : array
     {
         // Recupero i dati degli staff.
         $conn = parent::getConnection();
 
-        $stmtSelezione = $conn->prepare("SELECT id, nome, timestampCreazione FROM staff INNER JOIN membro ON membro.idStaff = staff.id WHERE membro.idUtente = :idUtente");
-        $stmtSelezione->bindValue(":idUtente", $utente->getId(), PDO::PARAM_INT);
+        $stmtSelezione = $conn->prepare("SELECT id, idCreatore, nome, timestampCreazione FROM staff INNER JOIN membro ON membro.idStaff = staff.id WHERE membro.idUtente = :idUtente");
+        $stmtSelezione->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $lista = array();
@@ -338,12 +345,12 @@ class Utente extends Table
     /**
      * Rinnova il token di accesso.
      * 
-     * @param WUtente $utente
+     * @param int $idUtente
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @throws NotAvailableOperationException non si è loggati nel sistema
      * @return WToken token di accesso
      */
-    public static function renewToken(WUtente $utente) : WToken
+    public static function renewToken(int $idUtente) : WToken
     {
         $newToken = Hash::getSingleton()->getToken();
 
@@ -354,12 +361,12 @@ class Utente extends Table
         $stmtUpdate = $conn->prepare("UPDATE utente SET token = :token, scadenzaToken = (CURRENT_TIMESTAMP + INTERVAL :giorni DAY) WHERE id = :idUtente");
         $stmtUpdate->bindValue(":giorni", $GLOBALS["scadenzaTokenGiorni"], PDO::PARAM_INT);
         $stmtUpdate->bindValue(":token", $newToken, PDO::PARAM_STR);
-        $stmtUpdate->bindValue(":idUtente", $utente->getId(), PDO::PARAM_INT);
+        $stmtUpdate->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
         $stmtUpdate->execute();
 
         //Ricavo la scadenza.
         $stmtSelezione = $conn->prepare("SELECT scadenzaToken FROM utente WHERE id = :idUtente");
-        $stmtSelezione->bindValue(":idUtente", $utente->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $wrapper = NULL;
@@ -371,23 +378,23 @@ class Utente extends Table
 
         $conn = NULL;
 
-        return WToken::makeNoChecks($utente->getId(), $newToken, is_null($wrapper) ? NULL : new DateTimeImmutableAdapterJSON($wrapper));
+        return WToken::makeNoChecks($idUtente, $newToken, is_null($wrapper) ? NULL : new DateTimeImmutableAdapterJSON($wrapper));
     }
 
     /**
      * Restituisce il token di accesso se presente.
      *
-     * @param WUtente $utente
+     * @param int $utente
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @return WToken token di accesso
      */
-    public static function getToken(WUtente $utente) : WToken
+    public static function getToken(int $idUtente) : WToken
     {
         // Recupero i dati degli staff.
         $conn = parent::getConnection();
 
         $stmtSelezione = $conn->prepare("SELECT id, token, scadenzaToken FROM utente WHERE id = :idUtente");
-        $stmtSelezione->bindValue(":idUtente", $utente->getId(), PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
         $result = NULL;
@@ -457,19 +464,19 @@ class Utente extends Table
      * Restituisce lo staff dall'id.
      * Restitusice solo se l'utente fa parte dello staff.
      * 
-     * @param int $utente
-     * @param int $staff
+     * @param int $idUtente
+     * @param int $idStaff
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * 
      * @return WStaff staff richiesto
      */
-    public static function getStaff(int $utente, int $staff) : WStaff {
+    public static function getStaff(int $idUtente, int $idStaff) : WStaff {
         // Recupero i dati degli staff.
         $conn = parent::getConnection();
         
-        $stmtSelezione = $conn->prepare("SELECT s.id, s.nome, s.timestampCreazione FROM staff AS s INNER JOIN membro AS m ON s.id = m.idStaff WHERE s.id = :idStaff AND m.idUtente = :idUtente");
-        $stmtSelezione->bindValue(":idUtente", $utente, PDO::PARAM_INT);
-        $stmtSelezione->bindValue(":idStaff", $staff, PDO::PARAM_INT);
+        $stmtSelezione = $conn->prepare("SELECT s.id, s.idCreatore, s.nome, s.timestampCreazione FROM staff AS s INNER JOIN membro AS m ON s.id = m.idStaff WHERE s.id = :idStaff AND m.idUtente = :idUtente");
+        $stmtSelezione->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
+        $stmtSelezione->bindValue(":idStaff", $idStaff, PDO::PARAM_INT);
         $stmtSelezione->execute();
         
         $result = NULL;

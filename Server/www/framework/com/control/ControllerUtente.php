@@ -237,7 +237,7 @@ class ControllerUtente extends Controller
             throw new InvalidArgumentException("Parametro non valido.");
         }
         
-        parent::getPrinter()->addResult(Utente::creaStaff($utente, $staff));
+        parent::getPrinter()->addResult(Utente::creaStaff($utente->getId(), $staff));
     }
 
     private function cmd_accedi_staff(Command $command, Context $context)
@@ -259,7 +259,7 @@ class ControllerUtente extends Controller
             throw new InvalidArgumentException("Parametri non validi.");        
         }
         
-        parent::getPrinter()->addResult(Utente::accediStaff($utente, $staff));
+        parent::getPrinter()->addResult(Utente::accediStaff($utente->getId(), $staff));
     }
 
     private function cmd_restituisci_lista_staff(Command $command, Context $context)
@@ -281,7 +281,7 @@ class ControllerUtente extends Controller
 
         $utente = $context->getUserSession()->getUtente();
 
-        parent::getPrinter()->addResults(Utente::getListaStaffMembri($utente));
+        parent::getPrinter()->addResults(Utente::getListaStaffMembri($utente->getId()));
     }
 
     private function cmd_renew_token(Command $command, Context $context)
@@ -293,7 +293,7 @@ class ControllerUtente extends Controller
 
         $utente = $context->getUserSession()->getUtente();
         
-        parent::getPrinter()->addResult(Utente::renewToken($utente));
+        parent::getPrinter()->addResult(Utente::renewToken($utente->getId()));
     }
 
     private function cmd_get_token(Command $command, Context $context)
@@ -305,7 +305,7 @@ class ControllerUtente extends Controller
 
         $utente = $context->getUserSession()->getUtente();
 
-        parent::getPrinter()->addResult(Utente::getToken($utente));
+        parent::getPrinter()->addResult(Utente::getToken($utente->getId()));
     }
 
     private function cmd_login_token(Command $command, Context $context)
@@ -331,7 +331,7 @@ class ControllerUtente extends Controller
         //Creo il contesto dal token.
         Context::createContext($utente);
 
-        parent::getPrinter()->addResult($utente);
+        parent::getPrinter()->addResult($utente->getId());
     }
 
     private function cmd_restituisci_utente(Command $command, Context $context)

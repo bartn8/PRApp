@@ -21,16 +21,17 @@
 
 namespace com\model\db\wrapper;
 
-use InvalidArgumentException;
 use ReflectionClass;
-use com\model\net\serialize\ArrayDeserializable;
 use DateTimeImmutable;
+use InvalidArgumentException;
+use com\model\db\wrapper\WStaff;
 use com\utils\DateTimeImmutableAdapterJSON;
+use com\model\net\serialize\ArrayDeserializable;
 
 class WStaff implements DatabaseWrapper
 {
 
-    const NOME_MAX = 150;
+    public const NOME_MAX = 150;
 
     /**
      * Converte un array di stringhe in un wrapper.
@@ -47,34 +48,41 @@ class WStaff implements DatabaseWrapper
         if (! array_key_exists("id", $array))
             throw new InvalidArgumentException("Dato id non trovato.");
 
+        if (! array_key_exists("idCreatore", $array))
+            throw new InvalidArgumentException("Dato idCreatore non trovato.");
+
         if (! array_key_exists("nome", $array))
             throw new InvalidArgumentException("Dato id non trovato.");
 
         if (! array_key_exists("timestampCreazione", $array))
             throw new InvalidArgumentException("Dato timestampCreazione non trovato.");
 
-        return self::make((int) $array["id"], $array["nome"], new DateTimeImmutableAdapterJSON(DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampCreazione"])));
+        return self::make((int) $array["id"], (int) $array["idCreatore"], $array["nome"], new DateTimeImmutableAdapterJSON(DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampCreazione"])));
     }
 
     /**
      * Metodo factory con controlli.
      *
      * @param int $id
+     * @param int $idCreatore
      * @param string $nome
      * @param DateTimeImmutableAdapterJSON $timestampCreazione
      * @throws InvalidArgumentException
      * @return \com\model\db\wrapper\WStaff
      */
-    public static function make($id, $nome, $timestampCreazione)
+    public static function make($id, $idCreatore, $nome, $timestampCreazione)
     {
-        if (is_null($id) || is_null($nome) || is_null($timestampCreazione))
+        if (is_null($id) || is_null($id) || is_null($nome) || is_null($timestampCreazione))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) || ! is_string($nome) || ! ($timestampCreazione instanceof DateTimeImmutableAdapterJSON))
+        if (! is_int($id) || ! is_int($idCreatore) || ! is_string($nome) || ! ($timestampCreazione instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if ($id <= 0)
             throw new InvalidArgumentException("ID non valido");
+
+        if ($idCreatore <= 0)
+            throw new InvalidArgumentException("ID creatore non valido");            
 
         if (strlen($nome) > self::NOME_MAX)
             throw new InvalidArgumentException("Nome non valido (MAX)");
@@ -86,9 +94,17 @@ class WStaff implements DatabaseWrapper
      * Identificativo dello staff.
      * (>0).
      *
-     * @var int|NULL
+     * @var int
      */
     private $id;
+
+    /**
+     * Identificativo del'utente che ha creato lo staff.
+     * (>0).
+     *
+     * @var int
+     */
+    private $idCreatore;
 
     /**
      * Nome dello staff.
@@ -100,13 +116,14 @@ class WStaff implements DatabaseWrapper
     /**
      * Indica quando è stato creato lo staff.
      *
-     * @var DateTimeImmutableAdapterJSON|NULL
+     * @var DateTimeImmutableAdapterJSON
      */
     private $timestampCreazione;
 
-    protected function __construct($id, $nome, $timestampCreazione)
+    protected function __construct($id, $idCreatore, $nome, $timestampCreazione)
     {
         $this->id = $id;
+        $this->idCreatore = $idCreatore;
         $this->nome = $nome;
         $this->timestampCreazione = $timestampCreazione;
     }
@@ -129,11 +146,20 @@ class WStaff implements DatabaseWrapper
 
     /**
      *
-     * @return number|NULL
+     * @return int
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getIdCreatore()
+    {
+        return $this->idCreatore;
     }
 
     /**
@@ -147,7 +173,7 @@ class WStaff implements DatabaseWrapper
 
     /**
      *
-     * @return DateTimeImmutableAdapterJSON|NULL
+     * @return DateTimeImmutableAdapterJSON
      */
     public function getTimestampCreazione()
     {
