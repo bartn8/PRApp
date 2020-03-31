@@ -1,5 +1,7 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[margin=50pt]{geometry}
+\usepackage{tabulary}
 
 \title{Ingegneria del Software T}
 \author{
@@ -32,91 +34,119 @@ Il risparmio economico ottenuto è ovviamente importante in confronto alla vendi
 Viene gestito oltre alle prevendite e relatvi clienti, anche l'organizzazione e i vari membri dell'organizzazione, con divisione dei ruoli.\\
 Per facilitare i conti di bilancio è disponibile una sezione in cui è possibile ricavare statistiche sull'andamento dell'evento.
 
-\newpage
-
 \section{Analisi dei requisiti}
 
 \subsection{Requisiti del sistema}
 
 \begin{itemize}
 	
-	%REQUISITI FUNZIONALI
-
-    \item Il software prevede la possibilità di gestire più staff.
-    \item Ogni staff gestito dal software è indipendente.
-    \item La registrazione di utenti è libera.
-    
-	%-Requisiti di sicurezza
+	\item \textbf{REQUISITI FUNZIONALI}
 	
-    %--Requisiti di identificazione
-	\item Gli utenti devono essere identificati.
+	\begin{itemize}
+		%Si tratta di un requisito funzionale????
+		\item Requisito fondamentale è il basso costo del prodotto software.
+		\item Il software prevede la possibilità di gestire più staff.
+		
+		
+		
+		%-Requisiti di sicurezza
+		
+		%--Requisiti di identificazione
+		\item Gli utenti devono essere identificati per accedere al software.
+		
+		%--Requisito di autenticazione
+		\item Gli utenti sono autenticati tramite username e password.
+		\item Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
+		\item L'accesso ad uno staff, da parte di un utente, avviene tramite codice di accesso.	
+			
+		%--Requisiti di immunità
+		\item Si richiede una comunicazione sicura.
+		\item Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
+		\item Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
+		
+		\item Possibilità di cambiare il codice di accesso dello staff.
+		\item La registrazione di utenti è a carico dell'amministratore.
+		\item Possibilità di cambiare la password personale dell'utente.
+		\item La password fornita dall'amministratore a tempo di registrazione va cambiata immediatamente dopo il login.
+		
+		%--Requisiti di Autorizzazione
+		\item Ogni staff gestito dal software è indipendente.
+		\item Ogni membro di uno staff può ricoprire dei ruoli: cassiere, PR, amministratore.
+		\item Ogni ruolo è indipendente.
+		
+		\item Il ruolo di cassiere riguarda la timbratura di prevendite all'ingresso di un evento.
+		\item Il ruolo di PR riguarda la vendita di prevendite a clienti.
+		\item Il ruolo di amministratore riguarda la gestione dello staff, degli eventi e delle tipologie di prevendita di un evento.
+		
+		%--Requisiti di scoperta alle intrusioni
+		\item Utilizzo di log per monitorare lo stato.
+		\item Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore.
+		
+		%--Requisiti di non-ripudiabilità
+		\item Quando un PR vende una prevendita, essa viene associata ad esso.
+		\item Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
+		
+		%--Requisiti di riservatezza
+		\item Le password devono essere salvate in modo sicuro.
+		%Non vuol dire cifrato! Basta un controllo agli accessi.
+		%Se salvi in DB ricorda di indicizzare.
+		\item Il log deve essere salvato in modo abbastanza sicuro.
+		
+		%--------------------
+		
+		%Accesso e creazione di uno staff
+		\item Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
+		\item Ogni utente registrato può creare al massimo uno staff.
+		\item Quando un utente crea uno staff ne diventa amministratore.
+		
+		%Timbratura (Cassiere)
+		\item La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
+		\item La timbratura può essere fatta solo una volta.
+		
+		%Vendita (PR)
+		\item La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta. Il cliente sceglierà la tipologia di prevendita.
+		\item Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
+		\item Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
+		
+		%Gestione staff (Amministratore)
+		\item La gestione di staff riguarda la gestione dei ruoli concessi ai membri, rimozione di membri, statistiche di un membro, statistiche dell'evento, statistiche dello staff.
+		
+		\item Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
+	   
+		\item Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
+		\item Gli utenti non amministratori possono solo vedere gli eventi dello staff.
+		
+		\item La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
+		\item Gli utenti non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
+		
+		%Definizioni
+		%-Eventi
+		\item Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
+		\item Un evento può essere annullato, anche se ci sono prevendite vendute. Un evento annullato rimane tale.
+		
+		%Tipologia Prevendita
+		\item Una tipologia di prevendita serve ad associare alla prevendita un prezzo e una descrizione standard a tutte le prevendite con la stessa tipologia.
+		\item Una tipologia di prevendita contiene un periodo temporale precedente al periodo di svolgimento dell'evento, dentro al quale è possibile vendere le prevendite associate alla tipologia.
+		
+		%-Prevendite
+		\item Ogni prevendita venduta  associata ad una sola tipologia di prevendita.
+		\item Ogni prevedita è nominativa.
+		\item Una prevendita può essere annullata e/o rimborsata. Una prevendita annullata e/o rimborsata rimane tale.
+		
+		%-Statistiche
+		\item Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
+		\item Il ruolo di amministratore non prevede statistiche personali.
+		\item Gli utenti non amministratori possono vedere solo le statistiche personali.	
+	\end{itemize}
 	
-	%--Requisito di autenticazione
-    \item Gli utenti sono autenticati tramite username e password.
-    	
-	%--Requisiti di immunità
-    \item Si richiede una comunicazione sicura.
-    \item Si richiedono metodi per cercare di garantire la disponibilità del servizio.
-    
-	%--Requisiti di Autorizzazione
-    \item Ogni membro di uno staff può ricoprire dei ruoli: cassiere, PR, amministratore.
-    \item Ogni ruolo è indipendente.
-    
-    \item Il ruolo di cassiere riguarda la timbratura di prevendite all'ingresso di un evento.
-    \item Il ruolo di PR riguarda la vendita di prevendite a clienti.
-    \item Il ruolo di amministratore riguarda la gestione dello staff, degli eventi e delle tipologie di prevendita di un evento.
 	
-	%--Requisiti di scoperta alle intrusioni
-	\item Utilizzo di log per monitorare lo stato.
+    
+    \item \textbf{REQUISITI NON FUNZIONALI}
 	
+	\begin{itemize}
+		\item Il blocco dell'account deve avvenire dopo 3 tentativi.
+	\end{itemize}
 	
-	%--Requisiti di non-ripudiabilità
-	\item Quando un PR vende una prevendita viene associata ad esso.
-	
-	%--Requisiti di riservatezza
-	\item Le password devono essere salvate (se necessario) in modo sicuro.
-	\item Il log deve essere salvato in modo sicuro.
-	
-	%--------------------
-    
-    \item Ogni utente registrato nel gestionale può diventare membro di uno o più staff, solo se autorizzato. 
-    \item L'accesso ad uno staff, da parte di un utente, avviene tramite codice di accesso.
-    \item Ogni utente registrato può creare al massimo uno staff.
-    \item Quando un utente crea uno staff ne diventa amministratore.
-    
-    
-    
-    
-    \item La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
-    \item La timbratura può essere fatta solo una volta.
-    
-    \item La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta. Il cliente sceglierà la tipologia di prevendita.
-    \item Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
-    \item Si prevedono più forme equivalenti di documenti digitali, per affrontare le eterogeneità.
-    
-    
-    \item La gestione di staff riguarda le autorizzazioni concesse ai membri, rimozione di membri, statistiche di un membro, statistiche dell'evento, statistiche dello staff.
-    
-    \item Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
-    \item Il ruolo di amministratore non prevede statistiche personali.
-    \item Gli utenti non amministratori possono vedere solo le statistiche personali.
-    
-    \item Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
-    \item Gli utenti non amministratori possono solo vedere gli eventi dello staff.
-    \item La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
-    \item Gli utenti non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
-    
-    
-    \item Una tipologia di prevendita non è altro che un modello di prevendita con un prezzo, una descrizione e un periodo temporale anticipante l'evento in cui è possibile vendere la prevendita.
-    
-    \item Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. Inoltre ha anche uno stato che ne indica se l'evento è valido o annullato.
-    
-    \item Ogni prevendita venduta `e associata ad una sola tipologia di prevendita.
-    \item Ogni prevedita `e nominativa.
-    \item Una prevendita ha anche uno stato che ne indica se è stata consegnata, pagata, annullata o rimborsata.
-    
-    %REQUISITI NON FUNZIONALI
-    
 \end{itemize}
 
 \newpage
@@ -125,17 +155,28 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 
 \subsubsection{Vocabolario}
 
-\begin{center}
-    \begin{tabular}{|c|c|c|}
-        \hline
-        \textbf{Voce} & \textbf{Definizione} & \textbf{Sinonimi} \\
-        \hline\hline
-        test & test & test \\
-        \hline
-    \end{tabular}
-\end{center}
+\begin{table}[ht!]
+  \begin{center}
+    \begin{tabulary}{1\textwidth}{c|C|C}
+      \textbf{Voce} & \textbf{Definizione} & \textbf{Sinonimi}\\
+      \hline
+		Amministratore di sistema & Utente con tutti i privilegi. & \\
+        Staff & Gruppo di utenti con lo scopo di organizzare eventi. & Ente organizzatore \\
+        Utente & Persona registrata nel software gestione. & \\
+        Membro & Utente che è iscritto ad uno staff. & Organizzatore \\
+		PR & Membro di uno staff che si occupa della vendita di prevendite & \\
+		Cassiere & Membro di uno staff che si occupa dell'entrata dei clienti ad un evento & \\
+		Amministratore & Membro di uno staff che si occupa della gestione dello staff steso & \\
+        Ruolo & Compito che ha il membro all'interno dello staff & \\
+        Evento & Avvenimento registrato dallo staff, per il quale è possibile vendere prevendite e registrare ingressi & Festa \\
+        Tipologia Prevendita & Modello associato ad una prevendita che da le caratteristiche di prezzo e descrizione & Tipo Prevendita \\
+        Prevendita & Ticket che consente l'entrata ad un evento & Ticket, Prevendita Elettronica
+    \end{tabulary}
+  \end{center}
+\end{table}
 
-%Lo staff è un gruppo di utenti con lo scopo di creare eventi, vendere prevendite e registrare le entrate dell'evento.
-%Un utente è una persona regitrata nel software gestionale, in grado di iscriversi ad uno staff, diventandone membro.
+%Voce & Definizione & Sinonimi \\
+%Staff & Gruppo di utenti con lo scopo di organizzare eventi. & Ente organizzatore \\
+%Utente & Persona registrata nel software gestione, in grado di iscriversi a staff, diventandone membro. & User \\
 
 \end{document}

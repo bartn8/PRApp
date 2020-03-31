@@ -87,7 +87,7 @@ CREATE TABLE evento (
   inizio timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fine timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   indirizzo varchar(150) NOT NULL,
-  stato ENUM('VALIDO', 'ANNULLATO', 'RIMBORSATO', 'PAGATO') NOT NULL DEFAULT 'VALIDO',
+  stato ENUM('VALIDO', 'ANNULLATO') NOT NULL DEFAULT 'VALIDO',
   idModificatore int,
   timestampUltimaModifica timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -124,7 +124,7 @@ CREATE TABLE prevendita (
   idTipoPrevendita int NOT NULL,
   timestampCreazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   codice varchar(10) NOT NULL,
-  stato ENUM('CONSEGNATA', 'PAGATA', 'ANNULLATA', 'RIMBORSATA') NOT NULL DEFAULT 'PAGATA',
+  stato ENUM('VALIDA', 'ANNULLATA', 'ANNULLATA_NON_RIMBORSATA') NOT NULL DEFAULT 'VALIDA',
   timestampUltimaModifica timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   FOREIGN KEY (idEvento) REFERENCES evento(id),
@@ -387,21 +387,9 @@ FOR EACH ROW BEGIN
 	ELSEIF (NEW.inizio < CURRENT_TIMESTAMP AND OLD.inizio <> NEW.inizio) THEN
 		SIGNAL SQLSTATE '70000'
         SET MESSAGE_TEXT = 'Data non valida: inizio in una data passata!';
-	ELSEIF (NEW.stato = 'PAGATO' AND (OLD.stato <> 'VALIDO' AND OLD.stato <> 'PAGATO')) THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento è PAGATO solo se prima era VALIDO!";
-	ELSEIF (NEW.stato = 'ANNULLATO' AND (OLD.stato <> 'VALIDO' AND OLD.stato <> 'PAGATO')) THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento è ANNULLATO solo se prima era VALIDO o PAGATO!";
-	ELSEIF (NEW.stato = 'RIMBORSATO' AND (OLD.stato <> 'ANNULLATO' AND OLD.stato <> 'PAGATO')) THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento è RIMBORSATO solo se prima era ANNULLATO o PAGATO!";
-	ELSEIF (NEW.stato = 'VALIDO' AND (OLD.stato <> 'VALIDO' AND OLD.stato <> 'PAGATO')) THEN
+	ELSEIF (NEW.stato = 'VALIDO' AND (OLD.stato <> 'VALIDO')) THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = "Stato non valido: un evento NON VALIDO rimane tale";
-	ELSEIF (NEW.stato <> 'RIMBORSATO' AND OLD.stato = 'RIMBORSATO') THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: un evento RIMBORSATO rimane tale";
     END IF;
 END$$
 
@@ -420,8 +408,10 @@ CREATE TRIGGER verificaTipoPrevendita
 BEFORE INSERT ON tipoPrevendita
 FOR EACH ROW BEGIN
 	DECLARE inizioEvento timestamp;
+	DECLARE statoEvento varchar(20);
 
 	SELECT inizio INTO inizioEvento FROM evento WHERE id = NEW.idEvento;
+	SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
 
 	IF (NEW.aperturaPrevendite > NEW.chiusuraPrevendite) THEN
 		SIGNAL SQLSTATE '70000'
@@ -435,6 +425,9 @@ FOR EACH ROW BEGIN
 	ELSEIF (NEW.chiusuraPrevendite > inizioEvento) THEN
 		SIGNAL SQLSTATE '70000'
         SET MESSAGE_TEXT = 'Data non valida: chiusura prevendite dopo inizio evento!';
+	ELSEIF (statoEvento <> 'VALIDO') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = 'L\'evento non è valido!';	
     END IF;
 END$$
 
@@ -453,8 +446,10 @@ CREATE TRIGGER verificaAggiornamentoTipoPrevendita
 BEFORE UPDATE ON tipoPrevendita
 FOR EACH ROW BEGIN
 	DECLARE inizioEvento timestamp;
+	DECLARE statoEvento varchar(20);
 
 	SELECT inizio INTO inizioEvento FROM evento WHERE id = OLD.idEvento;
+	SELECT stato INTO statoEvento FROM evento WHERE id = OLD.idEvento;
 
 	IF (NEW.aperturaPrevendite > NEW.chiusuraPrevendite) THEN
 		SIGNAL SQLSTATE '70000'
@@ -468,6 +463,9 @@ FOR EACH ROW BEGIN
 	ELSEIF (NEW.chiusuraPrevendite > inizioEvento) THEN
 		SIGNAL SQLSTATE '70000'
         SET MESSAGE_TEXT = 'Data non valida: chiusura prevendite dopo inizio evento!';
+	ELSEIF (statoEvento <> 'VALIDO') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = 'L\'evento non è valido!';
     END IF;
 END$$
 
@@ -476,6 +474,7 @@ DELIMITER ;
 /*
 Verifica eliminazione tipo prevendita:
   1)Non devono essere state vendute prevendite.
+  2)L'evento deve essere valido
 */
 
 DELIMITER $$
@@ -485,12 +484,17 @@ BEFORE DELETE ON tipoPrevendita
 FOR EACH ROW BEGIN
 
 	DECLARE conteggio int;
+	DECLARE statoEvento varchar(20);
 
 	SELECT COUNT(*) INTO conteggio FROM prevendita WHERE idTipoPrevendita = OLD.id;
+	SELECT stato INTO statoEvento FROM evento WHERE id = OLD.idEvento;
 	
 	IF(conteggio > 0) THEN
 		SIGNAL SQLSTATE '70003'
 		SET MESSAGE_TEXT = 'Impossibile eliminare tipo prevendita: ci sono prevendite vendute';
+	ELSEIF (statoEvento <> 'VALIDO') THEN
+		SIGNAL SQLSTATE '70002'
+        SET MESSAGE_TEXT = 'L\'evento non è valido!';
 	END IF;
 END$$
 
@@ -530,12 +534,12 @@ FOR EACH ROW BEGIN
 	ELSEIF (ora < apertura OR ora > chiusura) THEN
 		SIGNAL SQLSTATE '70000'
         SET MESSAGE_TEXT = 'Data non valida: non puoi vendere in questo momento!';
-    ELSEIF (statoEvento <> 'VALIDO' AND statoEvento <> 'PAGATO') THEN
+    ELSEIF (statoEvento <> 'VALIDO') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Evento non valido!';    
-	ELSEIF (NEW.stato <> 'CONSEGNATA' AND NEW.stato <> 'PAGATA') THEN
+	ELSEIF (NEW.stato <> 'VALIDA') THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'La prevendita deve essere pagata o consegnata!';    
+        SET MESSAGE_TEXT = 'La prevendita deve essere valida!';    
     END IF;
 END$$
 
@@ -568,118 +572,12 @@ FOR EACH ROW BEGIN
 	ELSEIF ((NEW.timestampCreazione < apertura OR NEW.timestampCreazione > chiusura) AND OLD.timestampCreazione <> NEW.timestampCreazione) THEN
 		SIGNAL SQLSTATE '70000'
         SET MESSAGE_TEXT = 'Data non valida: non puoi vendere in questo momento!';
-    ELSEIF (statoEvento <> 'VALIDO' AND (NEW.stato = 'CONSEGNATA' OR NEW.stato = 'PAGATA'))  THEN
+    ELSEIF (statoEvento <> 'VALIDO' AND NEW.stato = 'VALIDA')  THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = "Stato non valido: la prevendita deve essere CONSEGNATA o PAGATA quando l\'evento è VALIDO!";
-	ELSEIF (NEW.stato = 'ANNULLATA' AND (OLD.stato <> 'CONSEGNATA' /*AND OLD.stato <> 'PAGATA')*/)) THEN
+        SET MESSAGE_TEXT = 'L\'Evento è scaduto: la prevendita non può essere valida';
+	ELSEIF (NEW.stato = 'VALIDA' AND OLD.stato <> 'VALIDA')  THEN
 		SIGNAL SQLSTATE '70002'
-		SET MESSAGE_TEXT = 'Stato non valido: una prevendita si può annullare solo se nello stato CONSEGNATA!';
-        /*SET MESSAGE_TEXT = 'Stato non valido: una prevendita si può annullare solo se nello stato CONSEGNATA o PAGATA!';*/
-		/* Se PAGATA solo RIMBORSATA: non ha senso annullarla se ti hanno dato i soldi. */
-	ELSEIF (NEW.stato = 'RIMBORSATA' AND OLD.stato <> 'PAGATA') THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita è RIMBORSATA solo se era PAGATA!';
-	ELSEIF (NEW.stato = 'PAGATA' AND OLD.stato <> 'CONSEGNATA') THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita può andare in PAGATA solo se in CONSEGNATA.';
-	ELSEIF (NEW.stato = 'CONSEGNATA' AND OLD.stato <> 'CONSEGNATA') THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita NON CONSEGNATA rimane tale.';
-	ELSEIF (NEW.stato <> 'RIMBORSATA' AND OLD.stato = 'RIMBORSATA') THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita RIMBORSATA rimane tale.';
-	ELSEIF (NEW.stato <> 'ANNULLATA' AND OLD.stato = 'ANNULLATA') THEN
-		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Stato non valido: una prevendita ANNULLATA rimane tale.';
-    END IF;
-END$$
-
-DELIMITER ;
-
-/*
-Se un evento è ANNULLATO, lo porto automaticamente in RIMBORSATO
-  se tutte le prevendite sono state rimborsate o annullate.
-*/
-
-/*
-Se un evento è VALIDO e tutte le prevendite sono pagate
-  lo porto automaticamente in PAGATO.
-*/
-
-
-/*
-Se un evento è PAGATO e tutte le prevendite non sono pagate
-  lo porto automaticamente in VALIDO.
-*/
-
-DELIMITER $$
-
-CREATE TRIGGER verificaStatoEvento
-AFTER UPDATE ON prevendita
-FOR EACH ROW BEGIN
-	DECLARE conteggioTotale int;
-    DECLARE conteggioRimborsate int;
-	DECLARE conteggioAnnullate int;
-	DECLARE conteggioPagate int;
-	DECLARE conteggioConsegnate int;
-	DECLARE statoEvento varchar(20);
-	
-	SELECT COUNT(id) INTO conteggioTotale FROM prevendita WHERE idEvento = NEW.idEvento;
-	SELECT COUNT(id) INTO conteggioRimborsate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'RIMBORSATA';
-	SELECT COUNT(id) INTO conteggioAnnullate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'ANNULLATA';
-	/*SELECT COUNT(id) INTO conteggioConsegnate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'CONSEGNATA';*/
-	SELECT COUNT(id) INTO conteggioPagate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'PAGATA';
-    SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
-	
-	IF (statoEvento = 'ANNULLATO') THEN
-		UPDATE evento SET stato = 'RIMBORSATO' WHERE id = NEW.idEvento AND conteggioTotale = (conteggioAnnullate + conteggioRimborsate);
-/*
-	ELSEIF (statoEvento = 'RIMBORSATO') THEN
-		UPDATE evento SET stato = 'ANNULLATO' WHERE id = NEW.idEvento AND conteggioTotale <> (conteggioAnnullate + conteggioRimborsate);
-*/
-	ELSEIF (statoEvento = 'VALIDO') THEN
-		UPDATE evento SET stato = 'PAGATO' WHERE id = NEW.idEvento AND conteggioTotale = (conteggioPagate + conteggioAnnullate + conteggioRimborsate);	
-		
-	ELSEIF (statoEvento = 'PAGATO') THEN
-		UPDATE evento SET stato = 'VALIDO' WHERE id = NEW.idEvento AND conteggioTotale <> (conteggioPagate + conteggioAnnullate + conteggioRimborsate);	
-    END IF;
-END$$
-
-DELIMITER ;
-
-
-/* Faccio lo stesso trigger sopra per le prevendite inserite. */
-
-DELIMITER $$
-
-CREATE TRIGGER verificaStatoEventoSuInserimento
-AFTER INSERT ON prevendita
-FOR EACH ROW BEGIN
-	DECLARE conteggioTotale int;
-    DECLARE conteggioRimborsate int;
-	DECLARE conteggioAnnullate int;
-	DECLARE conteggioPagate int;
-	DECLARE conteggioConsegnate int;
-	DECLARE statoEvento varchar(20);
-	
-	SELECT COUNT(id) INTO conteggioTotale FROM prevendita WHERE idEvento = NEW.idEvento;
-	SELECT COUNT(id) INTO conteggioRimborsate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'RIMBORSATA';
-	SELECT COUNT(id) INTO conteggioAnnullate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'ANNULLATA';
-	/*SELECT COUNT(id) INTO conteggioConsegnate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'CONSEGNATA';*/
-	SELECT COUNT(id) INTO conteggioPagate FROM prevendita WHERE idEvento = NEW.idEvento AND stato = 'PAGATA';
-    SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
-	
-	IF (statoEvento = 'ANNULLATO') THEN
-		UPDATE evento SET stato = 'RIMBORSATO' WHERE id = NEW.idEvento AND conteggioTotale = (conteggioAnnullate + conteggioRimborsate);
-/*
-	ELSEIF (statoEvento = 'RIMBORSATO') THEN
-		UPDATE evento SET stato = 'ANNULLATO' WHERE id = NEW.idEvento AND conteggioTotale <> (conteggioAnnullate + conteggioRimborsate);
-*/
-	ELSEIF (statoEvento = 'VALIDO') THEN
-		UPDATE evento SET stato = 'PAGATO' WHERE id = NEW.idEvento AND conteggioTotale = (conteggioPagate + conteggioAnnullate + conteggioRimborsate);	
-		
-	ELSEIF (statoEvento = 'PAGATO') THEN
-		UPDATE evento SET stato = 'VALIDO' WHERE id = NEW.idEvento AND conteggioTotale <> (conteggioPagate + conteggioAnnullate + conteggioRimborsate);	
+        SET MESSAGE_TEXT = 'Ormai hai annullato la prevendita: fanne un\'altra';		
     END IF;
 END$$
 
@@ -715,12 +613,12 @@ FOR EACH ROW BEGIN
 	IF (ora < inizioEvento OR ora > fineEvento) THEN
 		SIGNAL SQLSTATE '70000'
         SET MESSAGE_TEXT = 'Data non valida: non puoi timbrare in questo momento!';
-    ELSEIF (statoEvento <> 'VALIDO' AND statoEvento <> 'PAGATO') THEN
+    ELSEIF (statoEvento <> 'VALIDO') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Evento non valido!'; 
-	ELSEIF (statoPrevendita <> 'PAGATA' AND statoPrevendita <> 'CONSEGNATA') THEN
+	ELSEIF (statoPrevendita <> 'VALIDA') THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Prevendita non valida!'; 
+        SET MESSAGE_TEXT = 'Prevendita annullata!'; 
     END IF;
 END$$
 

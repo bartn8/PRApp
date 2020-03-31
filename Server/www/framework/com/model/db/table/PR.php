@@ -242,7 +242,7 @@ class PR extends Table
                     INNER JOIN evento ON evento.idStaff = pr.idStaff
                     INNER JOIN prevendita ON prevendita.idEvento = evento.id AND prevendita.idPR = pr.idUtente
                     INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita
-                    WHERE prevendita.stato = 'PAGATA'
+                    WHERE prevendita.stato = 'VALIDA'
                     GROUP BY pr.idUtente, pr.idStaff, prevendita.idEvento, prevendita.idTipoPrevendita) AS T2
                 GROUP BY T2.idUtente, T2.idStaff) AS T1
             GROUP BY T1.idUtente) AS T
@@ -288,7 +288,7 @@ EOT;
                 INNER JOIN evento ON evento.idStaff = pr.idStaff
                 INNER JOIN prevendita ON prevendita.idEvento = evento.id AND prevendita.idPR = pr.idUtente
                 INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita
-                WHERE prevendita.stato = 'PAGATA'
+                WHERE prevendita.stato = 'VALIDA'
                 GROUP BY pr.idUtente, pr.idStaff, prevendita.idEvento, prevendita.idTipoPrevendita) AS T1
             GROUP BY idUtente, idStaff) AS T
         WHERE T.idUtente = :idUtente AND T.idStaff = :idStaff
@@ -333,7 +333,7 @@ EOT;
             INNER JOIN evento ON evento.idStaff = pr.idStaff
             INNER JOIN prevendita ON prevendita.idEvento = evento.id AND prevendita.idPR = pr.idUtente
             INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita
-            WHERE prevendita.stato IN ('PAGATA')
+            WHERE prevendita.stato = 'VALIDA'
             GROUP BY pr.idUtente, pr.idStaff, prevendita.idEvento, prevendita.idTipoPrevendita) AS T
         WHERE T.idUtente = :idUtente AND T.idEvento = :idEvento
 EOT;

@@ -30,10 +30,6 @@ class StatoEvento extends BasicEnum implements JsonSerializable
 
     public const ANNULLATO = 1;
 
-    public const RIMBORSATO = 2;
-    
-    public const PAGATO = 3;
-
     public function __construct($name, $id)
     {
         parent::__construct($name, $id);

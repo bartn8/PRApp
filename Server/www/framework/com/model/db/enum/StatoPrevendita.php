@@ -26,13 +26,11 @@ use com\model\net\serialize\ArrayDeserializable;
 class StatoPrevendita extends BasicEnum /*implements JsonSerializable,ArrayDeserializable*/ 
 {
 
-    public const CONSEGNATA = 0;
+    public const VALIDA = 0;
 
-    public const PAGATA = 1;
+    public const ANNULLATA = 1;
 
-    public const ANNULLATA = 2;
-
-    public const RIMBORSATA = 3;
+    public const ANNULLATA_NON_RIMBORSATA = 2;
 
     public function __construct($name, $id)
     {
