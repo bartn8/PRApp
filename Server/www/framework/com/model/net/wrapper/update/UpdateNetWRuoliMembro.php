@@ -21,41 +21,41 @@
 
 namespace com\model\net\wrapper\update;
 
+use com\model\db\enum\Ruolo;
 use InvalidArgumentException;
-use com\model\db\enum\Diritto;
 use com\model\net\wrapper\NetWrapper;
-use com\model\db\wrapper\WDirittiUtente;
+use com\model\db\wrapper\WRuoliMembro;
 use com\model\net\serialize\ArrayDeserializable;
-use com\model\net\wrapper\update\UpdateNetWDirittiUtente;
+use com\model\net\wrapper\update\UpdateNetWRuoliMembro;
 
-class UpdateNetWDirittiUtente implements NetWrapper
+class UpdateNetWRuoliMembro implements NetWrapper
 {
 
     /**
      * Metodo factory.
      *
      * @param int $idUtente
-     * @param Diritto[] $diritti
+     * @param Ruolo[] $ruoli
      * @throws InvalidArgumentException
-     * @return UpdateNetWDirittiUtente
+     * @return UpdateNetWRuoliMembro
      */
-    private static function make($idUtente, $diritti)
+    private static function make($idUtente, $ruoli)
     {
-        if (is_null($idUtente) || is_null($diritti))
+        if (is_null($idUtente) || is_null($ruoli))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($idUtente) || ! is_array($diritti))
+        if (! is_int($idUtente) || ! is_array($ruoli))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if ($idUtente <= 0)
             throw new InvalidArgumentException("ID Utente non valido");
 
-        foreach ($diritti as $diritto) {
-            if (! ($diritto instanceof Diritto))
+        foreach ($ruoli as $ruolo) {
+            if (! ($ruolo instanceof Ruolo))
                 throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
         }
 
-        return new UpdateNetWDirittiUtente($idUtente, $diritti);
+        return new UpdateNetWRuoliMembro($idUtente, $ruoli);
     }
 
     public static function of($array)
@@ -66,14 +66,14 @@ class UpdateNetWDirittiUtente implements NetWrapper
         if (! array_key_exists("idUtente", $array))
             throw new InvalidArgumentException("Dato id non trovato.");
 
-        if (! array_key_exists("diritti", $array))
-            throw new InvalidArgumentException("Dato id non trovato.");
+        if (! array_key_exists("ruoli", $array))
+            throw new InvalidArgumentException("Dato ruoli non trovato.");
 
-        return self::make((int) $array["idUtente"], Diritto::ofArray($array["diritti"]));
+        return self::make((int) $array["idUtente"], Ruolo::ofArray($array["ruoli"]));
     }
 
     /**
-     * Identificativo dell'utente.
+     * Identificativo del membro.
      *
      * @var int
      */
@@ -82,17 +82,17 @@ class UpdateNetWDirittiUtente implements NetWrapper
     //Prima c'era idStaff: sostituito dallo staff selezionato
 
     /**
-     * Diritti dell'utente nello staff.
+     * Ruoli del membro nello staff.
      *
-     * @var Diritto[]
+     * @var Ruolo[]
      */
-    private $diritti;
+    private $ruoli;
 
-    private function __construct($idUtente, $idStaff, $diritti)
+    private function __construct($idUtente, $idStaff, $ruoli)
     {
         $this->idUtente = $idUtente;
         $this->idStaff = $idStaff;
-        $this->diritti = $diritti;
+        $this->ruoli = $ruoli;
     }
 
     /**
@@ -106,16 +106,16 @@ class UpdateNetWDirittiUtente implements NetWrapper
 
     /**
      *
-     * @return Diritto[]
+     * @return Ruolo[]
      */
-    public function getDiritti()
+    public function getRuoli()
     {
-        return $this->diritti;
+        return $this->ruoli;
     }
 
-    public function getWDirittiUtente($idStaff)
+    public function getWRuoliMembro($idStaff)
     {
-        return WDirittiUtente::make(self::getIdUtente(), $idStaff, self::getDiritti());
+        return WRuoliMembro::make(self::getIdUtente(), $idStaff, self::getRuoli());
     }
 }
 

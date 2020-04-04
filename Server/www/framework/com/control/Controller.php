@@ -113,9 +113,9 @@ abstract class Controller
                 throw new SessionExpiredException("La sessione è scaduta (evento non disponibile)");
             }
 
-            //Adesso controllo i diritti: qui non è necessario rimuovere la sessione
-            $dirittiPersonaliAggiornati = Membro::getDiritti($utente->getId(), $staffScelto->getId());
-            $context->getUserSession()->setDirittiUtente($dirittiPersonaliAggiornati);
+            //Adesso controllo i ruoli: qui non è necessario rimuovere la sessione
+            $ruoliAggiornati = Membro::getRuoli($utente->getId(), $staffScelto->getId());
+            $context->getUserSession()->setRuoliUtente($ruoliAggiornati);
 
             //Applico le modifiche.
             $context->apply();

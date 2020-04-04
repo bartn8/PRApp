@@ -166,10 +166,12 @@ class ControllerUtente extends Controller
             throw new InvalidArgumentException("Argomenti non validi");
         }
 
-        // Verifico che non si è loggati nel sistema.
-        if ($context->isValid()){
-            throw new NotAvailableOperationException("Utente loggato.");
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isValid()){
+            throw new NotAvailableOperationException("Utente non loggato.");
         }
+
+        $utente = $context->getUserSession()->getUtente();
     
         $registrazione = $command->getArgs()[ControllerUtente::CMD_REGISTRAZIONE_ARG_0]->getValue();
 
@@ -368,13 +370,13 @@ class ControllerUtente extends Controller
             //Tecnicamente se vieni cacciato, rimani nello staff fino a quando non aggiorno la sessione.
             $context->getUserSession()->setStaffScelto($staffScelto);
             
-            //Ricavo anche i diritti dell'utente
-            //Tecnicamente se vengono aggiornati i diritti, la modifica non viene vista fino all'aggiornamento della sessione.
-            $dirittiPersonali = Membro::getDiritti($utente->getId(), $staffScelto->getId());
+            //Ricavo anche i ruoli dell'utente
+            //Tecnicamente se vengono aggiornati i ruoli, la modifica non viene vista fino all'aggiornamento della sessione.
+            $ruoliPersonali = Membro::getRuoli($utente->getId(), $staffScelto->getId());
 
-            $context->getUserSession()->setDirittiUtente($dirittiPersonali);
+            $context->getUserSession()->setRuoliMembro($ruoliPersonali);
             
-            parent::getPrinter()->addResults([$staffScelto, $dirittiStaff]);
+            parent::getPrinter()->addResults([$staffScelto, $ruoliPersonali]);
         }
         
     }

@@ -21,13 +21,14 @@
 
 namespace com\model\db\wrapper;
 
-use com\model\db\enum\Diritto;
 use ReflectionClass;
+use com\model\db\enum\Ruolo;
 use InvalidArgumentException;
 use com\model\handler\Transportable;
+use com\model\db\wrapper\WRuoliMembro;
 use com\model\net\serialize\ArrayDeserializable;
 
-class WDirittiUtente implements DatabaseWrapper
+class WRuoliMembro implements DatabaseWrapper
 {
 
     /**
@@ -35,16 +36,16 @@ class WDirittiUtente implements DatabaseWrapper
      *
      * @param int $idUtente
      * @param int $idStaff
-     * @param Diritto[] $diritti
+     * @param Ruolo[] $ruoli
      * @throws InvalidArgumentException
-     * @return \com\model\db\wrapper\WDirittiUtente
+     * @return \com\model\db\wrapper\WRuoliMembro
      */
-    public static function make($idUtente, $idStaff, $diritti)
+    public static function make($idUtente, $idStaff, $ruoli)
     {
-        if (is_null($idUtente) || is_null($idStaff) || is_null($diritti))
+        if (is_null($idUtente) || is_null($idStaff) || is_null($ruoli))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($idUtente) || ! is_int($idStaff) || ! is_array($diritti))
+        if (! is_int($idUtente) || ! is_int($idStaff) || ! is_array($ruoli))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if ($idUtente <= 0)
@@ -53,37 +54,37 @@ class WDirittiUtente implements DatabaseWrapper
         if ($idStaff <= 0)
             throw new InvalidArgumentException("ID Staff non valido");
 
-        foreach ($diritti as $diritto) {
-            if (! ($diritto instanceof Diritto))
-                throw new InvalidArgumentException("Diritti non del tipo giusto");
+        foreach ($ruoli as $ruolo) {
+            if (! ($ruolo instanceof Ruolo))
+                throw new InvalidArgumentException("Ruoli non del tipo giusto");
         }
 
-        return new WDirittiUtente($idUtente, $idStaff, $diritti);
+        return new WRuoliMembro($idUtente, $idStaff, $ruoli);
     }
 
-    public static function makeNoChecks($idUtente, $idStaff, $diritti)
+    public static function makeNoChecks($idUtente, $idStaff, $ruoli)
     {
-        return new WDirittiUtente($idUtente, $idStaff, $diritti);
+        return new WRuoliMembro($idUtente, $idStaff, $ruoli);
     }
 
     /**
-     * Tenta di fare il parsing dei diritti su un array di stringhe.
+     * Tenta di fare il parsing dei ruoli su un array di stringhe.
      *
      * @param int $idUtente
      * @param int $idStaff
      * @param array $arrayString
-     * @return WDirittiUtente
+     * @return WRuoliMembro
      * @throws \com\model\exception\ParseException
      */
     public static function parse($idUtente, $idStaff, $arrayString)
     {
-        $diritti = array();
+        $ruoli = array();
 
         foreach ($arrayString as $stringa) {
-            $diritti[] = Diritto::parse(strtoupper($stringa));
+            $ruoli[] = Ruolo::parse(strtoupper($stringa));
         }
 
-        return self::make($idUtente, $idStaff, $diritti);
+        return self::make($idUtente, $idStaff, $ruoli);
     }
 
     /**
@@ -91,7 +92,7 @@ class WDirittiUtente implements DatabaseWrapper
      *
      * @param array $array
      * @throws InvalidArgumentException i dati dell'array non sono validi oppure l'array stesso non è valido
-     * @return WDirittiUtente wrapper convertito
+     * @return WRuoliMembro wrapper convertito
      */
     public static function of($array)
     {
@@ -114,14 +115,14 @@ class WDirittiUtente implements DatabaseWrapper
             throw new InvalidArgumentException("Dato amministratore non trovato.");
         
         //Piccolo stratagemma (In memoria di UGO)....
-        $array["diritti"] = 0;
-        $array["diritti"] = ("1" == $array["pr"]) << 2 | ("1" == $array["cassiere"]) << 1 | ("1" == $array["amministratore"]);
+        $array["ruoli"] = 0;
+        $array["ruoli"] = ("1" == $array["pr"]) << 2 | ("1" == $array["cassiere"]) << 1 | ("1" == $array["amministratore"]);
 
-        return self::make((int) $array["idUtente"], (int) $array["idStaff"], Diritto::ofPCA($array["diritti"]));
+        return self::make((int) $array["idUtente"], (int) $array["idStaff"], Ruolo::ofPCA($array["ruoli"]));
     }
 
     /**
-     * Identificativo dell'utente.
+     * Identificativo del membro.
      *
      * @var int
      */
@@ -135,17 +136,17 @@ class WDirittiUtente implements DatabaseWrapper
     private $idStaff;
 
     /**
-     * Diritti dell'utente nello staff.
+     * Ruoli del membro nello staff.
      *
-     * @var Diritto[]
+     * @var Ruolo[]
      */
-    private $diritti;
+    private $ruoli;
 
-    protected function __construct($idUtente, $idStaff, $diritti)
+    protected function __construct($idUtente, $idStaff, $ruoli)
     {
         $this->idUtente = $idUtente;
         $this->idStaff = $idStaff;
-        $this->diritti = $diritti;
+        $this->ruoli = $ruoli;
     }
 
     /**
@@ -165,7 +166,7 @@ class WDirittiUtente implements DatabaseWrapper
     }
 
     /**
-     * Restituisce l'id dell'utente a cui sono associati i diritti nello staff
+     * Restituisce l'id del membro a cui sono associati i ruoli nello staff
      * @return int
      */
     public function getIdUtente()
@@ -174,7 +175,7 @@ class WDirittiUtente implements DatabaseWrapper
     }
 
     /**
-     * Restituisce l'id dello staff a cui sono associati i diritti dell'utente
+     * Restituisce l'id dello staff a cui sono associati i ruoli del membro
      * @return int
      */
     public function getIdStaff()
@@ -183,23 +184,23 @@ class WDirittiUtente implements DatabaseWrapper
     }
 
     /**
-     * Restituisce i diritti dell'utente.
-     * @return Diritto[]
+     * Restituisce i ruoli del membro.
+     * @return Ruolo[]
      */
-    public function getDiritti() : array
+    public function getRuoli() : array
     {
-        return $this->diritti;
+        return $this->ruoli;
     }
 
     /**
-     * Dice se l'utente è cassiere nello staff.
+     * Dice se il membro è cassiere nello staff.
      * 
      * @return boolean
      */
     public function isCassiere() : boolean
     {
-        foreach($this->diritti as $diritto){
-            if(Diritto::CASSIERE == $diritto->getId()){
+        foreach($this->ruoli as $ruolo){
+            if(Ruolo::CASSIERE == $ruolo->getId()){
                 return TRUE;
             }
         }
@@ -208,14 +209,14 @@ class WDirittiUtente implements DatabaseWrapper
     }
 
     /**
-     * Dice se l'utente è PR nello staff.
+     * Dice se il membro è PR nello staff.
      * 
      * @return boolean
      */
     public function isPR() : boolean
     {
-        foreach($this->diritti as $diritto){
-            if(Diritto::PR == $diritto->getId()){
+        foreach($this->ruoli as $ruolo){
+            if(Ruolo::PR == $ruolo->getId()){
                 return TRUE;
             }
         }
@@ -224,14 +225,14 @@ class WDirittiUtente implements DatabaseWrapper
     }
 
     /**
-     * Dice se l'utente è amministratore nello staff.
+     * Dice se il membro è amministratore nello staff.
      * 
      * @return boolean
      */
     public function isAmministratore() : boolean
     {
-        foreach($this->diritti as $diritto){
-            if(Diritto::AMMINISTRATORE == $diritto->getId()){
+        foreach($this->ruoli as $ruolo){
+            if(Ruolo::AMMINISTRATORE == $ruolo->getId()){
                 return TRUE;
             }
         }

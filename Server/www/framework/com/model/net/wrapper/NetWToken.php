@@ -1,7 +1,7 @@
 <?php
 
 /*
- * PRApp  Copyright (C) 2019  Luca Bartolomei
+ * PRApp  Copyright (C) 2020  Luca Bartolomei
  *
  * This file is part of PRApp.
  *
@@ -22,6 +22,7 @@
 namespace com\model\net\wrapper;
 
 use InvalidArgumentException;
+use com\model\net\wrapper\NetWToken;
 
 class NetWToken implements NetWrapper
 {
@@ -30,22 +31,32 @@ class NetWToken implements NetWrapper
         if (is_null($array) || ! is_array($array))
             throw new InvalidArgumentException("Array nullo o non valido.");
         
+        if (! array_key_exists("username", $array))
+            throw new InvalidArgumentException("Dato username non trovato.");
+
         if (! array_key_exists("token", $array))
             throw new InvalidArgumentException("Dato token non trovato.");
                 
-        return self::make($array["token"]);
+        return self::make($array["username"], $array["token"]);
     }
 
-    private static function make(string $token): NetWToken
+    private static function make($username, $token): NetWToken
     {
-        if (is_null($token))
+        if (is_null($token) || is_null($username))
             throw new InvalidArgumentException("Uno o più parametri nulli");
         
-        if (! is_string($token))
+        if (! is_string($token) || ! is_string($username))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
                 
-        return new NetWToken($token);
+        return new NetWToken($username, $token);
     }
+
+    /**
+     * Username per il login.
+     *
+     * @var string
+     */
+    private $username;
 
     /**
      * Token per il login.
@@ -54,10 +65,20 @@ class NetWToken implements NetWrapper
      */
     private $token;
 
-
-    private function __construct($token)
+    private function __construct($username, $token)
     {
+        $this->username = $username;
         $this->token = $token;
+    }
+
+    /**
+     * Get username per il login.
+     *
+     * @return  string
+     */ 
+    public function getUsername()
+    {
+        return $this->username;
     }
 
     /**

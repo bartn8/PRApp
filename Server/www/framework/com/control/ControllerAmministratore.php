@@ -32,6 +32,7 @@ use com\control\ControllerAmministratore;
 use com\model\db\exception\AuthorizationException;
 use com\model\net\wrapper\insert\InsertNetWEvento;
 use com\model\net\wrapper\update\UpdateNetWEvento;
+use com\model\net\wrapper\update\UpdateNetWRuoliMembro;
 use com\model\db\exception\NotAvailableOperationException;
 use com\model\net\wrapper\insert\InsertNetWTipoPrevendita;
 
@@ -54,7 +55,7 @@ class ControllerAmministratore extends Controller
 
     public const CMD_ELIMINA_TIPO_PREVENDITA = 407;
 
-    public const CMD_MODIFICA_DIRITTI_UTENTE = 408;
+    public const CMD_MODIFICA_RUOLI_UTENTE = 408;
 
     public const CMD_RESTITUISCI_STATISTICHE_PR = 409;
 
@@ -72,7 +73,7 @@ class ControllerAmministratore extends Controller
 
     public const CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO = 416;
 
-    public const CMD_RESTITUISCI_DIRITTI_UTENTE = 417;
+    public const CMD_RESTITUISCI_RUOLI_UTENTE = 417;
 
     public function __construct($printer, $retriver)
     {
@@ -102,8 +103,8 @@ class ControllerAmministratore extends Controller
                 $this->cmd_elimina_tipo_prevendita($command, $context);
                 break;
             
-            case ControllerAmministratore::CMD_MODIFICA_DIRITTI_UTENTE:
-                $this->cmd_modifica_diritti_utente($command, $context);
+            case ControllerAmministratore::CMD_MODIFICA_RUOLI_UTENTE:
+                $this->cmd_modifica_ruoli_utente($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR:
@@ -138,8 +139,8 @@ class ControllerAmministratore extends Controller
                 $this->cmd_restituisci_statistiche_cassiere_evento($command, $context);
                 break;
                 
-            case ControllerAmministratore::CMD_RESTITUISCI_DIRITTI_UTENTE:
-                $this->cmd_restituisci_diritti_utente($command, $context);
+            case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_UTENTE:
+                $this->cmd_restituisci_ruol_utente($command, $context);
                 break;
 
             default:
@@ -151,7 +152,7 @@ class ControllerAmministratore extends Controller
             case ControllerAmministratore::CMD_MODIFICA_EVENTO:
             case ControllerAmministratore::CMD_AGGIUNGI_TIPO_PREVENDITA:                
             case ControllerAmministratore::CMD_MODIFICA_TIPO_PREVENDITA:
-            case ControllerAmministratore::CMD_MODIFICA_DIRITTI_UTENTE:
+            case ControllerAmministratore::CMD_MODIFICA_RUOLI_UTENTE:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_CASSIERE:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_EVENTO:
@@ -160,7 +161,7 @@ class ControllerAmministratore extends Controller
             case ControllerAmministratore::CMD_MODIFICA_CODICE_ACCESSO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR_EVENTO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO:
-            case ControllerAmministratore::CMD_RESTITUISCI_DIRITTI_UTENTE:                
+            case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_UTENTE:                
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
                 
@@ -187,11 +188,11 @@ class ControllerAmministratore extends Controller
 
         $utente = $context->getUserSession()->getUtente();
         $staff = $context->getUserSession()->getStaffScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();    
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();    
 
         $evento = $command->getArgs()['evento']->getValue();
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
@@ -220,11 +221,11 @@ class ControllerAmministratore extends Controller
         $utente = $context->getUserSession()->getUtente();
         $staffScelto = $context->getUserSession()->getStaffScelto();
         $eventoScelto = $context->getUserSession()->getEventoScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
         $evento = $command->getArgs()['evento']->getValue();
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
@@ -252,11 +253,11 @@ class ControllerAmministratore extends Controller
 
         $utente = $context->getUserSession()->getUtente();
         $eventoScelto = $context->getUserSession()->getEventoScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
         $tipoPrevendita = $command->getArgs()['tipoPrevendita']->getValue();       
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
@@ -284,11 +285,11 @@ class ControllerAmministratore extends Controller
 
         $utente = $context->getUserSession()->getUtente();
         $eventoScelto = $context->getUserSession()->getEventoScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
         $tipoPrevendita = $command->getArgs()['tipoPrevendita']->getValue();    
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
@@ -316,11 +317,11 @@ class ControllerAmministratore extends Controller
         }        
 
         $eventoScelto = $context->getUserSession()->getEventoScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
         $tipoPrevendita = $command->getArgs()['tipoPrevendita']->getValue();       
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
@@ -332,9 +333,9 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::eliminaTipoPrevendita($evento->getId(), $eventoScelto->getId()));
     }
 
-    private function cmd_modifica_diritti_utente(Command $command, Context $context)
+    private function cmd_modifica_ruol_utente(Command $command, Context $context)
     {
-        if(!array_key_exists("dirittiUtente", $command->getArgs())) {
+        if(!array_key_exists("ruoliMembro", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
         }
 
@@ -348,19 +349,19 @@ class ControllerAmministratore extends Controller
         }        
 
         $staff = $context->getUserSession()->getStaffScelto();
-        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+        $mieiRuoliMembro = $context->getUserSession()->getRuoliMembro();    
 
-        if(! $dirittiUtenteMiei->isAmministratore()){
+        if(! $mieiRuoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
-        $dirittiUtente = $command->getArgs()['dirittiUtente']->getValue();
+        $ruoliMembro = $command->getArgs()['ruoliMembro']->getValue();
 
-        if (! ($dirittiUtente instanceof UpdateNetWDirittiUtente)){
+        if (! ($ruoliMembro instanceof UpdateNetWRuoliMembro)){
             throw new InvalidArgumentException("Parametri non validi.");
         }
         
-        Amministratore::modificaDirittiUtente($evento, $staff->getId());
+        Amministratore::modificaRuoliMembro($evento, $staff->getId());
     }
 
     private function cmd_restituisci_statistiche_pr(Command $command, Context $context)
@@ -381,9 +382,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $staff = $context->getUserSession()->getStaffScelto();
-        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+        $mieiRuoliMembro = $context->getUserSession()->getRuoliMembro();    
 
-        if(! $dirittiUtenteMiei->isAmministratore()){
+        if(! $mieiRuoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
@@ -414,9 +415,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $staff = $context->getUserSession()->getStaffScelto();
-        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+        $mieiRuoliMembro = $context->getUserSession()->getRuoliMembro();    
 
-        if(! $dirittiUtenteMiei->isAmministratore()){
+        if(! $mieiRuoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
@@ -443,9 +444,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $eventoScelto = $context->getUserSession()->getEventoScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }        
         
@@ -466,9 +467,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $eventoScelto = $context->getUserSession()->getEventoScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
         
@@ -491,9 +492,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $staff = $context->getUserSession()->getStaffScelto();
-        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+        $mieiRuoliMembro = $context->getUserSession()->getRuoliMembro();    
 
-        if(! $dirittiUtenteMiei->isAmministratore()){
+        if(! $mieiRuoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }        
         
@@ -522,9 +523,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $staffScelto = $context->getUserSession()->getStaffScelto();
-        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+        $mieiRuoliMembro = $context->getUserSession()->getRuoliMembro();    
 
-        if(! $dirittiUtenteMiei->isAmministratore()){
+        if(! $mieiRuoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }        
         
@@ -555,9 +556,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $eventoScelto = $context->getUserSession()->getEventoScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
 
@@ -588,9 +589,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $eventoScelto = $context->getUserSession()->getEventoScelto();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isAmministratore()){
+        if(! $ruoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }        
 
@@ -603,7 +604,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::getStatisticheCassiereEvento($eventoScelto->getId(), $cassiere->getId()));
     }
 
-    private function cmd_restituisci_diritti_utente(Command $command, Context $context)
+    private function cmd_restituisci_ruoli_utente(Command $command, Context $context)
     {
         //Prima richiedeva lo staff: ora uso quello selezionato
 
@@ -621,9 +622,9 @@ class ControllerAmministratore extends Controller
         }        
 
         $staffScelto = $context->getUserSession()->getStaffScelto();
-        $dirittiUtenteMiei = $context->getUserSession()->getDirittiUtente();    
+        $mieiRuoliMembro = $context->getUserSession()->getRuoliMembro();    
 
-        if(! $dirittiUtenteMiei->isAmministratore()){
+        if(! $mieiRuoliMembro->isAmministratore()){
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }      
 
@@ -633,7 +634,7 @@ class ControllerAmministratore extends Controller
             throw new InvalidArgumentException("Parametri non validi.");
         }  
         
-        parent::getPrinter()->addResult(Amministratore::getDiritti($membro->getId(), $staffScelto->getId()));
+        parent::getPrinter()->addResult(Amministratore::getRuoli($membro->getId(), $staffScelto->getId()));
     }
 
 }

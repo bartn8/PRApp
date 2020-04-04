@@ -132,10 +132,10 @@ class ControllerPR extends Controller
         $utente = $context->getUserSession()->getUtente();
         $eventoSelezionato = $context->getUserSession()->getEventoScelto();
 
-        //Controllo i diritti dell'utente.
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        //Controllo i ruoli dell'utente.
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isPR()){
+        if(! $ruoliMembro->isPR()){
             throw new AuthorizationException("L'utente non è PR dello staff.");
         }
 
@@ -159,11 +159,11 @@ class ControllerPR extends Controller
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
-        //Controllo i diritti dell'utente.
+        //Controllo i ruoli dell'utente.
         $utente = $context->getUserSession()->getUtente();
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isPR()){
+        if(! $ruoliMembro->isPR()){
             throw new AuthorizationException("L'utente non è PR dello staff.");
         }
 

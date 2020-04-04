@@ -159,10 +159,10 @@ class ControllerCassiere extends Controller
             throw new NotAvailableOperationException("La prevendita non appartiene all'evento selezionato");
         }
 
-        //Controllo i diritti dell'utente.
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        //Controllo i ruoli dell'utente.
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isCassiere()){
+        if(! $ruoliMembro->isCassiere()){
             throw new AuthorizationException("L'utente non è cassiere dello staff.");
         }
 
@@ -254,10 +254,10 @@ class ControllerCassiere extends Controller
 
         $eventoSelezionato = $context->getUserSession()->getEventoScelto();
 
-        //Controllo i diritti dell'utente.
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        //Controllo i ruoli dell'utente.
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isCassiere()){
+        if(! $ruoliMembro->isCassiere()){
             throw new AuthorizationException("L'utente non è cassiere dello staff.");
         }
 
@@ -282,10 +282,10 @@ class ControllerCassiere extends Controller
 
         $eventoSelezionato = $context->getUserSession()->getEventoScelto();
 
-        //Controllo i diritti dell'utente.
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        //Controllo i ruoli dell'utente.
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isCassiere()){
+        if(! $ruoliMembro->isCassiere()){
             throw new AuthorizationException("L'utente non è cassiere dello staff.");
         }
 
@@ -319,10 +319,10 @@ class ControllerCassiere extends Controller
 
         $eventoSelezionato = $context->getUserSession()->getEventoScelto();
 
-        //Controllo i diritti dell'utente.
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        //Controllo i ruoli dell'utente.
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isCassiere()){
+        if(! $ruoliMembro->isCassiere()){
             throw new AuthorizationException("L'utente non è cassiere dello staff.");
         }
 
@@ -343,10 +343,10 @@ class ControllerCassiere extends Controller
 
         $eventoSelezionato = $context->getUserSession()->getEventoScelto();
 
-        //Controllo i diritti dell'utente.
-        $dirittiUtente = $context->getUserSession()->getDirittiUtente();
+        //Controllo i ruoli dell'utente.
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
 
-        if(! $dirittiUtente->isCassiere()){
+        if(! $ruoliMembro->isCassiere()){
             throw new AuthorizationException("L'utente non è cassiere dello staff.");
         }
 

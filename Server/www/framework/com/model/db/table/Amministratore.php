@@ -23,12 +23,11 @@ namespace com\model\db\table;
 
 use PDO;
 use com\model\Hash;
+use com\model\db\enum\Ruolo;
 use com\model\db\table\Table;
-use com\model\db\enum\Diritto;
 use com\model\db\wrapper\WUtente;
 use com\model\db\wrapper\WPrevendita;
 use com\model\db\table\Amministratore;
-use com\model\db\wrapper\WDirittiUtente;
 use com\model\db\wrapper\WTipoPrevendita;
 use com\utils\DateTimeImmutableAdapterJSON;
 use com\model\db\wrapper\WStatisticheEvento;
@@ -40,7 +39,7 @@ use com\model\net\wrapper\insert\InsertNetWEvento;
 use com\model\net\wrapper\update\UpdateNetWEvento;
 use com\model\db\wrapper\WStatisticheCassiereStaff;
 use com\model\db\wrapper\WStatisticheCassiereEvento;
-use com\model\net\wrapper\update\UpdateNetWDirittiUtente;
+use com\model\net\wrapper\update\UpdateNetWRuoliMembro;
 use com\model\db\exception\NotAvailableOperationException;
 use com\model\net\wrapper\insert\InsertNetWTipoPrevendita;
 use com\model\net\wrapper\update\UpdateNetWTipoPrevendita;
@@ -360,22 +359,22 @@ class Amministratore extends Table
     }
 
     /**
-     * Modifica i diritti di un utente.
+     * Modifica i ruoli di un utente.
      *
-     * @param UpdateNetWDirittiUtente $dirittiUtente
+     * @param UpdateNetWRuoliMembro $ruoliMembro
      * @param int $idStaff
      * @throws NotAvailableOperationException qualche condizione che ha dato errore
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws InsertUpdateException non è possibile modificare diritti di un non-membro
-     * @return WDirittiUtente restituisce i diritti modificati
+     * @throws InsertUpdateException non è possibile modificare ruoli di un non-membro
+     * @return WRuoliMembro restituisce i ruoli modificati
      */
-    public static function modificaDirittiUtente(UpdateNetWDirittiUtente $dirittiUtente, int $idStaff): WDirittiUtente
+    public static function modificaRuoliMembro(UpdateNetWRuoliMembro $ruoliMembro, int $idStaff): WRuoliMembro
     {
         $conn = parent::getConnection();
 
         // Dato che non mi fido dei dati, controllo che l'utente faccia parte dello staff.
         $stmtVerifica = $conn->prepare("SELECT COUNT(*) AS conto FROM membro WHERE idUtente = :idUtente AND idStaff = :idStaff");
-        $stmtVerifica->bindValue(":idUtente", $dirittiUtente->getIdUtente(), PDO::PARAM_INT);
+        $stmtVerifica->bindValue(":idUtente", $ruoliMembro->getIdUtente(), PDO::PARAM_INT);
         $stmtVerifica->bindValue(":idStaff", $idStaff, PDO::PARAM_INT);
         $stmtVerifica->execute();
 
@@ -384,7 +383,7 @@ class Amministratore extends Table
         if ($count === 0) {
             $conn = NULL;
 
-            throw new NotAvailableOperationException("Non è possibile modificare diritti di un non-membro.");
+            throw new NotAvailableOperationException("Non è possibile modificare i ruoli di un non-membro.");
         }
 
         $queryInserimento = "INSERT INTO :tabella: (idUtente, idStaff) VALUES (:idUtente, :idStaff)";
@@ -397,30 +396,30 @@ class Amministratore extends Table
         try {
             $conn->beginTransaction();
 
-            // Posso scrivere i diritti che sono presenti.
-            foreach ($dirittiUtente->getDiritti() as $diritto) {
-                $stmtInserimento = $conn->prepare(str_replace(":tabella:", strtolower($diritto->toString()), $queryInserimento));
+            // Posso scrivere i ruoli che sono presenti.
+            foreach ($ruoliMembro->getRuoli() as $ruolo) {
+                $stmtInserimento = $conn->prepare(str_replace(":tabella:", strtolower($ruolo->toString()), $queryInserimento));
                 $stmtInserimento->bindValue(":idStaff", $idStaff, PDO::PARAM_INT);
-                $stmtInserimento->bindValue(":idUtente", $dirittiUtente->getIdUtente(), PDO::PARAM_INT);
+                $stmtInserimento->bindValue(":idUtente", $ruoliMembro->getIdUtente(), PDO::PARAM_INT);
 
                 try {
                     $stmtInserimento->execute();
                 } catch (PDOException $ex) {
-                    // Se restituisce UNIQUE exception vuol dire che il diritto non è stato modificato.
+                    // Se restituisce UNIQUE exception vuol dire che il ruolo non è stato modificato.
                     // Teoricamente non serve il rollback...
                     if ($ex->getCode() != Amministratore::UNIQUE_CODE && $ex->getCode() != Amministratore::INTEGRITY_CODE){ // Codice di integrità.
-                        throw new InsertUpdateException("Impossibile aggiornare i diritti dell'utente");
+                        throw new InsertUpdateException("Impossibile aggiornare i ruoli dell'utente");
                     }
 
                     throw $ex;
                 }
             }
 
-            // Passo all'eliminazione dei diritti non presenti.
-            foreach (Diritto::complement($dirittiUtente->getDiritti()) as $diritto) {
-                $stmtRimozione = $conn->prepare(str_replace(":tabella:", strtolower($diritto->toString()), $queryRimozione));
+            // Passo all'eliminazione dei ruoli non presenti.
+            foreach (Ruolo::complement($ruoliMembro->getRuoli()) as $ruolo) {
+                $stmtRimozione = $conn->prepare(str_replace(":tabella:", strtolower($ruolo->toString()), $queryRimozione));
                 $stmtRimozione->bindValue(":idStaff", $$idStaff, PDO::PARAM_INT);
-                $stmtRimozione->bindValue(":idUtente", $dirittiUtente->getIdUtente(), PDO::PARAM_INT);
+                $stmtRimozione->bindValue(":idUtente", $ruoliMembro->getIdUtente(), PDO::PARAM_INT);
                 $stmtRimozione->execute();
             }
         }
@@ -438,7 +437,7 @@ class Amministratore extends Table
         $conn->commit();
         $conn = NULL;
 
-        return $dirittiUtente->getWDirittiUtente($idStaff);
+        return $ruoliMembro->getWRuoliMembro($idStaff);
     }
 
     /**
@@ -780,7 +779,16 @@ EOT;
     }
 
     // Utilizzo sto metodo per i due metodi pubblici qua sotto.
-    public static function getDiritti(int $idUtente, int $idStaff): ?WDirittiUtente
+
+    /**
+     * Restituisce i ruoli di un membro.
+     * 
+     * @param int $idUtente
+     * @param int $idStaff
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     * @throws NotAvailableOperationException quando sopraggiunge una condizione.
+     */
+    public static function getRuoli(int $idUtente, int $idStaff): ?WRuoliMembro
     {
         $conn = parent::getConnection();
 
@@ -793,14 +801,14 @@ EOT;
             $idStaffDB = $stmtVerifica->fetch(PDO::FETCH_ASSOC)["idStaff"];
 
             if($idStaff != $idStaffDB){
-                throw new NotAvailableOperationException("Non puoi i diritti di un membro che non sia dello staff selezionato");
+                throw new NotAvailableOperationException("Non puoi selezionare i ruoli di un membro che non sia dello staff selezionato");
             }
         }else{
-            throw new NotAvailableOperationException("Non puoi i diritti di un membro che non sia dello staff selezionato");
+            throw new NotAvailableOperationException("Non puoi selezionare i ruoli di un membro che non sia dello staff selezionato");
         }
 
         //Query per XAMPP:
-        //$query = "SELECT id AS idUtente, dirut.idStaff as idStaff, nome, cognome, telefono, dirut.pr AS pr, dirut.cassiere AS cassiere, dirut.amministratore AS amministratore FROM utente INNER JOIN dirittiutente AS dirut ON dirut.idUtente = utente.id WHERE dirut.idStaff = :idStaff AND utente.id = :idUtente";
+        //$query = "SELECT id AS idUtente, dirut.idStaff as idStaff, nome, cognome, telefono, dirut.pr AS pr, dirut.cassiere AS cassiere, dirut.amministratore AS amministratore FROM utente INNER JOIN ruoliutente AS dirut ON dirut.idUtente = utente.id WHERE dirut.idStaff = :idStaff AND utente.id = :idUtente";
 
         //Query per ALTERVISTA:
         $query = <<<EOT
@@ -825,7 +833,7 @@ EOT;
         $wrapper = NULL;
 
         if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
-            $wrapper = WDirittiUtente::of($riga);
+            $wrapper = WRuoliMembro::of($riga);
         }
 
         $conn = NULL;

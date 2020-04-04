@@ -20,7 +20,7 @@ namespace com\model\session;
 use com\model\db\wrapper\WUtente;
 use com\model\db\wrapper\WEvento;
 use com\model\db\wrapper\WStaff;
-use com\model\db\wrapper\WDirittiUtente;
+use com\model\db\wrapper\WRuoliMembro;
 
 class UserSession {
         
@@ -44,10 +44,10 @@ class UserSession {
     private $eventoScelto;
     
     /**
-     * Diritti dell'utente nello staff scelto.
-     * @var WDirittiUtente|NULL
+     * Ruoli del membro nello staff scelto.
+     * @var WRuoliMembro|NULL
      */
-    private $dirittiUtente;
+    private $ruoliMembro;
     
     public function __construct($utente){
         $this->utente = $utente;
@@ -96,19 +96,19 @@ class UserSession {
     }
     
     /**
-     * @return Ambigous <\com\model\db\wrapper\WDirittiUtente, NULL>
+     * @return Ambigous <\com\model\db\wrapper\WRuoliMembro, NULL>
      */
-    public function getDirittiUtente()
+    public function getRuoliMembro()
     {
-        return $this->dirittiUtente;
+        return $this->ruoliMembro;
     }
 
     /**
-     * @param \com\model\db\wrapper\WDirittiUtente $dirittiUtente
+     * @param \com\model\db\wrapper\WRuoliMembro $ruoliMembro
      */
-    public function setDirittiUtente($dirittiUtente)
+    public function setRuoliMembro($ruoliMembro)
     {
-        $this->dirittiUtente = $dirittiUtente;
+        $this->ruoliMembro = $ruoliMembro;
     }
 
     public function isEventoScelto(){

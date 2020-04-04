@@ -10,6 +10,7 @@ CREATE TABLE staff (
 
 CREATE TABLE utente (
   id int NOT NULL AUTO_INCREMENT,
+  tipologiaUtente ENUM('NORMALE', 'AMMINISTRATORE_SISTEMA') NOT NULL DEFAULT 'NORMALE',
   nome varchar(150) NOT NULL,
   cognome varchar(150) NOT NULL,
   telefono varchar(80) NOT NULL,
@@ -21,7 +22,13 @@ CREATE TABLE utente (
   PRIMARY KEY (id),
   CONSTRAINT chkUsername UNIQUE (username),
   CONSTRAINT chkTokenEScadenza CHECK ((token IS NOT NULL AND scadenzaToken IS NOT NULL) OR token IS NULL)
-  /*CONSTRAINT chkToken UNIQUE(token) meglio un trigger per evitare unique null*/
+);
+
+CREATE TABLE registro (
+  seq int NOT NULL AUTO_INCREMENT,
+  livello ENUM('INFO', 'WARNING', 'IMPORTANT') NOT NULL DEFAULT 'INFO',
+  timestampInserimento timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  
 );
 
 CREATE TABLE membro (
@@ -65,27 +72,14 @@ CREATE TABLE macchina (
 	FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
 
-/*Tabella cliente rimossa: I dati sono inseriti nella prevendita.*/
-/*
-	CREATE TABLE cliente (
-	  id int NOT NULL AUTO_INCREMENT,
-	  idStaff int NOT NULL,
-	  nome varchar(150) NOT NULL,
-	  cognome varchar(150) NOT NULL,
-	  timestampInserimento timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	  PRIMARY KEY (id),
-	  FOREIGN KEY(idStaff) REFERENCES staff(id)
-	);
-*/
-
 CREATE TABLE evento (
   id int NOT NULL AUTO_INCREMENT,
   idStaff int NOT NULL,
   idCreatore int NOT NULL, 
   nome varchar(150) NOT NULL,
   descrizione varchar(500),
-  inizio timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  fine timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  inizio timestamp NOT NULL,
+  fine timestamp NOT NULL,
   indirizzo varchar(150) NOT NULL,
   stato ENUM('VALIDO', 'ANNULLATO') NOT NULL DEFAULT 'VALIDO',
   idModificatore int,
@@ -150,7 +144,7 @@ CREATE TABLE entrata (
 	Prima view per stabilire i ruoli di un utente nei vari staff.
 */
 
-CREATE VIEW dirittiUtente AS 
+CREATE VIEW ruoliMembro AS 
 SELECT utente.id AS idUtente, staff.id AS idStaff, COUNT(membro.idStaff) AS membro, COUNT(pr.idStaff) AS pr, COUNT(cassiere.idStaff) AS cassiere, COUNT(amministratore.idStaff) AS amministratore
 FROM utente
 INNER JOIN membro ON membro.idUtente = utente.id
@@ -315,23 +309,25 @@ WHERE T.idEvento = :idEvento
 */
 
 /*
-Verifica che il token sia univoco:
-	1)Non viene selezionato il null: non fa conteggio.
-	2)Deve essere univoco per garantire un accesso senza username.
-
+Verifica che il token sia scaduto: Altrimenti non posso aggiornare il token. 
 */
 
 DELIMITER $$
 
-CREATE TRIGGER uniqueToken
+CREATE TRIGGER verificheToken
 BEFORE UPDATE ON utente
 FOR EACH ROW BEGIN
-	DECLARE conteggioToken int;
-	SELECT COUNT(token) INTO conteggioToken FROM utente WHERE token = NEW.token;
-	
-	IF(conteggioToken > 0) THEN
+	IF(OLD.token IS NOT NULL AND OLD.scadenzaToken IS NOT NULL) THEN
+		IF(OLD.token <> NEW.TOKEN AND OLD.scadenzaToken > CURRENT_TIMESTAMP) THEN
+			SIGNAL SQLSTATE '70003'
+			SET MESSAGE_TEXT = 'Token non ancora scaduto';
+		END IF;
+	ELSEIF ((NEW.token IS NULL AND NEW.scadenzaToken IS NOT NULL) OR (NEW.token IS NOT NULL AND NEW.scadenzaToken IS NULL)) THEN
 		SIGNAL SQLSTATE '70003'
-		SET MESSAGE_TEXT = 'Token presente';
+		SET MESSAGE_TEXT = 'Inserimento token non valido';
+	ELSEIF (NEW.scadenzaToken < CURRENT_TIMESTAMP) THEN
+		SIGNAL SQLSTATE '70000'
+		SET MESSAGE_TEXT = 'La scadenza del token deve avvenire nel futuro.';	
 	END IF;
 END$$
 

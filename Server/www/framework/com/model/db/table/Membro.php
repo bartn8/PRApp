@@ -31,7 +31,7 @@ use com\model\db\wrapper\WEvento;
 use com\model\db\wrapper\WUtente;
 use com\model\net\wrapper\NetWId;
 use com\model\db\wrapper\WCliente;
-use com\model\db\wrapper\WDirittiUtente;
+use com\model\db\wrapper\WRuoliMembro;
 use com\model\db\wrapper\WTipoPrevendita;
 use com\model\db\exception\AuthorizationException;
 use com\model\db\exception\NotAvailableOperationException;
@@ -64,12 +64,19 @@ class Membro extends Table
         return $lista;
     }
 
-    public static function getDiritti(int $idUtente, int $idStaff): ?WDirittiUtente
+    /**
+     * Restituisce i ruoli del membro.
+     * 
+     * @param int $idUtente
+     * @param int $idStaff
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     */
+    public static function getRuoliPersonali(int $idUtente, int $idStaff): ?WRuoliMembro
     {
         $conn = parent::getConnection();
 
         //Query per XAMPP:
-        //$query = "SELECT id AS idUtente, dirut.idStaff as idStaff, nome, cognome, telefono, dirut.pr AS pr, dirut.cassiere AS cassiere, dirut.amministratore AS amministratore FROM utente INNER JOIN dirittiutente AS dirut ON dirut.idUtente = utente.id WHERE dirut.idStaff = :idStaff AND utente.id = :idUtente";
+        //$query = "SELECT id AS idUtente, dirut.idStaff as idStaff, nome, cognome, telefono, dirut.pr AS pr, dirut.cassiere AS cassiere, dirut.amministratore AS amministratore FROM utente INNER JOIN ruolimembro AS dirut ON dirut.idUtente = utente.id WHERE dirut.idStaff = :idStaff AND utente.id = :idUtente";
 
         //Query per ALTERVISTA:
         $query = <<<EOT
@@ -94,7 +101,7 @@ EOT;
         $wrapper = NULL;
 
         if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
-            $wrapper = WDirittiUtente::of($riga);
+            $wrapper = WRuoliMembro::of($riga);
         }
 
         $conn = NULL;

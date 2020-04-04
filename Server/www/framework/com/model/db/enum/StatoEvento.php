@@ -23,7 +23,7 @@ namespace com\model\db\enum;
 
 use JsonSerializable;
 
-class StatoEvento extends BasicEnum implements JsonSerializable
+class StatoEvento extends BasicEnum
 {
 
     public const VALIDO = 0;

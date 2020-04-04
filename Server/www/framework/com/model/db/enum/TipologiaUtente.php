@@ -1,7 +1,7 @@
 <?php
 
 /*
- * PRApp  Copyright (C) 2019  Luca Bartolomei
+ * PRApp  Copyright (C) 2020  Luca Bartolomei
  *
  * This file is part of PRApp.
  *
@@ -22,8 +22,10 @@
 namespace com\model\db\enum;
 
 use InvalidArgumentException;
+use com\model\db\enum\BasicEnum;
+use com\model\db\enum\TipologiaUtente;
 
-class Diritto extends BasicEnum
+class TipologiaUtente extends BasicEnum
 {
 
     public static function ofPCA($pca)
@@ -33,23 +35,18 @@ class Diritto extends BasicEnum
             
         $tmp = array();
 
-        if ((($pca >> 2) & 1) == 1)
-            $tmp[] = Diritto::of(Diritto::PR);
-
         if ((($pca >> 1) & 1) == 1)
-            $tmp[] = Diritto::of(Diritto::CASSIERE);
+            $tmp[] = TipologiaUtente::of(TipologiaUtente::NORMALE);
 
         if ((($pca) & 1) == 1)
-            $tmp[] = Diritto::of(Diritto::AMMINISTRATORE);
+            $tmp[] = TipologiaUtente::of(TipologiaUtente::AMMINISTRATORE_SISTEMA);
 
         return $tmp;
     }
 
-    public const PR = 0;
+    public const NORMALE = 0;
 
-    public const CASSIERE = 1;
-
-    public const AMMINISTRATORE = 2;
+    public const AMMINISTRATORE_SISTEMA = 1;
 
     public function __construct($name, $id)
     {

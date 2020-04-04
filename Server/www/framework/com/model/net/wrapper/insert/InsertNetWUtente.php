@@ -21,10 +21,11 @@
 
 namespace com\model\net\wrapper\insert;
 
-use com\model\db\wrapper\WUtente;
 use InvalidArgumentException;
-use com\model\net\serialize\ArrayDeserializable;
+use com\model\db\wrapper\WUtente;
 use com\model\net\wrapper\NetWrapper;
+use com\model\db\enum\TipologiaUtente;
+use com\model\net\serialize\ArrayDeserializable;
 
 class InsertNetWUtente implements NetWrapper
 {
@@ -40,13 +41,17 @@ class InsertNetWUtente implements NetWrapper
      * @throws InvalidArgumentException
      * @return \com\model\db\wrapper\WUtente
      */
-    private static function make($nome, $cognome, $telefono, $username, $password)
+    private static function make($tipologiaUtente, $nome, $cognome, $telefono, $username, $password)
     {
-        if (is_null($nome) || is_null($cognome) || is_null($telefono) || is_null($username) || is_null($password))
+        if (is_nul($tipologiaUtente) || is_null($nome) || is_null($cognome) || is_null($telefono) || is_null($username) || is_null($password))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
         if (! is_string($nome) || ! is_string($cognome) || ! is_string($telefono) || ! is_string($username) || ! is_string($password))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
+
+        if( ! $tipologiaUtente instanceof TipologiaUtente){
+            throw new InvalidArgumentException("Tipologia utente non valida");
+        }
 
         if (strlen($nome) > WUtente::NOME_MAX)
             throw new InvalidArgumentException("Nome non valido (MAX)");
@@ -57,19 +62,13 @@ class InsertNetWUtente implements NetWrapper
         if (strlen($telefono) > WUtente::TELEFONO_MAX)
             throw new InvalidArgumentException("Telefono non valido (MAX)");
 
-        /*
-        if (preg_match(WUtente::TELEFONO_REGEX, $telefono) !== 1)
-            throw new InvalidArgumentException("Telefono non valido (REGEX)");
-
-        */
-
         if (strlen($username) > WUtente::USERNAME_MAX)
             throw new InvalidArgumentException("Username non valido (MAX)");
 
         if ($password === "")
             throw new InvalidArgumentException("Password vuota");
 
-        return new InsertNetWUtente($nome, $cognome, $telefono, $username, $password);
+        return new InsertNetWUtente($tipologiaUtente, $nome, $cognome, $telefono, $username, $password);
     }
 
     public static function of($array)
@@ -92,8 +91,16 @@ class InsertNetWUtente implements NetWrapper
         if (! array_key_exists("password", $array))
             throw new InvalidArgumentException("Dato password non trovato.");
 
-        return self::make($array["nome"], $array["cognome"], $array["telefono"], $array["username"], $array["password"]);
+        if (! array_key_exists("tipologiaUtente", $array))
+            throw new InvalidArgumentException("Dato tipologiaUtente non trovato.");
+
+        return self::make(TipologiaUtente::of($array["tipologiaUtente"]), $array["nome"], $array["cognome"], $array["telefono"], $array["username"], $array["password"]);
     }
+
+    /**
+     * Tipologia dell'utente (Amministratore o utente normale)
+     */
+    private $tipologiaUtente;
 
     /**
      * Nome dell'utente.
@@ -130,13 +137,22 @@ class InsertNetWUtente implements NetWrapper
      */
     private $password;
 
-    private function __construct($nome, $cognome, $telefono, $username, $password)
+    private function __construct($tipologiaUtente, $nome, $cognome, $telefono, $username, $password)
     {
+        $this->tipologiaUtente = $tipologiaUtente;
         $this->nome = $nome;
         $this->cognome = $cognome;
         $this->telefono = $telefono;
         $this->username = $username;
         $this->password = $password;
+    }
+
+    /**
+     * Get tipologia dell'utente (Amministratore o utente normale)
+     */ 
+    public function getTipologiaUtente()
+    {
+        return $this->tipologiaUtente;
     }
 
     /**
@@ -197,7 +213,7 @@ class InsertNetWUtente implements NetWrapper
 
     public function getWUtente($id): WUtente
     {
-        return WUtente::makeNoChecks($id, self::getNome(), self::getCognome(), self::getTelefono());
+        return WUtente::makeNoChecks(self::getTipologiaUtente(), $id, self::getNome(), self::getCognome(), self::getTelefono());
     }
 }
 

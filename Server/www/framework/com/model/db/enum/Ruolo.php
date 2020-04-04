@@ -1,7 +1,7 @@
 <?php
 
 /*
- * PRApp  Copyright (C) 2019  Luca Bartolomei
+ * PRApp  Copyright (C) 2020  Luca Bartolomei
  *
  * This file is part of PRApp.
  *
@@ -21,16 +21,37 @@
 
 namespace com\model\db\enum;
 
-use com\model\net\serialize\ArrayDeserializable;
+use com\model\db\enum\Ruolo;
+use InvalidArgumentException;
+use com\model\db\enum\BasicEnum;
 
-class StatoPrevendita extends BasicEnum
+class Ruolo extends BasicEnum
 {
 
-    public const VALIDA = 0;
+    public static function ofPCA($pca)
+    {
+        if (! is_int($pca))
+            throw new InvalidArgumentException("PCA non è int.");
+            
+        $tmp = array();
 
-    public const ANNULLATA = 1;
+        if ((($pca >> 2) & 1) == 1)
+            $tmp[] = Ruolo::of(Ruolo::PR);
 
-    public const ANNULLATA_NON_RIMBORSATA = 2;
+        if ((($pca >> 1) & 1) == 1)
+            $tmp[] = Ruolo::of(Ruolo::CASSIERE);
+
+        if ((($pca) & 1) == 1)
+            $tmp[] = Ruolo::of(Ruolo::AMMINISTRATORE);
+
+        return $tmp;
+    }
+
+    public const PR = 0;
+
+    public const CASSIERE = 1;
+
+    public const AMMINISTRATORE = 2;
 
     public function __construct($name, $id)
     {
@@ -38,3 +59,4 @@ class StatoPrevendita extends BasicEnum
     }
 
 }
+

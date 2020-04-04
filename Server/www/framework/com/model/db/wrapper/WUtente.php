@@ -21,8 +21,10 @@
 
 namespace com\model\db\wrapper;
 
-use InvalidArgumentException;
 use ReflectionClass;
+use InvalidArgumentException;
+use com\model\db\wrapper\WUtente;
+use com\model\db\enum\TipologiaUtente;
 use com\model\net\serialize\ArrayDeserializable;
 
 class WUtente implements DatabaseWrapper
@@ -33,8 +35,6 @@ class WUtente implements DatabaseWrapper
     const COGNOME_MAX = 150;
 
     const TELEFONO_MAX = 80;
-
-    const TELEFONO_REGEX = "/\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$/";
 
     const USERNAME_MAX = 60;
 
@@ -48,9 +48,9 @@ class WUtente implements DatabaseWrapper
      * @throws InvalidArgumentException
      * @return \com\model\db\wrapper\WUtente
      */
-    public static function make($id, $nome, $cognome, $telefono)
+    public static function make($tipologiaUtente, $id, $nome, $cognome, $telefono)
     {
-        if (is_null($id) || is_null($nome) || is_null($cognome) || is_null($telefono))
+        if (is_null($tipologiaUtente) || is_null($id) || is_null($nome) || is_null($cognome) || is_null($telefono))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
         if (! is_int($id) || ! is_string($nome) || ! is_string($cognome) || ! is_string($telefono))
@@ -68,17 +68,16 @@ class WUtente implements DatabaseWrapper
         if (strlen($telefono) > self::TELEFONO_MAX)
             throw new InvalidArgumentException("Telefono non valido (MAX)");
 
-        /*
-        if (preg_match(self::TELEFONO_REGEX, $telefono) !== 1)
-            throw new InvalidArgumentException("Telefono non valido (REGEX)");
-        */
+        if( ! $tipologiaUtente instanceof TipologiaUtente){
+            throw new InvalidArgumentException("Tipologia utente non valida");
+        }
 
-        return new WUtente($id, $nome, $cognome, $telefono);
+        return new WUtente($tipologiaUtente, $id, $nome, $cognome, $telefono);
     }
 
-    public static function makeNoChecks($id, $nome, $cognome, $telefono)
+    public static function makeNoChecks($tipologiaUtente, $id, $nome, $cognome, $telefono)
     {
-        return new WUtente($id, $nome, $cognome, $telefono);
+        return new WUtente($tipologiaUtente, $id, $nome, $cognome, $telefono);
     }
 
     /**
@@ -109,10 +108,14 @@ class WUtente implements DatabaseWrapper
     }
 
     /**
-     * Identificativo dell'utente.
-     * (>0).
+     * Tipologia dell'utente (Amministratore o utente normale)
+     */
+    private $tipologiaUtente;
+    
+    /**
+     * Identificativo dell'utente. (>0).
      *
-     * @var int|NULL
+     * @var int
      */
     private $id;
 
@@ -137,8 +140,9 @@ class WUtente implements DatabaseWrapper
      */
     private $telefono;
 
-    protected function __construct($id, $nome, $cognome, $telefono)
+    protected function __construct($tipologiaUtente, $id, $nome, $cognome, $telefono)
     {
+        $this->tipologiaUtente = $tipologiaUtente;
         $this->id = $id;
         $this->nome = $nome;
         $this->cognome = $cognome;
@@ -159,6 +163,14 @@ class WUtente implements DatabaseWrapper
         }
 
         return $array;
+    }
+
+    /**
+     * Get tipologia dell'utente (Amministratore o utente normale)
+     */ 
+    public function getTipologiaUtente()
+    {
+        return $this->tipologiaUtente;
     }
 
     /**
@@ -196,5 +208,16 @@ class WUtente implements DatabaseWrapper
     {
         return $this->telefono;
     }
+
+    /**
+     * Dice se l'utente è amministratore di sistema.
+     * 
+     * @return boolean
+     */
+    public function isAmministratoreSistema() : boolean
+    {
+        return TipologiaUtente::AMMINISTRATORE_SISTEMA == $tipologiaUtente->getId();
+    }
+
 }
 

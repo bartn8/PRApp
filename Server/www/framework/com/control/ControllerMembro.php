@@ -39,17 +39,11 @@ class ControllerMembro extends Controller
 
     public const CMD_RESTITUISCI_LISTA_UTENTI = 102;
 
-    public const CMD_RESTITUISCI_DIRITTI_PERSONALI = 103;
-
-    //Spostato in amministratore per sicurezza
-    //public const CMD_RESTITUISCI_DIRITTI_UTENTE = 104;
+    public const CMD_RESTITUISCI_RUOLI_PERSONALI = 103;
 
     public const CMD_RESTITUISCI_LISTA_EVENTI = 105;
 
     public const CMD_RESTITUISCI_TIPI_PREVENDITA = 106;
-
-    //Rimossa per cancellazione tabella
-    //public const CMD_RESTITUISCI_LISTA_CLIENTI = 107;
 
     public const CMD_SCEGLI_EVENTO = 108;	
 
@@ -66,8 +60,8 @@ class ControllerMembro extends Controller
                 $this->cmd_restituisci_lista_utenti($command, $context);
                 break;
             
-            case ControllerMembro::CMD_RESTITUISCI_DIRITTI_PERSONALI:
-                $this->cmd_restiutisci_diritti_personali($command, $context);
+            case ControllerMembro::CMD_RESTITUISCI_RUOLI_PERSONALI:
+                $this->cmd_restiutisci_ruoli_personali($command, $context);
                 break;
                         
             case ControllerMembro::CMD_RESTITUISCI_LISTA_EVENTI:
@@ -88,7 +82,7 @@ class ControllerMembro extends Controller
         
         switch ($command->getCommand()) {
             case ControllerMembro::CMD_RESTITUISCI_LISTA_UTENTI:
-            case ControllerMembro::CMD_RESTITUISCI_DIRITTI_PERSONALI:
+            case ControllerMembro::CMD_RESTITUISCI_RUOLI_PERSONALI:
             case ControllerMembro::CMD_RESTITUISCI_LISTA_EVENTI:
             case ControllerMembro::CMD_RESTITUISCI_TIPI_PREVENDITA:
 			case ControllerMembro::CMD_SCEGLI_EVENTO:
@@ -120,7 +114,7 @@ class ControllerMembro extends Controller
         parent::getPrinter()->addResults(Membro::getListaUtenti($staff));
     }
 
-    private function cmd_restiutisci_diritti_personali(Command $command, Context $context)
+    private function cmd_restiutisci_ruoli_personali(Command $command, Context $context)
     {
         //Precedentemente richiedevo all'utente lo staff: ora deve sceglierlo prima
         
@@ -136,7 +130,7 @@ class ControllerMembro extends Controller
         $utente = $context->getUserSession()->getUtente();
         $staff = $context->getUserSession()->getStaffScelto();
 
-        parent::getPrinter()->addResult(Membro::getDiritti($utente->getId(), $staff->getId()));
+        parent::getPrinter()->addResult(Membro::getRuoli($utente->getId(), $staff->getId()));
     }
 
     private function cmd_restituisci_lista_eventi(Command $command, Context $context)

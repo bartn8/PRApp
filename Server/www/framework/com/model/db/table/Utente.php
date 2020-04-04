@@ -62,7 +62,8 @@ class Utente extends Table
 
         $conn = parent::getConnection();
 
-        $stmtInserimentoUtente = $conn->prepare("INSERT INTO utente (nome, cognome, telefono, username, hash) VALUES (:nome, :cognome, :telefono, :username, :hash)");
+        $stmtInserimentoUtente = $conn->prepare("INSERT INTO utente (tipologiaUtente, nome, cognome, telefono, username, hash) VALUES (:tipologiaUtente, :nome, :cognome, :telefono, :username, :hash)");
+        $stmtInserimentoUtente->bindValue(":tipologiaUtente", $utente->getTipologiaUtente()->toString(), PDO::PARAM_STR);
         $stmtInserimentoUtente->bindValue(":nome", $utente->getNome(), PDO::PARAM_STR);
         $stmtInserimentoUtente->bindValue(":cognome", $utente->getCognome(), PDO::PARAM_STR);
         $stmtInserimentoUtente->bindValue(":telefono", $utente->getTelefono(), PDO::PARAM_STR);
@@ -347,7 +348,6 @@ class Utente extends Table
      * 
      * @param int $idUtente
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @throws NotAvailableOperationException non si è loggati nel sistema
      * @return WToken token di accesso
      */
     public static function renewToken(int $idUtente) : WToken
@@ -362,13 +362,33 @@ class Utente extends Table
         $stmtUpdate->bindValue(":giorni", $GLOBALS["scadenzaTokenGiorni"], PDO::PARAM_INT);
         $stmtUpdate->bindValue(":token", $newToken, PDO::PARAM_STR);
         $stmtUpdate->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
-        $stmtUpdate->execute();
+
+        try {
+            $stmtUpdate->execute();
+        } catch (PDOException $ex) {
+
+            // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
+            $conn = NULL;
+
+            if ($ex->getCode() == Utente::DATA_NON_VALIDA_CODE){
+                throw new InsertUpdateException("Renew non valido: data scadenza non valida.");
+            }
+
+            if ($ex->getCode() == Utente::VINCOLO_CODE){
+                throw new InsertUpdateException("Renew non valido: token non scaduto o inserimento non valido.");
+            }
+
+            throw $ex;
+        }
 
         //Ricavo la scadenza.
         $stmtSelezione = $conn->prepare("SELECT scadenzaToken FROM utente WHERE id = :idUtente");
         $stmtSelezione->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
+        //Non dovrebbe mai accadere che la scadenza a questo punto sia nulla:
+        //Sia perché la query di sopra non lo prevede, sia perché ci sono trigger che lo impediscono.
+        //Per sicurezza dobbiamo comunque andare avanti.
         $wrapper = NULL;
 
         if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
@@ -386,9 +406,9 @@ class Utente extends Table
      *
      * @param int $utente
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
-     * @return WToken token di accesso
+     * @return WToken|NULL token di accesso
      */
-    public static function getToken(int $idUtente) : WToken
+    public static function getToken(int $idUtente) : ?WToken
     {
         // Recupero i dati degli staff.
         $conn = parent::getConnection();
@@ -419,14 +439,13 @@ class Utente extends Table
      */
     public static function loginToken(NetWToken $token) : WUtente
     {
-        //Mi serve un DateTime per la verifica della scadenza del token.
-        $dateNow = new \DateTime();
-
         // Prima devo recuperare tutti i dati dell'utente, la password dell'utente.
 
         $conn = parent::getConnection();
 
-        $stmtSelezione = $conn->prepare("SELECT id, nome, cognome, telefono, token, scadenzaToken FROM utente WHERE token = :token");
+        //Check della scadenza qui.
+        $stmtSelezione = $conn->prepare("SELECT id, nome, cognome, telefono, token, scadenzaToken FROM utente WHERE username = :username AND token = :token AND scadenzaToken > CURRENT_TIMESTAMP");
+        $stmtSelezione->bindValue(":username", $token->getUsername(), PDO::PARAM_STR);
         $stmtSelezione->bindValue(":token", $token->getToken(), PDO::PARAM_STR);
         $stmtSelezione->execute();
 
@@ -441,16 +460,10 @@ class Utente extends Table
         if ($riga !== FALSE) {
             //Controllo che ci sia un token
             if(!is_null($riga["token"])){
-                // Controllo scadenza token.
-                // Nel DB non è prevista una data nulla se il token non è nullo: nessuna eccezione da format strano.
-                $scadenzaToken = \DateTime::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $riga["scadenzaToken"]);
+                // Pulisco i campi di login.
+                $token->clear();
 
-                if ($dateNow < $scadenzaToken) {
-                    // Pulisco i campi di login.
-                    $token->clear();
-
-                    return WUtente::of($riga);
-                }
+                return WUtente::of($riga);
             }
         }
 
