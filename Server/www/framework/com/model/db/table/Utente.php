@@ -102,39 +102,48 @@ class Utente extends Table
      * Aggiorna il contesto di conseguenza.
      *
      * @param NetWLogin $login
-     * @param string $password
+     * @param int $tentativiLogin
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @throws AuthorizationException login errato
      * @return WUtente dati dell'utente.
      */
-    public static function login(NetWLogin $login) : WUtente
+    public static function login(NetWLogin $login, int $tentativiLogin) : WUtente
     {
         // Prima devo recuperare tutti i dati dell'utente, la password dell'utente.
 
         $conn = parent::getConnection();
 
-        $stmtSelezione = $conn->prepare("SELECT id, nome, cognome, telefono, hash FROM utente WHERE username = :username");
+        $stmtSelezione = $conn->prepare("SELECT id, nome, cognome, telefono, hash, tentativiLogin FROM utente WHERE username = :username");
         $stmtSelezione->bindValue(":username", $login->getUsername(), PDO::PARAM_STR);
         $stmtSelezione->execute();
 
         // Prendo la prima riga, dato che username univoco.
         $riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC);
 
-        // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
-        // Posso già chiudere qua la connessione, dato che il fetch è già stato fatto.
-        $conn = NULL;
-
         // Se riga falsa restituisco falso.
         if ($riga !== FALSE) {
-            // Controllo della password.
-            if (Hash::getSingleton()->evalutatePassword($login->getPassword(), $riga["hash"])) {
+            //Controllo tentativi
+            if($riga["tentativiLogin"] < $tentativiLogin){
+                // Controllo della password.
+                if (Hash::getSingleton()->evalutatePassword($login->getPassword(), $riga["hash"])) {
 
-                // Pulisco i campi di login.
-                $login->clear();
+                    // Pulisco i campi di login.
+                    $login->clear();
 
-                return WUtente::of($riga);
+                    return WUtente::of($riga);
+                }
+            }else{
+                //TODO:Devo anche aggiornare i log
             }
         }
+
+        //Devo aggiornare i tentativi di login
+        $stmtUpdate = $conn->prepare("UPDATE utente SET tentativiLogin = tentativiLogin + 1 WHERE username = :username");
+        $stmtUpdate->bindValue(":username", $login->getUsername(), PDO::PARAM_STR);
+        $stmtUpdate->execute();
+
+        // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
+        $conn = NULL;
 
         // Pulisco i campi di login.
         $login->clear();

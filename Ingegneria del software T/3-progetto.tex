@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[margin=50pt]{geometry}
 \usepackage{tabulary}
+\usepackage{graphicx}
 
 \title{Ingegneria del Software T}
 \author{
@@ -40,12 +41,8 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 
 \begin{itemize}
 	
-	%\item \textbf{REQUISITI FUNZIONALI}
-	
-
-	%Non funzionale
-	\item Requisito fondamentale è il basso costo del prodotto software.
-	
+	\item \textbf{REQUISITI FUNZIONALI}
+		
 	\item Il software prevede la possibilità di gestire più staff.
 	
 	%-Requisiti di sicurezza
@@ -55,55 +52,21 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	
 	%--Requisito di autenticazione
 	\item Gli utenti sono autenticati tramite credenziali di username e password.
-	
-	%Non funzionale??
-	\item Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
-	
 	\item L'accesso ad uno staff, da parte di un utente, avviene tramite codice di accesso.	
-		
-	%--Requisiti di immunità
-	%Utilizzo https per la cifratura
-	\item Si richiede una comunicazione sicura.
-	
-	%Sistema locale senza server remoto tramite server locale + wifi
-	\item Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
-	
-	%Non funzionale??
-	%Devo contare i tentativi falliti nella SESSIONE.
-	\item Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
-	
-	\item Possibilità di cambiare il codice di accesso dello staff.
+
+	%Funzionale/non funzionale
 	\item La registrazione di utenti è a carico dell'amministratore di sistema.
 	\item Possibilità di cambiare la password personale dell'utente.
-	
-	%Codice della prevendita
-	%Prevendita nominativa
-	\item Si richiedono metodi per evitare la contraffazione delle prevendite.
-	
-	%Non funzionale??
-	\item La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
-	
+		
 	%--Requisiti di Autorizzazione
-	%Non funzionale??
-	\item Ogni staff gestito dal software è indipendente.
-	
-	\item Ogni membro di uno staff può ricoprire dei ruoli: cassiere, PR, amministratore.
-	
-	%Non funzionale??
-	\item Ogni ruolo è indipendente.
-	
+	\item Ogni membro di uno staff può ricoprire dei ruoli: cassiere, PR, amministratore.	
 	\item Il ruolo di cassiere riguarda la timbratura di prevendite all'ingresso di un evento.
 	\item Il ruolo di PR riguarda la vendita di prevendite a clienti.
-	\item Il ruolo di amministratore riguarda la gestione dello staff, degli eventi e delle tipologie di prevendita di un evento.
+	\item Il ruolo di amministratore riguarda la gestione dei membri, degli eventi, delle tipologie di prevendita di un evento e della visualizzazione di tutte statistiche.
 	
 	%--Requisiti di scoperta alle intrusioni
 	\item Utilizzo di log per monitorare operazioni critiche.
-	\item Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore.
-	
-	%--Requisiti di non-ripudiabilità
-	\item Quando un PR vende una prevendita, essa viene associata ad esso.
-	\item Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
-	
+
 	%--Requisiti di riservatezza
 	\item Le password devono essere salvate in modo sicuro.
 	
@@ -115,70 +78,93 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	
 	%Accesso e creazione di uno staff
 	\item Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
-	\item Ogni utente registrato può creare al massimo uno staff.
+	
 	\item Quando un utente crea uno staff ne diventa membro e amministratore.
 	
 	%Timbratura (Cassiere)
 	\item La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
-	\item La timbratura può essere fatta solo una volta.
 	
-	%Vendita (PR)
-	\item Prima della vendita il cliente sceglierà una tipologia di prevendita associata all'evento a cui vuole partecipare.
 	
 	%Non viene specificata la modalità di consegna: URL, file immagine file testo etc.
 	\item La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
-	\item Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
-	
-	%Non funzionale???
-	\item Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
+
 	
 	%Gestione staff (Amministratore)
-	\item La gestione di staff riguarda la gestione dei ruoli concessi ai membri, rimozione di membri, statistiche di un membro, statistiche dell'evento, statistiche dello staff.
-	
 	\item Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
+	\item Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
 	   
 	\item Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
-	
-	%Non funzionale???
-	\item Gli utenti non amministratori possono solo vedere gli eventi dello staff.
-	
+		
 	\item La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
-	
-	%Non funzionale???
-	\item Gli utenti non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
 	
 	%Definizioni
 	%-Eventi
 	\item Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
-	
-	%Funzionale/Non funzionale???
-	\item Un evento può essere annullato, anche se ci sono prevendite vendute. Un evento annullato rimane tale.
+	\item Un evento può essere annullato, anche se ci sono prevendite vendute.
 	
 	%Tipologia Prevendita
-	\item Una tipologia di prevendita serve ad associare alla prevendita un prezzo e una descrizione a tutte le prevendite con la stessa tipologia.
-	
-	%Funzionale/Non funzionale???
-	\item Una tipologia di prevendita contiene un periodo temporale precedente al periodo di svolgimento dell'evento, dentro al quale è possibile vendere le prevendite associate alla tipologia.
-	
+	\item Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
+
 	%-Prevendite
-	\item Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
-	\item Ogni prevedita è nominativa.
-	
-	%Funzionale/Non funzionale???
-	\item Una prevendita può essere annullata e/o rimborsata. Una prevendita annullata e/o rimborsata rimane tale.
+	\item Una prevendita può essere annullata e/o rimborsata. 
 	
 	%-Statistiche
 	\item Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
-	\item Il ruolo di amministratore non prevede statistiche personali.
 	
-	%Non funzionale???
-	\item Gli utenti non amministratori possono vedere solo le statistiche personali.	
+	%Si deduce dalla precedente
+	%\item Il ruolo di amministratore non prevede statistiche personali.
+		
+    \item \textbf{REQUISITI NON FUNZIONALI}
 	
-    
-    %\item \textbf{REQUISITI NON FUNZIONALI}
-	\item Il blocco dell'account deve avvenire dopo 3 tentativi.
+	%Se si verifica attacco freezing dell'account cambiare username.
+	\item Il blocco dell'account deve avvenire dopo 3 tentativi. Dopodiché l'amministratore di sistema deciderà se sbloccare l'utente.
+	
 	\item La password degli utenti deve essere lunga almeno 8 caratteri.
 	\item Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
+	\item Ogni utente registrato può creare al massimo uno staff.
+	\item Requisito fondamentale è il basso costo del prodotto software.
+	\item Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
+	\item I membri non amministratori possono vedere solo le statistiche personali.	
+	\item I membri non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
+	\item I membri non amministratori possono solo vedere gli eventi dello staff.
+	\item Il periodo di vendita delle prevendite deve essere antecedente il periodo dell'evento.
+	\item Una prevendita annullata e/o rimborsata rimane tale.
+	\item Un evento annullato rimane tale.
+	\item Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
+	\item Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
+	\item La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
+	
+	%Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
+	\item Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
+	
+	\item Ogni ruolo è indipendente.
+	\item Ogni staff gestito dal software è indipendente.
+	
+	%Utilizzo https per la cifratura
+	\item Si richiede una comunicazione sicura.
+	
+	%Sistema locale senza server remoto tramite server locale + wifi
+	\item Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
+	
+	%Codice della prevendita
+	%Prevendita nominativa
+	\item Si richiedono metodi per evitare la contraffazione delle prevendite.
+	
+	%Log
+	\item Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
+	
+	%Prevendita
+	\item Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
+	\item Ogni prevedita è nominativa.
+	
+	%--Requisiti di non-ripudiabilità
+	\item Quando un PR vende una prevendita, essa viene associata ad esso.
+	\item Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
+	
+	%Vendita (PR)
+	\item Prima della vendita il cliente sceglierà una tipologia di prevendita associata all'evento a cui vuole partecipare.
+	
+	\item La timbratura può essere fatta solo una volta.
 	
 	
 \end{itemize}
@@ -225,7 +211,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 		\hline
 		Documento digitale & Si tratta di una risorsa digitale, reperibile dal cliente, che serve a identificare una prevendita venduta & \\
 		\hline
-		Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte & \\
+		Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte & Registro \\
 		\hline
 		Operazione & Comando richiesto al software gestionale da parte di un utente & \\
 		\hline
@@ -239,6 +225,8 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 		\hline
 		Password & String di caratteri alfanumerici. Può contenere caratteri speciali. & \\
 		\hline
+		Periodo di vendita & Periodo temporale in cui la prevendita è vendibile ai clienti & \\
+		\hline
     \end{tabulary}
   \end{center}
 \end{table}
@@ -247,11 +235,15 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 
 \subsection{Casi d'uso}
 
+\includegraphics[scale=0.9]{use_cases.png}
+
+L'utilizzo del login è necessario per tutti i servizi forniti agli attori.
+Non abbiamo approfondito molo in quanto si avrebbe avuto un diagramma pesante per la lettura.
+Tutte le funzioni che abbiamo ritenute critiche utilizzano il caso d'uso "Aggiungi log".
+Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.
+
+
 
 \subsection{Scenari}
-
-
-
-
 
 \end{document}

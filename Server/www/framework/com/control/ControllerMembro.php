@@ -101,7 +101,7 @@ class ControllerMembro extends Controller
         //Precedentemente richiedevo all'utente lo staff: ora deve sceglierlo prima
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -119,7 +119,7 @@ class ControllerMembro extends Controller
         //Precedentemente richiedevo all'utente lo staff: ora deve sceglierlo prima
         
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -138,7 +138,7 @@ class ControllerMembro extends Controller
         //Precedentemente richiedevo all'utente lo staff: ora deve sceglierlo prima
         
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -156,7 +156,7 @@ class ControllerMembro extends Controller
     private function cmd_restituisci_tipi_prevendita(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -175,7 +175,7 @@ class ControllerMembro extends Controller
         }
                 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 

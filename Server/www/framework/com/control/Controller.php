@@ -87,8 +87,12 @@ abstract class Controller
         //Ricavo il contesto: verrà utilizzato sotto dai sotto controllori.
         $context = Context::getContext();
 
+        if(!$context->isValid()){
+            Context::createContext();
+        }
+
         //Prima devo verificare se devo aggiornare il contesto.
-        if($context->isWatchdogTriggered() && $context->isValid()){
+        if($context->isWatchdogTriggered() && $context->isLogged()){
             //Devo aggiornare il trigger!
 
             $utente = $context->getUserSession()->getUtente();
@@ -100,7 +104,7 @@ abstract class Controller
 
             if($staffScelto == NULL){
                 //Sessione da aggiornare
-                Context::deleteContext();
+                $context->logout();
                 throw new SessionExpiredException("La sessione è scaduta (staff non disponibile)");
             }
 
@@ -109,7 +113,7 @@ abstract class Controller
 
             if($richiestaEvento == NULL){
                 //Sessione da aggiornare
-                Context::deleteContext();
+                $context->logout();
                 throw new SessionExpiredException("La sessione è scaduta (evento non disponibile)");
             }
 

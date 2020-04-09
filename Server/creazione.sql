@@ -19,6 +19,7 @@ CREATE TABLE utente (
   token varchar(255),
   scadenzaToken timestamp DEFAULT CURRENT_TIMESTAMP,
   timestampRegistrazione timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  tentativiLogin int NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   CONSTRAINT chkUsername UNIQUE (username),
   CONSTRAINT chkTokenEScadenza CHECK ((token IS NOT NULL AND scadenzaToken IS NOT NULL) OR token IS NULL)

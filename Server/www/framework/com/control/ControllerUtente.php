@@ -44,6 +44,16 @@ use com\model\db\exception\NotAvailableOperationException;
 class ControllerUtente extends Controller
 {
 
+    /**
+     * Indica dopo quanti tentativi di login bloccare un account.
+     */
+    private static $tentativiLogin = 3;
+
+    private static function loadParameters(){
+        if(isset($GLOBALS['tentativiLogin']))
+        ControllerUtente::$tentativiLogin = $GLOBALS['tentativiLogin'];
+    }
+
     // Divisione dei comandi: (1-100 utente) (101-200 membro) (201-300 pr) (301-400 cassiere) (401-500 amministratore) (950-1000 manutenzione)
     public const CMD_REGISTRAZIONE = 1;
     public const CMD_REGISTRAZIONE_ARG_0 = "utente";
@@ -167,8 +177,12 @@ class ControllerUtente extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        if(! $context->getUserSession()->isAmministratoreSistema()){
+            throw new AuthorizationException("Non sei amministratore di sistema");
         }
 
         $utente = $context->getUserSession()->getUtente();
@@ -190,7 +204,7 @@ class ControllerUtente extends Controller
         }
 
         // Verifico che non si è loggati nel sistema.
-        if ($context->isValid()){
+        if ($context->isLogged()){
             throw new NotAvailableOperationException("Utente loggato.");
         }
 
@@ -203,8 +217,9 @@ class ControllerUtente extends Controller
         //Effettuo il login da db: eccezione se non fa il login.
         $utente = Utente::login($login);
 
-        // Inizializzo il contesto.
-        Context::createContext($utente);
+        // Salvo il contesto.
+        $context->login($utente, ControllerUtente::$tentativiLogin);
+        $context->apply();
 
         parent::getPrinter()->addResult($utente);
     }
@@ -212,12 +227,12 @@ class ControllerUtente extends Controller
     private function cmd_logout(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
-        // Elimino il contesto.
-        Context::deleteContext();
+        $context->logout();
+        $context->apply();
     }
 
     private function cmd_crea_staff(Command $command, Context $context)
@@ -227,7 +242,7 @@ class ControllerUtente extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
     
@@ -249,7 +264,7 @@ class ControllerUtente extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -267,7 +282,7 @@ class ControllerUtente extends Controller
     private function cmd_restituisci_lista_staff(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -277,7 +292,7 @@ class ControllerUtente extends Controller
     private function cmd_restituisci_lista_staff_membri(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -289,7 +304,7 @@ class ControllerUtente extends Controller
     private function cmd_renew_token(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -301,7 +316,7 @@ class ControllerUtente extends Controller
     private function cmd_get_token(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -317,7 +332,7 @@ class ControllerUtente extends Controller
         }
 
         // Verifico che non si è loggati nel sistema.
-        if ($context->isValid()){
+        if ($context->isLogged()){
             throw new NotAvailableOperationException("Utente loggato.");
         }
 
@@ -338,7 +353,7 @@ class ControllerUtente extends Controller
 
     private function cmd_restituisci_utente(Command $command, Context $context)
     {
-        if(!$context->isValid()) {
+        if(!$context->isLogged()) {
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -351,7 +366,7 @@ class ControllerUtente extends Controller
         }
         
         // Verifico che si è loggati nel sistema.
-        if(!$context->isValid()) {
+        if(!$context->isLogged()) {
             throw new NotAvailableOperationException("Utente non loggato.");
         }
             
@@ -383,3 +398,5 @@ class ControllerUtente extends Controller
 	
 }
 
+//Caricamento parametri statici
+ControllerUtente::loadParameters();

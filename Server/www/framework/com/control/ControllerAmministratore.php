@@ -178,7 +178,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -210,7 +210,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -243,7 +243,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -275,7 +275,7 @@ class ControllerAmministratore extends Controller
         }
         
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -308,7 +308,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -340,7 +340,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -373,7 +373,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -406,7 +406,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -435,7 +435,7 @@ class ControllerAmministratore extends Controller
         //Prima richiedeva l'evento: ora uso quello selezionato
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -458,7 +458,7 @@ class ControllerAmministratore extends Controller
         //Prima richiedeva l'evento: ora uso quello selezionato
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -483,7 +483,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -514,7 +514,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -547,7 +547,7 @@ class ControllerAmministratore extends Controller
         //Prima richiedeva l'evento: ora uso quello selezionato
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -580,7 +580,7 @@ class ControllerAmministratore extends Controller
         //Prima richiedeva l'evento: ora uso quello selezionato
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -613,7 +613,7 @@ class ControllerAmministratore extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 

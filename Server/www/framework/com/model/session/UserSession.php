@@ -111,12 +111,29 @@ class UserSession {
         $this->ruoliMembro = $ruoliMembro;
     }
 
+    /**
+     * Indica se l'utente ha scelto l'evento di sessione.
+     */
     public function isEventoScelto(){
         return $this->eventoScelto != NULL;
     }
     
+    /**
+     * Indica se l'utente ha scelto lo staff di sessione
+     */
     public function isStaffScelto(){
         return $this->staffScelto != NULL;
+    }
+
+    /**
+     * Indica se l'utente che ha eseguito l'accesso è un amministratore di sistema.
+     */
+    public function isAmministratoreSistema(){
+        if(!is_null($this->utente)){
+            $this->utente->isAmministratoreSistema();
+        }
+
+        return FALSE;
     }
     
 }

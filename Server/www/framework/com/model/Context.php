@@ -49,22 +49,17 @@ class Context
     /**
      * Crea un contesto.
      *
-     * @param WUtente $utente utente
      * @throws Exception Lanciata se la sessione non é attiva
      * @throws InvalidArgumentException Lanciata se l'identificativo non é valido
      */
-    public static function createContext($utente)
+    public static function createContext()
     {
         if (session_status() != PHP_SESSION_ACTIVE)
             throw new Exception("Sessione non attiva");
         
-        if (! ($utente instanceof WUtente))
-            throw new InvalidArgumentException("utente non valido.");
-
         loadParameters();
-        
-        $userSession = new UserSession($utente);
-        $context = new Context($userSession, TRUE);
+
+        $context = new Context(NULL, TRUE);
 
         $_SESSION["context"] = $context;
     }
@@ -160,6 +155,30 @@ class Context
     public function isValid()
     {
         return $this->valid;
+    }
+
+    /**
+     * Effettua il login.
+     */
+    public function login($utente){
+        if (! ($utente instanceof WUtente))
+            throw new InvalidArgumentException("utente non valido.");
+
+        $this->userSession = new UserSession($utente);
+    }
+
+    /**
+     * Effettua il logout.
+     */
+    public function logout(){
+        $this->userSession = NULL;
+    }
+
+    /**
+     * Restituisce vero se l'utente è loggato
+     */
+    public function isLogged() : boolean {
+        return !is_null($this->userSession);
     }
 
     /**

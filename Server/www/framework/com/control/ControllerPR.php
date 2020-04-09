@@ -121,7 +121,7 @@ class ControllerPR extends Controller
         }
         
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }             
 
@@ -155,7 +155,7 @@ class ControllerPR extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -183,7 +183,7 @@ class ControllerPR extends Controller
         }
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }        
         
@@ -201,7 +201,7 @@ class ControllerPR extends Controller
     private function cmd_restituisci_statistiche_pr_totali(Command $command, Context $context)
     {
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }     
 
@@ -215,7 +215,7 @@ class ControllerPR extends Controller
         //Prima richiedeva lo staff: ora uso quello selezionato
 
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }             
 
@@ -234,7 +234,7 @@ class ControllerPR extends Controller
         //Prima richiedeva l'evento: ora uso quello selezionato
     
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
@@ -253,7 +253,7 @@ class ControllerPR extends Controller
         //Prima richiedeva l'evento: ora uso quello selezionato
     
         // Verifico che si è loggati nel sistema.
-        if (! $context->isValid()){
+        if (! $context->isLogged()){
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
