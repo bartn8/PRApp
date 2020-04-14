@@ -13,7 +13,7 @@ CREATE TABLE utente (
   tipologiaUtente ENUM('NORMALE', 'AMMINISTRATORE_SISTEMA') NOT NULL DEFAULT 'NORMALE',
   nome varchar(150) NOT NULL,
   cognome varchar(150) NOT NULL,
-  telefono varchar(80) NOT NULL,
+  telefono varchar(80) /* facciamo opzionale*/,
   username varchar(60) NOT NULL,
   hash varchar(255) NOT NULL,
   token varchar(255),
@@ -435,6 +435,7 @@ Verifica l'aggiornamento di un tipo prevendita:
   1)La data di apertura e chiusura deve formare un intervallo temporale.
   2)Questo intervallo deve essere in una data presente o futura.
   3)Questo intervallo NON deve superare la data dell'evento.
+  4)Se sono state vendute prevendite allora non posso modificarne il prezzo.
 */
 
 DELIMITER $$
@@ -444,9 +445,11 @@ BEFORE UPDATE ON tipoPrevendita
 FOR EACH ROW BEGIN
 	DECLARE inizioEvento timestamp;
 	DECLARE statoEvento varchar(20);
+	DECLARE conteggio int;
 
 	SELECT inizio INTO inizioEvento FROM evento WHERE id = OLD.idEvento;
 	SELECT stato INTO statoEvento FROM evento WHERE id = OLD.idEvento;
+	SELECT COUNT(*) INTO conteggio FROM prevendita WHERE idTipoPrevendita = OLD.id;
 
 	IF (NEW.aperturaPrevendite > NEW.chiusuraPrevendite) THEN
 		SIGNAL SQLSTATE '70000'
@@ -463,6 +466,9 @@ FOR EACH ROW BEGIN
 	ELSEIF (statoEvento <> 'VALIDO') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'L\'evento non è valido!';
+	ELSEIF (conteggio > 0 AND OLD.prezzo <> NEW.prezzo) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'Non puoi modificare il prezzo se hai venduto prevendite';
     END IF;
 END$$
 
