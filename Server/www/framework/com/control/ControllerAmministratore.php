@@ -55,7 +55,7 @@ class ControllerAmministratore extends Controller
 
     public const CMD_ELIMINA_TIPO_PREVENDITA = 407;
 
-    public const CMD_MODIFICA_RUOLI_UTENTE = 408;
+    public const CMD_MODIFICA_RUOLI_MEMBRO = 408;
 
     public const CMD_RESTITUISCI_STATISTICHE_PR = 409;
 
@@ -73,7 +73,7 @@ class ControllerAmministratore extends Controller
 
     public const CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO = 416;
 
-    public const CMD_RESTITUISCI_RUOLI_UTENTE = 417;
+    public const CMD_RESTITUISCI_RUOLI_MEMBRO = 417;
 
     public function __construct($printer, $retriver)
     {
@@ -103,8 +103,8 @@ class ControllerAmministratore extends Controller
                 $this->cmd_elimina_tipo_prevendita($command, $context);
                 break;
             
-            case ControllerAmministratore::CMD_MODIFICA_RUOLI_UTENTE:
-                $this->cmd_modifica_ruoli_utente($command, $context);
+            case ControllerAmministratore::CMD_MODIFICA_RUOLI_MEMBRO:
+                $this->cmd_modifica_ruoli_membro($command, $context);
                 break;
             
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR:
@@ -139,8 +139,8 @@ class ControllerAmministratore extends Controller
                 $this->cmd_restituisci_statistiche_cassiere_evento($command, $context);
                 break;
                 
-            case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_UTENTE:
-                $this->cmd_restituisci_ruol_utente($command, $context);
+            case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_MEMBRO:
+                $this->cmd_restituisci_ruoli_utente($command, $context);
                 break;
 
             default:
@@ -152,7 +152,7 @@ class ControllerAmministratore extends Controller
             case ControllerAmministratore::CMD_MODIFICA_EVENTO:
             case ControllerAmministratore::CMD_AGGIUNGI_TIPO_PREVENDITA:                
             case ControllerAmministratore::CMD_MODIFICA_TIPO_PREVENDITA:
-            case ControllerAmministratore::CMD_MODIFICA_RUOLI_UTENTE:
+            case ControllerAmministratore::CMD_MODIFICA_RUOLI_MEMBRO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_CASSIERE:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_EVENTO:
@@ -161,7 +161,7 @@ class ControllerAmministratore extends Controller
             case ControllerAmministratore::CMD_MODIFICA_CODICE_ACCESSO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR_EVENTO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO:
-            case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_UTENTE:                
+            case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_MEMBRO:                
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
                 
@@ -333,7 +333,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::eliminaTipoPrevendita($evento->getId(), $eventoScelto->getId()));
     }
 
-    private function cmd_modifica_ruol_utente(Command $command, Context $context)
+    private function cmd_modifica_ruoli_membro(Command $command, Context $context)
     {
         if(!array_key_exists("ruoliMembro", $command->getArgs())) {
             throw new InvalidArgumentException("Argomenti non validi");
@@ -604,7 +604,7 @@ class ControllerAmministratore extends Controller
         parent::getPrinter()->addResult(Amministratore::getStatisticheCassiereEvento($eventoScelto->getId(), $cassiere->getId()));
     }
 
-    private function cmd_restituisci_ruoli_utente(Command $command, Context $context)
+    private function cmd_restituisci_ruoli_membro(Command $command, Context $context)
     {
         //Prima richiedeva lo staff: ora uso quello selezionato
 

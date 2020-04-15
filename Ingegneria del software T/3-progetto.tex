@@ -1,9 +1,16 @@
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=50pt]{geometry}
+\usepackage{tabularx}
 \usepackage{tabulary}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+}
 
 
 \title{Ingegneria del Software T}
@@ -37,6 +44,8 @@ Il risparmio economico ottenuto è ovviamente importante in confronto alla vendi
 Viene gestito oltre alle prevendite e relatvi clienti, anche l'organizzazione e i vari membri dell'organizzazione, con divisione dei ruoli.\\
 Per facilitare i conti di bilancio è disponibile una sezione in cui è possibile ricavare statistiche sull'andamento dell'evento.
 
+\newpage
+
 \section{Analisi dei requisiti}
 
 \subsection{Requisiti del sistema}
@@ -45,32 +54,32 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	
 	\item \textbf{REQUISITI FUNZIONALI}
 		
-	\item R1F - Il software prevede la possibilità di gestire più staff.
+	\item \hypertarget{R1F}{R1F} - Il software prevede la possibilità di gestire più staff.
 	
 	%-Requisiti di sicurezza
 	
 	%--Requisiti di identificazione
-	\item R2F - Gli utenti devono essere identificati tramite username.
+	\item \hypertarget{R2F}{R2F} - Gli utenti devono essere identificati tramite username.
 	
 	%--Requisito di autenticazione
-	\item R3F - Gli utenti sono autenticati tramite credenziali di username e password.
-	\item R4F - L'accesso ad uno staff, da parte di un utente, avviene tramite codice di accesso.	
+	\item \hypertarget{R3F}{R3F} - Gli utenti sono autenticati tramite credenziali di username e password.
+	\item \hypertarget{R4F}{R4F} - L'accesso ad uno staff, da parte di un utente, avviene tramite codice di accesso.	
 
 	%Funzionale/non funzionale
-	\item R5F - La registrazione di utenti è a carico dell'amministratore di sistema.
-	\item R6F - Possibilità di cambiare la password personale dell'utente.
+	\item \hypertarget{R5F}{R5F} - La registrazione di utenti è a carico dell'amministratore di sistema.
+	\item \hypertarget{R6F}{R6F} - Possibilità di cambiare la password personale dell'utente.
 		
 	%--Requisiti di Autorizzazione
-	\item R7F - Ogni membro di uno staff può ricoprire dei ruoli: cassiere, PR, amministratore.	
-	\item R8F - Il ruolo di cassiere riguarda la timbratura di prevendite all'ingresso di un evento.
-	\item R9F - Il ruolo di PR riguarda la vendita di prevendite a clienti.
-	\item R10F - Il ruolo di amministratore riguarda la gestione dei membri, degli eventi, delle tipologie di prevendita di un evento e della visualizzazione di tutte statistiche.
+	\item \hypertarget{R7F}{R7F} - Ogni membro di uno staff può ricoprire dei ruoli: cassiere, PR, amministratore.	
+	\item \hypertarget{R8F}{R8F} - Il ruolo di cassiere riguarda la timbratura di prevendite all'ingresso di un evento.
+	\item \hypertarget{R9F}{R9F} - Il ruolo di PR riguarda la vendita di prevendite a clienti.
+	\item \hypertarget{R10F}{R10F} - Il ruolo di amministratore riguarda la gestione dei membri, degli eventi, delle tipologie di prevendita di un evento e della visualizzazione di tutte statistiche.
 	
 	%--Requisiti di scoperta alle intrusioni
-	\item R11F - Utilizzo di log per monitorare operazioni critiche.
+	\item \hypertarget{R11F}{R11F} - Utilizzo di log per monitorare operazioni critiche.
 
 	%--Requisiti di riservatezza
-	\item R12F - Le password devono essere salvate in modo sicuro.
+	\item \hypertarget{R12F}{R12F} - Le password devono essere salvate in modo sicuro.
 	
 	%Non vuol dire cifrato! Basta un controllo agli accessi.
 	%Se salvi in DB ricorda di indicizzare.
@@ -79,41 +88,44 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	%--------------------
 	
 	%Accesso e creazione di uno staff
-	\item R13F - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
+	\item \hypertarget{R13F}{R13F} - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
 	
-	\item R14F - Quando un utente crea uno staff ne diventa membro e amministratore.
+	\item \hypertarget{R14F}{R14F} - Quando un utente crea uno staff ne diventa membro e amministratore.
 	
 	%Timbratura (Cassiere)
-	\item R15F - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
+	\item \hypertarget{R15F}{R15F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
+	
+	\item \hypertarget{R16F}{R16F} - Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
 	
 	
 	%Non viene specificata la modalità di consegna: URL, file immagine file testo etc.
-	\item R16F - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
+	\item \hypertarget{R17F}{R17F} - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
 
 	
 	%Gestione staff (Amministratore)
-	\item R17F - Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
-	\item R18F - Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
+	\item \hypertarget{R18F/NF}{R18F/NF} - Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
+	\item \hypertarget{R19F}{R19F} - Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
 	   
-	\item R19F - Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
+	\item \hypertarget{R20F}{R20F} - Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
 		
-	\item R20F - La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
+	\item \hypertarget{R21F}{R21F} - La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
 	
 	%Definizioni
 	%-Eventi
-	\item R21F - Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
-	\item R22F - Un evento può essere annullato, anche se ci sono prevendite vendute.
+	\item \hypertarget{R22F}{R22F} - Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
+	\item \hypertarget{R23F}{R23F} - Un evento può essere annullato, anche se ci sono prevendite vendute.
 	
 	%Tipologia Prevendita
-	\item R23F - Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
+	\item \hypertarget{R24F}{R24F} - Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
 
 	%-Prevendite
-	\item R24F - Una prevendita può essere annullata e/o rimborsata. 
+	\item \hypertarget{R25F}{R25F} - Una prevendita può essere annullata e/o rimborsata. 
 	
 	%-Statistiche
-	\item R25F - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
+	\item \hypertarget{R26F}{R26F} - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
 	
-	\item R26F - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
+	\item \hypertarget{R27F}{R27F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
+	
 	
 	%Si deduce dalla precedente
 	%\item Il ruolo di amministratore non prevede statistiche personali.
@@ -121,58 +133,57 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
     \item \textbf{REQUISITI NON FUNZIONALI}
 	
 	%Se si verifica attacco freezing dell'account cambiare username.
-	\item R1NF - Il blocco dell'account deve avvenire dopo 3 tentativi.
+	\item \hypertarget{R1NF}{R1NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
 	
-	\item R2NF - La password degli utenti deve essere lunga almeno 8 caratteri.
-	\item R3NF - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
-	\item R4NF - Ogni utente registrato può creare al massimo uno staff.
-	\item R5NF - Requisito fondamentale è il basso costo del prodotto software.
-	\item R6NF - Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
-	\item R7NF - I membri non amministratori possono vedere solo le statistiche personali.	
-	\item R8NF - I membri non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
-	\item R9NF - I membri non amministratori possono solo vedere gli eventi dello staff.
-	\item R10NF - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell'evento.
-	\item R11NF - Una prevendita annullata e/o rimborsata rimane tale.
-	\item R12NF - Un evento annullato rimane tale.
-	\item R13NF - Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
-	\item R14NF - Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
-	\item R15NF - La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
+	\item \hypertarget{R2NF}{R2NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
+	\item \hypertarget{R3NF}{R3NF} - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
+	\item \hypertarget{R4NF}{R4NF} - Ogni utente registrato può creare al massimo uno staff.
+	\item \hypertarget{R5NF}{R5NF} - Requisito fondamentale è il basso costo del prodotto software.
+	\item \hypertarget{R6NF}{R6NF} - Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
+	\item \hypertarget{R7NF}{R7NF} - I membri non amministratori possono vedere solo le statistiche personali.	
+	\item \hypertarget{R8NF}{R8NF} - I membri non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
+	\item \hypertarget{R9NF}{R9NF} - I membri non amministratori possono solo vedere gli eventi dello staff.
+	\item \hypertarget{R10NF}{R10NF} - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell'evento.
+	\item \hypertarget{R11NF}{R11NF} - Una prevendita annullata e/o rimborsata rimane tale.
+	\item \hypertarget{R12NF}{R12NF} - Un evento annullato rimane tale.
+	\item \hypertarget{R13NF}{R13NF} - Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
+	\item \hypertarget{R14NF}{R14NF} - La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
 	
 	%Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
-	\item R16NF - Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
+	\item \hypertarget{R15NF}{R15NF} - Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
 	
-	\item R17NF - Ogni ruolo è indipendente.
-	\item R18NF - Ogni staff gestito dal software è indipendente.
+	\item \hypertarget{R16NF}{R16NF} - Ogni ruolo è indipendente.
+	\item \hypertarget{R17NF}{R17NF} - Ogni staff gestito dal software è indipendente.
 	
 	%Utilizzo https per la cifratura
-	\item R19NF - Si richiede una comunicazione sicura.
+	\item \hypertarget{R18NF}{R18NF} - Si richiede una comunicazione sicura.
 	
 	%Sistema locale senza server remoto tramite server locale + wifi
-	\item R20NF - Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
+	\item \hypertarget{R19NF}{R19NF} - Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
 	
 	%Codice della prevendita
 	%Prevendita nominativa
-	\item R21NF - Si richiedono metodi per evitare la contraffazione delle prevendite.
+	\item \hypertarget{R20NF}{R20NF} - Si richiedono metodi per evitare la contraffazione delle prevendite.
 	
 	%Log
-	\item R22NF - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
+	\item \hypertarget{R21NF}{R21NF} - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
 	
 	%Prevendita
-	\item R23NF - Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
-	\item R24NF - La tipologia di prevendita associata non è modificabile.
-	\item R25NF - Ogni prevedita è nominativa.
+	\item \hypertarget{R22NF}{R22NF} - Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
+	\item \hypertarget{R23NF}{R23NF} - La tipologia di prevendita associata non è modificabile.
+	\item \hypertarget{R24NF}{R24NF} - Ogni prevedita è nominativa.
 	
 	%Tipologia prevendita
-	\item R26NF - Il prezzo di una tipologia di prevendita è modificabile solo se non sono state vendute prevendite con quella determinata tipologia.
+	\item \hypertarget{R25NF}{R25NF} - Il prezzo di una tipologia di prevendita è modificabile solo se non sono state vendute prevendite con quella determinata tipologia.
 	
 	%--Requisiti di non-ripudiabilità
-	\item R27NF - Quando un PR vende una prevendita, essa viene associata ad esso.
-	\item R28NF - Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
+	\item \hypertarget{R26NF}{R26NF} - Quando un PR vende una prevendita, essa viene associata ad esso.
+	\item \hypertarget{R27NF}{R27NF} - Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
 	
 	%Vendita (PR)
-	\item R29NF - Prima della vendita il cliente sceglierà una tipologia di prevendita associata all'evento a cui vuole partecipare.
+	\item \hypertarget{R6NF}{R28NF} - Prima della vendita il cliente sceglierà una tipologia di prevendita associata all'evento a cui vuole partecipare.
 	
-	\item R30NF - La timbratura può essere fatta solo una volta.
+	\item \hypertarget{R29NF}{R29NF} - La timbratura può essere fatta solo una volta.
 	
 	
 \end{itemize}
@@ -243,7 +254,8 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 
 \newpage
 
-\subsection{Casi d'uso}
+\subsection{Analisi dei requisiti}
+\subsubsection{Casi d'uso}
 
 %Specificare i casi d'uso?
 %Gestione utente: Sblocco utente, Registrazione utente
@@ -261,13 +273,13 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 \newpage
 
-\subsection{Scenari}
+\subsubsection{Scenari}
 
 %Login
 
-\begin{table}[ht!]
+
   \begin{center}
-    \begin{tabulary}{1\textwidth}{l|L}
+    \begin{tabularx}{1\textwidth}{l|X}
         \textbf{Titolo} & Login \\
         \hline
         \textbf{Descrizione} & Autenticazione nel software gestionale \\
@@ -286,6 +298,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                      & 4. Il sistema verifica le credenziali. \\
                                      & 5. Dopo l'autenticazione viene mostrata una schermata principale.\\
                                      & 6. Viene notificato l'evento nei log.\\
+                                     & 7. Visualizzazione della schermata principale.\\
         \hline
         \textbf{Scenari alternativi} & A) L'utente sbaglia credenziali: \\
                                      & \quad 1. Notifica all'utente.\\
@@ -297,20 +310,20 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                      & C) L'utente ha la password di default impostata dall'amministratore di sistema:\\
                                      & \quad 1. Passaggio al cambio password.\\
         \hline
-        \textbf{Requisiti non funzionali} & R1NF, R2NF, R15NF, R16NF \\
+        \textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R2NF}{R2NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R16NF}{R16NF} \\
         \hline
         \textbf{Punti aperti} & \\
         \hline
-    \end{tabulary}
+    \end{tabularx}
   \end{center}
-\end{table}
+
 
 %Gestione utenti
 %Forse da dividere in registrazione utente e sblocco utente
 
-\begin{table}[ht!]
+
   \begin{center}
-    \begin{tabulary}{1\textwidth}{l|L}
+    \begin{tabularx}{1\textwidth}{l|X}
         \textbf{Titolo} & Gestione utenti \\
         \hline
         \textbf{Descrizione} & Gestione degli utenti presenti nel software gestionale \\
@@ -330,6 +343,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                      & \quad a. Registrazione utente \\
                                      & \quad b. Sblocco utente \\
                                      & 5. L'amministratore di sistema esegue l'operazione, dopo aver consultato l'utente interessato.\\
+                                     & 6. Ritorno alla schermata principale.\\
         \hline
         \textbf{Scenari alternativi} & A) L'utente autenticato non è amministratore di sistema: \\
                                      & \quad 1. Notifica all'utente.\\
@@ -339,16 +353,15 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
         \hline
         \textbf{Punti aperti} & \\
         \hline
-    \end{tabulary}
+    \end{tabularx}
   \end{center}
-\end{table}
+
 
 % Gestione log
 %Forse da dividere in aggiungi log, leggi log e cancella log.
 
-\begin{table}[ht!]
   \begin{center}
-    \begin{tabulary}{1\textwidth}{l|L}
+    \begin{tabularx}{1\textwidth}{l|X}
         \textbf{Titolo} & Gestione log \\
         \hline
         \textbf{Descrizione} & Gestione del log del software gestionale \\
@@ -369,6 +382,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                      & \quad b. Leggi log \\
                                      & \quad c. Cancella log \\
                                      & 5. L'amministratore di sistema esegue l'operazione.\\
+                                     & 6. Ritorno alla schermata principale.\\
         \hline
         \textbf{Scenari alternativi} & A) L'utente autenticato non è amministratore di sistema: \\
                                      & \quad 1. Notifica all'utente.\\
@@ -378,16 +392,16 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
         \hline
         \textbf{Punti aperti} & \\
         \hline
-    \end{tabulary}
+    \end{tabularx}
   \end{center}
-\end{table}
+
 
 %Aggiungi log
 %Non so se mettere la relazione con login.
 
-\begin{table}[ht!]
+
   \begin{center}
-    \begin{tabulary}{1\textwidth}{l|L}
+    \begin{tabularx}{1\textwidth}{l|X}
         \textbf{Titolo} & Aggiungi log \\
         \hline
         \textbf{Descrizione} & Aggiunta di una voce di log nel sistema gestionale \\
@@ -402,7 +416,8 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
         \hline
         \textbf{Scenario principale} & 1. Il sistema mostra una vista per l'inserimento della voce del log.\\
                                      & 2. L'amministratore di sistema aggiunge le informazioni.\\
-                                     & 3. L'amministratore esegue l'operazione.
+                                     & 3. L'amministratore esegue l'operazione.\\
+                                     & 4. Ritorno alla schermata principale.\\
         \hline
         \textbf{Scenari alternativi} & \\
         \hline
@@ -410,15 +425,15 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
         \hline
         \textbf{Punti aperti} & \\
         \hline
-    \end{tabulary}
+    \end{tabularx}
   \end{center}
-\end{table}
+
 
 % Crea staff
 
-\begin{table}[ht!]
+
   \begin{center}
-    \begin{tabulary}{1\textwidth}{l|L}
+    \begin{tabularx}{1\textwidth}{l|X}
         \textbf{Titolo} & Crea staff \\
         \hline
         \textbf{Descrizione} & Creazione di uno staff \\
@@ -437,24 +452,25 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                      & 4. L'utente inserisce i dati del nuovo staff. \\
                                      & 5. L'utente esegue l'operazione.\\
                                      & 6. Viene notificato l'evento nei log.\\
+                                     & 7. Ritorno alla schermata principale.\\
         \hline
         \textbf{Scenari alternativi} & A) L'utente ha già creato uno staff: \\
                                      & \quad 1. Notifica all'utente \\
                                      & \quad 2. Ritorno alla schermata precedente.\\
         \hline
-        \textbf{Requisiti non funzionali} & R4NF \\
+        \textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF}, \hyperlink{R17NF}{R17NF} \\
         \hline
         \textbf{Punti aperti} & \\
         \hline
-    \end{tabulary}
+    \end{tabularx}
   \end{center}
-\end{table}
+
 
 %Cambia password
 
-\begin{table}[ht!]
+
   \begin{center}
-    \begin{tabulary}{1\textwidth}{l|L}
+    \begin{tabularx}{1\textwidth}{l|X}
         \textbf{Titolo} & Cambia password \\
         \hline
         \textbf{Descrizione} & Cambio della password di un utente \\
@@ -473,19 +489,375 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                      & 4. L'utente inserisce i dati per il cambio di password. \\
                                      & 5. L'utente esegue l'operazione.\\
                                      & 6. Viene notificato l'evento nei log.\\
+                                     & 7. Ritorno alla schermata principale.\\
         \hline
         \textbf{Scenari alternativi} & \\
         \hline
-        \textbf{Requisiti non funzionali} & R2NF \\
+        \textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
         \hline
         \textbf{Punti aperti} & \\
         \hline
-    \end{tabulary}
+    \end{tabularx}
   \end{center}
-\end{table}
 
 
 
+%Accedi staff
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Accedi allo staff \\
+        \hline
+        \textbf{Descrizione} & Permettere di diventare membro di uno staff \\
+        \hline
+        \textbf{Attori} & Utente \\
+        \hline
+        \textbf{Relazioni} & Login, Aggiungi log \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. L'utente accede alla schermata di accedi staff. \\
+                                     & 3. Il sistema fornisce una vista. \\
+                                     & 4. L'utente inserisce i dati per l'accesso allo staff. \\
+                                     & 5. L'utente esegue l'operazione.\\
+                                     & 6. Viene notificato l'evento nei log.\\
+                                     & 7. Ritorno alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & A) L'utente è già membro dello staff:\\
+                                     & \quad 1. Notifica all'utente.\\
+                                     & \quad 2. Ritorno alla schermata principale.\\
+                                     & B) L'utente ha fornito un codice di accesso errato:\\
+                                     & \quad 1. Notifica all'utente.\\
+                                     & \quad 1. Evento notificato nei log.\\
+        \hline
+        \textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF}, \hyperlink{R17NF}{R17NF} \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+
+%Visualizza statistiche personali
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Visualizza statistiche personali \\
+        \hline
+        \textbf{Descrizione} & Permettere di visualizzare le statistiche personali di un membro come PR o cassiere. \\
+                             & Non è associato direttamente a PR e a cassiere perché i ruoli di un membro potrebbero cambiare.\\
+        \hline
+        \textbf{Attori} & Membro \\
+        \hline
+        \textbf{Relazioni} & Login \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. L'utente accede alla schermata di vusualizzazione. \\
+                                     & 3. Il sistema fornisce una vista con tutte le statistiche. \\
+                                     & 4. Quando il membro ha finito la consultazione, ritorna alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & \\
+        \hline
+        \textbf{Requisiti non funzionali} & \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+
+%Gestione vendita prevendita: aggiungi prevendita, annulla prevendita
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Gestione vendita prevendita \\
+        \hline
+        \textbf{Descrizione} & Permette di gestire la vendita di una prevendita: aggiunta prevendita, annulla prevendita \\
+        \hline
+        \textbf{Attori} & PR, Cliente \\
+        \hline
+        \textbf{Relazioni} & Login \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. Il PR accede alla schermata di gestione prevenite. \\
+                                     & 3. Il sistema fornisce una vista con le opzioni possibili. \\
+                                     & 4. Il PR sceglie l'operazione:\\
+                                     & \quad a. Aggiungi prevendita.\\
+                                     & \quad b. Annulla prevendita.\\
+                                     & 5. Il PR inserisce i dati relativi all'operazione, consultando il cliente se necessario.\\
+                                     & 6. Il PR esegue l'operazione.\\
+                                     & 6bis. Nel caso di aggiungi prevendita si consegna al cliente il documento digitale.\\
+                                     & 7. Ritorno alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & A) L'utente non è PR dello staff: \\
+                                     & \quad 1. Notifica all'utente. \\
+                                     & \quad 2. Ritorno alla schermata precedente. \\
+        \hline
+        \textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R11NF}{R11NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R20NF}{R20NF}, \hyperlink{R22NF}{R22NF}, \hyperlink{R23NF}{R23NF} \hyperlink{R24NF}{R24NF}, \hyperlink{R26NF}{R26NF}, \hyperlink{R28NF}{R28NF}   \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+
+%Gestione entrata: timbra entrata, leggi prevendita,
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Gestione entrata \\
+        \hline
+        \textbf{Descrizione} & Permette di gestire l'entrata di un cliente: timbratura dell'entrata \\
+        \hline
+        \textbf{Attori} & Cassiere, Cliente \\
+        \hline
+        \textbf{Relazioni} & Login \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. Il Cassiere accede alla schermata di gestione entrata. \\
+                                     & 3. Il sistema fornisce una vista.\\
+                                     & 5. Il Cassiere inserisce i dati relativi al documento digitale fornito dal cliente.\\
+                                     & 6. Il Cassiere esegue l'operazione.\\
+                                     & 7. Il Cassiere informa il cliente riguardo l'esito dell'entrata.\\
+                                     & 7. Ritorno alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & A) L'utente non è Cassiere dello staff: \\
+                                     & \quad 1. Notifica all'utente. \\
+                                     & \quad 2. Ritorno alla schermata precedente. \\
+        \hline
+        \textbf{Requisiti non funzionali} & \hyperlink{R27NF}{R27NF}, \hyperlink{R29NF}{R29NF} \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+
+
+%Cambia codice accesso
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Cambia codice accesso \\
+        \hline
+        \textbf{Descrizione} & Cambio del codice di accesso allo staff \\
+        \hline
+        \textbf{Attori} & Amministratore \\
+        \hline
+        \textbf{Relazioni} & Login, Aggiungi log \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. L'amministratore accede al cambio codice di accesso. \\
+                                     & 3. Il sistema fornisce una vista. \\
+                                     & 4. L'amministratore inserisce i dati per il cambio del codice. \\
+                                     & 5. L'amministratore esegue l'operazione.\\
+                                     & 6. Viene notificato l'evento nei log.\\
+                                     & 7. Ritorno alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
+                                     & \quad 1. Notifica all'utente. \\
+                                     & \quad 2. Ritorno alla schermata precedente. \\
+        \hline
+        \textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+
+%Visualizza statistiche 
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Visualizza statistiche \\
+        \hline
+        \textbf{Descrizione} & Permettere di visualizzare le statistiche dello staff. \\
+        \hline
+        \textbf{Attori} & Amministratore \\
+        \hline
+        \textbf{Relazioni} & Login \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. L'amministratore accede alla schermata di vusualizzazione. \\
+                                     & 3. Il sistema fornisce una vista con tutte le statistiche. \\
+                                     & 4. Quando l'amministratore ha finito la consultazione, ritorna alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
+                                     & \quad 1. Notifica all'utente. \\
+                                     & \quad 2. Ritorno alla schermata precedente. \\
+        \hline
+        \textbf{Requisiti non funzionali} & \hyperlink{R7NF}{R7NF} \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+
+%Gestione eventi: aggiungi evento, modifica evento, annulla evento
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Gestione eventi \\
+        \hline
+        \textbf{Descrizione} & Permettere di gestire gli eventi dello staff. \\
+        \hline
+        \textbf{Attori} & Amministratore \\
+        \hline
+        \textbf{Relazioni} & Login \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. L'amministratore accede alla schermata di vusualizzazione. \\
+                                     & 3. Il sistema fornisce una vista con le scelte: \\
+                                     & \quad a. Aggiungi evento.\\
+                                     & \quad b. Modifica evento.\\
+                                     & \quad c. Annulla evento.\\
+                                     & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+                                     & 5. L'amministratore esegue l'operazione.\\
+                                     & 7. Ritorno alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
+                                     & \quad 1. Notifica all'utente. \\
+                                     & \quad 2. Ritorno alla schermata precedente. \\
+        \hline
+        \textbf{Requisiti non funzionali} & \hyperlink{R9NF}{R9NF}, \hyperlink{R12NF}{R12NF} \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+
+%Gestione tipologie prevendite: aggiungi tipologia prevendita, modifica tipologia prevendita, elimina tipologia prevendita.
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Gestione tipologie prevendite \\
+        \hline
+        \textbf{Descrizione} & Permettere di gestire le tipologie associate alle prevendite di un evento. \\
+        \hline
+        \textbf{Attori} & Amministratore \\
+        \hline
+        \textbf{Relazioni} & Login \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. L'amministratore accede alla schermata di vusualizzazione. \\
+                                     & 3. Il sistema fornisce una vista con le scelte: \\
+                                     & \quad a. Aggiungi tipologia evento.\\
+                                     & \quad b. Modifica tipologia evento.\\
+                                     & \quad c. Elimina tipologia evento.\\
+                                     & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+                                     & 5. L'amministratore esegue l'operazione.\\
+                                     & 7. Ritorno alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
+                                     & \quad 1. Notifica all'utente. \\
+                                     & \quad 2. Ritorno alla schermata precedente. \\
+        \hline
+        \textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R25NF}{R25NF} \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+
+%Gestione membri: modifica diritti membro, rimuovi membro
+
+
+  \begin{center}
+    \begin{tabularx}{1\textwidth}{l|X}
+        \textbf{Titolo} & Gestione membri \\
+        \hline
+        \textbf{Descrizione} & Permettere di gestire i membri dello staff, concedendo i ruoli o rimuovendo i membri. \\
+        \hline
+        \textbf{Attori} & Amministratore \\
+        \hline
+        \textbf{Relazioni} & Login \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
+                                     & 2. L'amministratore accede alla schermata di vusualizzazione. \\
+                                     & 3. Il sistema fornisce una vista con le scelte: \\
+                                     & \quad a. Modifica ruoli membro.\\
+                                     & \quad b. Rimuovi membro.\\
+                                     & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+                                     & 5. L'amministratore esegue l'operazione.\\
+                                     & 7. Ritorno alla schermata principale.\\
+        \hline
+        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
+                                     & \quad 1. Notifica all'utente. \\
+                                     & \quad 2. Ritorno alla schermata precedente. \\
+                                     & B) L'amministratore si vuole rimuovere ma è l'unico amministratore rimasto nello staff: \\
+                                     & \quad 1. Notifica all'utente. \\
+                                     & \quad 2. Ritorno alla schermata precedente. \\
+        \hline
+        \textbf{Requisiti non funzionali} & \hyperlink{R18F/NF}{R18F/NF} \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+  \end{center}
+
+\newpage
+
+\subsection{Analisi del rischio}
+
+\subsubsection{Valutazione dei beni}
+
+\begin{center}
+    \begin{tabulary}{1\textwidth}{c|C|C}
+         \textbf{Bene} & \textbf{Valore} & \textbf{Esposizione}  \\
+         \hline
+         \hline
+         Sistema gestionale & Alto & Alta \\
+                            & Registra tutte le prevendite di uno staff & Perdita d'immagine, ripristino del backup \\
+                            & Critico dal punto di vista della sicurezza &  \\
+    \end{tabulary}
+\end{center}
 
 
 \end{document}
