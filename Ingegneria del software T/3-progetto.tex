@@ -126,6 +126,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	
 	\item \hypertarget{R27F}{R27F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
 	
+	\item \hypertarget{R28F}{R28F} - Ogni prevedita è nominativa.
 	
 	%Si deduce dalla precedente
 	%\item Il ruolo di amministratore non prevede statistiche personali.
@@ -171,7 +172,6 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	%Prevendita
 	\item \hypertarget{R22NF}{R22NF} - Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
 	\item \hypertarget{R23NF}{R23NF} - La tipologia di prevendita associata non è modificabile.
-	\item \hypertarget{R24NF}{R24NF} - Ogni prevedita è nominativa.
 	
 	%Tipologia prevendita
 	\item \hypertarget{R25NF}{R25NF} - Il prezzo di una tipologia di prevendita è modificabile solo se non sono state vendute prevendite con quella determinata tipologia.
@@ -607,7 +607,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                      & \quad 1. Notifica all'utente. \\
                                      & \quad 2. Ritorno alla schermata precedente. \\
         \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R11NF}{R11NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R20NF}{R20NF}, \hyperlink{R22NF}{R22NF}, \hyperlink{R23NF}{R23NF} \hyperlink{R24NF}{R24NF}, \hyperlink{R26NF}{R26NF}, \hyperlink{R28NF}{R28NF}   \\
+        \textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R11NF}{R11NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R20NF}{R20NF}, \hyperlink{R22NF}{R22NF}, \hyperlink{R23NF}{R23NF}, \hyperlink{R26NF}{R26NF}, \hyperlink{R28NF}{R28NF}   \\
         \hline
         \textbf{Punti aperti} & \\
         \hline
@@ -849,15 +849,80 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 \subsubsection{Valutazione dei beni}
 
 \begin{center}
-    \begin{tabulary}{1\textwidth}{c|C|C}
+    \begin{tabulary}{1\textwidth}{L|C|C}
          \textbf{Bene} & \textbf{Valore} & \textbf{Esposizione}  \\
          \hline
          \hline
          Sistema gestionale & Alto & Alta \\
-                            & Registra tutte le prevendite di uno staff & Perdita d'immagine, ripristino del backup \\
-                            & Critico dal punto di vista della sicurezza &  \\
+                            & Registra tutte le prevendite di uno staff. Critico dal punto di vista della sicurezza & Perdita d'immagine del software e degli staff, spesa in tempo per il ripristino del backup, se il sistema fallisce è necessario acquistare prevendite fisiche \\
+         \hline
+         Informazioni su utenti & Medio-Alto & Alta\\
+                            & Informazioni relative agli utenti del sistema, anche le credenziali, le quali potrebbero permettere l'accesso ai dati dello staff e relativi clienti & Perdita d'immagine del software, un membro con ruolo amministrativo potrebbe compromettere temporaneamente uno staff fino a ripristino backup\\
+         \hline
+         Informazioni su prevendite & Alto & Alta \\
+                                    & Rappresentano i guadagni per uno staff, nonché il biglietto d'ingresso di un cliente & Perdita d'immagine del software: lo staff ha perso informazioni riguardo i ricavi, perdita d'immagine dello staff: il cliente non riesce a entrare.\\
+         \hline
+         Informazioni su clienti & Medio & Bassa \\
+                                  & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R28F}{R28F}) & \\
+         \hline
+         Informazioni su amministratori di sistema & Medio-Alto &  Alta \\
+                                                    & Hanno lo stesso valore di quelle degli utenti & Tutte le esposizioni sulle informazioni degli utenti, più la possibilità di perdere log\\ 
+         \hline
     \end{tabulary}
 \end{center}
+
+\subsubsection{Analisi minacce e controlli}
+
+
+\begin{center}
+    \begin{tabulary}{1\textwidth}{L|c|C|C}
+        \textbf{Minaccia} & \textbf{Probabilità} & \textbf{Controllo} & \textbf{Fattibilità}  \\
+        \hline
+        \hline
+        Furto d’identità (utente) & Media & Log degli accessi, blocco dell'utente & Costo minimo\\
+        \hline
+        Furto d’identità (amministratore di sistema) & Bassa & Log degli accessi & Costo minimo\\
+        \hline
+        Alterazione dei dati nella comunicazione & Bassa & Uso di canale sicuro & Costo basso se uso di risorse gratuite\\
+        Man in the Middle &  &  & \\
+        \hline
+        DoS/DDoS & Bassa & Sistema locale durante l'evento (\hyperlink{R19NF}{R19NF}) & Costo medio, richiesta di risorse hardware portatili\\
+        \hline
+        Contraffazione della prevendita & Alta & Sistema anti-contraffazione (\hyperlink{R20NF}{R20NF}), prevendita nominativa & Costo minimo\\
+        \hline
+        Furto della prevendita & Media & prevendita nominativa & Costo minimo\\
+        \hline
+    \end{tabulary}
+\end{center}
+
+\newpage
+
+\subsubsection{Analisi della tecnologia dal punto di vista della sicurezza}
+
+\begin{center}
+    \begin{tabulary}{1\textwidth}{L|C}
+        \textbf{Tecnologia} & \textbf{Vulnerabilità} \\
+        \hline
+        \hline
+        Cifratura delle comunicazioni & Utilizzo di una doppia cifratura simmetrica+asimmetrica con le loro relative vulnerabilità.\\
+                                      & L'utilizzo di cifrature standard potrebbero causare vulnerabilià ulteriori.\\
+        \hline
+        Autenticazione tramite credenziali & Social engineering \\
+                                           & Password cracking \\
+                                           & Negligenza \\
+        \hline
+        Architettura Client/Server & Attacco DDoS/DoS \\
+                                   & Attacco Man in the Middle\\
+                                   & Sniffing della comunicazione\\
+                                   & Deadlock\\
+                                   & Esposizione dei client\\
+        \hline
+        %Non so se questa va bene.
+        Servizio di hosting esterno & Esposizione dei dati \\
+        \hline
+    \end{tabulary}
+\end{center}
+
 
 
 \end{document}

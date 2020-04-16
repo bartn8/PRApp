@@ -28,6 +28,7 @@ use com\model\db\table\Table;
 use com\model\db\wrapper\WUtente;
 use com\model\db\wrapper\WPrevendita;
 use com\model\db\table\Amministratore;
+use com\model\db\wrapper\WRuoliMembro;
 use com\model\db\wrapper\WTipoPrevendita;
 use com\utils\DateTimeImmutableAdapterJSON;
 use com\model\db\wrapper\WStatisticheEvento;
