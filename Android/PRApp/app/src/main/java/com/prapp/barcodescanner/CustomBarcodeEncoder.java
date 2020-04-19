@@ -78,7 +78,11 @@ public class CustomBarcodeEncoder {
         public int getHeight(){
             return textSize + textSpacingSize;
         }
-
+/** 
+* Restituisce la dimensione del testo prendendo la larghezza come parametro in ingresso.
+* @param width
+* @return intero che rappresenta la dimensione del testo
+*/
         public int calculateTextSize(int width){
             int calculatedSize = width/textSize;
             return calculatedSize < textSize ? calculatedSize : textSize;
@@ -100,7 +104,11 @@ public class CustomBarcodeEncoder {
         TextWrapper textWrapper = new TextWrapper(text, bold);
         return listText.add(textWrapper);
     }
-
+/** 
+* Crea una Bitmap richiamando il metodo addTextToBitMap, usato per aggiungere informazioni testuali al QR code 
+* @param matrix
+* @return
+*/
     public Bitmap createBitmap(BitMatrix matrix) {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
