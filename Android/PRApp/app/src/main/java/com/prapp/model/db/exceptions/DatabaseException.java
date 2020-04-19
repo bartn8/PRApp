@@ -24,7 +24,7 @@ import com.prapp.model.net.Eccezione;
 import com.prapp.model.net.Twinned;
 
 /**
- * Si verifica quando il database fa i capricci e non vuole fare ciò che dovrebbe fare.
+ * Si verifica quando il database risulta difettoso e non svolge la sua tradizionale attività.
  * Teoricamente non si dovrebbe mai verificare, ma se succede...
  */
 
