@@ -76,7 +76,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	\item \hypertarget{R10F}{R10F} - Il ruolo di amministratore riguarda la gestione dei membri, degli eventi, delle tipologie di prevendita di un evento e della visualizzazione di tutte statistiche.
 	
 	%--Requisiti di scoperta alle intrusioni
-	\item \hypertarget{R11F}{R11F} - Utilizzo di log per monitorare operazioni critiche.
+	%\item \hypertarget{R11F}{R11F} - Utilizzo di log per monitorare operazioni critiche.
 
 	%--Requisiti di riservatezza
 	\item \hypertarget{R12F}{R12F} - Le password devono essere salvate in modo sicuro.
@@ -167,7 +167,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	\item \hypertarget{R20NF}{R20NF} - Si richiedono metodi per evitare la contraffazione delle prevendite.
 	
 	%Log
-	\item \hypertarget{R21NF}{R21NF} - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
+	%\item \hypertarget{R21NF}{R21NF} - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
 	
 	%Prevendita
 	\item \hypertarget{R22NF}{R22NF} - Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
@@ -196,7 +196,8 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 
 \begin{table}[ht!]
   \begin{center}
-    \begin{tabulary}{1\textwidth}{c|C|C}
+    \begin{tabulary}{1\textwidth}{|c|C|C|}
+        \hline
         \textbf{Voce} & \textbf{Definizione} & \textbf{Sinonimi}\\
         \hline
         \hline
@@ -264,12 +265,17 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 %Gestione entrata: timbra entrata, leggi prevendita,
 %Gestione eventi: aggiungi evento, modifica evento, annulla evento
 %Gestione tipologie prevendite: aggiungi tipologia prevendita, modifica tipologia prevendita, elimina tipologia prevendita.
+
 \includegraphics[scale=0.9]{use_cases.png}
 
-L'utilizzo del login (frecce \textcolor{red}{rosse}) è necessario per tutti i servizi forniti agli attori.
-Non abbiamo approfondito molo in quanto si avrebbe avuto un diagramma pesante per la lettura.
+L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tutti i servizi forniti agli attori.
 Tutte le funzioni che abbiamo ritenute critiche utilizzano il caso d'uso "Aggiungi log" (frecce \textcolor{blue}{blu}).
-Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.
+Con le frecce \textcolor{violet}{viola} abbiamo voluto evidenziare la maggior parte degli scenari che estendono la gestione degli utenti o dello staff.\\
+Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.    
+
+
+
+
 
 \newpage
 
@@ -277,570 +283,644 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 %Login
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Login \\
-        \hline
-        \textbf{Descrizione} & Autenticazione nel software gestionale \\
-        \hline
-        \textbf{Attori} & Utente \\
-        \hline
-        \textbf{Relazioni} & Aggiungi log, Cambia Password \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Impostazione di una schermata per l'inserimento di username e password. \\
-                                     & 2. L'utente inserisce i dati del proprio account. \\
-                                     & 3. L'utente esegue l'operazione. \\
-                                     & 4. Il sistema verifica le credenziali. \\
-                                     & 5. Dopo l'autenticazione viene mostrata una schermata principale.\\
-                                     & 6. Viene notificato l'evento nei log.\\
-                                     & 7. Visualizzazione della schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente sbaglia credenziali: \\
-                                     & \quad 1. Notifica all'utente.\\
-                                     & \quad 2. Ritorno alla schermata di login.\\
-                                     & B) L'utente ha sbagliato troppe volte le credenziali: \\
-                                     & \quad 1. Blocco dell'account.\\
-                                     & \quad 2. Notifica all'utente.\\
-                                     & \quad 3. Ritorno alla schermata di login.\\
-                                     & C) L'utente ha la password di default impostata dall'amministratore di sistema:\\
-                                     & \quad 1. Passaggio al cambio password.\\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R2NF}{R2NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R16NF}{R16NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Login \\
+	\hline
+	\textbf{Descrizione} & Autenticazione nel software gestionale \\
+	\hline
+	\textbf{Attori} & Utente \\
+	\hline
+	\textbf{Relazioni} & Cambia Password \\
+	\hline
+	\textbf{Precondizioni} & L'utente deve essere registato nel sistema \\
+	\hline
+	\textbf{Postcondizioni} & L'utente è autenticato nel sistema \\
+	\hline
+	\textbf{Scenario principale} & 1. Impostazione di una schermata per l'inserimento di username e password. \\
+								 & 2. L'utente inserisce i dati del proprio account. \\
+								 & 3. L'utente esegue l'operazione. \\
+								 & 4. Il sistema verifica le credenziali. \\
+								 & 5. Dopo l'autenticazione viene mostrata una schermata principale.\\
+	\hline
+	\textbf{Scenari alternativi} & A) L'utente sbaglia credenziali: \\
+								 & \quad 1. Notifica all'utente.\\
+								 & \quad 2. Ritorno alla schermata di login.\\
+								 & B) L'utente ha sbagliato troppe volte le credenziali: \\
+								 & \quad 1. Blocco dell'account.\\
+								 & \quad 2. Notifica all'utente.\\
+								 & \quad 3. Ritorno alla schermata di login.\\
+								 & C) L'utente ha la password di default impostata dall'amministratore di sistema:\\
+								 & \quad 1. Passaggio al cambio password.\\
+								 & D) L'utente ha l'account bloccato:\\
+								 & \quad 1. Notifica all'utente.\\
+								 & \quad 2. Ritorno alla schermata di login.\\
+								 & E) L'utente è gia autenticato:\\
+								 & \quad 1. Mostro la schermata principale.\\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R2NF}{R2NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R16NF}{R16NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
+  
 %Gestione utenti
-%Forse da dividere in registrazione utente e sblocco utente
 
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione utenti \\
+	\hline
+	\textbf{Descrizione} & Gestione degli utenti presenti nel software gestionale \\
+	\hline
+	\textbf{Attori} & Utente \\
+	\hline
+	\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff, Gestione log, Registrazione utente, Sblocco utente \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. Viene mostrata una schermata con le azioni possibili:\\
+								 & \quad a. Cambia Password.\\
+								 & \quad b. Accedi staff.\\
+								 & \quad c. Crea staff.\\
+								 & 1b. Se l'utente è anche amministratore di sistema, vengono aggiunte delle scelte:\\
+								 & \quad d. Gestione log.\\
+								 & \quad e. Registrazione utente.\\
+								 & \quad f. Sblocco utente.\\
+								 & 2. L'utente sceglie l'operazione desiderata.\\
+								 & 3. Il sistema cambia vista a seconda della scelta.\\
+	\hline
+	\textbf{Scenari alternativi} & A) L'utente non è autenticato: \\
+								 & \quad 1. Notifica all'utente.\\
+								 & \quad 2. Passaggio al login.\\
+	\hline
+	\textbf{Requisiti non funzionali} & \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Gestione utenti \\
-        \hline
-        \textbf{Descrizione} & Gestione degli utenti presenti nel software gestionale \\
-        \hline
-        \textbf{Attori} & Amministratore di sistema, Utente \\
-        \hline
-        \textbf{Relazioni} & Login \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'amministratore di sistema accede alla gestione utenti. \\
-                                     & 3. Il sistema fornisce una vista per scegliere tra i comandi. \\
-                                     & 4. L'amministratore di sistema sceglie una funzione: \\
-                                     & \quad a. Registrazione utente \\
-                                     & \quad b. Sblocco utente \\
-                                     & 5. L'amministratore di sistema esegue l'operazione, dopo aver consultato l'utente interessato.\\
-                                     & 6. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente autenticato non è amministratore di sistema: \\
-                                     & \quad 1. Notifica all'utente.\\
-                                     & \quad 2. Ritorno alla schermata precedente.\\
-        \hline
-        \textbf{Requisiti non funzionali} & \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
+%Qui metto i casi d'uso sotto gestione utente------------------------------------------
 
+%Sblocco utente
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Sblocco utente \\
+	\hline
+	\textbf{Descrizione} & Caso in cui un utente è bloccato e chiede aiuto all'amministratore di sistema. \\
+	\hline
+	\textbf{Attori} & Amministratore di sistema, Utente \\
+	\hline
+	\textbf{Relazioni} & Gestione utente \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente.\\
+								 & 2. L'utente si spiega di quanto accaduto con l'amministratore.\\
+								 & 3. Se decide di sbloccarlo allora inserisce i dati nell'apposita vista.\\
+								 & 4. L'amministratore esegue l'operazione e l'utente viene sbloccato.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
+
+%Registrazione utente
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Registrazione utente \\
+	\hline
+	\textbf{Descrizione} & Una persona ha richiesto l'accesso al sistema gestionale e l'amministratore vuole registrarlo. \\
+	\hline
+	\textbf{Attori} & Amministratore di sistema, Utente \\
+	\hline
+	\textbf{Relazioni} & Gestione utente \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente, chiedendo informazioni per la registrazione.\\
+								 & 2. L'utente fornisce i dati all'amministratore.\\
+								 & 3. L'amministratore sceglie username e password iniziale per l'utente, utilizzando criteri di sicurezza.\\
+	\hline
+	\textbf{Scenari alternativi} & A) Dati dell'utente da registrare in conflitto o non validi: \\
+								 & \quad 1. Notifica all'amministratore.\\
+								 & \quad 2. L'amministratore cerca di correggere i dati.\\
+								 & \quad 3. L'amministratore ripete l'operazione.\\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 % Gestione log
 %Forse da dividere in aggiungi log, leggi log e cancella log.
 
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Gestione log \\
-        \hline
-        \textbf{Descrizione} & Gestione del log del software gestionale \\
-        \hline
-        \textbf{Attori} & Amministratore di sistema \\
-        \hline
-        \textbf{Relazioni} & Login, Aggiungi log \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'amministratore di sistema accede alla gestione utenti. \\
-                                     & 3. Il sistema fornisce una vista per scegliere tra i comandi. \\
-                                     & 4. L'amministratore di sistema sceglie una funzione: \\
-                                     & \quad a. Aggiungi log \\
-                                     & \quad b. Leggi log \\
-                                     & \quad c. Cancella log \\
-                                     & 5. L'amministratore di sistema esegue l'operazione.\\
-                                     & 6. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente autenticato non è amministratore di sistema: \\
-                                     & \quad 1. Notifica all'utente.\\
-                                     & \quad 2. Ritorno alla schermata precedente.\\
-        \hline
-        \textbf{Requisiti non funzionali} & \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione log \\
+	\hline
+	\textbf{Descrizione} & Gestione del log del software gestionale \\
+	\hline
+	\textbf{Attori} & Amministratore di sistema \\
+	\hline
+	\textbf{Relazioni} & Gestione utente \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore di sistema sceglie una funzione: \\
+								 & \quad a. Aggiungi log \\
+								 & \quad b. Leggi log \\
+								 & \quad c. Cancella log \\
+								 & 2. L'amministratore di sistema esegue l'operazione.\\
+								 & 3. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 
 %Aggiungi log
 %Non so se mettere la relazione con login.
 
+% \begin{center}
+% \begin{tabularx}{1\textwidth}{l|X}
+% \textbf{Titolo} & Aggiungi log \\
+% \hline
+% \textbf{Descrizione} & Aggiunta di una voce di log nel sistema gestionale \\
+% \hline
+% \textbf{Attori} & Amministratore di sistema \\
+% \hline
+% \textbf{Relazioni} & Gestione log \\
+% \hline
+% \textbf{Precondizioni} &  \\
+% \hline
+% \textbf{Postcondizioni} &  \\
+% \hline
+% \textbf{Scenario principale} & 1. Il sistema mostra una vista per l'inserimento della voce del log.\\
+% & 2. L'amministratore di sistema aggiunge le informazioni.\\
+% & 3. L'amministratore esegue l'operazione.\\
+% & 4. Ritorno alla schermata precedente.\\
+% \hline
+% \textbf{Scenari alternativi} & A) L'utente non è autenticato: \\
+% & \quad 1. Notifica all'utente.\\
+% & \quad 2. Passaggio al login.\\
+% & B) L'utente non è amministratore di sistema:\\
+% & \quad 1. Notifica all'utente.\\
+% & \quad 2. Passaggio alla schermata precedente.\\
+% & C) La richiesta di aggiunta log viene
 
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Aggiungi log \\
-        \hline
-        \textbf{Descrizione} & Aggiunta di una voce di log nel sistema gestionale \\
-        \hline
-        \textbf{Attori} & Amministratore di sistema \\
-        \hline
-        \textbf{Relazioni} & Gestione log \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Il sistema mostra una vista per l'inserimento della voce del log.\\
-                                     & 2. L'amministratore di sistema aggiunge le informazioni.\\
-                                     & 3. L'amministratore esegue l'operazione.\\
-                                     & 4. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & \\
-        \hline
-        \textbf{Requisiti non funzionali} & \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+% \hline
+% \textbf{Requisiti non funzionali} &  \hyperlink{R21NF}{R21NF} \\
+% \hline
+% \textbf{Punti aperti} & \\
+% \hline
+% \end{tabularx}
+% \end{center}
 
 % Crea staff
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Crea staff \\
-        \hline
-        \textbf{Descrizione} & Creazione di uno staff \\
-        \hline
-        \textbf{Attori} & Utente \\
-        \hline
-        \textbf{Relazioni} & Login, Aggiungi log \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'utente accede alla creazione staff. \\
-                                     & 3. Il sistema fornisce una vista di creazione. \\
-                                     & 4. L'utente inserisce i dati del nuovo staff. \\
-                                     & 5. L'utente esegue l'operazione.\\
-                                     & 6. Viene notificato l'evento nei log.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente ha già creato uno staff: \\
-                                     & \quad 1. Notifica all'utente \\
-                                     & \quad 2. Ritorno alla schermata precedente.\\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF}, \hyperlink{R17NF}{R17NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+		\textbf{Titolo} & Crea staff \\
+		\hline
+		\textbf{Descrizione} & Creazione di uno staff \\
+		\hline
+		\textbf{Attori} & Utente \\
+		\hline
+		\textbf{Relazioni} & Gestione utente \\
+		\hline
+		\textbf{Precondizioni} &  \\
+		\hline
+		\textbf{Postcondizioni} &  \\
+		\hline
+		\textbf{Scenario principale} & 1. L'utente accede alla creazione staff. \\
+									 & 2. Il sistema fornisce una vista di creazione. \\
+									 & 3. L'utente inserisce i dati del nuovo staff. \\
+									 & 4. L'utente esegue l'operazione.\\
+									 & 5. Ritorno alla schermata precedente.\\
+		\hline
+		\textbf{Scenari alternativi} & A) L'utente ha già creato uno staff: \\
+									 & \quad 1. Notifica all'utente \\
+									 & \quad 2. Ritorno alla schermata precedente.\\
+		\hline
+		\textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF}, \hyperlink{R17NF}{R17NF} \\
+		\hline
+		\textbf{Punti aperti} & \\
+		\hline
+	\end{tabularx}
+\end{center}
 
 %Cambia password
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Cambia password \\
-        \hline
-        \textbf{Descrizione} & Cambio della password di un utente \\
-        \hline
-        \textbf{Attori} & Utente \\
-        \hline
-        \textbf{Relazioni} & Login, Aggiungi log \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'utente accede al cambio password. \\
-                                     & 3. Il sistema fornisce una vista. \\
-                                     & 4. L'utente inserisce i dati per il cambio di password. \\
-                                     & 5. L'utente esegue l'operazione.\\
-                                     & 6. Viene notificato l'evento nei log.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & \\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Cambia password \\
+	\hline
+	\textbf{Descrizione} & Cambio della password di un utente \\
+	\hline
+	\textbf{Attori} & Utente \\
+	\hline
+	\textbf{Relazioni} & Gestione utente \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'utente accede al cambio password. \\
+								 & 2. Il sistema fornisce una vista. \\
+								 & 3. L'utente inserisce i dati per il cambio di password. \\
+								 & 4. L'utente esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 %Accedi staff
 
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Accedi allo staff \\
+	\hline
+	\textbf{Descrizione} & Permettere di diventare membro di uno staff \\
+	\hline
+	\textbf{Attori} & Utente \\
+	\hline
+	\textbf{Relazioni} & Gestione utenti\\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'utente accede alla schermata di accedi staff. \\
+								 & 2. Il sistema fornisce una vista. \\
+								 & 3. L'utente inserisce i dati per l'accesso allo staff. \\
+								 & 4. L'utente esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & A) L'utente è già membro dello staff:\\
+								 & \quad 1. Notifica all'utente.\\
+								 & \quad 2. Ritorno alla schermata precedente.\\
+								 & B) L'utente ha fornito un codice di accesso errato:\\
+								 & \quad 1. Notifica all'utente.\\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF}, \hyperlink{R17NF}{R17NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Accedi allo staff \\
-        \hline
-        \textbf{Descrizione} & Permettere di diventare membro di uno staff \\
-        \hline
-        \textbf{Attori} & Utente \\
-        \hline
-        \textbf{Relazioni} & Login, Aggiungi log \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'utente accede alla schermata di accedi staff. \\
-                                     & 3. Il sistema fornisce una vista. \\
-                                     & 4. L'utente inserisce i dati per l'accesso allo staff. \\
-                                     & 5. L'utente esegue l'operazione.\\
-                                     & 6. Viene notificato l'evento nei log.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente è già membro dello staff:\\
-                                     & \quad 1. Notifica all'utente.\\
-                                     & \quad 2. Ritorno alla schermata principale.\\
-                                     & B) L'utente ha fornito un codice di accesso errato:\\
-                                     & \quad 1. Notifica all'utente.\\
-                                     & \quad 1. Evento notificato nei log.\\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF}, \hyperlink{R17NF}{R17NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
+%----------------------------------------------------------------------------------------
 
+%Gestione staff
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione staff \\
+	\hline
+	\textbf{Descrizione} & Gestione dello staff dell'utente \\
+	\hline
+	\textbf{Attori} & Membro \\
+	\hline
+	\textbf{Relazioni} & Login, Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice di accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendite \\
+	\hline
+	\textbf{Precondizioni} & \\
+	\hline
+	\textbf{Postcondizioni} & \\
+	\hline
+	\textbf{Scenario principale} & 1. Viene mostrata una schermata con le azioni possibili:\\
+								 & \quad a. Visualizza statistiche personali.\\
+								 & 1b. Se il membro è anche PR dello staff, vengono aggiunte delle scelte:\\
+								 & \quad b. Gestione vendita prevendita.\\
+								 & 1c. Se il membro è anche cassiere dello staff, vengono aggiunte delle scelte:\\
+								 & \quad c. Gestione entrata.\\
+								 & 1d. Se il membro è anche amministratore dello staff, vengono aggiunte delle scelte:\\
+								 & \quad d. Gestione membri.\\
+								 & \quad d. Cambia codice di accesso.\\
+								 & \quad d. Visualizzazione statistiche.\\
+								 & \quad d. Gestione eventi.\\
+								 & \quad d. Gestione tipologie prevendite.\\
+								 & 2. il membro sceglie l'operazione desiderata.\\
+								 & 3. Il sistema cambia vista a seconda della scelta.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
+  
+%Qui metto i casi d'uso sotto gestione staff--------------------------------------------------
 
 %Visualizza statistiche personali
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Visualizza statistiche personali \\
-        \hline
-        \textbf{Descrizione} & Permettere di visualizzare le statistiche personali di un membro come PR o cassiere. \\
-                             & Non è associato direttamente a PR e a cassiere perché i ruoli di un membro potrebbero cambiare.\\
-        \hline
-        \textbf{Attori} & Membro \\
-        \hline
-        \textbf{Relazioni} & Login \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'utente accede alla schermata di vusualizzazione. \\
-                                     & 3. Il sistema fornisce una vista con tutte le statistiche. \\
-                                     & 4. Quando il membro ha finito la consultazione, ritorna alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & \\
-        \hline
-        \textbf{Requisiti non funzionali} & \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Visualizza statistiche personali \\
+	\hline
+	\textbf{Descrizione} & Permettere di visualizzare le statistiche personali di un membro come PR o cassiere. \\
+						 & Non è associato direttamente a PR e a cassiere perché i ruoli di un membro potrebbero cambiare.\\
+	\hline
+	\textbf{Attori} & Membro \\
+	\hline
+	\textbf{Relazioni} & Gestione staff \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. Il membro accede alla schermata di vusualizzazione delle statistiche personali. \\
+								 & 2. Il sistema fornisce una vista con tutte le statistiche. \\
+								 & 3. Quando il membro ha finito la consultazione, ritorna alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 %Gestione vendita prevendita: aggiungi prevendita, annulla prevendita
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Gestione vendita prevendita \\
-        \hline
-        \textbf{Descrizione} & Permette di gestire la vendita di una prevendita: aggiunta prevendita, annulla prevendita \\
-        \hline
-        \textbf{Attori} & PR, Cliente \\
-        \hline
-        \textbf{Relazioni} & Login \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. Il PR accede alla schermata di gestione prevenite. \\
-                                     & 3. Il sistema fornisce una vista con le opzioni possibili. \\
-                                     & 4. Il PR sceglie l'operazione:\\
-                                     & \quad a. Aggiungi prevendita.\\
-                                     & \quad b. Annulla prevendita.\\
-                                     & 5. Il PR inserisce i dati relativi all'operazione, consultando il cliente se necessario.\\
-                                     & 6. Il PR esegue l'operazione.\\
-                                     & 6bis. Nel caso di aggiungi prevendita si consegna al cliente il documento digitale.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente non è PR dello staff: \\
-                                     & \quad 1. Notifica all'utente. \\
-                                     & \quad 2. Ritorno alla schermata precedente. \\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R11NF}{R11NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R20NF}{R20NF}, \hyperlink{R22NF}{R22NF}, \hyperlink{R23NF}{R23NF}, \hyperlink{R26NF}{R26NF}, \hyperlink{R28NF}{R28NF}   \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione vendita prevendita \\
+	\hline
+	\textbf{Descrizione} & Permette di gestire la vendita di una prevendita: aggiunta prevendita, annulla prevendita \\
+	\hline
+	\textbf{Attori} & PR, Cliente \\
+	\hline
+	\textbf{Relazioni} & Gestione staff \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. Il PR accede alla schermata di gestione prevenite. \\
+								 & 2. Il sistema fornisce una vista con le opzioni possibili. \\
+								 & 3. Il PR sceglie l'operazione:\\
+								 & \quad a. Aggiungi prevendita.\\
+								 & \quad b. Annulla prevendita.\\
+								 & 4. Il PR inserisce i dati relativi all'operazione, consultando il cliente se necessario.\\
+								 & 5. Il PR esegue l'operazione.\\
+								 & 6bis. Nel caso di aggiungi prevendita si consegna al cliente il documento digitale.\\
+								 & 7. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R11NF}{R11NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R20NF}{R20NF}, \hyperlink{R22NF}{R22NF}, \hyperlink{R23NF}{R23NF}, \hyperlink{R26NF}{R26NF}, \hyperlink{R28NF}{R28NF}   \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 %Gestione entrata: timbra entrata, leggi prevendita,
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Gestione entrata \\
-        \hline
-        \textbf{Descrizione} & Permette di gestire l'entrata di un cliente: timbratura dell'entrata \\
-        \hline
-        \textbf{Attori} & Cassiere, Cliente \\
-        \hline
-        \textbf{Relazioni} & Login \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. Il Cassiere accede alla schermata di gestione entrata. \\
-                                     & 3. Il sistema fornisce una vista.\\
-                                     & 5. Il Cassiere inserisce i dati relativi al documento digitale fornito dal cliente.\\
-                                     & 6. Il Cassiere esegue l'operazione.\\
-                                     & 7. Il Cassiere informa il cliente riguardo l'esito dell'entrata.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente non è Cassiere dello staff: \\
-                                     & \quad 1. Notifica all'utente. \\
-                                     & \quad 2. Ritorno alla schermata precedente. \\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R27NF}{R27NF}, \hyperlink{R29NF}{R29NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione entrata \\
+	\hline
+	\textbf{Descrizione} & Permette di gestire l'entrata di un cliente: timbratura dell'entrata \\
+	\hline
+	\textbf{Attori} & Cassiere, Cliente \\
+	\hline
+	\textbf{Relazioni} & Gestone staff \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. Il Cassiere accede alla schermata di gestione entrata. \\
+								 & 2. Il sistema fornisce una vista.\\
+								 & 3. Il Cassiere inserisce i dati relativi al documento digitale fornito dal cliente.\\
+								 & 4. Il Cassiere esegue l'operazione.\\
+								 & 5. Il Cassiere informa il cliente riguardo l'esito dell'entrata.\\
+								 & 6. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R27NF}{R27NF}, \hyperlink{R29NF}{R29NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 
 %Cambia codice accesso
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Cambia codice accesso \\
-        \hline
-        \textbf{Descrizione} & Cambio del codice di accesso allo staff \\
-        \hline
-        \textbf{Attori} & Amministratore \\
-        \hline
-        \textbf{Relazioni} & Login, Aggiungi log \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'amministratore accede al cambio codice di accesso. \\
-                                     & 3. Il sistema fornisce una vista. \\
-                                     & 4. L'amministratore inserisce i dati per il cambio del codice. \\
-                                     & 5. L'amministratore esegue l'operazione.\\
-                                     & 6. Viene notificato l'evento nei log.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
-                                     & \quad 1. Notifica all'utente. \\
-                                     & \quad 2. Ritorno alla schermata precedente. \\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Cambia codice accesso \\
+	\hline
+	\textbf{Descrizione} & Cambio del codice di accesso allo staff \\
+	\hline
+	\textbf{Attori} & Amministratore \\
+	\hline
+	\textbf{Relazioni} & Gestone staff, Aggiungi log \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore accede al cambio codice di accesso. \\
+								 & 2. Il sistema fornisce una vista. \\
+								 & 3. L'amministratore inserisce i dati per il cambio del codice. \\
+								 & 4. L'amministratore esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 %Visualizza statistiche 
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Visualizza statistiche \\
-        \hline
-        \textbf{Descrizione} & Permettere di visualizzare le statistiche dello staff. \\
-        \hline
-        \textbf{Attori} & Amministratore \\
-        \hline
-        \textbf{Relazioni} & Login \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'amministratore accede alla schermata di vusualizzazione. \\
-                                     & 3. Il sistema fornisce una vista con tutte le statistiche. \\
-                                     & 4. Quando l'amministratore ha finito la consultazione, ritorna alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
-                                     & \quad 1. Notifica all'utente. \\
-                                     & \quad 2. Ritorno alla schermata precedente. \\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R7NF}{R7NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Visualizza statistiche \\
+	\hline
+	\textbf{Descrizione} & Permettere di visualizzare le statistiche dello staff. \\
+	\hline
+	\textbf{Attori} & Amministratore \\
+	\hline
+	\textbf{Relazioni} & Gestone staff \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 2. Il sistema fornisce una vista con tutte le statistiche. \\
+								 & 3. Quando l'amministratore ha finito la consultazione, ritorna alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R7NF}{R7NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 %Gestione eventi: aggiungi evento, modifica evento, annulla evento
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Gestione eventi \\
-        \hline
-        \textbf{Descrizione} & Permettere di gestire gli eventi dello staff. \\
-        \hline
-        \textbf{Attori} & Amministratore \\
-        \hline
-        \textbf{Relazioni} & Login \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'amministratore accede alla schermata di vusualizzazione. \\
-                                     & 3. Il sistema fornisce una vista con le scelte: \\
-                                     & \quad a. Aggiungi evento.\\
-                                     & \quad b. Modifica evento.\\
-                                     & \quad c. Annulla evento.\\
-                                     & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-                                     & 5. L'amministratore esegue l'operazione.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
-                                     & \quad 1. Notifica all'utente. \\
-                                     & \quad 2. Ritorno alla schermata precedente. \\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R9NF}{R9NF}, \hyperlink{R12NF}{R12NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione eventi \\
+	\hline
+	\textbf{Descrizione} & Permettere di gestire gli eventi dello staff. \\
+	\hline
+	\textbf{Attori} & Amministratore \\
+	\hline
+	\textbf{Relazioni} & Gestone staff \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 2. Il sistema fornisce una vista con le scelte: \\
+								 & \quad a. Aggiungi evento.\\
+								 & \quad b. Modifica evento.\\
+								 & \quad c. Annulla evento.\\
+								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 4. L'amministratore esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R9NF}{R9NF}, \hyperlink{R12NF}{R12NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 %Gestione tipologie prevendite: aggiungi tipologia prevendita, modifica tipologia prevendita, elimina tipologia prevendita.
 
-
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Gestione tipologie prevendite \\
-        \hline
-        \textbf{Descrizione} & Permettere di gestire le tipologie associate alle prevendite di un evento. \\
-        \hline
-        \textbf{Attori} & Amministratore \\
-        \hline
-        \textbf{Relazioni} & Login \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'amministratore accede alla schermata di vusualizzazione. \\
-                                     & 3. Il sistema fornisce una vista con le scelte: \\
-                                     & \quad a. Aggiungi tipologia evento.\\
-                                     & \quad b. Modifica tipologia evento.\\
-                                     & \quad c. Elimina tipologia evento.\\
-                                     & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-                                     & 5. L'amministratore esegue l'operazione.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
-                                     & \quad 1. Notifica all'utente. \\
-                                     & \quad 2. Ritorno alla schermata precedente. \\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R25NF}{R25NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
-
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione tipologie prevendite \\
+	\hline
+	\textbf{Descrizione} & Permettere di gestire le tipologie associate alle prevendite di un evento. \\
+	\hline
+	\textbf{Attori} & Amministratore \\
+	\hline
+	\textbf{Relazioni} & Gestone staff \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 2. Il sistema fornisce una vista con le scelte: \\
+								 & \quad a. Aggiungi tipologia evento.\\
+								 & \quad b. Modifica tipologia evento.\\
+								 & \quad c. Elimina tipologia evento.\\
+								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 4. L'amministratore esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R25NF}{R25NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 %Gestione membri: modifica diritti membro, rimuovi membro
 
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione membri \\
+	\hline
+	\textbf{Descrizione} & Permettere di gestire i membri dello staff, concedendo i ruoli o rimuovendo i membri. \\
+	\hline
+	\textbf{Attori} & Amministratore \\
+	\hline
+	\textbf{Relazioni} & Gestone staff \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 2. Il sistema fornisce una vista con le scelte: \\
+								 & \quad a. Modifica ruoli membro.\\
+								 & \quad b. Rimuovi membro.\\
+								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 4. L'amministratore esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & A) L'amministratore si vuole rimuovere ma è l'unico amministratore rimasto nello staff: \\
+								 & \quad 1. Notifica all'utente. \\
+								 & \quad 2. Ritorno alla schermata precedente. \\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R18F/NF}{R18F/NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
-  \begin{center}
-    \begin{tabularx}{1\textwidth}{l|X}
-        \textbf{Titolo} & Gestione membri \\
-        \hline
-        \textbf{Descrizione} & Permettere di gestire i membri dello staff, concedendo i ruoli o rimuovendo i membri. \\
-        \hline
-        \textbf{Attori} & Amministratore \\
-        \hline
-        \textbf{Relazioni} & Login \\
-        \hline
-        \textbf{Precondizioni} &  \\
-        \hline
-        \textbf{Postcondizioni} &  \\
-        \hline
-        \textbf{Scenario principale} & 1. Autenticazione tramite login. \\
-                                     & 2. L'amministratore accede alla schermata di vusualizzazione. \\
-                                     & 3. Il sistema fornisce una vista con le scelte: \\
-                                     & \quad a. Modifica ruoli membro.\\
-                                     & \quad b. Rimuovi membro.\\
-                                     & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-                                     & 5. L'amministratore esegue l'operazione.\\
-                                     & 7. Ritorno alla schermata principale.\\
-        \hline
-        \textbf{Scenari alternativi} & A) L'utente non è Amministratore dello staff: \\
-                                     & \quad 1. Notifica all'utente. \\
-                                     & \quad 2. Ritorno alla schermata precedente. \\
-                                     & B) L'amministratore si vuole rimuovere ma è l'unico amministratore rimasto nello staff: \\
-                                     & \quad 1. Notifica all'utente. \\
-                                     & \quad 2. Ritorno alla schermata precedente. \\
-        \hline
-        \textbf{Requisiti non funzionali} & \hyperlink{R18F/NF}{R18F/NF} \\
-        \hline
-        \textbf{Punti aperti} & \\
-        \hline
-    \end{tabularx}
-  \end{center}
+%------------------------------------------------------------------------------------------
 
 \newpage
 
@@ -849,18 +929,18 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 \subsubsection{Valutazione dei beni}
 
 \begin{center}
-    \begin{tabulary}{1\textwidth}{L|C|C}
+    \begin{tabulary}{1\textwidth}{|L|C|C|}
          \textbf{Bene} & \textbf{Valore} & \textbf{Esposizione}  \\
          \hline
          \hline
          Sistema gestionale & Alto & Alta \\
-                            & Registra tutte le prevendite di uno staff. Critico dal punto di vista della sicurezza & Perdita d'immagine del software e degli staff, spesa in tempo per il ripristino del backup, se il sistema fallisce è necessario acquistare prevendite fisiche \\
+                            & Registra tutte le prevendite di uno staff. Critico dal punto di vista della sicurezza & Perdita d'immagine del software e degli staff, spesa in tempo per il ripristino del backup, se il sistema fallisce è necessario acquistare prevendite fisiche. Possibili perdite finanziare \\
          \hline
          Informazioni su utenti & Medio-Alto & Alta\\
-                            & Informazioni relative agli utenti del sistema, anche le credenziali, le quali potrebbero permettere l'accesso ai dati dello staff e relativi clienti & Perdita d'immagine del software, un membro con ruolo amministrativo potrebbe compromettere temporaneamente uno staff fino a ripristino backup\\
+                            & Informazioni relative agli utenti del sistema, anche le credenziali, le quali potrebbero permettere l'accesso ai dati dello staff e relativi clienti & Perdita d'immagine del software, un membro con ruolo amministrativo potrebbe compromettere temporaneamente uno staff fino a ripristino backup. Possibile perdita economica dovuta all'aggiunta di prevendite.\\
          \hline
          Informazioni su prevendite & Alto & Alta \\
-                                    & Rappresentano i guadagni per uno staff, nonché il biglietto d'ingresso di un cliente & Perdita d'immagine del software: lo staff ha perso informazioni riguardo i ricavi, perdita d'immagine dello staff: il cliente non riesce a entrare.\\
+                                    & Rappresentano i guadagni per uno staff, nonché il biglietto d'ingresso di un cliente & Perdita d'immagine del software: lo staff ha perso informazioni riguardo i ricavi, perdita d'immagine dello staff: il cliente non riesce a entrare. Possibile perdita economica se vengono aggiunte prevendite non dovute.\\
          \hline
          Informazioni su clienti & Medio & Bassa \\
                                   & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R28F}{R28F}) & \\
@@ -875,15 +955,15 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 
 \begin{center}
-    \begin{tabulary}{1\textwidth}{L|c|C|C}
+    \begin{tabulary}{1\textwidth}{|L|C|C|C|}
         \textbf{Minaccia} & \textbf{Probabilità} & \textbf{Controllo} & \textbf{Fattibilità}  \\
         \hline
         \hline
-        Furto d’identità (utente) & Media & Log degli accessi, blocco dell'utente & Costo minimo\\
+        Furto d’identità (utente) & Media-Bassa. Username e password scelti dall'amministratore di sistema & Log degli accessi, blocco dell'utente & Costo minimo\\
         \hline
         Furto d’identità (amministratore di sistema) & Bassa & Log degli accessi & Costo minimo\\
         \hline
-        Alterazione dei dati nella comunicazione & Bassa & Uso di canale sicuro & Costo basso se uso di risorse gratuite\\
+        Alterazione dei dati nella comunicazione & Medio-Alta. Molte comunicazione avvengono nel sistema distribuito client/server. & Uso di canale sicuro & Costo basso se uso di risorse gratuite\\
         Man in the Middle &  &  & \\
         \hline
         DoS/DDoS & Bassa & Sistema locale durante l'evento (\hyperlink{R19NF}{R19NF}) & Costo medio, richiesta di risorse hardware portatili\\
@@ -900,7 +980,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 \subsubsection{Analisi della tecnologia dal punto di vista della sicurezza}
 
 \begin{center}
-    \begin{tabulary}{1\textwidth}{L|C}
+    \begin{tabulary}{1\textwidth}{|L|C|}
         \textbf{Tecnologia} & \textbf{Vulnerabilità} \\
         \hline
         \hline
@@ -918,11 +998,27 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                    & Esposizione dei client\\
         \hline
         %Non so se questa va bene.
-        Servizio di hosting esterno & Esposizione dei dati \\
-        \hline
+        %Servizio di hosting esterno & Esposizione dei dati \\
+        %\hline
     \end{tabulary}
 \end{center}
 
+\subsubsection{Security Use Case e Misuse Case}
 
+% qui metto il security cases e misuse cases
+\includegraphics[scale=0.73]{security_use_cases_misuse_cases.png}
+
+\newpage
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \multicolumn{4}{|X|}{\textbf{Caso d’uso:} Garantire Protezione}\\
+    \hline
+    \multicolumn{4}{|X|}{\textbf{Descrizione:} I dati devono essere protetti, sia nella comunicazione, sia nelo stoccaggio.}\\
+    
+    \hline
+\end{tabularx}
+\end{center}
 
 \end{document}
