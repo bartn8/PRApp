@@ -79,6 +79,48 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	\item \hypertarget{R9F}{R9F} - Il ruolo di PR riguarda la vendita di prevendite a clienti.
 	\item \hypertarget{R10F}{R10F} - Il ruolo di amministratore riguarda la gestione dei membri, degli eventi, delle tipologie di prevendita di un evento e della visualizzazione di tutte statistiche.
 	
+	%Accesso e creazione di uno staff
+	\item \hypertarget{R11F}{R11F} - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
+	
+	\item \hypertarget{R12F}{R12F} - Quando un utente crea uno staff ne diventa membro e amministratore.
+	
+	%Timbratura (Cassiere)
+	\item \hypertarget{R13F}{R13F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
+	
+	\item \hypertarget{R14F}{R14F} - Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
+	
+	%Non viene specificata la modalità di consegna: URL, file immagine file testo etc.
+	\item \hypertarget{R15F}{R15F} - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
+	
+	%Gestione staff (Amministratore)
+	\item \hypertarget{R16F/NF}{R16F/NF} - Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
+	\item \hypertarget{R17F}{R17F} - Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
+	   
+	\item \hypertarget{R18F}{R18F} - Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
+		
+	\item \hypertarget{R19F}{R19F} - La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
+	
+	%Definizioni
+	%-Eventi
+	\item \hypertarget{R20F}{R20F} - Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
+	\item \hypertarget{R21F}{R21F} - Un evento può essere annullato, anche se ci sono prevendite vendute.
+	
+	%Tipologia Prevendita
+	\item \hypertarget{R22F}{R22F} - Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
+
+	%-Prevendite
+	\item \hypertarget{R23F}{R23F} - Una prevendita può essere annullata e/o rimborsata. 
+	
+	%-Statistiche
+	\item \hypertarget{R24F}{R24F} - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
+	
+	\item \hypertarget{R25F}{R25F} - Ogni prevedita è nominativa.
+	
+	%Requisiti rimossi o spostati nell'analisi del rischio ----------------------------------------
+	
+	%Si deduce dalla precedente
+	%\item Il ruolo di amministratore non prevede statistiche personali.
+	%\item \hypertarget{R27F}{R27F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
 	%--Requisiti di scoperta alle intrusioni
 	%\item \hypertarget{R11F}{R11F} - Utilizzo di log per monitorare operazioni critiche.
 
@@ -89,72 +131,47 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	%Se salvi in DB ricorda di indicizzare.
 	%\item Il log deve essere salvato in modo abbastanza sicuro.
 	
-	%--------------------
-	
-	%Accesso e creazione di uno staff
-	\item \hypertarget{R13F}{R13F} - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
-	
-	\item \hypertarget{R14F}{R14F} - Quando un utente crea uno staff ne diventa membro e amministratore.
-	
-	%Timbratura (Cassiere)
-	\item \hypertarget{R15F}{R15F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
-	
-	\item \hypertarget{R16F}{R16F} - Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
-	
-	
-	%Non viene specificata la modalità di consegna: URL, file immagine file testo etc.
-	\item \hypertarget{R17F}{R17F} - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
-
-	
-	%Gestione staff (Amministratore)
-	\item \hypertarget{R18F/NF}{R18F/NF} - Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
-	\item \hypertarget{R19F}{R19F} - Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
-	   
-	\item \hypertarget{R20F}{R20F} - Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
-		
-	\item \hypertarget{R21F}{R21F} - La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
-	
-	%Definizioni
-	%-Eventi
-	\item \hypertarget{R22F}{R22F} - Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
-	\item \hypertarget{R23F}{R23F} - Un evento può essere annullato, anche se ci sono prevendite vendute.
-	
-	%Tipologia Prevendita
-	\item \hypertarget{R24F}{R24F} - Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
-
-	%-Prevendite
-	\item \hypertarget{R25F}{R25F} - Una prevendita può essere annullata e/o rimborsata. 
-	
-	%-Statistiche
-	\item \hypertarget{R26F}{R26F} - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
-	
-	%\item \hypertarget{R27F}{R27F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
-	
-	\item \hypertarget{R28F}{R28F} - Ogni prevedita è nominativa.
-	
-	%Si deduce dalla precedente
-	%\item Il ruolo di amministratore non prevede statistiche personali.
+	%-----------------------------------------------------------------------------------------------
 		
     \item \textbf{REQUISITI NON FUNZIONALI}
 	
+	\item \hypertarget{R1NF}{R1NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
+	\item \hypertarget{R2NF}{R2NF} - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
+	\item \hypertarget{R3NF}{R3NF} - Ogni utente registrato può creare al massimo uno staff.
+	\item \hypertarget{R4NF}{R4NF} - Requisito fondamentale è il basso costo del prodotto software.
+	
+	\item \hypertarget{R5NF}{R5NF} - I membri non amministratori possono vedere solo le statistiche personali.	
+	\item \hypertarget{R6NF}{R6NF} - I membri non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
+	\item \hypertarget{R7NF}{R7NF} - I membri non amministratori possono solo vedere gli eventi dello staff.
+	\item \hypertarget{R8NF}{R8NF} - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell'evento.
+	\item \hypertarget{R9NF}{R9NF} - Una prevendita annullata e/o rimborsata rimane tale.
+	\item \hypertarget{R10NF}{R10NF} - Un evento annullato rimane tale.
+	\item \hypertarget{R11NF}{R11NF} - Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
+	\item \hypertarget{R12NF}{R12NF} - La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
+	
+	%Prevendita
+	\item \hypertarget{R13NF}{R13NF} - Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
+	\item \hypertarget{R14NF}{R14NF} - La tipologia di prevendita associata non è modificabile.
+	
+	%Tipologia prevendita
+	\item \hypertarget{R15NF}{R15NF} - Il prezzo di una tipologia di prevendita è modificabile solo se non sono state vendute prevendite con quella determinata tipologia.
+	
+	%--Requisiti di non-ripudiabilità
+	\item \hypertarget{R16NF}{R16NF} - Quando un PR vende una prevendita, essa viene associata ad esso.
+	\item \hypertarget{R17NF}{R17NF} - Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
+	
+	%Vendita (PR)
+	\item \hypertarget{R18NF}{R18NF} - Prima della vendita il cliente sceglierà una tipologia di prevendita associata all'evento a cui vuole partecipare.
+	
+	\item \hypertarget{R19NF}{R19NF} - La timbratura può essere fatta solo una volta.
+	
+	%Requisiti rimossi o spostati nell'analisi del rischio ----------------------------------------
+	
 	%Se si verifica attacco freezing dell'account cambiare username.
-	%\item \hypertarget{R1NF}{R1NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
-	
-	\item \hypertarget{R2NF}{R2NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
-	\item \hypertarget{R3NF}{R3NF} - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
-	\item \hypertarget{R4NF}{R4NF} - Ogni utente registrato può creare al massimo uno staff.
-	\item \hypertarget{R5NF}{R5NF} - Requisito fondamentale è il basso costo del prodotto software.
+	%\item \hypertarget{R1NF}{R1NF} - Il blocco dell'account deve avvenire dopo 3 tentativi
 	%\item \hypertarget{R6NF}{R6NF} - Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
-	\item \hypertarget{R7NF}{R7NF} - I membri non amministratori possono vedere solo le statistiche personali.	
-	\item \hypertarget{R8NF}{R8NF} - I membri non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
-	\item \hypertarget{R9NF}{R9NF} - I membri non amministratori possono solo vedere gli eventi dello staff.
-	\item \hypertarget{R10NF}{R10NF} - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell'evento.
-	\item \hypertarget{R11NF}{R11NF} - Una prevendita annullata e/o rimborsata rimane tale.
-	\item \hypertarget{R12NF}{R12NF} - Un evento annullato rimane tale.
-	\item \hypertarget{R13NF}{R13NF} - Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
-	\item \hypertarget{R14NF}{R14NF} - La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
 	
-	%Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
+		%Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
 	%\item \hypertarget{R15NF}{R15NF} - Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
 	
 	%\item \hypertarget{R16NF}{R16NF} - Ogni ruolo è indipendente.
@@ -173,22 +190,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	%Log
 	%\item \hypertarget{R21NF}{R21NF} - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
 	
-	%Prevendita
-	\item \hypertarget{R22NF}{R22NF} - Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
-	\item \hypertarget{R23NF}{R23NF} - La tipologia di prevendita associata non è modificabile.
-	
-	%Tipologia prevendita
-	\item \hypertarget{R25NF}{R25NF} - Il prezzo di una tipologia di prevendita è modificabile solo se non sono state vendute prevendite con quella determinata tipologia.
-	
-	%--Requisiti di non-ripudiabilità
-	\item \hypertarget{R26NF}{R26NF} - Quando un PR vende una prevendita, essa viene associata ad esso.
-	\item \hypertarget{R27NF}{R27NF} - Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
-	
-	%Vendita (PR)
-	\item \hypertarget{R6NF}{R28NF} - Prima della vendita il cliente sceglierà una tipologia di prevendita associata all'evento a cui vuole partecipare.
-	
-	\item \hypertarget{R29NF}{R29NF} - La timbratura può essere fatta solo una volta.
-	
+	%-----------------------------------------------------------------------------------------------
 	
 \end{itemize}
 
@@ -235,10 +237,6 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 		\hline
 		Documento digitale & Si tratta di una risorsa digitale, reperibile dal cliente, che serve a identificare una prevendita venduta & \\
 		\hline
-		Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte. Composto da una serie di voci & Registro \\
-		\hline
-		Voce di log & Si tratta di una riga del log. & Record del log\\
-		\hline
 		Operazione & Comando richiesto al software gestionale da parte di un utente & \\
 		\hline
 		Login & Operazione per identificare un utente & Accesso utente \\
@@ -253,6 +251,10 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 		\hline
 		Periodo di vendita & Periodo temporale in cui la prevendita è vendibile ai clienti & \\
 		\hline
+		%Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte. Composto da una serie di voci & Registro \\
+		%\hline
+		%Voce di log & Si tratta di una riga del log. & Record del log\\
+		%\hline
     \end{tabulary}
   \end{center}
 \end{table}
@@ -318,7 +320,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & E) L'utente è gia autenticato:\\
 								 & \quad 1. Mostro la schermata principale.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R2NF}{R2NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R1NF}{R1NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -367,37 +369,6 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 %Qui metto i casi d'uso sotto gestione utente------------------------------------------
 
-%Sblocco utente
-
-%\begin{center}
-%\begin{tabularx}{1\textwidth}{|l|X|}
-%\hline
-%\textbf{Titolo} & Sblocco utente \\
-%\hline
-%\textbf{Descrizione} & Caso in cui un utente è bloccato e chiede aiuto all'amministratore di sistema. \\
-%\hline
-%\textbf{Attori} & Amministratore di sistema, Utente \\
-%\hline
-%\textbf{Relazioni} & Gestione utente \\
-%\hline
-%\textbf{Precondizioni} &  \\
-%\hline
-%\textbf{Postcondizioni} &  \\
-%\hline
-%\textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente.\\
-%& 2. L'utente si spiega di quanto accaduto con l'amministratore.\\
-%& 3. Se decide di sbloccarlo allora inserisce i dati nell'apposita vista.\\
-%& 4. L'amministratore esegue l'operazione e l'utente viene sbloccato.\\
-%\hline
-%\textbf{Scenari alternativi} & \\
-%\hline
-%\textbf{Requisiti non funzionali} & \\
-%\hline
-%\textbf{Punti aperti} & \\
-%\hline
-%\end{tabularx}
-%\end{center}
-
 %Registrazione utente
 
 \begin{center}
@@ -424,46 +395,14 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & \quad 2. L'amministratore cerca di correggere i dati.\\
 								 & \quad 3. L'amministratore ripete l'operazione.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
 \end{tabularx}
 \end{center}
 
-% Gestione log
-%Forse da dividere in aggiungi log, leggi log e cancella log.
 
-% \begin{center}
-% \begin{tabularx}{1\textwidth}{|l|X|}
-    % \hline
-	% \textbf{Titolo} & Gestione log \\
-	% \hline
-	% \textbf{Descrizione} & Gestione del log del software gestionale \\
-	% \hline
-	% \textbf{Attori} & Amministratore di sistema \\
-	% \hline
-	% \textbf{Relazioni} & Gestione utente \\
-	% \hline
-	% \textbf{Precondizioni} &  \\
-	% \hline
-	% \textbf{Postcondizioni} &  \\
-	% \hline
-	% \textbf{Scenario principale} & 1. L'amministratore di sistema sceglie una funzione: \\
-								 % & \quad a. Aggiungi log \\
-								 % & \quad b. Leggi log \\
-								 % & \quad c. Cancella log \\
-								 % & 2. L'amministratore di sistema esegue l'operazione.\\
-								 % & 3. Ritorno alla schermata precedente.\\
-	% \hline
-	% \textbf{Scenari alternativi} & \\
-	% \hline
-	% \textbf{Requisiti non funzionali} & \\
-	% \hline
-	% \textbf{Punti aperti} & \\
-	% \hline
-% \end{tabularx}
-% \end{center}
 
 
 %Aggiungi log
@@ -531,7 +470,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 									 & \quad 1. Notifica all'utente \\
 									 & \quad 2. Ritorno alla schermata precedente.\\
 		\hline
-		\textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF} \\
+		\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
 		\hline
 		\textbf{Punti aperti} & \\
 		\hline
@@ -563,7 +502,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -599,7 +538,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & B) L'utente ha fornito un codice di accesso errato:\\
 								 & \quad 1. Notifica all'utente.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -711,7 +650,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R11NF}{R11NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R20NF}{R20NF}, \hyperlink{R22NF}{R22NF}, \hyperlink{R23NF}{R23NF}, \hyperlink{R26NF}{R26NF}, \hyperlink{R28NF}{R28NF}   \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R7NF}{R7NF}, \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R11NF}{R11NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R18NF}{R18NF}  \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -744,7 +683,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R27NF}{R27NF}, \hyperlink{R29NF}{R29NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -777,7 +716,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -807,7 +746,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R7NF}{R7NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R5NF}{R5NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -842,7 +781,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R9NF}{R9NF}, \hyperlink{R12NF}{R12NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R7NF}{R7NF}, \hyperlink{R10NF}{R10NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -877,7 +816,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R25NF}{R25NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R15NF}{R15NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -913,7 +852,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & \quad 1. Notifica all'utente. \\
 								 & \quad 2. Ritorno alla schermata precedente. \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R18F/NF}{R18F/NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R16F/NF}{R16F/NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -951,7 +890,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
                                     & Rappresentano i guadagni per uno staff, nonché il biglietto d'ingresso di un cliente & Perdita d'immagine del software: lo staff ha perso informazioni riguardo i ricavi, perdita d'immagine dello staff: il cliente non riesce a entrare. Possibile perdita economica se vengono aggiunte prevendite non dovute.\\
          \hline
          Informazioni su clienti & Medio & Bassa \\
-                                  & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R28F}{R28F}) & \\
+                                  & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R25F}{R25F}) & \\
          \hline
          Informazioni su amministratori di sistema & Medio-Alto &  Alta \\
                                                     & Hanno lo stesso valore di quelle degli utenti & Tutte le esposizioni sulle informazioni degli utenti, più la possibilità di perdere log\\ 
@@ -1017,7 +956,6 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 \subsubsection{Security Use Case e Misuse Case}
 
-% qui metto il security cases e misuse cases
 \includegraphics[scale=0.73]{security_use_cases_misuse_cases.png}
 
 \newpage
@@ -1261,9 +1199,125 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 
 \subsubsection{Requisiti di sistema aggiornati}
 
+\begin{itemize}
+    \item \textbf{REQUISITI FUNZIONALI}
+    
+    \item \hypertarget{R26F}{R26F} - Creare un sistema di log per il tracciamento delle operazioni.
+    \item \hypertarget{R27F}{R27F} - L'amministratore di sistema deve avere il pieno controllo dei log.
+    \item \hypertarget{R28F}{R28F} - Creare un sistema per il bloccaggio dell'account dopo vari tentativi. L'amministratore di sistema ha l'autorizzazione a sbloccare l'account.
+    
+    \item \textbf{REQUISITI NON FUNZIONALI}
+    
+    %Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
+    \item \hypertarget{R20NF}{R20NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
+    %HTTPS
+    \item \hypertarget{R21NF}{R21NF} - I dati della comunicazione devono essere protetti.
+    \item \hypertarget{R22NF}{R22NF} - I dati persistenti devono essere protetti.
+    \item \hypertarget{R23NF}{R23NF} - Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
+    \item \hypertarget{R24NF}{R24NF} - Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
+    \item \hypertarget{R25NF}{R25NF} - Il sistema deve cercare di garantire la disponibilità del servizio.
+    %Sistema locale senza server remoto tramite server locale + wifi
+    \item \hypertarget{R26NF}{R26NF} - Il sistema deve essere strutturato in modo da essere replicabile localmente.
+    \item \hypertarget{R27NF}{R26NF} - Il sistema deve essere in grado di riconoscere prevendite contraffatte.
+    
+    
+\end{itemize}
+
+\subsubsection{Glossario aggiornato}
+
+  \begin{center}
+    \begin{tabulary}{1\textwidth}{|c|C|C|}
+        \hline
+        \textbf{Voce} & \textbf{Definizione} & \textbf{Sinonimi}\\
+        \hline
+        \hline
+		Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte. Composto da una serie di voci & Registro \\
+		\hline
+		Voce di log & Si tratta di una riga del log. & Record del log\\
+		\hline
+		Blocco dell'utente & Operazione automatica eseguita per la protezione del sistema. L'utente non può più effettuare l'operazione di autenticazione con successo & Blocco dell'account utente \\
+		\hline
+		Sblocco dell'utente & Operazione eseguita da un amministratore di sistema, per il ripristino di un utente con autenticazione bloccata & Sblocco dell'account utente\\
+		\hline
+    \end{tabulary}
+  \end{center}
+
+\newpage
+
 \subsubsection{Casi d'uso aggiornati}
 
+\includegraphics[scale=0.9]{use_cases_aggiornato.png}
+
+Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'uso sono associati ad un amministratore di sistema.
+
+\newpage
+
 \subsubsection{Scenari aggiornati}
+
+% Gestione log
+%Forse da dividere in aggiungi log, leggi log e cancella log.
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione log \\
+	\hline
+	\textbf{Descrizione} & Gestione del log del software gestionale \\
+	\hline
+	\textbf{Attori} & Amministratore di sistema \\
+	\hline
+	\textbf{Relazioni} & Gestione utente \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'amministratore di sistema sceglie una funzione: \\
+								 & \quad a. Aggiungi log \\
+								 & \quad b. Leggi log \\
+								 & \quad c. Cancella log \\
+								 & 2. L'amministratore di sistema esegue l'operazione.\\
+								 & 3. Ritorno alla schermata precedente.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
+
+%Sblocco utente
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|l|X|}
+        \hline
+        \textbf{Titolo} & Sblocco utente \\
+        \hline
+        \textbf{Descrizione} & Caso in cui un utente è bloccato e chiede aiuto all'amministratore di sistema. \\
+        \hline
+        \textbf{Attori} & Amministratore di sistema, Utente \\
+        \hline
+        \textbf{Relazioni} & Gestione utente \\
+        \hline
+        \textbf{Precondizioni} &  \\
+        \hline
+        \textbf{Postcondizioni} &  \\
+        \hline
+        \textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente.\\
+                                      & 2. L'utente si spiega di quanto accaduto con l'amministratore.\\
+                                      & 3. Se decide di sbloccarlo allora inserisce i dati nell'apposita vista.\\
+                                      & 4. L'amministratore esegue l'operazione e l'utente viene sbloccato.\\
+        \hline
+        \textbf{Scenari alternativi} & \\
+        \hline
+        \textbf{Requisiti non funzionali} & \\
+        \hline
+        \textbf{Punti aperti} & \\
+        \hline
+    \end{tabularx}
+\end{center}
 
 \newpage
 
