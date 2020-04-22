@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{multirow}
 
 \hypersetup{
     colorlinks=true,
@@ -28,6 +29,9 @@
 \date{Marzo 2020}
 
 \begin{document}
+
+\newcommand{\mc}[2]{\multicolumn{#1}{>{\setlength{\hsize}{#1\hsize}}X|}{#2}}
+\newcommand{\mcc}[2]{\multicolumn{#1}{|l|}{#2}}
 
 \maketitle
 
@@ -79,7 +83,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	%\item \hypertarget{R11F}{R11F} - Utilizzo di log per monitorare operazioni critiche.
 
 	%--Requisiti di riservatezza
-	\item \hypertarget{R12F}{R12F} - Le password devono essere salvate in modo sicuro.
+	%\item \hypertarget{R12F}{R12F} - Le password devono essere salvate in modo sicuro.
 	
 	%Non vuol dire cifrato! Basta un controllo agli accessi.
 	%Se salvi in DB ricorda di indicizzare.
@@ -124,7 +128,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	%-Statistiche
 	\item \hypertarget{R26F}{R26F} - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
 	
-	\item \hypertarget{R27F}{R27F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
+	%\item \hypertarget{R27F}{R27F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
 	
 	\item \hypertarget{R28F}{R28F} - Ogni prevedita è nominativa.
 	
@@ -134,13 +138,13 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
     \item \textbf{REQUISITI NON FUNZIONALI}
 	
 	%Se si verifica attacco freezing dell'account cambiare username.
-	\item \hypertarget{R1NF}{R1NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
+	%\item \hypertarget{R1NF}{R1NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
 	
 	\item \hypertarget{R2NF}{R2NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
 	\item \hypertarget{R3NF}{R3NF} - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
 	\item \hypertarget{R4NF}{R4NF} - Ogni utente registrato può creare al massimo uno staff.
 	\item \hypertarget{R5NF}{R5NF} - Requisito fondamentale è il basso costo del prodotto software.
-	\item \hypertarget{R6NF}{R6NF} - Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
+	%\item \hypertarget{R6NF}{R6NF} - Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
 	\item \hypertarget{R7NF}{R7NF} - I membri non amministratori possono vedere solo le statistiche personali.	
 	\item \hypertarget{R8NF}{R8NF} - I membri non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
 	\item \hypertarget{R9NF}{R9NF} - I membri non amministratori possono solo vedere gli eventi dello staff.
@@ -151,20 +155,20 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	\item \hypertarget{R14NF}{R14NF} - La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
 	
 	%Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
-	\item \hypertarget{R15NF}{R15NF} - Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
+	%\item \hypertarget{R15NF}{R15NF} - Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
 	
-	\item \hypertarget{R16NF}{R16NF} - Ogni ruolo è indipendente.
-	\item \hypertarget{R17NF}{R17NF} - Ogni staff gestito dal software è indipendente.
+	%\item \hypertarget{R16NF}{R16NF} - Ogni ruolo è indipendente.
+	%\item \hypertarget{R17NF}{R17NF} - Ogni staff gestito dal software è indipendente.
 	
 	%Utilizzo https per la cifratura
-	\item \hypertarget{R18NF}{R18NF} - Si richiede una comunicazione sicura.
+	%\item \hypertarget{R18NF}{R18NF} - Si richiede una comunicazione sicura.
 	
 	%Sistema locale senza server remoto tramite server locale + wifi
-	\item \hypertarget{R19NF}{R19NF} - Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
+	%\item \hypertarget{R19NF}{R19NF} - Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
 	
 	%Codice della prevendita
 	%Prevendita nominativa
-	\item \hypertarget{R20NF}{R20NF} - Si richiedono metodi per evitare la contraffazione delle prevendite.
+	%\item \hypertarget{R20NF}{R20NF} - Si richiedono metodi per evitare la contraffazione delle prevendite.
 	
 	%Log
 	%\item \hypertarget{R21NF}{R21NF} - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
@@ -269,13 +273,8 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 \includegraphics[scale=0.9]{use_cases.png}
 
 L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tutti i servizi forniti agli attori.
-Tutte le funzioni che abbiamo ritenute critiche utilizzano il caso d'uso "Aggiungi log" (frecce \textcolor{blue}{blu}).
 Con le frecce \textcolor{violet}{viola} abbiamo voluto evidenziare la maggior parte degli scenari che estendono la gestione degli utenti o dello staff.\\
 Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.    
-
-
-
-
 
 \newpage
 
@@ -319,7 +318,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & E) L'utente è gia autenticato:\\
 								 & \quad 1. Mostro la schermata principale.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R2NF}{R2NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R16NF}{R16NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R2NF}{R2NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -337,7 +336,8 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Attori} & Utente \\
 	\hline
-	\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff, Gestione log, Registrazione utente, Sblocco utente \\
+	%\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff, Gestione log, Registrazione utente, Sblocco utente \\
+	\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff, Registrazione utente \\
 	\hline
 	\textbf{Precondizioni} &  \\
 	\hline
@@ -348,9 +348,9 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & \quad b. Accedi staff.\\
 								 & \quad c. Crea staff.\\
 								 & 1b. Se l'utente è anche amministratore di sistema, vengono aggiunte delle scelte:\\
-								 & \quad d. Gestione log.\\
+								 %& \quad d. Gestione log.\\
 								 & \quad e. Registrazione utente.\\
-								 & \quad f. Sblocco utente.\\
+								 %& \quad f. Sblocco utente.\\
 								 & 2. L'utente sceglie l'operazione desiderata.\\
 								 & 3. Il sistema cambia vista a seconda della scelta.\\
 	\hline
@@ -369,34 +369,34 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 %Sblocco utente
 
-\begin{center}
-\begin{tabularx}{1\textwidth}{|l|X|}
-    \hline
-	\textbf{Titolo} & Sblocco utente \\
-	\hline
-	\textbf{Descrizione} & Caso in cui un utente è bloccato e chiede aiuto all'amministratore di sistema. \\
-	\hline
-	\textbf{Attori} & Amministratore di sistema, Utente \\
-	\hline
-	\textbf{Relazioni} & Gestione utente \\
-	\hline
-	\textbf{Precondizioni} &  \\
-	\hline
-	\textbf{Postcondizioni} &  \\
-	\hline
-	\textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente.\\
-								 & 2. L'utente si spiega di quanto accaduto con l'amministratore.\\
-								 & 3. Se decide di sbloccarlo allora inserisce i dati nell'apposita vista.\\
-								 & 4. L'amministratore esegue l'operazione e l'utente viene sbloccato.\\
-	\hline
-	\textbf{Scenari alternativi} & \\
-	\hline
-	\textbf{Requisiti non funzionali} & \\
-	\hline
-	\textbf{Punti aperti} & \\
-	\hline
-\end{tabularx}
-\end{center}
+%\begin{center}
+%\begin{tabularx}{1\textwidth}{|l|X|}
+%\hline
+%\textbf{Titolo} & Sblocco utente \\
+%\hline
+%\textbf{Descrizione} & Caso in cui un utente è bloccato e chiede aiuto all'amministratore di sistema. \\
+%\hline
+%\textbf{Attori} & Amministratore di sistema, Utente \\
+%\hline
+%\textbf{Relazioni} & Gestione utente \\
+%\hline
+%\textbf{Precondizioni} &  \\
+%\hline
+%\textbf{Postcondizioni} &  \\
+%\hline
+%\textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente.\\
+%& 2. L'utente si spiega di quanto accaduto con l'amministratore.\\
+%& 3. Se decide di sbloccarlo allora inserisce i dati nell'apposita vista.\\
+%& 4. L'amministratore esegue l'operazione e l'utente viene sbloccato.\\
+%\hline
+%\textbf{Scenari alternativi} & \\
+%\hline
+%\textbf{Requisiti non funzionali} & \\
+%\hline
+%\textbf{Punti aperti} & \\
+%\hline
+%\end{tabularx}
+%\end{center}
 
 %Registrazione utente
 
@@ -434,36 +434,36 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 % Gestione log
 %Forse da dividere in aggiungi log, leggi log e cancella log.
 
-\begin{center}
-\begin{tabularx}{1\textwidth}{|l|X|}
-    \hline
-	\textbf{Titolo} & Gestione log \\
-	\hline
-	\textbf{Descrizione} & Gestione del log del software gestionale \\
-	\hline
-	\textbf{Attori} & Amministratore di sistema \\
-	\hline
-	\textbf{Relazioni} & Gestione utente \\
-	\hline
-	\textbf{Precondizioni} &  \\
-	\hline
-	\textbf{Postcondizioni} &  \\
-	\hline
-	\textbf{Scenario principale} & 1. L'amministratore di sistema sceglie una funzione: \\
-								 & \quad a. Aggiungi log \\
-								 & \quad b. Leggi log \\
-								 & \quad c. Cancella log \\
-								 & 2. L'amministratore di sistema esegue l'operazione.\\
-								 & 3. Ritorno alla schermata precedente.\\
-	\hline
-	\textbf{Scenari alternativi} & \\
-	\hline
-	\textbf{Requisiti non funzionali} & \\
-	\hline
-	\textbf{Punti aperti} & \\
-	\hline
-\end{tabularx}
-\end{center}
+% \begin{center}
+% \begin{tabularx}{1\textwidth}{|l|X|}
+    % \hline
+	% \textbf{Titolo} & Gestione log \\
+	% \hline
+	% \textbf{Descrizione} & Gestione del log del software gestionale \\
+	% \hline
+	% \textbf{Attori} & Amministratore di sistema \\
+	% \hline
+	% \textbf{Relazioni} & Gestione utente \\
+	% \hline
+	% \textbf{Precondizioni} &  \\
+	% \hline
+	% \textbf{Postcondizioni} &  \\
+	% \hline
+	% \textbf{Scenario principale} & 1. L'amministratore di sistema sceglie una funzione: \\
+								 % & \quad a. Aggiungi log \\
+								 % & \quad b. Leggi log \\
+								 % & \quad c. Cancella log \\
+								 % & 2. L'amministratore di sistema esegue l'operazione.\\
+								 % & 3. Ritorno alla schermata precedente.\\
+	% \hline
+	% \textbf{Scenari alternativi} & \\
+	% \hline
+	% \textbf{Requisiti non funzionali} & \\
+	% \hline
+	% \textbf{Punti aperti} & \\
+	% \hline
+% \end{tabularx}
+% \end{center}
 
 
 %Aggiungi log
@@ -531,7 +531,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 									 & \quad 1. Notifica all'utente \\
 									 & \quad 2. Ritorno alla schermata precedente.\\
 		\hline
-		\textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF}, \hyperlink{R17NF}{R17NF} \\
+		\textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF} \\
 		\hline
 		\textbf{Punti aperti} & \\
 		\hline
@@ -599,7 +599,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & B) L'utente ha fornito un codice di accesso errato:\\
 								 & \quad 1. Notifica all'utente.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF}, \hyperlink{R17NF}{R17NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R4NF}{R4NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -763,7 +763,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Attori} & Amministratore \\
 	\hline
-	\textbf{Relazioni} & Gestone staff, Aggiungi log \\
+	\textbf{Relazioni} & Gestone staff \\
 	\hline
 	\textbf{Precondizioni} &  \\
 	\hline
@@ -926,10 +926,18 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 \subsection{Analisi del rischio}
 
+%Alla fine di questa parte vanno introdotti i seguenti vincoli:
+%Log delle operazioni
+%Blocco utente dopo un tot di tentativi
+%Cifratura della comunicazione
+%Sistema anti contraffazione: prevendita nominativa + codice
+%Sistema locale durante l'evento
+
 \subsubsection{Valutazione dei beni}
 
 \begin{center}
-    \begin{tabulary}{1\textwidth}{|L|C|C|}
+    \begin{tabularx}{1\textwidth}{|X|X|X|}
+         \hline
          \textbf{Bene} & \textbf{Valore} & \textbf{Esposizione}  \\
          \hline
          \hline
@@ -948,7 +956,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
          Informazioni su amministratori di sistema & Medio-Alto &  Alta \\
                                                     & Hanno lo stesso valore di quelle degli utenti & Tutte le esposizioni sulle informazioni degli utenti, più la possibilità di perdere log\\ 
          \hline
-    \end{tabulary}
+    \end{tabularx}
 \end{center}
 
 \subsubsection{Analisi minacce e controlli}
@@ -956,6 +964,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 \begin{center}
     \begin{tabulary}{1\textwidth}{|L|C|C|C|}
+        \hline
         \textbf{Minaccia} & \textbf{Probabilità} & \textbf{Controllo} & \textbf{Fattibilità}  \\
         \hline
         \hline
@@ -963,12 +972,14 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
         \hline
         Furto d’identità (amministratore di sistema) & Bassa & Log degli accessi & Costo minimo\\
         \hline
-        Alterazione dei dati nella comunicazione & Medio-Alta. Molte comunicazione avvengono nel sistema distribuito client/server. & Uso di canale sicuro & Costo basso se uso di risorse gratuite\\
+        Alterazione dei dati nella comunicazione & Medio-Alta. Molte comunicazione avvengono nel sistema distribuito client/server. & Uso di canale sicuro & Costo basso anche se si utilizza un mix tra chiave simmetrica e asimmetrica\\
         Man in the Middle &  &  & \\
         \hline
-        DoS/DDoS & Bassa & Sistema locale durante l'evento (\hyperlink{R19NF}{R19NF}) & Costo medio, richiesta di risorse hardware portatili\\
+        %DoS/DDoS & Bassa & Sistema locale durante l'evento (\hyperlink{R19NF}{R19NF}) & Costo medio, richiesta di risorse hardware portatili\\
+        DoS/DDoS & Bassa & Sistema locale durante l'evento & Costo medio, richiesta di risorse hardware portatili\\
         \hline
-        Contraffazione della prevendita & Alta & Sistema anti-contraffazione (\hyperlink{R20NF}{R20NF}), prevendita nominativa & Costo minimo\\
+        %Contraffazione della prevendita & Alta & Sistema anti-contraffazione (\hyperlink{R20NF}{R20NF}), prevendita nominativa & Costo minimo\\
+        Contraffazione della prevendita & Alta & Sistema anti-contraffazione, prevendita nominativa & Costo minimo\\
         \hline
         Furto della prevendita & Media & prevendita nominativa & Costo minimo\\
         \hline
@@ -981,6 +992,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 
 \begin{center}
     \begin{tabulary}{1\textwidth}{|L|C|}
+        \hline
         \textbf{Tecnologia} & \textbf{Vulnerabilità} \\
         \hline
         \hline
@@ -1011,14 +1023,248 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 \newpage
 
 \begin{center}
-\begin{tabularx}{1\textwidth}{|X|X|X|X|}
+\begin{tabularx}{1\textwidth}{|X|X|X|}
     \hline
-    \multicolumn{4}{|X|}{\textbf{Caso d’uso:} Garantire Protezione}\\
+    \textbf{Caso d’uso} & \mc{2}{Garantire Protezione}\\
     \hline
-    \multicolumn{4}{|X|}{\textbf{Descrizione:} I dati devono essere protetti, sia nella comunicazione, sia nelo stoccaggio.}\\
-    
+    \textbf{Percorso d’uso} & \mc{2}{Garantire Protezione dei dati persistenti}\\
+    \hline
+    \textbf{Misuse case} & \mc{2}{Man in the Middle, Sniffing, Furto credenziali}\\
+    \hline
+    \textbf{Descrizione} & \mc{2}{I dati persistenti devono essere protetti.}\\
+    \hline
+    \textbf{Rischi alla sicurezza} & \mc{2}{Un utente malintenzionato potrebbe modificare o compromettere i dati relativi al software gestionale, come i gli utenti registrati o le prevendite di un evento.}\\
+    \hline
+    \textbf{Precondizioni} & \mc{2}{ 1. Il sistema è già stato utilizzato dall'amministratore di sistema per la registrazione degli utenti e/o uno staff ha già registrato delle prevendite per un evento.}\\
+    & \mc{2}{2. L'attaccante ha i mezzi necessari per tentare di modificare i dati persistenti.}\\
+    \hline
+    \textbf{Postcondizioni} & \mc{2}{ Il sistema blocca il tentativo di modifica o compromissione dei dati persistenti.}\\
+    \hline
+    \textbf{Scenario principale} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & & L'attaccante cerca di modificare dati persistenti del sistema gestionale \\
+    \cline{2-3}
+    & Il sistema blocca l'attacco e notifica l'amministratore di sistema.  &  \\
+    \hline
+    \textbf{Scenario di attacco avvenuto con successo} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & & L'attaccante riesce ad accedere/modificare dati persistenti\\
+    \cline{2-3}
+    & Il sistema registra nei log le modifiche effettuate & \\
+    \cline{2-3}
+    & L'amministratore di sistema nota i log anomali e opera di conseguenza & \\
     \hline
 \end{tabularx}
 \end{center}
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|X|X|X|}
+    \hline
+    \textbf{Caso d’uso} & \mc{2}{Garantire Protezione}\\
+    \hline
+    \textbf{Percorso d’uso} & \mc{2}{Garantire Protezione dei dati della comunicazione}\\
+    \hline
+    \textbf{Misuse case} & \mc{2}{Man in the Middle, Sniffing, Furto credenziali}\\
+    \hline
+    \textbf{Descrizione} & \mc{2}{I dati che viaggiano nelle comunicazioni devono essere protetti.}\\
+    \hline
+    \textbf{Rischi alla sicurezza} & \mc{2}{Un utente malintenzionato potrebbe leggere o alterare i dati in transito in una comunicazione.}\\
+    \hline
+    \textbf{Precondizioni} & \mc{2}{1. Il malintezionato ha la possibilità di intercettare i dati.}\\
+    & \mc{2}{2. Il malintenzionato ha la possibilità di modificare i dati.}\\
+    & \mc{2}{3. ha i mezzi per spedire il messaggio modificato al destinatario.}\\
+    \hline
+    \textbf{Postcondizioni} & \mc{2}{ Il sistema rileva il tentativo di modifica della comunicazione.}\\
+    \hline
+    \textbf{Scenario principale} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & Il sistema si occupa di garantire una comunicazione dei messaggi sicura. & \\
+    \cline{2-3}
+    & & L'attaccante rileva un messaggio in transito, lo interecetta, lo modifica e lo inoltra all'utente finale. \\
+    \cline{2-3}
+    & Il sistema riceve il messaggio modificato e rileva il tentativo di lettura o modifca, rifiutandolo e segnalandolo nei log.  &  \\
+    \hline
+    \textbf{Scenario di attacco avvenuto con successo} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & Il sistema si occupa di garantire una comunicazione dei messaggi sicura. & \\
+    \cline{2-3}
+    & & L'attaccante riesce ad alterare la comunicazione senza che il sistema se ne accorga.\\
+    \cline{2-3}
+    & Il sistema registra nei log le modifiche effettuate. & \\
+    \cline{2-3}
+    & L'amministratore di sistema nota i log anomali e opera di conseguenza. & \\
+    \hline
+\end{tabularx}
+\end{center}
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|X|X|X|}
+    \hline
+    \textbf{Caso d’uso} & \mc{2}{Garantire Protezione}\\
+    \hline
+    \textbf{Percorso d’uso} & \mc{2}{Garantire Protezione rispetto alle contraffazioni}\\
+    \hline
+    \textbf{Misuse case} & \mc{2}{Contraffazione}\\
+    \hline
+    \textbf{Descrizione} & \mc{2}{Devo garantire che le prevendite lette siano autentiche.}\\
+    \hline
+    \textbf{Rischi alla sicurezza} & \mc{2}{Un utente malintenzionato potrebbe falsificare una prevendita.}\\
+    \hline
+    \textbf{Precondizioni} & \mc{2}{1. Il malintezionato conosce la struttura di una prevendita.}\\
+    & \mc{2}{2. Il malintenzionato ha la possibilità di falsificare la prevendita.}\\
+    \hline
+    \textbf{Postcondizioni} & \mc{2}{ Il sistema rileva che la prevendita non è autentica.}\\
+    \hline
+    \textbf{Scenario principale} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & Il sistema si occupa di garantire l'autenticità delle prevendite consegnate. & \\
+    \cline{2-3}
+    & & L'attaccante crea una prevendita falsificata e tenta il riconoscimento da parte del sistema. \\
+    \cline{2-3}
+    & Il sistema rileva che la prevendita è contraffatta, rifiutandola e segnalandola nei log.  &  \\
+    \hline
+    \textbf{Scenario di attacco avvenuto con successo} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & Il sistema si occupa di garantire l'autenticità delle prevendite consegnate. & \\
+    \cline{2-3}
+    & & L'attaccante riesce a creare una prevendita che illuda il sistema.\\
+    \cline{2-3}
+    & Il sistema registra nei log l'entrata effettuata. & \\
+    \cline{2-3}
+    & L'amministratore dello staff nota una discrepanza e informa l'amministratore di sistema. & \\
+    \cline{2-3}
+    & L'amministratore di sistema fa una ricerca nei log e tenta di risalire al malfattore. & \\
+    \hline
+\end{tabularx}
+\end{center}
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|X|X|X|}
+    \hline
+    \textbf{Caso d’uso} & \mc{2}{Controllo Accesso}\\
+    \hline
+    \textbf{Percorso d’uso} & \mc{2}{Controllo sull'autenticazione dell'utente}\\
+    \hline
+    \textbf{Misuse case} & \mc{2}{Furto credenziali}\\
+    \hline
+    \textbf{Descrizione} & \mc{2}{Il sistema deve proteggere l'utente da intrusioni di malintenzionati}\\
+    \hline
+    \textbf{Rischi alla sicurezza} & \mc{2}{Un malintenzionato ruba i dati di identificazione e autenticazione ad un utente.}\\
+    \hline
+    \textbf{Precondizioni} & \mc{2}{1. Il malintezionato ha la possibilità di trovare l'username.}\\
+    & \mc{2}{2. Il malintenzionato ha la possibilità di tentare l'accesso al sistema.}\\
+    \hline
+    \textbf{Postcondizioni} & \mc{2}{ Il sistema rileva il tentativo di accesso fraudolento e blocca l'utente.}\\
+    \hline
+    \textbf{Scenario principale} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & & L'attaccante tenta un attacco di password cracking. \\
+    \cline{2-3}
+    & Il sistema rileva l'attacco e blocca l'account dell'utente. &  \\
+    \hline
+    \textbf{Scenario di attacco avvenuto con successo} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & & L'attaccante riesce a scoprire la password \\
+    \cline{2-3}
+    & Il sistema fornisce l'accesso al sistema. & \\
+    \cline{2-3}
+    & & Il malintenzionato tenta di reperire tutte le informazioni prima di essere scoperto. \\
+    \cline{2-3}
+    & Il sistema notifica nei log le operazioni effettuate. & \\
+    \cline{2-3}
+    & L'amministratore di sistema nota i log anomali e opera di conseguenza. & \\
+    \hline
+\end{tabularx}
+\end{center}
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|X|X|X|}
+    \hline
+    \textbf{Caso d’uso} & \mc{2}{Controllo Accesso}\\
+    \hline
+    \textbf{Percorso d’uso} & \mc{2}{Controllo sulle operazioni eseguite dagli utenti}\\
+    \hline
+    \textbf{Misuse case} & \mc{2}{Operazione non autorizzata}\\
+    \hline
+    \textbf{Descrizione} & \mc{2}{Il sistema deve evitare che utenti non autorizzati possano eseguire operazioni non concesse. Deve essere valido sia per i ruoli di uno staff, sia per il ruolo di amministratore di sistema.}\\
+    \hline
+    \textbf{Rischi alla sicurezza} & \mc{2}{Un utente normale esegue senza autorizzazione operazioni riservate all'amministratore di sistema.}\\
+    & \mc{2}{Un membro di uno staff esegue senza autorizzazione operazioni riservate ad un ruolo che non ha.}\\
+    \hline
+    \textbf{Precondizioni} & \mc{2}{1. L'utente ha credenziali validi per l'accesso.}\\
+    & \mc{2}{2. L'utente non ha i privilegi per cui sta tentando di effettuare l'operazione.}\\
+    \hline
+    \textbf{Postcondizioni} & \mc{2}{ Il sistema rileva il tentativo di esecuzione non autorizzata e blocca l'operazione.}\\
+    \hline
+    \textbf{Scenario principale} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & & L'utente tenta di eseguire un operazione non consentita. \\
+    \cline{2-3}
+    & Il sistema verifica le autorizzazioni dell'utente e blocca l'operazione non autorizzata. &  \\
+    & Il sistema aggiunge un record di log su quanto accaduto. &  \\
+    \hline
+\end{tabularx}
+\end{center}
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|X|X|X|}
+    \hline
+    \textbf{Caso d’uso} & \mc{2}{Disponibilità}\\
+    \hline
+    \textbf{Misuse case} & \mc{2}{DDoS/DoS}\\
+    \hline
+    \textbf{Descrizione} & \mc{2}{Il sistema deve cercare di proteggersi da attacchi DDoS/DoS}\\
+    \hline
+    \textbf{Rischi alla sicurezza} & \mc{2}{Un malintenzionato vuole impedire l'accesso al sistema durante un evento.}\\
+    \hline
+    \textbf{Precondizioni} & \mc{2}{1. Il malintezionato dispone dei mezzi per effettuare l'attacco.}\\
+    \hline
+    \textbf{Postcondizioni} & \mc{2}{ Il sistema si protegge dalla minaccia.}\\
+    \hline
+    \textbf{Scenario principale} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & & L'attaccante tenta un attacco DDoS/DoS. \\
+    \cline{2-3}
+    & Il sistema rileva l'attacco e informa l'amministratore di sistema, mentre cerca di attuare misure per ridurre l'efficacia dell'attacco. &  \\
+    \cline{2-3}
+    & Il sistema riesce a contenere l'attacco, dato che l'attaccante non ha sufficiente potenza per mettere fuori uso il sistema. &  \\
+    \cline{2-3}
+    & L'amministratore di sistema controlla lo stato e agisce di conseguenza. &  \\
+    \hline
+    \textbf{Scenario di attacco avvenuto con successo} & \textbf{Sistema} & \textbf{Attaccante}\\
+    \hline
+    & & L'attaccante tenta un attacco DDoS/DoS. \\
+    \cline{2-3}
+    & Il sistema rileva l’attacco e informal’amministratore di sistema, mentrecerca di attuare misure per ridurrel’efficacia dell’attacco. & \\
+    \cline{2-3}
+    & Il sistema non riesce a contenere l'attacco e va fuori uso. & \\
+    \cline{2-3}
+    & L'amministratore di sistema vede che il sistema di fuori uso e tenta un ripristino locale per favorire l'accesso al sistema durante l'evento. & \\
+    \hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Requisiti di Protezione dei Dati}
+
+Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione dei dati:
+
+\begin{itemize}
+    \item Crazione di un sistema di log per il tracciamento delle operazioni svolte nel sistema gestionale, garantendo la persistenza dei log. L'amministratore di sistema è l'unico a poter accedere ai log. Per evitare l'uscita di informazioni riservate, cercare di memorizzare nei log solo le informazioni utili per l'analisi da parte dell'amministratore.
+    \item Creare un sistema per il blocco dell'utente dopo un certo numero di tentativi. L'amministratore di sistema ha la possibilità di sbloccare l'utente.
+    \item I dati scambiati devono essere protetti con cifratura sicura per evitare alterazione e lettura di dati privati.
+    \item I dati persistenti del sistema devono essere protetti da eventuali intrusioni.
+    \item Necessità di un sistema per il controllo delle autorizzazioni degli utenti.
+    \item Il sistema deve essere in grado di ridurre l'impatto di attacchi DoS, per esempio tramite blacklisting di IP o tramite servzizi esterni, come l'uso di reverse proxy, ovviamente configurato a dovere, non come il sistema dell'INPS.
+    \item Inoltre il sistema deve essere strutturato in maniera da consentire il ripristino locale ad un evento da parte dell'amministratore di sistema, nel caso che l'attacco DoS funzioni.
+    \item Il sistema deve prevedere un sistema di anti-contraffazione per garantire l'autenticità delle preventite.
+\end{itemize}
+
+\subsubsection{Requisiti di sistema aggiornati}
+
+\subsubsection{Casi d'uso aggiornati}
+
+\subsubsection{Scenari aggiornati}
+
+\newpage
 
 \end{document}
