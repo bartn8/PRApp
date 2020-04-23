@@ -320,19 +320,19 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & E) L'utente è gia autenticato:\\
 								 & \quad 1. Mostro la schermata principale.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R1NF}{R1NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
 \end{tabularx}
 \end{center}
   
-%Gestione utenti
+%Gestione utente
 
 \begin{center}
 \begin{tabularx}{1\textwidth}{|l|X|}
     \hline
-	\textbf{Titolo} & Gestione utenti \\
+	\textbf{Titolo} & Gestione utente \\
 	\hline
 	\textbf{Descrizione} & Gestione degli utenti presenti nel software gestionale \\
 	\hline
@@ -470,7 +470,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 									 & \quad 1. Notifica all'utente \\
 									 & \quad 2. Ritorno alla schermata precedente.\\
 		\hline
-		\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
+		\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
 		\hline
 		\textbf{Punti aperti} & \\
 		\hline
@@ -520,7 +520,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Attori} & Utente \\
 	\hline
-	\textbf{Relazioni} & Gestione utenti\\
+	\textbf{Relazioni} & Gestione utente\\
 	\hline
 	\textbf{Precondizioni} &  \\
 	\hline
@@ -538,7 +538,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & B) L'utente ha fornito un codice di accesso errato:\\
 								 & \quad 1. Notifica all'utente.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -1320,5 +1320,90 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \end{center}
 
 \newpage
+
+\subsection{Descrizione delle interfacce grafiche}
+
+%TODO
+
+\newpage
+
+\section{Analisi del problema}
+
+\subsection{Analisi delle funzionalità}
+
+\subsubsection{Tabella delle funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+        \hline
+        \textbf{Funzionalità} & \textbf{Tipo} & \textbf{Grado di Complessità} & \textbf{Requisiti collegati}\\
+        \hline
+        \hline
+        %Gestione utente & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R11F}{R11F}\\
+        Gestione utente & Gestione dei dati, interazione con l'esterno & Complesso & \\
+        \hline
+        Gestione dei log & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R26F}{R26F}, \hyperlink{R27F}{R27F}\\
+        \hline
+        Sblocco utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R28F}{R28F}\\
+        \hline
+        Registrazione utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R2F}{R2F}, \hyperlink{R3F}{R3F}, \hyperlink{R5F}{R5F} \\
+        \hline
+        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1F}{R1F}, \hyperlink{R4F}{R4F}, \hyperlink{R12F}{R12F}\\
+        \hline
+        Accedi staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R1F}{R1F}, \hyperlink{R4F}{R4F}, \hyperlink{R11F}{R11F} \\
+        \hline
+        Cambia password & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R3F}{R3F}, \hyperlink{R6F}{R6F} \\
+        \hline
+        %Gestione staff & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R10F}{R10F},  \\
+        Gestione staff & Gestione dei dati, interazione con l'esterno & Complesso &  \\
+        \hline
+        Visualizzazione statistiche personali & Lettura dati, interazione con l'esterno & Semplice &  \hyperlink{R24F}{R24F} \\
+        \hline
+        Gestione vendita prevendita & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R9F}{R9F}, \hyperlink{R14F}{R14F}, \hyperlink{R15F}{R15F}, \hyperlink{R23F}{R23F}, \hyperlink{R25F}{R25F} \\
+        \hline
+        Gestione entrata & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R8F}{R8F}, \hyperlink{R13F}{R13F}, \hyperlink{R14F}{R14F} \\
+        \hline
+        Gestione membri & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R10F}{R10F}, \hyperlink{R16F/NF}{R16F/NF} \\
+        \hline
+        Cambia codice accesso & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R17F}{R17F}  \\
+        \hline
+        Visualizzazione statistiche & Lettura dati, interazione con l'esterno & Semplice & \hyperlink{R10F}{R10F}  \\
+        \hline
+        Gestione eventi & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R10F}{R10F}, \hyperlink{R18F}{R18F}, \hyperlink{R20F}{R20F}, \hyperlink{R21F}{R21F} \\
+        \hline
+        Gestione tipologie prevendite & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R10F}{R10F}, \hyperlink{R19F}{R19F}, \hyperlink{R22F}{R22F} \\
+        \hline
+        Autenticazione & Gestione di dati, interazione con l'esterno & Semplice & \hyperlink{R2F}{R2F}, \hyperlink{R3F}{R3F} \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\newpage
+
+\subsubsection{Gestione Utente - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Tipologia utente & Semplice & Medio & Input & \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\subsubsection{Gestione dei log  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Record log & Semplice & Medio & Input & \\
+        \hline
+    \end{tabularx}
+\end{center}
 
 \end{document}
