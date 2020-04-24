@@ -239,7 +239,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 		\hline
 		Operazione & Comando richiesto al software gestionale da parte di un utente & \\
 		\hline
-		Login & Operazione per identificare un utente & Accesso utente \\
+		Login & Operazione per identificare e autenticare un utente & Accesso utente, Autenticazione \\
 		\hline
 		Timbratura & Operazione svolta da un cassiere svolta per validare una prevendita di un cliente & Convalida della prevendita \\
 		\hline
@@ -345,16 +345,17 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. Viene mostrata una schermata con le azioni possibili:\\
+	\textbf{Scenario principale} & 1. L'utente risulta già autenticato.\\
+	                             & 2. Viene mostrata una schermata con le azioni possibili:\\
 								 & \quad a. Cambia Password.\\
 								 & \quad b. Accedi staff.\\
 								 & \quad c. Crea staff.\\
-								 & 1b. Se l'utente è anche amministratore di sistema, vengono aggiunte delle scelte:\\
+								 & 2b. Se l'utente è anche amministratore di sistema, vengono aggiunte delle scelte:\\
 								 %& \quad d. Gestione log.\\
 								 & \quad e. Registrazione utente.\\
 								 %& \quad f. Sblocco utente.\\
-								 & 2. L'utente sceglie l'operazione desiderata.\\
-								 & 3. Il sistema cambia vista a seconda della scelta.\\
+								 & 3. L'utente sceglie l'operazione desiderata.\\
+								 & 4. Il sistema cambia vista a seconda della scelta.\\
 	\hline
 	\textbf{Scenari alternativi} & A) L'utente non è autenticato: \\
 								 & \quad 1. Notifica all'utente.\\
@@ -386,9 +387,10 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente, chiedendo informazioni per la registrazione.\\
-								 & 2. L'utente fornisce i dati all'amministratore.\\
-								 & 3. L'amministratore sceglie username e password iniziale per l'utente, utilizzando criteri di sicurezza.\\
+	\textbf{Scenario principale} & 1. L'amministratore di sistema è già autenticato.\\
+	                             & 2. L'amministratore si informa riguardo l'utente, chiedendo informazioni per la registrazione.\\
+								 & 3. L'utente fornisce i dati all'amministratore.\\
+								 & 4. L'amministratore sceglie username e password iniziale per l'utente, utilizzando criteri di sicurezza.\\
 	\hline
 	\textbf{Scenari alternativi} & A) Dati dell'utente da registrare in conflitto o non validi: \\
 								 & \quad 1. Notifica all'amministratore.\\
@@ -460,11 +462,12 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 		\hline
 		\textbf{Postcondizioni} &  \\
 		\hline
-		\textbf{Scenario principale} & 1. L'utente accede alla creazione staff. \\
-									 & 2. Il sistema fornisce una vista di creazione. \\
-									 & 3. L'utente inserisce i dati del nuovo staff. \\
-									 & 4. L'utente esegue l'operazione.\\
-									 & 5. Ritorno alla schermata precedente.\\
+		\textbf{Scenario principale} & 1. L'utente è già autenticato.\\
+		                             & 2. L'utente accede alla creazione staff. \\
+									 & 3. Il sistema fornisce una vista di creazione. \\
+									 & 4. L'utente inserisce i dati del nuovo staff. \\
+									 & 5. L'utente esegue l'operazione.\\
+									 & 6. Ritorno alla schermata precedente.\\
 		\hline
 		\textbf{Scenari alternativi} & A) L'utente ha già creato uno staff: \\
 									 & \quad 1. Notifica all'utente \\
@@ -494,11 +497,12 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'utente accede al cambio password. \\
-								 & 2. Il sistema fornisce una vista. \\
-								 & 3. L'utente inserisce i dati per il cambio di password. \\
-								 & 4. L'utente esegue l'operazione.\\
-								 & 5. Ritorno alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. L'utente è già autenticato.\\
+	                             & 2. L'utente accede al cambio password. \\
+								 & 3. Il sistema fornisce una vista. \\
+								 & 4. L'utente inserisce i dati per il cambio di password. \\
+								 & 5. L'utente esegue l'operazione.\\
+								 & 6. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -526,11 +530,12 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'utente accede alla schermata di accedi staff. \\
-								 & 2. Il sistema fornisce una vista. \\
-								 & 3. L'utente inserisce i dati per l'accesso allo staff. \\
-								 & 4. L'utente esegue l'operazione.\\
-								 & 5. Ritorno alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. L'utente è già autenticato.\\
+	                             & 2. L'utente accede alla schermata di accedi staff. \\
+								 & 3. Il sistema fornisce una vista. \\
+								 & 4. L'utente inserisce i dati per l'accesso allo staff. \\
+								 & 5. L'utente esegue l'operazione.\\
+								 & 6. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & A) L'utente è già membro dello staff:\\
 								 & \quad 1. Notifica all'utente.\\
@@ -564,20 +569,21 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} & \\
 	\hline
-	\textbf{Scenario principale} & 1. Viene mostrata una schermata con le azioni possibili:\\
+	\textbf{Scenario principale} & 1. Il membro è già autenticato.\\
+	                             & 2. Viene mostrata una schermata con le azioni possibili:\\
 								 & \quad a. Visualizza statistiche personali.\\
-								 & 1b. Se il membro è anche PR dello staff, vengono aggiunte delle scelte:\\
+								 & 2b. Se il membro è anche PR dello staff, vengono aggiunte delle scelte:\\
 								 & \quad b. Gestione vendita prevendita.\\
-								 & 1c. Se il membro è anche cassiere dello staff, vengono aggiunte delle scelte:\\
+								 & 2c. Se il membro è anche cassiere dello staff, vengono aggiunte delle scelte:\\
 								 & \quad c. Gestione entrata.\\
-								 & 1d. Se il membro è anche amministratore dello staff, vengono aggiunte delle scelte:\\
+								 & 2d. Se il membro è anche amministratore dello staff, vengono aggiunte delle scelte:\\
 								 & \quad d. Gestione membri.\\
 								 & \quad d. Cambia codice di accesso.\\
 								 & \quad d. Visualizzazione statistiche.\\
 								 & \quad d. Gestione eventi.\\
 								 & \quad d. Gestione tipologie prevendite.\\
-								 & 2. il membro sceglie l'operazione desiderata.\\
-								 & 3. Il sistema cambia vista a seconda della scelta.\\
+								 & 3. il membro sceglie l'operazione desiderata.\\
+								 & 4. Il sistema cambia vista a seconda della scelta.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -608,9 +614,10 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. Il membro accede alla schermata di vusualizzazione delle statistiche personali. \\
-								 & 2. Il sistema fornisce una vista con tutte le statistiche. \\
-								 & 3. Quando il membro ha finito la consultazione, ritorna alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. Il membro è già autenticato.\\
+	                             & 2. Il membro accede alla schermata di vusualizzazione delle statistiche personali.\\
+								 & 3. Il sistema fornisce una vista con tutte le statistiche. \\
+								 & 4. Quando il membro ha finito la consultazione, ritorna alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -638,15 +645,16 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. Il PR accede alla schermata di gestione prevenite. \\
-								 & 2. Il sistema fornisce una vista con le opzioni possibili. \\
-								 & 3. Il PR sceglie l'operazione:\\
+	\textbf{Scenario principale} & 1. Il PR è già autenticato.\\
+	                             & 2. Il PR accede alla schermata di gestione prevenite. \\
+								 & 3. Il sistema fornisce una vista con le opzioni possibili. \\
+								 & 4. Il PR sceglie l'operazione:\\
 								 & \quad a. Aggiungi prevendita.\\
 								 & \quad b. Annulla prevendita.\\
-								 & 4. Il PR inserisce i dati relativi all'operazione, consultando il cliente se necessario.\\
-								 & 5. Il PR esegue l'operazione.\\
-								 & 6bis. Nel caso di aggiungi prevendita si consegna al cliente il documento digitale.\\
-								 & 7. Ritorno alla schermata precedente.\\
+								 & 5. Il PR inserisce i dati relativi all'operazione, consultando il cliente se necessario.\\
+								 & 6. Il PR esegue l'operazione.\\
+								 & 7bis. Nel caso di aggiungi prevendita si consegna al cliente il documento digitale.\\
+								 & 8. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -674,12 +682,13 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. Il Cassiere accede alla schermata di gestione entrata. \\
-								 & 2. Il sistema fornisce una vista.\\
-								 & 3. Il Cassiere inserisce i dati relativi al documento digitale fornito dal cliente.\\
-								 & 4. Il Cassiere esegue l'operazione.\\
-								 & 5. Il Cassiere informa il cliente riguardo l'esito dell'entrata.\\
-								 & 6. Ritorno alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. Il Cassiere è già autenticato.\\
+	                             & 2. Il Cassiere accede alla schermata di gestione entrata. \\
+								 & 3. Il sistema fornisce una vista.\\
+								 & 4. Il Cassiere inserisce i dati relativi al documento digitale fornito dal cliente.\\
+								 & 5. Il Cassiere esegue l'operazione.\\
+								 & 6. Il Cassiere informa il cliente riguardo l'esito dell'entrata.\\
+								 & 7. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -708,11 +717,12 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore accede al cambio codice di accesso. \\
-								 & 2. Il sistema fornisce una vista. \\
-								 & 3. L'amministratore inserisce i dati per il cambio del codice. \\
-								 & 4. L'amministratore esegue l'operazione.\\
-								 & 5. Ritorno alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
+	                             & 2. L'amministratore accede al cambio codice di accesso. \\
+								 & 3. Il sistema fornisce una vista. \\
+								 & 4. L'amministratore inserisce i dati per il cambio del codice. \\
+								 & 5. L'amministratore esegue l'operazione.\\
+								 & 6. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -740,9 +750,10 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
-								 & 2. Il sistema fornisce una vista con tutte le statistiche. \\
-								 & 3. Quando l'amministratore ha finito la consultazione, ritorna alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
+	                             & 2. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 3. Il sistema fornisce una vista con tutte le statistiche. \\
+								 & 4. Quando l'amministratore ha finito la consultazione, ritorna alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -770,14 +781,15 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
-								 & 2. Il sistema fornisce una vista con le scelte: \\
+	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
+	                             & 2. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 3. Il sistema fornisce una vista con le scelte: \\
 								 & \quad a. Aggiungi evento.\\
 								 & \quad b. Modifica evento.\\
 								 & \quad c. Annulla evento.\\
-								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-								 & 4. L'amministratore esegue l'operazione.\\
-								 & 5. Ritorno alla schermata precedente.\\
+								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 5. L'amministratore esegue l'operazione.\\
+								 & 6. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -805,14 +817,15 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
-								 & 2. Il sistema fornisce una vista con le scelte: \\
+	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
+	                             & 2. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 3. Il sistema fornisce una vista con le scelte: \\
 								 & \quad a. Aggiungi tipologia evento.\\
 								 & \quad b. Modifica tipologia evento.\\
 								 & \quad c. Elimina tipologia evento.\\
-								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-								 & 4. L'amministratore esegue l'operazione.\\
-								 & 5. Ritorno alla schermata precedente.\\
+								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 5. L'amministratore esegue l'operazione.\\
+								 & 6. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -840,13 +853,14 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
-								 & 2. Il sistema fornisce una vista con le scelte: \\
+	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
+	                             & 2. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 3. Il sistema fornisce una vista con le scelte: \\
 								 & \quad a. Modifica ruoli membro.\\
 								 & \quad b. Rimuovi membro.\\
-								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-								 & 4. L'amministratore esegue l'operazione.\\
-								 & 5. Ritorno alla schermata precedente.\\
+								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 5. L'amministratore esegue l'operazione.\\
+								 & 6. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & A) L'amministratore si vuole rimuovere ma è l'unico amministratore rimasto nello staff: \\
 								 & \quad 1. Notifica all'utente. \\
@@ -1202,7 +1216,7 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 \begin{itemize}
     \item \textbf{REQUISITI FUNZIONALI}
     
-    \item \hypertarget{R26F}{R26F} - Creare un sistema di log per il tracciamento delle operazioni.
+    \item \hypertarget{R26F}{R26F} - Creare un sistema di log per il tracciamento delle operazioni automatico.
     \item \hypertarget{R27F}{R27F} - L'amministratore di sistema deve avere il pieno controllo dei log.
     \item \hypertarget{R28F}{R28F} - Creare un sistema per il bloccaggio dell'account dopo vari tentativi. L'amministratore di sistema ha l'autorizzazione a sbloccare l'account.
     
@@ -1214,11 +1228,10 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
     \item \hypertarget{R21NF}{R21NF} - I dati della comunicazione devono essere protetti.
     \item \hypertarget{R22NF}{R22NF} - I dati persistenti devono essere protetti.
     \item \hypertarget{R23NF}{R23NF} - Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
-    \item \hypertarget{R24NF}{R24NF} - Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
-    \item \hypertarget{R25NF}{R25NF} - Il sistema deve cercare di garantire la disponibilità del servizio.
+    \item \hypertarget{R24NF}{R24NF} - Il sistema deve cercare di garantire la disponibilità del servizio.
     %Sistema locale senza server remoto tramite server locale + wifi
-    \item \hypertarget{R26NF}{R26NF} - Il sistema deve essere strutturato in modo da essere replicabile localmente.
-    \item \hypertarget{R27NF}{R26NF} - Il sistema deve essere in grado di riconoscere prevendite contraffatte.
+    \item \hypertarget{R25NF}{R25NF} - Il sistema deve essere strutturato in modo da essere replicabile localmente.
+    \item \hypertarget{R26NF}{R26NF} - Il sistema deve essere in grado di riconoscere prevendite contraffatte.
     
     
 \end{itemize}
@@ -1272,12 +1285,12 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore di sistema sceglie una funzione: \\
+	\textbf{Scenario principale} & 1. L'amministratore di sistema è già autenticato.\\
+	                             & 2. L'amministratore di sistema sceglie una funzione: \\
 								 & \quad a. Aggiungi log \\
 								 & \quad b. Leggi log \\
-								 & \quad c. Cancella log \\
-								 & 2. L'amministratore di sistema esegue l'operazione.\\
-								 & 3. Ritorno alla schermata precedente.\\
+								 & 3. L'amministratore di sistema esegue l'operazione.\\
+								 & 4. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -1305,10 +1318,11 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         \textbf{Postcondizioni} &  \\
         \hline
-        \textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente.\\
-                                      & 2. L'utente si spiega di quanto accaduto con l'amministratore.\\
-                                      & 3. Se decide di sbloccarlo allora inserisce i dati nell'apposita vista.\\
-                                      & 4. L'amministratore esegue l'operazione e l'utente viene sbloccato.\\
+        \textbf{Scenario principale} & 1. L'amministratore di sistema è già autenticato.\\
+                                     & 2. L'amministratore si informa riguardo l'utente.\\
+                                     & 3. L'utente si spiega di quanto accaduto con l'amministratore.\\
+                                     & 4. Se decide di sbloccarlo allora inserisce i dati nell'apposita vista.\\
+                                     & 5. L'amministratore esegue l'operazione e l'utente viene sbloccato.\\
         \hline
         \textbf{Scenari alternativi} & \\
         \hline
@@ -1317,6 +1331,51 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \textbf{Punti aperti} & \\
         \hline
     \end{tabularx}
+\end{center}
+
+Nello scenario login ho aggiunto il requisito non funzionale
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Login \\
+	\hline
+	\textbf{Descrizione} & Autenticazione nel software gestionale \\
+	\hline
+	\textbf{Attori} & Utente \\
+	\hline
+	\textbf{Relazioni} & Cambia Password \\
+	\hline
+	\textbf{Precondizioni} & L'utente deve essere registato nel sistema \\
+	\hline
+	\textbf{Postcondizioni} & L'utente è autenticato nel sistema \\
+	\hline
+	\textbf{Scenario principale} & 1. Impostazione di una schermata per l'inserimento di username e password. \\
+								 & 2. L'utente inserisce i dati del proprio account. \\
+								 & 3. L'utente esegue l'operazione. \\
+								 & 4. Il sistema verifica le credenziali. \\
+								 & 5. Dopo l'autenticazione viene mostrata una schermata principale.\\
+	\hline
+	\textbf{Scenari alternativi} & A) L'utente sbaglia credenziali: \\
+								 & \quad 1. Notifica all'utente.\\
+								 & \quad 2. Ritorno alla schermata di login.\\
+								 & B) L'utente ha sbagliato troppe volte le credenziali: \\
+								 & \quad 1. Blocco dell'account.\\
+								 & \quad 2. Notifica all'utente.\\
+								 & \quad 3. Ritorno alla schermata di login.\\
+								 & C) L'utente ha la password di default impostata dall'amministratore di sistema:\\
+								 & \quad 1. Passaggio al cambio password.\\
+								 & D) L'utente ha l'account bloccato:\\
+								 & \quad 1. Notifica all'utente.\\
+								 & \quad 2. Ritorno alla schermata di login.\\
+								 & E) L'utente è gia autenticato:\\
+								 & \quad 1. Mostro la schermata principale.\\
+	\hline
+	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R20NF}{R20NF} \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
 \end{center}
 
 \newpage
@@ -1340,9 +1399,11 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         \hline
         %Gestione utente & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R11F}{R11F}\\
-        Gestione utente & Gestione dei dati, interazione con l'esterno & Complesso & \\
+        Gestione utente & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso & \\
         \hline
-        Gestione dei log & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R26F}{R26F}, \hyperlink{R27F}{R27F}\\
+        Lettura log & lettura dei dati, interazione con l'esterno & Semplice & \hyperlink{R26F}{R26F}, \hyperlink{R27F}{R27F}\\
+        \hline
+        Scrittura log & memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R26F}{R26F}\\
         \hline
         Sblocco utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R28F}{R28F}\\
         \hline
@@ -1355,7 +1416,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         Cambia password & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R3F}{R3F}, \hyperlink{R6F}{R6F} \\
         \hline
         %Gestione staff & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R10F}{R10F},  \\
-        Gestione staff & Gestione dei dati, interazione con l'esterno & Complesso &  \\
+        Gestione staff & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso &  \\
         \hline
         Visualizzazione statistiche personali & Lettura dati, interazione con l'esterno & Semplice &  \hyperlink{R24F}{R24F} \\
         \hline
@@ -1373,14 +1434,16 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         Gestione tipologie prevendite & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R10F}{R10F}, \hyperlink{R19F}{R19F}, \hyperlink{R22F}{R22F} \\
         \hline
-        Autenticazione & Gestione di dati, interazione con l'esterno & Semplice & \hyperlink{R2F}{R2F}, \hyperlink{R3F}{R3F} \\
+        Autenticazione & Lettura di dati, interazione con l'esterno & Semplice & \hyperlink{R2F}{R2F}, \hyperlink{R3F}{R3F} \\
         \hline
     \end{tabularx}
 \end{center}
 
 \newpage
 
-\subsubsection{Gestione Utente - Tabella Informazioni/Flusso}
+\subsubsection{Tabelle Informazioni/Flusso}
+
+\textbf{Gestione Utente - Tabella Informazioni/Flusso}
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
@@ -1388,12 +1451,13 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Tipologia utente & Semplice & Medio & Input & \\
+        %Da chiedere se da mettere
+        %Tipologia utente & Semplice & Alto & Input & Enumeratore: Utente normale o Amministratore di sistema \\
         \hline
     \end{tabularx}
 \end{center}
 
-\subsubsection{Gestione dei log  - Tabella Informazioni/Flusso}
+\textbf{Lettura log  - Tabella Informazioni/Flusso}
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
@@ -1401,9 +1465,261 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Record log & Semplice & Medio & Input & \\
+        Timestamp record & Semplice & Medio & Output & \\
+        \hline
+        Descrizione record & Semplice & Medio & Output & Non più di 256 caratteri \\
+        \hline
+        Livello di importanza record & Semplice & Medio & Output & Enumeratore: Basso, Medio, Alto\\
         \hline
     \end{tabularx}
 \end{center}
+
+\textbf{Scrittura log  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Timestamp record & Semplice & Medio & Input & \\
+        \hline
+        Descrizione record & Semplice & Medio & Input & Non più di 256 caratteri \\
+        \hline
+        Livello di importanza record & Semplice & Medio & Input & Enumeratore: Basso, Medio, Alto\\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Sblocco utente  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Informazioni per lo sblocco & Complesso & Medio & Input & \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Registrazione utente  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Nome & Semplice & Medio & Input & Non più di 100 caratteri\\
+        \hline
+        Cognome & Semplice & Medio & Input & Non più di 100 caratteri\\
+        \hline
+        Telefono & Semplice & Alto & Input & Non più di 20 caratteri\\
+        \hline
+        Username & Semplice & Alto & Input & Non più di 20 caratteri\\
+        \hline
+        Password & Semplice & Alto & Input & \hyperlink{R1NF}{R1NF}, non più di 50 caratteri\\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Crea staff  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Nome & Semplice & Basso & Input & Non più di 100 caratteri\\
+        \hline
+        Codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Accedi staff  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Nome & Semplice & Alto & Input & Non più di 100 caratteri\\
+        \hline
+        Codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Cambia password  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Vecchia password & Semplice & Alto & Input & \hyperlink{R1NF}{R1NF}, Non più di 50 caratteri\\
+        \hline
+        Nuova password & Semplice & Alto & Input & \hyperlink{R1NF}{R1NF}, Non più di 50 caratteri\\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione staff  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        %Ruolo & Semplce & Alto & Input & \hyperlink{R7F}{R7F} \\
+    \end{tabularx}
+\end{center}
+
+\textbf{Visualizzazione statistiche personali  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Entrate svolte & Complesso & Basso & Output & \\
+        \hline
+        Guadagni & Complesso & Basso & Output & \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione vendita prevendita  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Informazioni base cliente & Complesso & Medio & Input & \hyperlink{R25F}{R25F}\\
+        \hline
+        Prevendita & Complesso & Medio & Input & \hyperlink{R25F}{R25F}, \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R18NF}{R18NF}, \hyperlink{R26NF}{R26NF} \\
+        \hline
+        Documento digitale & Complesso & Medio & Output & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione entrata  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Informazioni base cliente & Complesso & Medio & Input & \hyperlink{R25F}{R25F}\\
+        \hline
+        Documento digitale & Complesso & Medio & Input & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione membri  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Informazioni membro & Complesso & Input & \hyperlink{R7F}{R7F}\\
+        \hline
+    \end{tabularx}
+\end{center}
+
+
+\textbf{Cambia codice accesso  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Vecchio codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
+        \hline
+        Nuovo codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
+        \hline
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Visualizzazione statistiche  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Entrate evento & Complesso & Basso & Output & \\
+        \hline
+        Guadagni evento & Complesso & Basso & Output & \\
+        \hline
+        Entrate membro & Complesso & Basso & Output & \\
+        \hline
+        Guadagni membro & Complesso & Basso & Output & \\
+        \hline
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione eventi  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Evento & Complesso & Medio & Input & \hyperlink{R20F}{R20F}, \hyperlink{R21F}{R21F} \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione tipologie prevendite  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Tipologia prevendita & Complesso & Input & \hyperlink{R22F}{R22F} \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Autenticazione  - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Username & Semplice & Alto & Input & Non più di 20 caratteri\\
+        \hline
+        Password & Semplice & Alto & Input & \hyperlink{R1NF}{R1NF}, non più di 50 caratteri\\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\subsection{Analisi dei vincoli}
 
 \end{document}
