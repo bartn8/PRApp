@@ -165,6 +165,8 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 	
 	\item \hypertarget{R19NF}{R19NF} - La timbratura può essere fatta solo una volta.
 	
+	\item \hypertarget{R20NF}{R20NF} - L'interfaccia utente deve garantire velocità d'utilizzo, soprattutto per il cassiere.
+	
 	%Requisiti rimossi o spostati nell'analisi del rischio ----------------------------------------
 	
 	%Se si verifica attacco freezing dell'account cambiare username.
@@ -651,6 +653,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & 4. Il PR sceglie l'operazione:\\
 								 & \quad a. Aggiungi prevendita.\\
 								 & \quad b. Annulla prevendita.\\
+								 & \quad c. Lista prevendite.\\
 								 & 5. Il PR inserisce i dati relativi all'operazione, consultando il cliente se necessario.\\
 								 & 6. Il PR esegue l'operazione.\\
 								 & 7bis. Nel caso di aggiungi prevendita si consegna al cliente il documento digitale.\\
@@ -684,11 +687,14 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 	\hline
 	\textbf{Scenario principale} & 1. Il Cassiere è già autenticato.\\
 	                             & 2. Il Cassiere accede alla schermata di gestione entrata. \\
-								 & 3. Il sistema fornisce una vista.\\
-								 & 4. Il Cassiere inserisce i dati relativi al documento digitale fornito dal cliente.\\
-								 & 5. Il Cassiere esegue l'operazione.\\
-								 & 6. Il Cassiere informa il cliente riguardo l'esito dell'entrata.\\
-								 & 7. Ritorno alla schermata precedente.\\
+								 & 3. Il sistema fornisce una vista con le opzioni disponibile.\\
+								 & 4. Il Cassiere sceglie l'operazione:\\
+								 & \quad a.Timbra entrata.\\
+								 & \quad b. Lista entrate.\\
+								 & 5. Il Cassiere inserisce i dati dell'operazione, consultando il cliente se necessario.\\
+								 & 6. Il cassiere esegue l'operazione.\\
+								 & 7. Il Cassiere informa il cliente riguardo l'esito dell'operazione, se necessario.\\
+								 & 8. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -1222,8 +1228,6 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
     
     \item \textbf{REQUISITI NON FUNZIONALI}
     
-    %Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
-    \item \hypertarget{R20NF}{R20NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
     %HTTPS
     \item \hypertarget{R21NF}{R21NF} - I dati della comunicazione devono essere protetti.
     \item \hypertarget{R22NF}{R22NF} - I dati persistenti devono essere protetti.
@@ -1232,7 +1236,8 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
     %Sistema locale senza server remoto tramite server locale + wifi
     \item \hypertarget{R25NF}{R25NF} - Il sistema deve essere strutturato in modo da essere replicabile localmente.
     \item \hypertarget{R26NF}{R26NF} - Il sistema deve essere in grado di riconoscere prevendite contraffatte.
-    
+    %Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
+    \item \hypertarget{R27NF}{R27NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
     
 \end{itemize}
 
@@ -1371,7 +1376,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
 								 & E) L'utente è gia autenticato:\\
 								 & \quad 1. Mostro la schermata principale.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R20NF}{R20NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R27NF}{R27NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -1401,9 +1406,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
         %Gestione utente & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R11F}{R11F}\\
         Gestione utente & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso & \\
         \hline
-        Lettura log & lettura dei dati, interazione con l'esterno & Semplice & \hyperlink{R26F}{R26F}, \hyperlink{R27F}{R27F}\\
+        Gestione log & gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R26F}{R26F}, \hyperlink{R27F}{R27F}\\
         \hline
-        Scrittura log & memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R26F}{R26F}\\
+        Scrittura log & memorizzazione di dati & Semplice & \hyperlink{R26F}{R26F}\\
         \hline
         Sblocco utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R28F}{R28F}\\
         \hline
@@ -1457,7 +1462,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \end{tabularx}
 \end{center}
 
-\textbf{Lettura log  - Tabella Informazioni/Flusso}
+\textbf{Gestione log  - Tabella Informazioni/Flusso}
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
@@ -1465,11 +1470,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Timestamp record & Semplice & Medio & Output & \\
+        Record d'inserimento & Complesso & Medio & Input & \\
         \hline
-        Descrizione record & Semplice & Medio & Output & Non più di 256 caratteri \\
-        \hline
-        Livello di importanza record & Semplice & Medio & Output & Enumeratore: Basso, Medio, Alto\\
+        Record di lettura & Complesso & Medio & Output & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1548,7 +1551,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Nome & Semplice & Alto & Input & Non più di 100 caratteri\\
+        Nome & Semplice & Basso & Input & Non più di 100 caratteri\\
         \hline
         Codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
         \hline
@@ -1626,6 +1629,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         Documento digitale & Complesso & Medio & Input & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
         \hline
+        Prevendita & Complesso & Medio & Output & \\
+        \hline
     \end{tabularx}
 \end{center}
 
@@ -1637,7 +1642,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Informazioni membro & Complesso & Input & \hyperlink{R7F}{R7F}\\
+        Informazioni membro & Complesso & Alto & Input & \hyperlink{R7F}{R7F}\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1650,6 +1655,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
+        \hline
+        Nome dello staff & Semplice & Basso & Input & \\
         \hline
         Vecchio codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
         \hline
@@ -1700,7 +1707,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Tipologia prevendita & Complesso & Input & \hyperlink{R22F}{R22F} \\
+        Tipologia prevendita & Complesso & Alto & Input & \hyperlink{R22F}{R22F} \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1721,5 +1728,315 @@ Nello scenario login ho aggiunto il requisito non funzionale
 \end{center}
 
 \subsection{Analisi dei vincoli}
+\subsubsection{Tabella dei vincoli}
+
+
+%\hyperlink{R21NF}{R21NF} I dati della comunicazione devono essere protetti.
+%\hyperlink{R22NF}{R22NF} I dati persistenti devono essere protetti
+%\hyperlink{R23NF}{R23NF} Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Requisito} & \textbf{Categoria} & \textbf{Impatto} & \textbf{Funzionalità}\\
+    \hline
+    \hline
+    Facile navigabilità delle schermate (\hyperlink{R20NF}{R20NF} & Usabilità & Cercare di migliorare & Gestione vendite prevendita,  Gestione entrata, Autenticazione\\
+    \hline
+    Protezione dei dati (\hyperlink{R21NF}{R21NF}, \hyperlink{R22NF}{R22NF}) & Sicurezza & Peggiorano tempo di risposta, migliorano la privacy dei dati & Gestione log, Scrittura log, Sblocco utente, Registrazione utente, Crea staff, Accedi staff, Cambia password, Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendite, Autenticazione\\
+    \hline
+    Controllo accessi (\hyperlink{R23NF}{R23NF}) & Sicurezza & Peggiorano tempo di risposta e usabilità, migliorano la privacy dei dati & Gestione utente, Gestione staff\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\newpage
+
+\subsection{Analisi delle interazioni}
+\subsubsection{Tabella delle maschere}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Maschera} & \textbf{Informazioni} & \textbf{Funzionalità}\\
+    \hline
+    \hline
+    View Autenticazione & username, password & Autenticazione\\
+    \hline
+    Home Gestione utente & navigabilità delle funzioni utente e amministratore di sistema & Gestione utente\\
+    \hline
+    Home Gestione log & navigabilità delle funzioni gestione log: aggiungi log e leggi log & Gestione log\\
+    \hline
+    View Aggiungi log & timestamp, descrizione, livello & Gestione log\\
+    \hline
+    View Leggi log & timestamp, descrizione, livello & Gestione log\\
+    \hline
+    View Sblocco utente & dati utente da sbloccare & Sblocco utente \\
+    \hline
+    View Registrazione utente & nome, cognome, telefono, username, password & Registrazione utente\\
+    \hline
+    View Crea staff & nome, codice di accesso & Crea staff\\
+    \hline
+    View Accedi staff & nome, codice di accesso & Accedi staff\\
+    \hline
+    View Cambia password & vecchia password, nuova password & Cambia password\\
+    \hline
+    Home Gestione staff & consente la navigabilità delle funzioni del membro, PR, cassiere e amministratore & Gestione staff\\
+    \hline
+    View Visualizzazione statistiche personali & entrate svolte, guadagni, filtri dei dati per evento, staff e totale & Visualizzazione statistiche personali\\
+    \hline
+    Home Gestione vendita prevendita & navigabilità tra le funzioni del PR & Gestione vendita prevendita\\
+    \hline
+    View Aggiungi prevendita & informazioni cliente, evento prevendita, tipologia prenvendita, documento finale & Gestione vendita prevendita\\
+    \hline
+    View Lista prevendite & informazioni cliente, evento e tipologia, filtri in base al cliente e all'evento & Gestione vendita prevendita\\
+    \hline
+    View Annulla prevendita & informazioni prevendita per l'annullamento & Gestionve vendita prevendita\\
+    \hline
+    Home Gestione entrata & fornisce la navigabilità tra le funzioni del Cassiere & Gestione entrata\\
+    \hline
+    View Timbra entrata & documento digitale & Gestione entrata\\
+    \hline
+    View Lista entrate & entrata, filtri per evento, staff & Gestione entrata\\
+    Home gestione membri & fornisce la navigabilità tra le funzioni di gestione dei membri da parte dell'amministratore & Gestione membri\\
+    \hline
+    View Modifica ruoli membro & informazioni del membro da modficare, nuovi ruoli & Gestione membri\\
+    \hline
+    View Rimuovi membro & informazioni del membro da eliminare & Gestione membri\\
+    \hline
+    View Cambia codice di accesso & nome staff, vecchio codice, nuovo codice & Cambia codice accesso\\
+    \hline
+    View Visualizzazione statistiche & informazioni membro, entrate effettuate, guadagni, informazioni evento, entrate evento, guadagni evento, filtro per membro o per evento & Visualizzazione statistiche\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Maschera} & \textbf{Informazioni} & \textbf{Funzionalità}\\
+    \hline
+    \hline
+    Home Gestione eventi & fornisce la navigabilità tra le funzioni di gestione eventi da parte dell'amministratore & Gestione eventi \\
+    \hline
+    View Aggiungi evento & nome, descrizione, periodo temporale e luogo di svolgimento & Gestione eventi\\
+    \hline
+    View Modifica evento & informazioni dell'evento da modificare, modifiche da effettuare & Gestione eventi\\
+    \hline
+    View Annulla evento & informazioni dell'evento da annullare & Gestione eventi\\
+    \hline
+    Home Gestione tipologie prevendite & fornisce la navigabilità tra le funzioni di gestione tipologie prevendite da parte dell'amministratore & Gestione tipologie prevendite \\
+    \hline
+    View Aggiungi tipologia prevendita & nome, descrizione, periodo temporale di vendita e prezzo & Gestione tipologie prevendite\\
+    \hline
+    View Modifica tipologia prevendita & informazioni della tipologia prevendita da modificare, modifiche da effettuare & Gestione tipologie prevendite\\
+    \hline
+    View Elimina tipologia prevendita & informazioni della tipologia prevendita da eliminare & Gestione tipologie prevendite\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\newpage
+
+\subsection{Analisi dei ruoli e responsabilità}
+\subsubsection{Tabella dei ruoli}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \hline
+    \textbf{Ruolo} & \textbf{Responsabilità} & \textbf{Maschere} & \textbf{Riservatezza} & \textbf{Numerosità}\\
+    \hline
+    \hline
+    Utente & Può creare uno staff, e accedere ad altri staff. & View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password & Alto grado di riservatezza & Il numero può essere gestito dall'amministratore di sistema, al più è limitato dalle risorse del sistema \\ 
+    \hline
+    Amministratore di sistema & Può fare tutte le operazioni di un utente e in più gestisce il log, lo sblocco di utenti bloccati e la registrazione di un nuovo utente & View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password, Home gestione log, View Aggiungi log, View Leggi Log, View Sblocco utente, View Registrazione utente & Massimo grado di riservatezza & per ogni installazione software è sufficiente un amministratore di sistema\\
+    \hline
+    Membro di uno staff & Può ricavare informazioni sullo staff, può leggere le statistiche ad esso attribuite. & Home gestione staff, View Visualizzazione statistiche personali & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema \\
+    \hline
+
+    \end{tabularx}
+\end{center}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \hline
+    \textbf{Ruolo} & \textbf{Responsabilità} & \textbf{Maschere} & \textbf{Riservatezza} & \textbf{Numerosità}\\
+    \hline
+    \hline
+    Cassiere di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce le entrate di un evento. & Home gestione staff, View Visualizzazione statistiche personali, Home Gestione entrata, View Timbra entrata, View lista entrate & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    \hline
+    PR di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce la vendita di prevendite & Home gestione staff, View Visualizzazione statistiche personali, Home Gestione vendita prevendita, View Aggiungi prevendita, View Lista prevendite, View Annulla prevendita & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    \hline
+    Amministratore di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce lo staff & Home gestione staff, View Visualizzazione statistiche personali, Home Gestione membri, View Modifica ruoli membro, View Rimuovi membro, View Cambia codice di accesso, View Visualizzazione statistiche, Home Gestione eventi, View Aggiungi evento, View Modifica evento, View Annulla evento, Home gestione tipologie prevendite, View Aggiungi tipologia prevendita, View modifica tipologia prevendita, View elimina tipologia prevendita & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\newpage
+
+\subsubsection{Tabelle Ruolo-Informazioni}
+
+\textbf{Utente: Tabella Ruolo-Informazioni}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|}
+    \hline
+    \textbf{Informazione} & \textbf{Tipo di accesso} \\
+    \hline
+    \hline
+    Dati personali & Lettura\\
+    \hline
+    Password personale & Scrittura\\
+    \hline
+    Staff & Lettura/Scrittura\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Amministratore di sistema: Tabella Ruolo-Informazioni}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|}
+    \hline
+    \textbf{Informazione} & \textbf{Tipo di accesso} \\
+    \hline
+    \hline
+    Dati personali & Lettura\\
+    \hline
+    Password personale & Scrittura\\
+    \hline
+    Staff & Lettura/Scrittura\\
+    \hline
+    Utente & Lettura/Scrittura\\
+    \hline
+    Log & Lettura/Scrittura\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Membro di uno staff: Tabella Ruolo-Informazioni}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|}
+    \hline
+    \textbf{Informazione} & \textbf{Tipo di accesso} \\
+    \hline
+    \hline
+    Dati personali & Lettura\\
+    \hline
+    Informazioni sullo staff & Lettura\\
+    \hline
+    Statistiche personali & Lettura\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Cassiere staff: Tabella Ruolo-Informazioni}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|}
+    \hline
+    \textbf{Informazione} & \textbf{Tipo di accesso} \\
+    \hline
+    \hline
+    Dati personali & Lettura\\
+    \hline
+    Informazioni sullo staff & Lettura\\
+    \hline
+    Statistiche personali & Lettura\\
+    \hline
+    Prevendite & Lettura\\
+    \hline
+    Entrate & Lettura/Scrittura\\
+    \hline
+    Tipologie prevendita & Lettura\\
+    \hline
+    Evento & Lettura\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{PR di uno staff: Tabella Ruolo-Informazioni}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|}
+    \hline
+    \textbf{Informazione} & \textbf{Tipo di accesso} \\
+    \hline
+    \hline
+    Dati personali & Lettura\\
+    \hline
+    Informazioni sullo staff & Lettura\\
+    \hline
+    Statistiche personali & Lettura\\
+    \hline
+    Prevendite & Lettura/Scrittura\\
+    \hline
+    Tipologie prevendita & Lettura\\
+    \hline
+    Evento & Lettura\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Amministratore di uno staff: Tabella Ruolo-Informazioni}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|}
+    \hline
+    \textbf{Informazione} & \textbf{Tipo di accesso} \\
+    \hline
+    \hline
+    Dati personali & Lettura\\
+    \hline
+    Informazioni sullo staff & Lettura\\
+    \hline
+    Statistiche personali & Lettura\\
+    \hline
+    Evento & Lettura/Scrittura\\
+    \hline
+    Tipologie Prevendite & Lettura/Scrittura\\
+    \hline
+    Statistiche & Lettura\\
+    \hline
+    Codice di accesso & Scrittura\\
+    \hline
+    Membri dello staff & Lettura/Scrittura\\
+    \hline
+    Ruoli di un membro & Lettura/Scrittura\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\newpage
+
+\subsection{Scomposizione del problema}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|}
+    \hline
+    \textbf{Funzionalità} & \textbf{Scomposizione} \\
+    \hline
+    \hline
+    Gestione utente & Crea staff, Accedi staff, Cambia password, Gestione log, Sblocco utente, Registrazione utente\\
+    \hline
+    Gestione log & Leggi log, Aggiungi log\\
+    \hline
+    Gestione Staff & Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendita\\
+    \hline
+    Gestione vendita prevendita & Aggiungi prevendita, Lista prevendite, Annulla prevendita\\
+    \hline
+    Gestione entrata & Timbra entrata, Lista entrate\\
+    \hline
+    Gestione membri & Modifica ruoli membro, Rimuovi membro\\
+    \hline
+    Gestione eventi & Aggiungi evento, Modifica evento, Annulla evento\\
+    \hline
+    Gestione tipologie prevendita & Aggiungi tipologia prevendita, Modifica tipologia prevendita, Rimuovi tipologia prevendita\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+%TODO: tabelle sotto funzionalità
 
 \end{document}
