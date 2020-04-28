@@ -793,6 +793,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & \quad a. Aggiungi evento.\\
 								 & \quad b. Modifica evento.\\
 								 & \quad c. Annulla evento.\\
+								 & \quad d. Lista eventi.\\
 								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
 								 & 5. L'amministratore esegue l'operazione.\\
 								 & 6. Ritorno alla schermata precedente.\\
@@ -829,6 +830,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & \quad a. Aggiungi tipologia evento.\\
 								 & \quad b. Modifica tipologia evento.\\
 								 & \quad c. Elimina tipologia evento.\\
+								 & \quad d. Lista tipologie evento.\\
 								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
 								 & 5. L'amministratore esegue l'operazione.\\
 								 & 6. Ritorno alla schermata precedente.\\
@@ -864,6 +866,7 @@ Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concet
 								 & 3. Il sistema fornisce una vista con le scelte: \\
 								 & \quad a. Modifica ruoli membro.\\
 								 & \quad b. Rimuovi membro.\\
+								 & \quad c. Lista membri.\\
 								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
 								 & 5. L'amministratore esegue l'operazione.\\
 								 & 6. Ritorno alla schermata precedente.\\
@@ -1798,7 +1801,10 @@ Nello scenario login ho aggiunto il requisito non funzionale
     View Timbra entrata & documento digitale & Gestione entrata\\
     \hline
     View Lista entrate & entrata, filtri per evento, staff & Gestione entrata\\
+    \hline
     Home gestione membri & fornisce la navigabilità tra le funzioni di gestione dei membri da parte dell'amministratore & Gestione membri\\
+    \hline
+    View lista membri & informazioni sui membri & Gestione membri\\
     \hline
     View Modifica ruoli membro & informazioni del membro da modficare, nuovi ruoli & Gestione membri\\
     \hline
@@ -1821,6 +1827,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     View Aggiungi evento & nome, descrizione, periodo temporale e luogo di svolgimento & Gestione eventi\\
     \hline
+    View Lista eventi & nome, descrizione, periodo temporale e luogo di svolgimento & Gestione eventi\\
+    \hline
     View Modifica evento & informazioni dell'evento da modificare, modifiche da effettuare & Gestione eventi\\
     \hline
     View Annulla evento & informazioni dell'evento da annullare & Gestione eventi\\
@@ -1829,6 +1837,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     View Aggiungi tipologia prevendita & nome, descrizione, periodo temporale di vendita e prezzo & Gestione tipologie prevendite\\
     \hline
+    View Lista tipologie prevendite & nome, descrizione, periodo temporale di vendita e prezzo & Gestione tipologie prevendite\\
     View Modifica tipologia prevendita & informazioni della tipologia prevendita da modificare, modifiche da effettuare & Gestione tipologie prevendite\\
     \hline
     View Elimina tipologia prevendita & informazioni della tipologia prevendita da eliminare & Gestione tipologie prevendite\\
@@ -1841,33 +1850,24 @@ Nello scenario login ho aggiunto il requisito non funzionale
 \subsection{Analisi dei ruoli e responsabilità}
 \subsubsection{Tabella dei ruoli}
 
-\begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
-    \hline
-    \textbf{Ruolo} & \textbf{Responsabilità} & \textbf{Maschere} & \textbf{Riservatezza} & \textbf{Numerosità}\\
-    \hline
-    \hline
-    Utente & Può creare uno staff, e accedere ad altri staff. & View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password & Alto grado di riservatezza & Il numero può essere gestito dall'amministratore di sistema, al più è limitato dalle risorse del sistema \\ 
-    \hline
-    Amministratore di sistema & Può fare tutte le operazioni di un utente e in più gestisce il log, lo sblocco di utenti bloccati e la registrazione di un nuovo utente & View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password, Home gestione log, View Aggiungi log, View Leggi Log, View Sblocco utente, View Registrazione utente & Massimo grado di riservatezza & per ogni installazione software è sufficiente un amministratore di sistema\\
-    \hline
-    Membro di uno staff & Può ricavare informazioni sullo staff, può leggere le statistiche ad esso attribuite. & Home gestione staff, View Visualizzazione statistiche personali & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema \\
-    \hline
-
-    \end{tabularx}
-\end{center}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|X|}
     \hline
-    \textbf{Ruolo} & \textbf{Responsabilità} & \textbf{Maschere} & \textbf{Riservatezza} & \textbf{Numerosità}\\
+    \textbf{Ruolo} & \textbf{Responsabilità} & \mc{2}{\textbf{Maschere}} & \textbf{Riservatezza} & \textbf{Numerosità}\\
     \hline
     \hline
-    Cassiere di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce le entrate di un evento. & Home gestione staff, View Visualizzazione statistiche personali, Home Gestione entrata, View Timbra entrata, View lista entrate & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    Utente & Può creare uno staff, e accedere ad altri staff. & \mc{2}{View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password} & Alto grado di riservatezza & Il numero può essere gestito dall'amministratore di sistema, al più è limitato dalle risorse del sistema \\ 
     \hline
-    PR di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce la vendita di prevendite & Home gestione staff, View Visualizzazione statistiche personali, Home Gestione vendita prevendita, View Aggiungi prevendita, View Lista prevendite, View Annulla prevendita & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    Amministratore di sistema & Può fare tutte le operazioni di un utente e in più gestisce il log, lo sblocco di utenti bloccati e la registrazione di un nuovo utente & \mc{2}{View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password, Home gestione log, View Aggiungi log, View Leggi Log, View Sblocco utente, View Registrazione utente} & Massimo grado di riservatezza & per ogni installazione software è sufficiente un amministratore di sistema\\
     \hline
-    Amministratore di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce lo staff & Home gestione staff, View Visualizzazione statistiche personali, Home Gestione membri, View Modifica ruoli membro, View Rimuovi membro, View Cambia codice di accesso, View Visualizzazione statistiche, Home Gestione eventi, View Aggiungi evento, View Modifica evento, View Annulla evento, Home gestione tipologie prevendite, View Aggiungi tipologia prevendita, View modifica tipologia prevendita, View elimina tipologia prevendita & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    Membro di uno staff & Può ricavare informazioni sullo staff, può leggere le statistiche ad esso attribuite. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema \\
+    \hline
+    Cassiere di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce le entrate di un evento. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione entrata, View Timbra entrata, View lista entrate} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    \hline
+    PR di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce la vendita di prevendite & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione vendita prevendita, View Aggiungi prevendita, View Lista prevendite, View Annulla prevendita} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    \hline
+    Amministratore di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce lo staff & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione membri, View lista membri, View Modifica ruoli membro, View Rimuovi membro, View Cambia codice di accesso, View Visualizzazione statistiche, Home Gestione eventi, View Aggiungi evento, View lista eventi, View Modifica evento, View Annulla evento, Home gestione tipologie prevendite, View Aggiungi tipologia prevendita, View lista tipologie prevendite, View modifica tipologia prevendita, View elimina tipologia prevendita} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2022,21 +2022,140 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     Gestione log & Leggi log, Aggiungi log\\
     \hline
-    Gestione Staff & Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendita\\
+    Gestione staff & Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendita\\
     \hline
     Gestione vendita prevendita & Aggiungi prevendita, Lista prevendite, Annulla prevendita\\
     \hline
     Gestione entrata & Timbra entrata, Lista entrate\\
     \hline
-    Gestione membri & Modifica ruoli membro, Rimuovi membro\\
+    Gestione membri & Lista membri, Modifica ruoli membro, Rimuovi membro\\
     \hline
-    Gestione eventi & Aggiungi evento, Modifica evento, Annulla evento\\
+    Gestione eventi & Aggiungi evento, Lista eventi, Modifica evento, Annulla evento\\
     \hline
-    Gestione tipologie prevendita & Aggiungi tipologia prevendita, Modifica tipologia prevendita, Rimuovi tipologia prevendita\\
+    Gestione tipologie prevendita & Aggiungi tipologia prevendita, Lista tipologie prevendita, Modifica tipologia prevendita, Rimuovi tipologia prevendita\\
     \hline
     \end{tabularx}
 \end{center}
 
-%TODO: tabelle sotto funzionalità
+
+\textbf{Gestione utente: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Registrazione utente & Sblocco utente & Si può sbloccare un utente solo se è registrato & username\\
+    \hline
+    Crea staff & Accedi staff & Si può accedere ad uno staff solo se è stato creato & nome staff\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione log: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Aggiungi log & Leggi log & Si può leggere un record solo se è stato aggiunto & record\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione staff: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Gestione vendita prevendita & Gestione eventi & La gestione vendita prevendita deve poter leggere gli eventi per inserirlo nella prevendita & eventi\\
+    \hline
+    Gestione vendita prevendita & Gestione tipologie prevendita & La gestione vendita prevendita deve poter leggere le tipologie prevendita per l'associazione alla prevendita & tipologie prevendita\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione vendita prevendita: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Aggiungi prevendita & Lista prevendite & La lista delle prevendite è condizionata dalle prevendite aggiunte & prevendita\\
+    \hline
+    Aggiungi prevendita & Annulla prevendita & Si può annullare una prevendita solo se è stata aggiunta & prevendita\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione entrata: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Timbra Entrata & Lista entrate & La lista delle entrate è condizionata dalle entrate aggiunte & entrata\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+%\textbf{Gestione membri: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Lista membri & Rimuovi membro & Posso eliminare un membro solo se fa parte della lista, cioè dello staff & membro\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione eventi: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Aggiungi evento & Lista eventi & La lista delle prevendite è condizionata dalle prevendite aggiunte & prevendita\\
+    \hline
+    Aggiungi prevendita & Annulla prevendita & Si può annullare una prevendita solo se è stata aggiunta & prevendita\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione tipologie prevendita: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Aggiungi tipologia prevendita & Lista tipologie prevendita & La lista delle tipologie prevendita è condizionata dalle tipologie prevendita aggiunte & tipologia prevendita\\
+    \hline
+    Aggiungi tipologie prevendita & Annulla tipologie prevendita & Si può annullare una tipologie prevendita solo se è stata aggiunta & tipologia prevendita\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\newpage
+
+\subsection{Creazione del modello del dominio}
+
+%TODO: da fare il disegnino UML
 
 \end{document}
