@@ -41,12 +41,7 @@
 
 \section{Abstract}
 
-Il progetto riguarda la creazione di un applicativo software gestionale per prevendite elettroniche.\\
-Abbiamo pensato il software per un gruppo di amici che organizzano feste, con obiettivi cardine l'abbattimento di costi, l'ottimizzazione dell'entrata dei partecipanti all'evento e una semplificazione dei conti di bilancio.\\
-L'idea di fondo è di utilizzare, come sostitutivo alla prevendita cartacea, un codice QR in grado di far entrare il cliente dopo relativo check all'entrata.\\
-Il risparmio economico ottenuto è ovviamente importante in confronto alla vendita tradizionale. Tuttavia bisogna tenere in conto dei problemi tecnologici che si possono verificare durante la vendita e l'entrata: problemi di connessione Internet, incompatibilità dei dispositivi dei clienti, training del personale addetto alle entrate, eccetera.\\
-Viene gestito oltre alle prevendite e relatvi clienti, anche l'organizzazione e i vari membri dell'organizzazione, con divisione dei ruoli.\\
-Per facilitare i conti di bilancio è disponibile una sezione in cui è possibile ricavare statistiche sull'andamento dell'evento.
+Il progetto riguarda la creazione di un applicativo software gestionale per prevendite elettroniche.\\Abbiamo pensato il software per un gruppo di amici che organizzano feste, con obiettivi cardine l'abbattimento di costi, l'ottimizzazione dell'entrata dei partecipanti all'evento e una semplificazione dei conti di bilancio.\\L'idea di fondo è di utilizzare, come sostitutivo alla prevendita cartacea, un codice QR in grado di far entrare il cliente dopo relativo check all'entrata.\\Il risparmio economico ottenuto è ovviamente importante in confronto alla vendita tradizionale. Tuttavia bisogna tenere in conto dei problemi tecnologici che si possono verificare durante la vendita e l'entrata: problemi di connessione Internet, incompatibilità dei dispositivi dei clienti, training del personale addetto alle entrate, eccetera.\\Viene gestito oltre alle prevendite e relatvi clienti, anche l'organizzazione e i vari membri dell'organizzazione, con divisione dei ruoli.\\Per facilitare i conti di bilancio è disponibile una sezione in cui è possibile ricavare statistiche sull'andamento dell'evento.
 
 \newpage
 
@@ -237,7 +232,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
         \hline
 		Statistiche & Informazioni di carattere gestionale, riguardo ad un evento o a un membro dello staff & \\
 		\hline
-		Documento digitale & Si tratta di una risorsa digitale, reperibile dal cliente, che serve a identificare una prevendita venduta & \\
+		Documento digitale & Si tratta di una risorsa digitale, consegnata al cliente, che serve a identificare una prevendita venduta & \\
 		\hline
 		Operazione & Comando richiesto al software gestionale da parte di un utente & \\
 		\hline
@@ -276,9 +271,7 @@ Per facilitare i conti di bilancio è disponibile una sezione in cui è possibil
 
 \includegraphics[scale=0.9]{use_cases.png}
 
-L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tutti i servizi forniti agli attori.
-Con le frecce \textcolor{violet}{viola} abbiamo voluto evidenziare la maggior parte degli scenari che estendono la gestione degli utenti o dello staff.\\
-Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.    
+L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tutti i servizi forniti agli attori.\\Con le frecce \textcolor{violet}{viola} abbiamo voluto evidenziare la maggior parte degli scenari che estendono la gestione degli utenti o dello staff.\\Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.    
 
 \newpage
 
@@ -2078,6 +2071,10 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     Gestione vendita prevendita & Gestione tipologie prevendita & La gestione vendita prevendita deve poter leggere le tipologie prevendita per l'associazione alla prevendita & tipologie prevendita\\
     \hline
+    Gestione vendita prevendita & Gestione entrata & Non posso annullare una prevendita se è già stata usata & prevendita\\
+    \hline
+    Gestione tipologie prevendita & Gestione eventi & Non posso creare una tipologia prevendita con un periodo di vendita durante o dopo l'evento (\hyperlink{R8NF}{R8NF}) & evento\\
+    \hline
     \end{tabularx}
 \end{center}
 
@@ -2109,7 +2106,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \end{tabularx}
 \end{center}
 
-%\textbf{Gestione membri: Tabella Sotto-Funzionalità}
+\textbf{Gestione membri: Tabella Sotto-Funzionalità}
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|}
@@ -2156,6 +2153,17 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \subsection{Creazione del modello del dominio}
 
-%TODO: da fare il disegnino UML
+Analizzando il vocabolario si evidenzia il privilegio dell'utente che può essere normale o amministratore di sistema, i ruoli di un membro che possono essere cassiere, pr o amministratore.\\Dall'analisi del vocabolario, rivisto dopo l'analisi di sicurezza, si evidenzia anche il log, con i livelli di importanza: basso, medio, alto.\\\textbf{Qui sotto il modello del dominio:}\\
+
+%TODO: Chiedere al prof se i versi delle molteplicità vanno bene   
+%TODO: Chiedere anche per le operazioni
+
+\includegraphics[scale=0.68]{modello_dominio.png}
+
+\newpage
+
+\subsection{Architettura logica}
+
+
 
 \end{document}
