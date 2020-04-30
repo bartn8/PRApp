@@ -7,6 +7,7 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{multirow}
+\usepackage{float}
 
 \hypersetup{
     colorlinks=true,
@@ -269,7 +270,15 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 %Gestione eventi: aggiungi evento, modifica evento, annulla evento
 %Gestione tipologie prevendite: aggiungi tipologia prevendita, modifica tipologia prevendita, elimina tipologia prevendita.
 
-\includegraphics[scale=0.9]{use_cases.png}
+%\begin{center}
+%    \includegraphics[scale=0.9]{use_cases.png}
+%\end{center}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{use_cases.png}
+    \centering
+    \caption{use\_cases.vsdx}
+\end{figure}
 
 L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tutti i servizi forniti agli attori.\\Con le frecce \textcolor{violet}{viola} abbiamo voluto evidenziare la maggior parte degli scenari che estendono la gestione degli utenti o dello staff.\\Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.    
 
@@ -972,7 +981,15 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 
 \subsubsection{Security Use Case e Misuse Case}
 
-\includegraphics[scale=0.73]{security_use_cases_misuse_cases.png}
+%\begin{center}
+%    \includegraphics[scale=0.73]{security_use_cases_misuse_cases.png}
+%\end{center}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.73]{security_use_cases_misuse_cases.png}
+    \centering
+    \caption{security\_use\_cases\_misuse\_cases.vsdx}
+\end{figure}
 
 \newpage
 
@@ -1260,7 +1277,15 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 
 \subsubsection{Casi d'uso aggiornati}
 
-\includegraphics[scale=0.9]{use_cases_aggiornato.png}
+%\begin{center}
+%    \includegraphics[scale=0.9]{use_cases_aggiornato.png}
+%\end{center}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{use_cases_aggiornato.png}
+    \centering
+    \caption{use\_cases\_aggiornato.vsdx}
+\end{figure}
 
 Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'uso sono associati ad un amministratore di sistema.
 
@@ -1444,6 +1469,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \subsubsection{Tabelle Informazioni/Flusso}
 
+%TODO: rivedere le tabelle di flusso
+
 \textbf{Gestione Utente - Tabella Informazioni/Flusso}
 
 \begin{center}
@@ -1467,8 +1494,16 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         \hline
         Record d'inserimento & Complesso & Medio & Input & \\
+        \textbf{Composto da:} & & & & \\
+        Timestamp & Semplice & Medio & Input & \\
+        Descrizione & Semplice & Medio & Input & Non più di 256 caratteri \\
+        Livello di importanza & Semplice & Medio & Input & Enumeratore: Basso, Medio, Alto\\
         \hline
         Record di lettura & Complesso & Medio & Output & \\
+        \textbf{Composto da:} & & & & \\
+        Timestamp & Semplice & Medio & Output & \\
+        Descrizione & Semplice & Medio & Output & Non più di 256 caratteri \\
+        Livello di importanza & Semplice & Medio & Output & Enumeratore: Basso, Medio, Alto\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1481,11 +1516,11 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Timestamp record & Semplice & Medio & Input & \\
-        \hline
-        Descrizione record & Semplice & Medio & Input & Non più di 256 caratteri \\
-        \hline
-        Livello di importanza record & Semplice & Medio & Input & Enumeratore: Basso, Medio, Alto\\
+        Record d'inserimento & Complesso & Medio & Input & \\
+        \textbf{Composto da:} & & & & \\
+        Timestamp & Semplice & Medio & Input & \\
+        Descrizione & Semplice & Medio & Input & Non più di 256 caratteri \\
+        Livello di importanza & Semplice & Medio & Input & Enumeratore: Basso, Medio, Alto\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1498,7 +1533,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Informazioni per lo sblocco & Complesso & Medio & Input & \\
+        Informazioni per lo sblocco & Semplice & Medio & Input & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1583,6 +1618,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \textbf{Visualizzazione statistiche personali  - Tabella Informazioni/Flusso}
 
+%TODO: Da chiedere per i filtri.
+
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
         \hline
@@ -1590,8 +1627,14 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         \hline
         Entrate svolte & Complesso & Basso & Output & \\
+        \textbf{Composto da:} & & & & \\
+        Nome evento & Semplice & Basso & Output & \\
+        Numero entrate & Semplice & Basso & Output & \\
         \hline
         Guadagni & Complesso & Basso & Output & \\
+        \textbf{Composto da:} & & & & \\
+        Nome evento & Semplice & Basso & Output & \\
+        guadagni totali & Semplice & Basso & Output & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1604,14 +1647,20 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Informazioni base cliente & Complesso & Medio & Input & \hyperlink{R25F}{R25F}\\
-        \hline
         Prevendita & Complesso & Medio & Input & \hyperlink{R25F}{R25F}, \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R18NF}{R18NF}, \hyperlink{R26NF}{R26NF} \\
+        \textbf{Composto da:} & & & & \\
+        Nome cliente & Semplice & Medio & Input & \\
+        Cognome cliente & Semplice & Medio & Input & \\
+        Evento associato & Semplice & Medio & Input & \\
+        Tipologia prevendita associata & Medio & Input & \\
+        PR Associato & Medio & Input & \\
         \hline
-        Documento digitale & Complesso & Medio & Output & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
-        \hline
+        %Documento digitale & Complesso & Medio & Output & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
+        %\hline
     \end{tabularx}
 \end{center}
+
+\newpage
 
 \textbf{Gestione entrata  - Tabella Informazioni/Flusso}
 
@@ -1621,14 +1670,20 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Informazioni base cliente & Complesso & Medio & Input & \hyperlink{R25F}{R25F}\\
-        \hline
-        Documento digitale & Complesso & Medio & Input & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
-        \hline
-        Prevendita & Complesso & Medio & Output & \\
+        %Documento digitale & Complesso & Medio & Input & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
+        %\hline
+        Prevendita & Complesso & Medio & Input & \hyperlink{R25F}{R25F}, \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R18NF}{R18NF}, \hyperlink{R26NF}{R26NF} \\
+        \textbf{Composto da:} & & & & \\
+        Nome cliente & Semplice & Medio & Input & \\
+        Cognome cliente & Semplice & Medio & Input & \\
+        Evento associato & Semplice & Medio & Input & \\
+        Tipologia prevendita associata & Medio & Input & \\
+        PR Associato & Medio & Input & \\
         \hline
     \end{tabularx}
 \end{center}
+
+%TODO: Da chiedere anche qui se il flusso va bene
 
 \textbf{Gestione membri  - Tabella Informazioni/Flusso}
 
@@ -1639,6 +1694,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         \hline
         Informazioni membro & Complesso & Alto & Input & \hyperlink{R7F}{R7F}\\
+        \textbf{Composto da:} & & & & \\
+        Membro associato & Semplice & Alto & Input & \\
+        Ruoli & Semplice & Alto & Input & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1671,16 +1729,30 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         \hline
         Entrate evento & Complesso & Basso & Output & \\
+        \textbf{Composto da:} & & & & \\
+        Nome evento & Semplice & Basso & Output & \\
+        Entrate totali & Semplice & Basso & Output & \\
         \hline
         Guadagni evento & Complesso & Basso & Output & \\
+        \textbf{Composto da:} & & & & \\
+        Nome evento & Semplice & Basso & Output & \\
+        Guadagni totali & Semplice & Basso & Output & \\
         \hline
         Entrate membro & Complesso & Basso & Output & \\
+        \textbf{Composto da:} & & & & \\
+        Membro associato & Semplice & Basso & Output & \\
+        Entrate totali & Semplice & Basso & Output & \\
         \hline
         Guadagni membro & Complesso & Basso & Output & \\
+        \textbf{Composto da:} & & & & \\
+        Membro associato & Semplice & Basso & Output & \\
+        guadagni totali & Semplice & Basso & Output & \\
         \hline
         \hline
     \end{tabularx}
 \end{center}
+
+\newpage
 
 \textbf{Gestione eventi  - Tabella Informazioni/Flusso}
 
@@ -1691,6 +1763,11 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         \hline
         Evento & Complesso & Medio & Input & \hyperlink{R20F}{R20F}, \hyperlink{R21F}{R21F} \\
+        \textbf{Composto da:} & & & & \\
+        Nome & Semplice & Medio & Input & \\
+        Descrizione & Semplice & Medio & Input & \\
+        Periodo temporale & Semplice & Medio & Input & \\
+        Luogo & Semplice & Medio & Input & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1703,7 +1780,12 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Tipologia prevendita & Complesso & Alto & Input & \hyperlink{R22F}{R22F} \\
+        Tipologia prevendita & Complesso & Medio & Input & \hyperlink{R22F}{R22F} \\
+        \textbf{Composto da:} & & & & \\
+        Nome & Semplice & Medio & Input & \\
+        Descrizione & Semplice & Medio & Input & \\
+        Periodo temporale & Semplice & Medio & Input & \\
+        Prezzo & Semplice & Medio & Input & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -2158,11 +2240,52 @@ Analizzando il vocabolario si evidenzia il privilegio dell'utente che può esser
 %TODO: Chiedere al prof se i versi delle molteplicità vanno bene   
 %TODO: Chiedere anche per le operazioni
 
-\includegraphics[scale=0.68]{modello_dominio.png}
+
+%\begin{center}
+%    \includegraphics[scale=0.68]{modello_dominio.png}
+%\end{center}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.68]{modello_dominio.png}
+    \centering
+    \caption{modello\_dominio.vsdx}
+\end{figure}
 
 \newpage
 
 \subsection{Architettura logica}
+
+\subsubsection{Diagramma dei package}
+
+%\begin{center}
+%    \includegraphics[scale=0.8]{diagramma_package.png}    
+%\end{center}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.8]{diagramma_package.png}
+    \centering
+    \caption{diagramma\_package.vsdx}
+\end{figure}
+
+\newpage
+
+\subsubsection{Diagramma delle classi}
+
+%TODO: Da chiedere se gestione log controller è da mettere sotto gestione utente controller.
+
+%\begin{center}
+%    \includegraphics[scale=0.50]{diagramma_classi_gestione_utente.png}    
+%\end{center}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.50]{diagramma_classi_gestione_utente.png}
+    \centering
+    \caption{diagramma\_classi\_gestione\_utente.vsdx}
+\end{figure}
+
+\textbf{Gestione Utente Controller} si occupa di gestire le operazioni associate agli utenti. L'operazione autentica viene eseguita tramite il controller \textbf{AutenticazioneController}, nel caso in cui fosse necessario.\\Abbiamo ritenuto utile separare \textbf{Gestione Utente Controller} e \textbf{Gestione Log Controller} per rispettare la scomposizione del problema vista precedentemente.
+
+\newpage
 
 
 
