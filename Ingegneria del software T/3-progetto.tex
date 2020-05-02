@@ -15,7 +15,7 @@
 }
 
 
-\title{Ingegneria del Software T}
+\title{Ingegneria del Software T - Gruppo 3}
 \author{
     Luca Bartolomei 
     \texttt{0000825005}
@@ -274,8 +274,10 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 %    \includegraphics[scale=0.9]{use_cases.png}
 %\end{center}
 
+%TODO: chiedi al prof membro utente amministratore di sistema
+
 \begin{figure}[H]
-    \includegraphics[scale=0.9]{use_cases.png}
+    \includegraphics[scale=0.9]{Cases/use_cases.png}
     \centering
     \caption{use\_cases.vsdx}
 \end{figure}
@@ -354,6 +356,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 								 & \quad a. Cambia Password.\\
 								 & \quad b. Accedi staff.\\
 								 & \quad c. Crea staff.\\
+								 & \quad d. Scegli Staff\\
 								 & 2b. Se l'utente è anche amministratore di sistema, vengono aggiunte delle scelte:\\
 								 %& \quad d. Gestione log.\\
 								 & \quad e. Registrazione utente.\\
@@ -576,6 +579,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\textbf{Scenario principale} & 1. Il membro è già autenticato.\\
 	                             & 2. Viene mostrata una schermata con le azioni possibili:\\
 								 & \quad a. Visualizza statistiche personali.\\
+								 & \quad b. Scegli evento.\\
 								 & 2b. Se il membro è anche PR dello staff, vengono aggiunte delle scelte:\\
 								 & \quad b. Gestione vendita prevendita.\\
 								 & 2c. Se il membro è anche cassiere dello staff, vengono aggiunte delle scelte:\\
@@ -986,7 +990,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 %\end{center}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.73]{security_use_cases_misuse_cases.png}
+    \includegraphics[scale=0.73]{Cases/security_use_cases_misuse_cases.png}
     \centering
     \caption{security\_use\_cases\_misuse\_cases.vsdx}
 \end{figure}
@@ -1282,7 +1286,7 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 %\end{center}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.9]{use_cases_aggiornato.png}
+    \includegraphics[scale=0.9]{Cases/use_cases_aggiornato.png}
     \centering
     \caption{use\_cases\_aggiornato.vsdx}
 \end{figure}
@@ -1408,8 +1412,6 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \subsection{Descrizione delle interfacce grafiche}
 
-%TODO
-
 \newpage
 
 \section{Analisi del problema}
@@ -1481,6 +1483,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         %Da chiedere se da mettere
         %Tipologia utente & Semplice & Alto & Input & Enumeratore: Utente normale o Amministratore di sistema \\
+        \hline
+        Staff scelto & Semplice & Medio & Input & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1559,6 +1563,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \end{tabularx}
 \end{center}
 
+\newpage
+
 \textbf{Crea staff  - Tabella Informazioni/Flusso}
 
 \begin{center}
@@ -1613,6 +1619,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         \hline
         %Ruolo & Semplce & Alto & Input & \hyperlink{R7F}{R7F} \\
+        Evento scelto & Semplice & Medio & Input & \\
+        \hline
     \end{tabularx}
 \end{center}
 
@@ -1652,8 +1660,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
         Nome cliente & Semplice & Medio & Input & \\
         Cognome cliente & Semplice & Medio & Input & \\
         Evento associato & Semplice & Medio & Input & \\
-        Tipologia prevendita associata & Medio & Input & \\
-        PR Associato & Medio & Input & \\
+        Tipologia prevendita associata & Semplice & Medio & Input & \\
+        PR Associato & Semplice & Medio & Input & \\
         \hline
         %Documento digitale & Complesso & Medio & Output & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
         %\hline
@@ -1716,7 +1724,6 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         Nuovo codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
         \hline
-        \hline
     \end{tabularx}
 \end{center}
 
@@ -1747,7 +1754,6 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Composto da:} & & & & \\
         Membro associato & Semplice & Basso & Output & \\
         guadagni totali & Semplice & Basso & Output & \\
-        \hline
         \hline
     \end{tabularx}
 \end{center}
@@ -1841,7 +1847,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     View Autenticazione & username, password & Autenticazione\\
     \hline
-    Home Gestione utente & navigabilità delle funzioni utente e amministratore di sistema & Gestione utente\\
+    Home Gestione utente & navigabilità delle funzioni utente e amministratore di sistema, scelta staff & Gestione utente\\
     \hline
     Home Gestione log & navigabilità delle funzioni gestione log: aggiungi log e leggi log & Gestione log\\
     \hline
@@ -1859,7 +1865,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     View Cambia password & vecchia password, nuova password & Cambia password\\
     \hline
-    Home Gestione staff & consente la navigabilità delle funzioni del membro, PR, cassiere e amministratore & Gestione staff\\
+    Home Gestione staff & consente la navigabilità delle funzioni del membro, PR, cassiere e amministratore, scelta evento & Gestione staff\\
     \hline
     View Visualizzazione statistiche personali & entrate svolte, guadagni, filtri dei dati per evento, staff e totale & Visualizzazione statistiche personali\\
     \hline
@@ -2273,20 +2279,68 @@ Analizzando il vocabolario si evidenzia il privilegio dell'utente che può esser
 
 %TODO: Da chiedere se gestione log controller è da mettere sotto gestione utente controller.
 
+\textbf{Diagramma delle classi: Gestione Utente}
+
 %\begin{center}
 %    \includegraphics[scale=0.50]{diagramma_classi_gestione_utente.png}    
 %\end{center}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.50]{diagramma_classi_gestione_utente.png}
+    \includegraphics[scale=0.50]{Diagrammi_Classi/diagramma_classi_gestione_utente.png}
     \centering
     \caption{diagramma\_classi\_gestione\_utente.vsdx}
 \end{figure}
 
-\textbf{Gestione Utente Controller} si occupa di gestire le operazioni associate agli utenti. L'operazione autentica viene eseguita tramite il controller \textbf{AutenticazioneController}, nel caso in cui fosse necessario.\\Abbiamo ritenuto utile separare \textbf{Gestione Utente Controller} e \textbf{Gestione Log Controller} per rispettare la scomposizione del problema vista precedentemente.
+\textbf{Gestione Utente Controller} si occupa di gestire le operazioni associate agli utenti. Abbiamo ritenuto utile separare \textbf{Gestione Utente Controller} e \textbf{Gestione Log Controller} per rispettare la scomposizione del problema vista precedentemente.\\La funzione verificaCredenziali() viene utilizzata da \textbf{Autenticazione Controller} per la verifica delle credenziali.
 
 \newpage
 
+\textbf{Diagramma delle classi: Gestione Staff}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.4]{Diagrammi_Classi/diagramma_classi_gestione_staff_interfacce.png}
+    \centering
+    \caption{diagramma\_classi\_gestione\_staff\_interfacce.vsdx}
+\end{figure}
+
+Le interfacce sono molte, visto le operazioni effettuabili nel sistema gestionale. Abbiamo separato le interfacce dai controller per evitare di confondere la lettura. Le interfacce sono comunque collegate ai relativi controller.
+
+\begin{figure}[H]
+    \includegraphics[scale=0.5]{Diagrammi_Classi/diagramma_classi_gestione_staff.png}
+    \centering
+    \caption{diagramma\_classi\_gestione\_staff.vsdx}
+\end{figure}
+
+\textbf{Gestione Staff Controller} si occupa della parte di gestione dello staff. Usato dai membri di uno staff per le varie operazioni, è stato diviso in base alle interfacce. 
+
+
+\newpage
+
+\textbf{Diagramma delle classi: Autenticazione}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.8]{Diagrammi_Classi/diagramma_classi_autenticazione.png}
+    \centering
+    \caption{diagramma\_classi\_autenticazione.vsdx}
+\end{figure}
+
+\textbf{Autenticazione Controller} gestisce la sessione di un utente, permette di tenere traccia anche del contesto attuale dell'utente per quanto riguarda la gestione staff, tramite scegliStaff e scegliEvento.\\ La verifica delle credenziali viene effettuata all'interno della operazione autentica(), chiamando \textbf{Gestione Utente Controller}
+
+\newpage
+
+\subsubsection{Interazione}
+
+Saranno riportati solo i diagrammi di sequenza ritenuti principali per il sistema di gestione prevendite
+
+\textbf{Diagramma di sequenza: Autenticazione con successo}
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Diagrammi_Sequenza/diagramma_sequenza_autenticazione.png}
+    \centering
+    \caption{diagramma\_sequenza\_autenticazione.vsdx}
+\end{figure}
+
+Una volta effettuato il logout si richiede di nuovo l'autenticazione tramite \textbf{View Autenticazione}.\\Effettuato l'accesso, si passa alla schermata di \textbf{Home Gestione Utente}.
 
 
 \end{document}
