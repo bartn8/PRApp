@@ -8,6 +8,21 @@
 \usepackage{hyperref}
 \usepackage{multirow}
 \usepackage{float}
+\usepackage{listings}
+\usepackage{adjustbox}
+
+\lstset{
+tabsize = 4, %% set tab space width
+showstringspaces = false, %% prevent space marking in strings, string is defined as the text that is generally printed directly to the console
+numbers = left, %% display line numbers on the left
+commentstyle = \color{gray}, %% set comment color
+keywordstyle = \color{blue}, %% set keyword color
+stringstyle = \color{red}, %% set string color
+rulecolor = \color{black}, %% set frame color to avoid being affected by text color
+basicstyle = \small \ttfamily , %% set listing font and size
+breaklines = true, %% enable line breaking
+numberstyle = \tiny,
+}
 
 \hypersetup{
     colorlinks=true,
@@ -20,7 +35,7 @@
     Luca Bartolomei 
     \texttt{0000825005}
     \\
-    Luigi Di Nuzzo
+    Luigi di Nuzzo
     \texttt{0000824873}
     \\
     Filippo Veronesi
@@ -249,6 +264,12 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 		\hline
 		Periodo di vendita & Periodo temporale in cui la prevendita è vendibile ai clienti & \\
 		\hline
+		Anullamento Prevendita & Operazione che consiste nell'annullare una prevendita acquistata da un cliente & \\
+		\hline
+		Rimborso Prevendita & Operazione eseguita su una prevendita annullata, al fine di tenere traccia del conto economico dello staff & \\
+		\hline
+		Annullamento Evento & Operazione eseguita da un amministratore quando decide di annullare l'evento & \\
+		\hline
 		%Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte. Composto da una serie di voci & Registro \\
 		%\hline
 		%Voce di log & Si tratta di una riga del log. & Record del log\\
@@ -277,7 +298,7 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 %TODO: chiedi al prof membro utente amministratore di sistema
 
 \begin{figure}[H]
-    \includegraphics[scale=0.9]{Cases/use_cases.png}
+    \includegraphics[scale=1]{Cases/use_cases.png}
     \centering
     \caption{use\_cases.vsdx}
 \end{figure}
@@ -990,7 +1011,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 %\end{center}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.73]{Cases/security_use_cases_misuse_cases.png}
+    \includegraphics[scale=0.75]{Cases/security_use_cases_misuse_cases.png}
     \centering
     \caption{security\_use\_cases\_misuse\_cases.vsdx}
 \end{figure}
@@ -1083,9 +1104,9 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
     \hline
     \textbf{Descrizione} & \mc{2}{Devo garantire che le prevendite lette siano autentiche.}\\
     \hline
-    \textbf{Rischi alla sicurezza} & \mc{2}{Un utente malintenzionato potrebbe falsificare una prevendita.}\\
+    \textbf{Rischi alla sicurezza} & \mc{2}{Un utente malintenzionato potrebbe falsificare una prevendita, mediante documento digitale consegnato.}\\
     \hline
-    \textbf{Precondizioni} & \mc{2}{1. Il malintezionato conosce la struttura di una prevendita.}\\
+    \textbf{Precondizioni} & \mc{2}{1. Il malintezionato conosce la struttura di una prevendita e del documento digitale.}\\
     & \mc{2}{2. Il malintenzionato ha la possibilità di falsificare la prevendita.}\\
     \hline
     \textbf{Postcondizioni} & \mc{2}{ Il sistema rileva che la prevendita non è autentica.}\\
@@ -1274,6 +1295,7 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 		\hline
 		Sblocco dell'utente & Operazione eseguita da un amministratore di sistema, per il ripristino di un utente con autenticazione bloccata & Sblocco dell'account utente\\
 		\hline
+		Verifica Contraffazione & Sistema volto a verificare l'autenticità di un
     \end{tabulary}
   \end{center}
 
@@ -1286,7 +1308,7 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 %\end{center}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.9]{Cases/use_cases_aggiornato.png}
+    \includegraphics[scale=1]{Cases/use_cases_aggiornato.png}
     \centering
     \caption{use\_cases\_aggiornato.vsdx}
 \end{figure}
@@ -2268,7 +2290,7 @@ Analizzando il vocabolario si evidenzia il privilegio dell'utente che può esser
 %\end{center}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.8]{diagramma_package.png}
+    \includegraphics[scale=0.8]{Diagrammi_Package/diagramma_package.png}
     \centering
     \caption{diagramma\_package.vsdx}
 \end{figure}
@@ -2324,23 +2346,181 @@ Le interfacce sono molte, visto le operazioni effettuabili nel sistema gestional
     \caption{diagramma\_classi\_autenticazione.vsdx}
 \end{figure}
 
-\textbf{Autenticazione Controller} gestisce la sessione di un utente, permette di tenere traccia anche del contesto attuale dell'utente per quanto riguarda la gestione staff, tramite scegliStaff e scegliEvento.\\ La verifica delle credenziali viene effettuata all'interno della operazione autentica(), chiamando \textbf{Gestione Utente Controller}
+\textbf{Autenticazione Controller} gestisce la sessione di un utente, permette di tenere traccia anche del contesto attuale dell'utente. Per esempio nella fase progettuali si potrebbe sfruttare per tenere traccia dello staff e dell'evento in uso dall'utente, semplificando la presentazione.\\ La verifica delle credenziali viene effettuata all'interno della operazione autentica(), chiamando \textbf{Gestione Utente Controller}
 
 \newpage
 
 \subsubsection{Interazione}
+
+%TODO: chiedere come funziona il blocco attivazione: se gli attori possono essere usati col blocco, vedi diagramma vendita prevendita o registrazione utente
 
 Saranno riportati solo i diagrammi di sequenza ritenuti principali per il sistema di gestione prevendite
 
 \textbf{Diagramma di sequenza: Autenticazione con successo}
 
 \begin{figure}[H]
-    \includegraphics[scale=1]{Diagrammi_Sequenza/diagramma_sequenza_autenticazione.png}
+    \includegraphics[scale=0.75]{Diagrammi_Sequenza/diagramma_sequenza_autenticazione.png}
     \centering
     \caption{diagramma\_sequenza\_autenticazione.vsdx}
 \end{figure}
 
-Una volta effettuato il logout si richiede di nuovo l'autenticazione tramite \textbf{View Autenticazione}.\\Effettuato l'accesso, si passa alla schermata di \textbf{Home Gestione Utente}.
+Una volta effettuato il logout si richiede di nuovo l'autenticazione tramite \textbf{View Autenticazione}. Effettuato l'accesso, si passa alla schermata di \textbf{Home Gestione Utente}.
 
+\textbf{Diagramma di sequenza: Registrazione utente}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.65]{Diagrammi_Sequenza/diagramma_sequenza_registrazione_utente.png}
+    \centering
+    \caption{diagramma\_sequenza\_registrazione\_utente.vsdx}
+\end{figure}
+
+Prima della registrazione la persona non è nota al sistema e non può interagire con esso direttamente. Abbiamo inserito un \textbf{loop} perché probabilmente la registrazione avviene per staff, evitando l'autenticazione ripetuta.
+
+\newpage
+
+\textbf{Diagramma di sequenza: Creazione evento}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.7]{Diagrammi_Sequenza/diagramma_sequenza_creazione_evento.png}
+    \centering
+    \caption{diagramma\_sequenza\_creazione\_evento.vsdx}
+\end{figure}
+
+\textbf{Diagramma di sequenza: Vendita prevendita}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.6]{Diagrammi_Sequenza/diagramma_sequenza_vendita_prevendita.png}
+    \centering
+    \caption{diagramma\_sequenza\_vendita\_prevendita.vsdx}
+\end{figure}
+
+Il cliente non può interfacciarsi direttamente al sistema, infatti è richiesto il PR per la gestione della vendita della prevendita. Quando il PR ha interagito con il sistema, consegna al cliente il \textbf{documento digitale} che rappresenta la prevendita. Abbiamo deciso di aggiungere un \textbf{loop} perché è probabile che il PR venda ad un gruppo di persone alla volta, evitando di effettuare l'autenticazione ogni volta.
+
+\newpage
+
+\textbf{Diagramma di sequenza: Ingresso evento}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.55]{Diagrammi_Sequenza/diagramma_sequenza_ingresso_evento.png}
+    \centering
+    \caption{diagramma\_sequenza\_ingresso\_evento.vsdx}
+\end{figure}
+
+Il cassiere \textbf{ripete} l'operazione di timbratura delle prevendite per tutta la durata necessaria durante l'evento. Qui il \textbf{loop} è d'obbligo data la natura del cassiere. Il documento permette di timbrare la prevendita, la quale si trasforma in \textbf{Prevendita Timbrata} come nel modello del dominio.
+
+\newpage
+
+\subsubsection{Comportamento}
+
+Dopo un'attenta analisi, abbiamo deciso di mostrare i diagrammi di stato riguardo un \textbf{evento} ed una \textbf{prevendita}, sempre basandoci sui requisiti.
+
+%R21F - Un evento puo essere annullato, anche se ci sono prevendite vendute.
+%R23F - Una prevendita puo essere annullata e/o rimborsata.
+
+%R8NF - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell’evento.
+%R9NF - Una prevendita annullata e/o rimborsata rimane tale
+%R10NF - Un evento annullato rimane tale
+%R13NF - Ogni prevendita venduta `e associata ad una sola tipologia di prevendita
+%R14NF - La tipologia di prevendita associata non `e modificabile
+%R15NF - Il prezzo di una tipologia di prevendita `e modificabile solo se non sono state vendute prevendite conquella determinata tipologia
+%R19NF - La timbratura puo essere fatta solo una volta
+
+\textbf{Diagramma di Stato: Evento}
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Diagrammi_Stato/diagramma_stato_evento.png}
+    \centering
+    \caption{diagramma\_stato\_evento.vsdx}
+\end{figure}
+
+Secondo le specifiche \hyperlink{R21F}{R21F} e \hyperlink{R10NF}{R10NF}, un evento può essere \textbf{annullato}, mentre lo stato \textbf{Concluso} si deduce dal requisito \hyperlink{R20F}{R20F} in quanto un evento ha un periodo di svolgimento.\\
+
+\textbf{Diagramma di Stato: Prevendita}
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Diagrammi_Stato/diagramma_stato_prevendita.png}
+    \centering
+    \caption{diagramma\_stato\_prevendita.vsdx}
+\end{figure}
+
+Secondo le specifiche \hyperlink{R23F}{R23F} \hyperlink{R9NF}{R9NF} una prevendita può essere \textbf{annullata} e \textbf{rimborsata}, mentre dai requisiti \hyperlink{R14F}{R14F} \hyperlink{R19NF}{R19NF} si deduce lo stato \textbf{Timbrata}, in accordo con il diagramma di sequenza di ingresso evento.
+
+\newpage
+
+\subsection{Piano del lavoro}
+
+Il lavoro di gruppo è stato diviso in base alle competenze dei membri del team. Si prevede un team per lo sviluppo del database, uno per una possibile applicazione middleware da interlacciare tra database e applicativo finale. \textbf{Tutti i dettagli nella tabelle sottostanti:}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|}
+        \hline
+        \textbf{Nome Team} & \textbf{Composizione}\\
+        \hline
+        \hline
+        Team progettazione & Bartolomei, di Nuzzo, Veronesi\\
+        \hline
+        Team sviluppo DB & Bartolomei, Veronesi\\
+        \hline
+        Team sviluppo Middleware & Bartolomei, di Nuzzo\\
+        \hline
+        Team sviluppo front-end & di Nuzzo, Veronesi\\
+        \hline
+        Team sicurezza & Bartolomei, di Nuzzo, Veronesi\\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Package} & \textbf{Progetto} & \textbf{Sviluppo}\\
+    \hline
+    \hline
+    Dominio & Team progettazione & Team sviluppo DB, Team sicurezza  \\
+    \hline
+    GestioneUtente & Team progettazione & Team sviluppo Middleware\\
+    \hline
+    GestioneStaff & Team progettazione & Team sviluppo Middleware\\
+    \hline
+    Autenticazione & Team progettazione & Team sviluppo DB, Team sviluppo Middleware, Team sicurezza\\
+    \hline
+    Log & Team progettazione & Team sviluppo DB, Team sviluppo Middleware, Team sicurezza\\
+    \hline
+    InterfacciaGestioneUtente & Team progettazione & Team sviluppo front-end \\
+    \hline
+    InterfacciaGestioneStaff & Team progettazione & Team sviluppo front-end\\
+    \hline
+    InterfacciaAutenticazione & Team progettazione & Team sviluppo front-end, Team sicurezza\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+Dopo una dovuta valutazione, i tempi di rilascio previsti sono i seguenti:
+
+\begin{itemize}
+    \item \textbf{Progettazione}: entro 14 giorni dalla data odierna.
+    \item \textbf{Sviluppo moduli con test unitari}: entro 21 giorni dalla fine di progetto odierna.
+    \item \textbf{Integrazione e testing}: Entro 7 giorni dalla fine dello sviluppo dei moduli.
+\end{itemize}
+
+\subsubsection{Sviluppi futuri}
+
+Il committente ha richiesto una flessibilità nell'applicazione per quanto riguarda la \textbf{l'utilizzo di nuove tipologie dei documenti digitali} per andare in contro a nuove tecnologie applicabili. Per esempio attualmente una valida proposta, già discussa con il committente, è l'utilizzo di QR code come documento digitale, non è da escludere che in futuro si possa usare una tecnologia alternativa per migliorare la qualità del servizio.   
+
+\newpage
+
+\subsection{Piano di collaudo}
+
+Per garantire il funzionamento del sistema sono necessari una gamma di test unitari e
+di integrazione che permettono di verificare la correttezza delle singole parti.
+
+\lstinputlisting[language=Java]{Test/TestEvento.java}
+\lstinputlisting[language=Java]{Test/TestPrevendita.java}
+
+%TODO
+
+\newpage
+
+\section{Progettazione}
 
 \end{document}
