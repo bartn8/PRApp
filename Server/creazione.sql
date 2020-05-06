@@ -10,6 +10,7 @@ CREATE TABLE staff (
 
 CREATE TABLE utente (
   id int NOT NULL AUTO_INCREMENT,
+  /*Si potrebbe fare una tabella simile a membro*/
   tipologiaUtente ENUM('NORMALE', 'AMMINISTRATORE_SISTEMA') NOT NULL DEFAULT 'NORMALE',
   nome varchar(150) NOT NULL,
   cognome varchar(150) NOT NULL,

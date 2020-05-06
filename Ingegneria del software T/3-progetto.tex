@@ -65,13 +65,11 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 
 \subsection{Requisiti del sistema}
 
+%TODO: aggiornare link
+
+\subsubsection{Requesiti Funzionali}
+
 \begin{itemize}
-	
-	\item \textbf{REQUISITI FUNZIONALI}
-		
-	\item \hypertarget{R1F}{R1F} - Il software prevede la possibilità di gestire più staff.
-	
-	%-Requisiti di sicurezza
 	
 	%--Requisiti di identificazione
 	\item \hypertarget{R2F}{R2F} - Gli utenti devono essere identificati tramite username.
@@ -94,6 +92,8 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 	\item \hypertarget{R11F}{R11F} - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
 	
 	\item \hypertarget{R12F}{R12F} - Quando un utente crea uno staff ne diventa membro e amministratore.
+	
+	%TODO: Chiedere R13F e R14F
 	
 	%Timbratura (Cassiere)
 	\item \hypertarget{R13F}{R13F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
@@ -144,9 +144,15 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 	
 	%-----------------------------------------------------------------------------------------------
 		
-    \item \textbf{REQUISITI NON FUNZIONALI}
 	
-	\item \hypertarget{R1NF}{R1NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
+	
+\end{itemize}
+
+\subsubsection{Requisiti non funzionali}
+
+\begin{itemize}
+    \item \hypertarget{R1NFbis}{R1NFbis} - Il software prevede la possibilità di gestire più staff.
+    \item \hypertarget{R1NF}{R1NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
 	\item \hypertarget{R2NF}{R2NF} - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
 	\item \hypertarget{R3NF}{R3NF} - Ogni utente registrato può creare al massimo uno staff.
 	\item \hypertarget{R4NF}{R4NF} - Requisito fondamentale è il basso costo del prodotto software.
@@ -204,8 +210,9 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 	%\item \hypertarget{R21NF}{R21NF} - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
 	
 	%-----------------------------------------------------------------------------------------------
-	
 \end{itemize}
+
+
 
 \newpage
 
@@ -407,7 +414,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Descrizione} & Una persona ha richiesto l'accesso al sistema gestionale e l'amministratore vuole registrarlo. \\
 	\hline
-	\textbf{Attori} & Amministratore di sistema, Utente \\
+	\textbf{Attori} & Amministratore di sistema \\
 	\hline
 	\textbf{Relazioni} & Gestione utente \\
 	\hline
@@ -925,24 +932,24 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 \subsubsection{Valutazione dei beni}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|l|X|X|}
          \hline
          \textbf{Bene} & \textbf{Valore} & \textbf{Esposizione}  \\
          \hline
          \hline
-         Sistema gestionale & Alto & Alta \\
+         \multirow{2}{*}{Sistema gestionale} & Alto & Alta \\
                             & Registra tutte le prevendite di uno staff. Critico dal punto di vista della sicurezza & Perdita d'immagine del software e degli staff, spesa in tempo per il ripristino del backup, se il sistema fallisce è necessario acquistare prevendite fisiche. Possibili perdite finanziare \\
          \hline
-         Informazioni su utenti & Medio-Alto & Alta\\
+         \multirow{2}{*}{Informazioni su utenti} & Medio-Alto & Alta\\
                             & Informazioni relative agli utenti del sistema, anche le credenziali, le quali potrebbero permettere l'accesso ai dati dello staff e relativi clienti & Perdita d'immagine del software, un membro con ruolo amministrativo potrebbe compromettere temporaneamente uno staff fino a ripristino backup. Possibile perdita economica dovuta all'aggiunta di prevendite.\\
          \hline
-         Informazioni su prevendite & Alto & Alta \\
+         \multirow{2}{*}{Informazioni su prevendite} & Alto & Alta \\
                                     & Rappresentano i guadagni per uno staff, nonché il biglietto d'ingresso di un cliente & Perdita d'immagine del software: lo staff ha perso informazioni riguardo i ricavi, perdita d'immagine dello staff: il cliente non riesce a entrare. Possibile perdita economica se vengono aggiunte prevendite non dovute.\\
          \hline
-         Informazioni su clienti & Medio & Bassa \\
+         \multirow{2}{*}{Informazioni su clienti} & Medio & Bassa \\
                                   & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R25F}{R25F}) & \\
          \hline
-         Informazioni su amministratori di sistema & Medio-Alto &  Alta \\
+         \multirow{2}{*}{\shortstack[l]{Informazioni su\\ amministratori di sistema}} & Medio-Alto &  Alta \\
                                                     & Hanno lo stesso valore di quelle degli utenti & Tutte le esposizioni sulle informazioni degli utenti, più la possibilità di perdere log\\ 
          \hline
     \end{tabularx}
@@ -980,19 +987,26 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 \subsubsection{Analisi della tecnologia dal punto di vista della sicurezza}
 
 \begin{center}
-    \begin{tabulary}{1\textwidth}{|L|C|}
+    \begin{tabularx}{1\textwidth}{|l|X|}
         \hline
         \textbf{Tecnologia} & \textbf{Vulnerabilità} \\
         \hline
         \hline
-        Cifratura delle comunicazioni & Utilizzo di una doppia cifratura simmetrica+asimmetrica con le loro relative vulnerabilità.\\
+       \multirow{9}{*}{Cifratura delle comunicazioni} & Utilizzo di una doppia cifratura simmetrica e asimmetrica con le loro relative vulnerabilità:\\
+                                      & \quad Cifratura Simmetrica:\\
+                                      & \quad\quad 1. Tempo di vita della chiave\\
+                                      & \quad\quad 2. Memorizzazione della chiave\\
+                                      & \quad\quad 3. Lunghezza della chiave\\
+                                      & \quad Cifratura Asimmetrica:\\
+                                      & \quad\quad 1. Lunghezza della chiave\\
+                                      & \quad\quad 2. Memorizzazione della chiave privata\\
                                       & L'utilizzo di cifrature standard potrebbero causare vulnerabilià ulteriori.\\
         \hline
-        Autenticazione tramite credenziali & Social engineering \\
+        \multirow{3}{*}{Autenticazione tramite credenziali} & Social engineering \\
                                            & Password cracking \\
                                            & Negligenza \\
         \hline
-        Architettura Client/Server & Attacco DDoS/DoS \\
+        \multirow{5}{*}{Architettura Client/Server} & Attacco DDoS/DoS \\
                                    & Attacco Man in the Middle\\
                                    & Sniffing della comunicazione\\
                                    & Deadlock\\
@@ -1001,7 +1015,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
         %Non so se questa va bene.
         %Servizio di hosting esterno & Esposizione dei dati \\
         %\hline
-    \end{tabulary}
+    \end{tabularx}
 \end{center}
 
 \subsubsection{Security Use Case e Misuse Case}
@@ -1363,7 +1377,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         \textbf{Descrizione} & Caso in cui un utente è bloccato e chiede aiuto all'amministratore di sistema. \\
         \hline
-        \textbf{Attori} & Amministratore di sistema, Utente \\
+        \textbf{Attori} & Amministratore di sistema \\
         \hline
         \textbf{Relazioni} & Gestione utente \\
         \hline
@@ -1460,9 +1474,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         Registrazione utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R2F}{R2F}, \hyperlink{R3F}{R3F}, \hyperlink{R5F}{R5F} \\
         \hline
-        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1F}{R1F}, \hyperlink{R4F}{R4F}, \hyperlink{R12F}{R12F}\\
+        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1NFbis}{R1NFbis}, \hyperlink{R4F}{R4F}, \hyperlink{R12F}{R12F}\\
         \hline
-        Accedi staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R1F}{R1F}, \hyperlink{R4F}{R4F}, \hyperlink{R11F}{R11F} \\
+        Accedi staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R1NFbis}{R1NFbis}, \hyperlink{R4F}{R4F}, \hyperlink{R11F}{R11F} \\
         \hline
         Cambia password & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R3F}{R3F}, \hyperlink{R6F}{R6F} \\
         \hline
@@ -1524,13 +1538,13 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Composto da:} & & & & \\
         Timestamp & Semplice & Medio & Input & \\
         Descrizione & Semplice & Medio & Input & Non più di 256 caratteri \\
-        Livello di importanza & Semplice & Medio & Input & Enumeratore: Basso, Medio, Alto\\
+        Livello di importanza & Semplice & Medio & Input & \textbf{Enumeratore}: Basso, Medio, Alto\\
         \hline
         Record di lettura & Complesso & Medio & Output & \\
         \textbf{Composto da:} & & & & \\
         Timestamp & Semplice & Medio & Output & \\
         Descrizione & Semplice & Medio & Output & Non più di 256 caratteri \\
-        Livello di importanza & Semplice & Medio & Output & Enumeratore: Basso, Medio, Alto\\
+        Livello di importanza & Semplice & Medio & Output & \textbf{Enumeratore}: Basso, Medio, Alto\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1547,7 +1561,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Composto da:} & & & & \\
         Timestamp & Semplice & Medio & Input & \\
         Descrizione & Semplice & Medio & Input & Non più di 256 caratteri \\
-        Livello di importanza & Semplice & Medio & Input & Enumeratore: Basso, Medio, Alto\\
+        Livello di importanza & Semplice & Medio & Input & \textbf{Enumeratore}: Basso, Medio, Alto\\
         \hline
     \end{tabularx}
 \end{center}
@@ -2268,7 +2282,8 @@ Analizzando il vocabolario si evidenzia il privilegio dell'utente che può esser
 
 %TODO: Chiedere al prof se i versi delle molteplicità vanno bene   
 %TODO: Chiedere anche per le operazioni
-
+%TODO: Chiedere la molteplicità se va bene
+%TODO: Chiedere se le molteplicità cambiano nella progettazione
 
 %\begin{center}
 %    \includegraphics[scale=0.68]{modello_dominio.png}
@@ -2355,6 +2370,8 @@ Le interfacce sono molte, visto le operazioni effettuabili nel sistema gestional
 
 %TODO: chiedere come funziona il blocco attivazione: se gli attori possono essere usati col blocco, vedi diagramma vendita prevendita o registrazione utente
 
+%TODO: Chiedere se sono sufficienti
+
 Saranno riportati solo i diagrammi di sequenza ritenuti principali per il sistema di gestione prevendite
 
 \textbf{Diagramma di sequenza: Autenticazione con successo}
@@ -2425,6 +2442,8 @@ Dopo un'attenta analisi, abbiamo deciso di mostrare i diagrammi di stato riguard
 %R14NF - La tipologia di prevendita associata non `e modificabile
 %R15NF - Il prezzo di una tipologia di prevendita `e modificabile solo se non sono state vendute prevendite conquella determinata tipologia
 %R19NF - La timbratura puo essere fatta solo una volta
+
+%TODO: riguardare con il prof
 
 \textbf{Diagramma di Stato: Evento}
 
@@ -2541,29 +2560,233 @@ Dall’analisi dei requisiti sono emersi alcuni vincoli non funzionali, tra cui:
     \item Facilità d’utilizzo
 \end{itemize}
 
-L'integrità e la sicurezza dei dati, soprattutto per quanto riguarda la comunicazione, è di fondamentale importanza, soprattutto in vista ad una architettura 3-tier. Purtroppo, dato il basso costo di sviluppo software, è opportuno scegliere soluzione standard esterne al sistema, come l'uso di protocolli di cifratura, come il TLS, il quale viene utilizzato da protocolli più di alto livello come HTTPS, ma può essere utilizzato anche con un protocollo proprietario. L'avvento di tecnologie di trasmissione di dati moderne, rende più che affordabile l'utilizzo di tecnologia di cifratura. Inoltre l'utilizzo di uno standard, già implementato e testato da terze parti, riduce il rischio di sicurezza dovuto a difetti all'interno del nostro prodotto software.\\Il controllo degli accessi rappresenta una opportuna soluzione per la garantire il sistema a fronte di malintenzionati. L'uso di un controllo delle autorizzazioni favorisce a separare i ruoli e a migliorare la sicurezza, probabilmente perdendo in facilità d'utilizzo.\\La Disponibilità del servizio e la Replicabilità del sistema servono per garantire i requisiti \hyperlink{R24NF}{R24NF} \hyperlink{R25NF}{R25NF}, per contenere un attacco DoS: abbiamo pensato alla copia in locale nell'evento del software gestione, mediante una procedura attuata dall'amministratore di sistema.
+L'integrità e la sicurezza dei dati, soprattutto per quanto riguarda la comunicazione, è di fondamentale importanza, soprattutto in vista ad una architettura 3-tier. Purtroppo, dato il basso costo di sviluppo software, è opportuno scegliere soluzione standard esterne al sistema, come l'uso di protocolli di cifratura, come il TLS, il quale viene utilizzato da protocolli più di alto livello come HTTPS, protocollo che abbiamo deciso di utilizzare, dato la facilità d'utilizzo e il supporto vasto. L'avvento di tecnologie di trasmissione di dati moderne, rende più che affordabile l'utilizzo di tecnologia di cifratura. Inoltre l'utilizzo di uno standard, già implementato e testato da terze parti, riduce il rischio di sicurezza dovuto a difetti all'interno del nostro prodotto software.\\Il controllo degli accessi rappresenta una opportuna soluzione per la garantire il sistema a fronte di malintenzionati. L'uso di un controllo delle autorizzazioni favorisce a separare i ruoli e a migliorare la sicurezza, probabilmente perdendo in facilità d'utilizzo.\\La Disponibilità del servizio e la Replicabilità del sistema servono per garantire i requisiti \hyperlink{R24NF}{R24NF} \hyperlink{R25NF}{R25NF}, per contenere un attacco DoS.
 
 
 \subsection{Scelta dell'architettura}
-Abbiamo optato per una architettura clinet/server a tre livelli: abbiamo il database, un software middle-ware e un applicativo front-end. L'applicazione middle-ware fa da intermediario tra il database e l'applicativo lato cliente. Questa scelta rende facile l'implementazione di applicativi front-end multipiattaforma e specializzati: si potranno quindi più applicativi front-end adatti al lavoro dello specifico utilizzatore finale.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVC} sia per l'applicativo middle-ware, sia per la parte front-end. Il software middle-ware avrà una parte di presentazione minima, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
+Abbiamo optato per una architettura client/server a tre livelli: abbiamo il database, un software middle-ware e un applicativo front-end. L'applicazione middle-ware fa da intermediario tra il database e l'applicativo lato cliente. Questa scelta rende facile l'implementazione di applicativi front-end multipiattaforma e specializzati: si potranno quindi più applicativi front-end adatti al lavoro dello specifico utilizzatore finale.
 
 \subsubsection{Livello di Persistenza}
-Abbiamo deciso di adottare un database indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento, si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middle-ware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middle-ware, favorendo la disponiblità del servizio (\hyperlink{R24NF}{R24NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R25NF}{R25N}), nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.
+Abbiamo deciso di adottare un database relazionale indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento, si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middle-ware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middle-ware, favorendo la disponiblità del servizio (\hyperlink{R24NF}{R24NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R25NF}{R25N}), nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.\\La persistenza dei log viene gestita attraverso file.
 
 
 \subsubsection{Livello Middle-ware}
-Le funzionalità di questo livello sono pensate per facilitare lo sviluppo multipiattaforma centralizzato, sfruttando una comunicazione con la controparte front-end. Si tratta dell'unico livello che può interagire con il livello di persistenza, e nel caso ci siano vincoli non direttamente implementabili nel progetto del database, saranno implentati qui, senza il rischio che una terza applicazione che utilizza il database, non implementi tali vincoli. Inoltre il livello si occupa della sessione del cliente, rendendo intrinsecamente più semplice la struttura del front-end.
+Le funzionalità di questo livello sono pensate per facilitare lo sviluppo multipiattaforma centralizzato, sfruttando una comunicazione con la controparte front-end. Si tratta dell'unico livello che può interagire con il livello di persistenza, e nel caso ci siano vincoli non direttamente implementabili nel progetto del database, saranno implentati qui, senza il rischio che una terza applicazione che utilizza il database, non implementi tali vincoli, rendendo intrinsecamente più semplice la struttura del front-end.
 
 \subsubsection{Livello Front-end}
-Si tratta dell'ultimo livello, quello a contatto con gli utilizzatori finali, specializzato nel rappresentare le informazioni reperite dallo strato intermedio. Il livello è pensato per essere altamente specializzato e multipiattaforma: una implementazione può sfruttare la piattaforma sottostante e reperire le informazioni in maniera più rapida. Inoltre si potrebbe introdurre di diverse implementazioni, a seconda dell'utilizzatore finale.
+Si tratta dell'ultimo livello, quello a contatto con gli utilizzatori finali, specializzato nel rappresentare le informazioni reperite dallo strato server intermedio. Il livello è pensato per essere altamente specializzato e multipiattaforma: una implementazione può sfruttare la piattaforma sottostante e reperire le informazioni in maniera più rapida. Inoltre si potrebbe introdurre di diverse implementazioni, a seconda dell'utilizzatore finale.\\
 
 
-%\TODO: subsubsection{Patterns & Design Principle}
+\subsubsection{Patterns \& Design Principle}
+Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVC} sia per l'applicativo middle-ware, sia per la parte front-end. Il software middle-ware avrà una parte di view minima, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
+
+\subsubsection{Diagramma a package}
+
+%TODO: Da chiedere se il diagramma a package va bene
+%TODO: Da chiedere se bisogna tenere uno o l'altro
+%TODO: Da chiedere se il pattern broker è utilizzato correttamente
+%TODO: Da chiedere dove mettere il protocollo di comunicazione tra middle-ware e front-end
+
 
 Nella figura sottostante è riportata l’Architettura del Sistema organizzata attraverso un
 diagramma dei package:\\
 
 
+\begin{figure}[H]
+    \includegraphics[scale=0.55]{Progettazione/diagramma_architettura_logica_package.png}
+    \centering
+    \caption{diagramma\_architettura\_logica\_package.vsdx}
+\end{figure}
+
+\newpage
+
+\subsubsection{Diagramma a componenti}
+
+
+\begin{figure}[H]
+    \includegraphics[scale=0.55]{Progettazione/diagramma_architettura_logica_componenti.png}
+    \centering
+    \caption{diagramma\_architettura\_logica\_componenti.vsdx}
+\end{figure}
+
+\subsubsection{Scelte tecnologiche}
+Abbiamo deciso di utilizzare come protocollo di sicurezza e trasmissione dei dati HTTPS: la sicurezza è garantita dal layer TLS, che garantisce una comunicazione sicura end-to-end, e l'ampio bacino di utilizzatori del protocollo permette la produzione di un prodotto software versatile.\\Per il formato dei dati abbiamo scelto JSON, dato il grande supporto e la facilità di utilizzo.
+
+\newpage
+
+\subsection{Progettazione di dettaglio}
+
+%TODO: chiedere la divisione di package in base al livello middle-ware o front-end.
+%TODO: chiedere come definire lo scambio dei dati tra middle-ware e front-end
+%TODO: Chiedere se vanno descritte tutte
+
+\subsubsection{Struttura}
+
+I cambiamenti del dominio seguente rispetto a quello dell’analisi del problema sono dovuti
+alla decisione di \textbf{dividere il software} in strato middle-ware e strato front-end. Inoltre, i cambiamenti sono dovuti alla decisione di utilizzare il Design Pattern ed il modello architetturale \textbf{MVC}.
+
+\subsubsection{Struttura middle-ware}
+
+Come detto in precedenza, la struttura è basata su \textbf{MVC}.
+
+\begin{itemize}
+    \item \textbf{Model}: Si tratta della parte che gestisce il database.\\Utilizzando il pattern \textbf{DAO}, si crea il mapping delle relazioni con gli oggetti.\\Gli oggetti del dominio utilizzano il pattern \textbf{Proxy} pre implementare il \textbf{lazy-load} nei casi d'uso necessari\\Per l'interazione con i log si è preferito un accesso diretto a file.
+    \item \textbf{View}: Gestisce la risposta al client, formattando i dati nel formato JSON.
+    \item \textbf{Controller}: Collante tra Model e View, con tutta la business logic di supporto
+\end{itemize}
+
+%Package it.unibo.prevenditaelettronica.middleware.model.dao
+
+%Factory DAO Generale
+%Factory DAO per ogni sotto interfaccia: sarà il broker a fare la connessione
+%Interfacce DAO Utente, DAO Amministratore di sistema, DAO Staff, DAO Membro, DAO Cassiere, DAO Amministratore.
+
+%PersistanceException
+
+%Package it.unibo.prevenditaelettronica.middleware.model.dao.broker
+
+%DatabaseBrokerInterface
+
+%Interfaccia per gestire la connessione per ogni dbms
+%Eccezioni 
+
+%Package it.unibo.prevenditaelettronica.middleware.dao.proxy
+
+%Dominio che richiede proxy
+
+%Package it.unibo.prevenditaelettronica.middleware.model.log
+
+%FileSystemInterface
+%FileSystemImplementation
+
+%Package it.unibo.prevenditaelettronica.middleware.model
+
+%Modello di dominio
+
+
+
+%Package it.unibo.prevenditaelettronica.middleware.view
+
+%JSONSerializable
+%JSONDeserializable
+
+%PrinterInterface
+%JSONPrinter
+
+%Package it.unibo.prevenditaelettronica.middleware.gestioneutente.controller
+
+%Gestione Utente Controller
+%Gestione Log Controller
+
+%Package it.unibo.prevenditaelettronica.middleware.gestionestaff.controller
+
+%Gestione Staff Controller
+%Gestione Entrata Controller
+%Gestione Vendita Prevendite Controller
+%Gestione Eventi Controller
+%Gestione Tipologie Prevendita Controller
+%Gestione Membri Controller
+
+%Package it.unibo.prevenditaelettronica.middleware.log.controller
+
+%Log
+
+%Package it.unibo.prevenditaelettronica.middleware.autenticazione.controller
+
+%AutenticazioneController
+
+
+%Package it.unibo.prevenditaelettronica.middleware.handler
+
+%HTTPHandler
+
+
+
+\subsubsection{Struttura front-end}
+
+Come detto in precedenza, la struttura è basata su \textbf{MVC}.
+
+\begin{itemize}
+    \item \textbf{Model}: Deve elaborare i dati per la ricezione/invio verso il middle-ware.\\L'accesso al middle-ware è dettato dal pattern \textbf{Broker}.
+    \item \textbf{View}: Componente principale del client front-end, utilizziamo il pattern \textbf{Observer} per la gestione di eventi.
+    \item \textbf{Controller}: Collante tra Model e View, con business logic limitata.
+\end{itemize}
+
+%Package it.unibo.prevenditaelettronica.frontend.common.model.net
+
+%HTTPHandler
+%JSONParser
+
+%Package it.unibo.prevenditaelettronica.frontend.common.model.broker
+
+%BrokerInterface
+%Broker
+
+%Package it.unibo.prevenditaelettronica.frontend.common.controller
+
+%Gestione Staff Controller
+%Gestione Utente Controller - alcune funzionalità sono solo di amministratore di sistema
+%Autenticazione Controller
+
+%Package it.unibo.prevenditaelettronica.frontend.utente.controller
+%Package it.unibo.prevenditaelettronica.frontend.amministratoredisistema.controller
+
+%Gestione Log Controller
+
+%Package it.unibo.prevenditaelettronica.frontend.membro.controller
+
+%Package it.unibo.prevenditaelettronica.frontend.pr.controller
+
+%Gestione Vendita Prevendite Controller
+
+%Package it.unibo.prevenditaelettronica.frontend.cassiere.controller
+
+%Gestione Entrata Controller
+
+%Package it.unibo.prevenditaelettronica.frontend.amministratore.controller
+
+%Gestione Eventi Controller
+%Gestione Tipologie Prevendita Controller
+%Gestione Membri Controller
+
+
+%Package it.unibo.prevenditaelettronica.frontend.common.view
+
+%Interfaccia Autorizzazione
+%Interfaccie Gestione Utente
+%Interfaccie Gestione Staff
+
+%Package it.unibo.prevenditaelettronica.frontend.utente.view
+
+%Interfaccia Accedi staff
+%Interfaccia Crea staff
+%Interfaccia Cambia password
+
+%Package it.unibo.prevenditaelettronica.frontend.amministratoredisistema.view
+
+%Interfacce Gestione Log
+%Interfacce Sblocco utente
+%Interfacce Registra utente
+
+%Package it.unibo.prevenditaelettronica.frontend.membro.view
+
+%Interaccia Visualizza statistiche personali
+
+%Package it.unibo.prevenditaelettronica.frontend.pr.view
+
+%Interfaccie Gestione vendita prevendita
+
+%Package it.unibo.prevenditaelettronica.frontend.cassiere.view
+
+%Interfaccie Gestione entrata
+
+%Package it.unibo.prevenditaelettronica.frontend.amministratore.view
+
+%Interfacce Gestione Membri
+%Interfacce Gestione Tipologie Prevendita
+%Interfacce Gestione Eventi
+%Interfacce Cambia codice accesso
+%Interfacce Visualizza Statistiche
 
 
 
