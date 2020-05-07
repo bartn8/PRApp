@@ -93,12 +93,10 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 	
 	\item \hypertarget{R12F}{R12F} - Quando un utente crea uno staff ne diventa membro e amministratore.
 	
-	%TODO: Chiedere R13F e R14F
-	
 	%Timbratura (Cassiere)
 	\item \hypertarget{R13F}{R13F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
 	
-	\item \hypertarget{R14F}{R14F} - Il documento digitale consegnato al cliente sarà utilizzato dal cassiere all'ingresso timbrare la prevedita elettronica.
+	\item \hypertarget{R14F}{R14F} - Si prevede la generazione di un documento elettronico da consegnare al cliente, associato alla prevendita, per il riconoscimento all'entrata dell'evento.
 	
 	%Non viene specificata la modalità di consegna: URL, file immagine file testo etc.
 	\item \hypertarget{R15F}{R15F} - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
@@ -301,8 +299,6 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 %\begin{center}
 %    \includegraphics[scale=0.9]{use_cases.png}
 %\end{center}
-
-%TODO: chiedi al prof membro utente amministratore di sistema
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Analisi/Cases/use_cases.png}
@@ -1508,8 +1504,6 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \subsubsection{Tabelle Informazioni/Flusso}
 
-%TODO: rivedere le tabelle di flusso
-
 \textbf{Gestione Utente - Tabella Informazioni/Flusso}
 
 \begin{center}
@@ -1663,8 +1657,6 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \textbf{Visualizzazione statistiche personali  - Tabella Informazioni/Flusso}
 
-%TODO: Da chiedere per i filtri.
-
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
         \hline
@@ -1727,8 +1719,6 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
     \end{tabularx}
 \end{center}
-
-%TODO: Da chiedere anche qui se il flusso va bene
 
 \textbf{Gestione membri  - Tabella Informazioni/Flusso}
 
@@ -2280,10 +2270,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 Analizzando il vocabolario si evidenzia il privilegio dell'utente che può essere normale o amministratore di sistema, i ruoli di un membro che possono essere cassiere, pr o amministratore.\\Dall'analisi del vocabolario, rivisto dopo l'analisi di sicurezza, si evidenzia anche il log, con i livelli di importanza: basso, medio, alto.\\\textbf{Qui sotto il modello del dominio:}\\
 
-%TODO: Chiedere al prof se i versi delle molteplicità vanno bene   
-%TODO: Chiedere anche per le operazioni
-%TODO: Chiedere la molteplicità se va bene
-%TODO: Chiedere se le molteplicità cambiano nella progettazione
+%TODO: Rivedere Associazioni dirette.
+%Chiedere se le molteplicità cambiano nella progettazione: Solo se c'è differenza di navigabilità
 
 %\begin{center}
 %    \includegraphics[scale=0.68]{modello_dominio.png}
@@ -2314,8 +2302,6 @@ Analizzando il vocabolario si evidenzia il privilegio dell'utente che può esser
 \newpage
 
 \subsubsection{Diagramma delle classi}
-
-%TODO: Da chiedere se gestione log controller è da mettere sotto gestione utente controller.
 
 \textbf{Diagramma delle classi: Gestione Utente}
 
@@ -2367,10 +2353,6 @@ Le interfacce sono molte, visto le operazioni effettuabili nel sistema gestional
 \newpage
 
 \subsubsection{Interazione}
-
-%TODO: chiedere come funziona il blocco attivazione: se gli attori possono essere usati col blocco, vedi diagramma vendita prevendita o registrazione utente
-
-%TODO: Chiedere se sono sufficienti
 
 Saranno riportati solo i diagrammi di sequenza ritenuti principali per il sistema di gestione prevendite
 
@@ -2442,8 +2424,6 @@ Dopo un'attenta analisi, abbiamo deciso di mostrare i diagrammi di stato riguard
 %R14NF - La tipologia di prevendita associata non `e modificabile
 %R15NF - Il prezzo di una tipologia di prevendita `e modificabile solo se non sono state vendute prevendite conquella determinata tipologia
 %R19NF - La timbratura puo essere fatta solo una volta
-
-%TODO: riguardare con il prof
 
 \textbf{Diagramma di Stato: Evento}
 
@@ -2537,8 +2517,6 @@ di integrazione che permettono di verificare la correttezza delle singole parti.
 \lstinputlisting[language=Java]{Analisi/Test/TestEvento.java}
 \lstinputlisting[language=Java]{Analisi/Test/TestPrevendita.java}
 
-%TODO
-
 \newpage
 
 \section{Progettazione}
@@ -2580,25 +2558,21 @@ Si tratta dell'ultimo livello, quello a contatto con gli utilizzatori finali, sp
 \subsubsection{Patterns \& Design Principle}
 Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVC} sia per l'applicativo middle-ware, sia per la parte front-end. Il software middle-ware avrà una parte di view minima, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
 
-\subsubsection{Diagramma a package}
+%\subsubsection{Diagramma a package}
 
-%TODO: Da chiedere se il diagramma a package va bene
-%TODO: Da chiedere se bisogna tenere uno o l'altro
-%TODO: Da chiedere se il pattern broker è utilizzato correttamente
-%TODO: Da chiedere dove mettere il protocollo di comunicazione tra middle-ware e front-end
+%Da chiedere dove mettere il protocollo di comunicazione tra middle-ware e front-end: Va in implementazione
 
 
-Nella figura sottostante è riportata l’Architettura del Sistema organizzata attraverso un
-diagramma dei package:\\
+%Nella figura sottostante è riportata l’Architettura del Sistema organizzata attraverso un diagramma dei package:\\
 
 
-\begin{figure}[H]
-    \includegraphics[scale=0.55]{Progettazione/diagramma_architettura_logica_package.png}
-    \centering
-    \caption{diagramma\_architettura\_logica\_package.vsdx}
-\end{figure}
+%\begin{figure}[H]
+%    \includegraphics[scale=0.55]{Progettazione/diagramma_architettura_logica_package.png}
+%    \centering
+%    \caption{diagramma\_architettura\_logica\_package.vsdx}
+%\end{figure}
 
-\newpage
+%\newpage
 
 \subsubsection{Diagramma a componenti}
 
@@ -2616,9 +2590,10 @@ Abbiamo deciso di utilizzare come protocollo di sicurezza e trasmissione dei dat
 
 \subsection{Progettazione di dettaglio}
 
-%TODO: chiedere la divisione di package in base al livello middle-ware o front-end.
-%TODO: chiedere come definire lo scambio dei dati tra middle-ware e front-end
-%TODO: Chiedere se vanno descritte tutte
+%Chiedere la divisione di package in base al livello middle-ware o front-end: si
+%Chiedere come definire lo scambio dei dati tra middle-ware e front-end: implementazione
+%Chiedere se aggiungere le chiavi del db nel dominio: Si
+%Chiedere se gli oggetti delle relazioni vanno esplicitate nella progettazione: no
 
 \subsubsection{Struttura}
 
