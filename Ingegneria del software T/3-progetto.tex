@@ -72,69 +72,69 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 \begin{itemize}
 	
 	%--Requisiti di identificazione
-	\item \hypertarget{R2F}{R2F} - Gli utenti devono essere identificati tramite username.
+	\item \hypertarget{R1F}{R1F} - Gli utenti devono essere identificati tramite username.
 	
 	%--Requisito di autenticazione
-	\item \hypertarget{R3F}{R3F} - Gli utenti sono autenticati tramite credenziali di username e password.
-	\item \hypertarget{R4F}{R4F} - L'accesso ad uno staff, da parte di un utente, avviene tramite codice di accesso.	
+	\item \hypertarget{R2F}{R2F} - Gli utenti sono autenticati tramite credenziali di username e password.
+	\item \hypertarget{R3F}{R3F} - L'accesso ad uno staff, da parte di un utente, avviene tramite codice di accesso.	
 
 	%Funzionale/non funzionale
-	\item \hypertarget{R5F}{R5F} - La registrazione di utenti è a carico dell'amministratore di sistema.
-	\item \hypertarget{R6F}{R6F} - Possibilità di cambiare la password personale dell'utente.
+	\item \hypertarget{R4F}{R4F} - La registrazione di utenti è a carico dell'amministratore di sistema.
+	\item \hypertarget{R5F}{R5F} - Possibilità di cambiare la password personale dell'utente.
 		
 	%--Requisiti di Autorizzazione
-	\item \hypertarget{R7F}{R7F} - Ogni membro di uno staff può ricoprire dei ruoli: cassiere, PR, amministratore.	
-	\item \hypertarget{R8F}{R8F} - Il ruolo di cassiere riguarda la timbratura di prevendite all'ingresso di un evento.
-	\item \hypertarget{R9F}{R9F} - Il ruolo di PR riguarda la vendita di prevendite a clienti.
-	\item \hypertarget{R10F}{R10F} - Il ruolo di amministratore riguarda la gestione dei membri, degli eventi, delle tipologie di prevendita di un evento e della visualizzazione di tutte statistiche.
+	\item \hypertarget{R6F}{R6F} - Ogni membro di uno staff può ricoprire dei ruoli: cassiere, PR, amministratore.	
+	\item \hypertarget{R7F}{R7F} - Il ruolo di cassiere riguarda la timbratura di prevendite all'ingresso di un evento.
+	\item \hypertarget{R8F}{R8F} - Il ruolo di PR riguarda la vendita di prevendite a clienti.
+	\item \hypertarget{R9F}{R9F} - Il ruolo di amministratore riguarda la gestione dei membri, degli eventi, delle tipologie di prevendita di un evento e della visualizzazione di tutte statistiche.
 	
 	%Accesso e creazione di uno staff
-	\item \hypertarget{R11F}{R11F} - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
+	\item \hypertarget{R10F}{R10F} - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
 	
-	\item \hypertarget{R12F}{R12F} - Quando un utente crea uno staff ne diventa membro e amministratore.
+	\item \hypertarget{R11F}{R11F} - Quando un utente crea uno staff ne diventa membro e amministratore.
 	
 	%Timbratura (Cassiere)
-	\item \hypertarget{R13F}{R13F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
+	\item \hypertarget{R12F}{R12F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
 	
-	\item \hypertarget{R14F}{R14F} - Si prevede la generazione di un documento elettronico da consegnare al cliente, associato alla prevendita, per il riconoscimento all'entrata dell'evento.
+	\item \hypertarget{R13F}{R13F} - Si prevede la generazione di un documento elettronico da consegnare al cliente, associato alla prevendita, per il riconoscimento all'entrata dell'evento.
 	
 	%Non viene specificata la modalità di consegna: URL, file immagine file testo etc.
-	\item \hypertarget{R15F}{R15F} - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
+	\item \hypertarget{R14F}{R14F} - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
 	
 	%Gestione staff (Amministratore)
-	\item \hypertarget{R16F/NF}{R16F/NF} - Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
-	\item \hypertarget{R17F}{R17F} - Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
+	\item \hypertarget{R15F/NF}{R15F/NF} - Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
+	\item \hypertarget{R16F}{R16F} - Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
 	   
-	\item \hypertarget{R18F}{R18F} - Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
+	\item \hypertarget{R17F}{R17F} - Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
 		
-	\item \hypertarget{R19F}{R19F} - La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
+	\item \hypertarget{R18F}{R18F} - La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
 	
 	%Definizioni
 	%-Eventi
-	\item \hypertarget{R20F}{R20F} - Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
-	\item \hypertarget{R21F}{R21F} - Un evento può essere annullato, anche se ci sono prevendite vendute.
+	\item \hypertarget{R19F}{R19F} - Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
+	\item \hypertarget{R20F}{R20F} - Un evento può essere annullato, anche se ci sono prevendite vendute.
 	
 	%Tipologia Prevendita
-	\item \hypertarget{R22F}{R22F} - Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
+	\item \hypertarget{R21F}{R21F} - Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
 
 	%-Prevendite
-	\item \hypertarget{R23F}{R23F} - Una prevendita può essere annullata e/o rimborsata. 
+	\item \hypertarget{R22F}{R22F} - Una prevendita può essere annullata e/o rimborsata. 
 	
 	%-Statistiche
-	\item \hypertarget{R24F}{R24F} - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
+	\item \hypertarget{R23F}{R23F} - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
 	
-	\item \hypertarget{R25F}{R25F} - Ogni prevedita è nominativa.
+	\item \hypertarget{R24F}{R24F} - Ogni prevedita è nominativa.
 	
 	%Requisiti rimossi o spostati nell'analisi del rischio ----------------------------------------
 	
 	%Si deduce dalla precedente
 	%\item Il ruolo di amministratore non prevede statistiche personali.
-	%\item \hypertarget{R27F}{R27F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
+	%\item \hypertarget{R26F}{R26F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
 	%--Requisiti di scoperta alle intrusioni
-	%\item \hypertarget{R11F}{R11F} - Utilizzo di log per monitorare operazioni critiche.
+	%\item \hypertarget{R10F}{R10F} - Utilizzo di log per monitorare operazioni critiche.
 
 	%--Requisiti di riservatezza
-	%\item \hypertarget{R12F}{R12F} - Le password devono essere salvate in modo sicuro.
+	%\item \hypertarget{R11F}{R11F} - Le password devono essere salvate in modo sicuro.
 	
 	%Non vuol dire cifrato! Basta un controllo agli accessi.
 	%Se salvi in DB ricorda di indicizzare.
@@ -149,63 +149,63 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 \subsubsection{Requisiti non funzionali}
 
 \begin{itemize}
-    \item \hypertarget{R1NFbis}{R1NFbis} - Il software prevede la possibilità di gestire più staff.
-    \item \hypertarget{R1NF}{R1NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
-	\item \hypertarget{R2NF}{R2NF} - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
-	\item \hypertarget{R3NF}{R3NF} - Ogni utente registrato può creare al massimo uno staff.
-	\item \hypertarget{R4NF}{R4NF} - Requisito fondamentale è il basso costo del prodotto software.
+    \item \hypertarget{R1NF}{R1NF} - Il software prevede la possibilità di gestire più staff.
+    \item \hypertarget{R2NF}{R2NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
+	\item \hypertarget{R3NF}{R3NF} - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
+	\item \hypertarget{R4NF}{R4NF} - Ogni utente registrato può creare al massimo uno staff.
+	\item \hypertarget{R5NF}{R5NF} - Requisito fondamentale è il basso costo del prodotto software.
 	
-	\item \hypertarget{R5NF}{R5NF} - I membri non amministratori possono vedere solo le statistiche personali.	
-	\item \hypertarget{R6NF}{R6NF} - I membri non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
-	\item \hypertarget{R7NF}{R7NF} - I membri non amministratori possono solo vedere gli eventi dello staff.
-	\item \hypertarget{R8NF}{R8NF} - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell'evento.
-	\item \hypertarget{R9NF}{R9NF} - Una prevendita annullata e/o rimborsata rimane tale.
-	\item \hypertarget{R10NF}{R10NF} - Un evento annullato rimane tale.
-	\item \hypertarget{R11NF}{R11NF} - Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
-	\item \hypertarget{R12NF}{R12NF} - La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
+	\item \hypertarget{R6NF}{R6NF} - I membri non amministratori possono vedere solo le statistiche personali.	
+	\item \hypertarget{R7NF}{R7NF} - I membri non amministratori possono solo vedere le tipologie di prevendite associate ad un evento.
+	\item \hypertarget{R8NF}{R8NF} - I membri non amministratori possono solo vedere gli eventi dello staff.
+	\item \hypertarget{R9NF}{R9NF} - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell'evento.
+	\item \hypertarget{R10NF}{R10NF} - Una prevendita annullata e/o rimborsata rimane tale.
+	\item \hypertarget{R11NF}{R11NF} - Un evento annullato rimane tale.
+	\item \hypertarget{R12NF}{R12NF} - Si prevedono più forme di consegna del documento digitale, per affrontare le eterogeneità.
+	\item \hypertarget{R13NF}{R13NF} - La password fornita dall'amministratore di sistema a tempo di registrazione va cambiata immediatamente dopo il login.
 	
 	%Prevendita
-	\item \hypertarget{R13NF}{R13NF} - Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
-	\item \hypertarget{R14NF}{R14NF} - La tipologia di prevendita associata non è modificabile.
+	\item \hypertarget{R14NF}{R14NF} - Ogni prevendita venduta è associata ad una sola tipologia di prevendita.
+	\item \hypertarget{R15NF}{R15NF} - La tipologia di prevendita associata non è modificabile.
 	
 	%Tipologia prevendita
-	\item \hypertarget{R15NF}{R15NF} - Il prezzo di una tipologia di prevendita è modificabile solo se non sono state vendute prevendite con quella determinata tipologia.
+	\item \hypertarget{R16NF}{R16NF} - Il prezzo di una tipologia di prevendita è modificabile solo se non sono state vendute prevendite con quella determinata tipologia.
 	
 	%--Requisiti di non-ripudiabilità
-	\item \hypertarget{R16NF}{R16NF} - Quando un PR vende una prevendita, essa viene associata ad esso.
-	\item \hypertarget{R17NF}{R17NF} - Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
+	\item \hypertarget{R17NF}{R17NF} - Quando un PR vende una prevendita, essa viene associata ad esso.
+	\item \hypertarget{R18NF}{R18NF} - Quando un Cassiere timbra una prevendita, essa viene associata ad esso.
 	
 	%Vendita (PR)
-	\item \hypertarget{R18NF}{R18NF} - Prima della vendita il cliente sceglierà una tipologia di prevendita associata all'evento a cui vuole partecipare.
+	\item \hypertarget{R19NF}{R19NF} - Prima della vendita il cliente sceglierà una tipologia di prevendita associata all'evento a cui vuole partecipare.
 	
-	\item \hypertarget{R19NF}{R19NF} - La timbratura può essere fatta solo una volta.
+	\item \hypertarget{R20NF}{R20NF} - La timbratura può essere fatta solo una volta.
 	
-	\item \hypertarget{R20NF}{R20NF} - L'interfaccia utente deve garantire velocità d'utilizzo, soprattutto per il cassiere.
+	\item \hypertarget{R21NF}{R21NF} - L'interfaccia utente deve garantire velocità d'utilizzo, soprattutto per il cassiere.
 	
 	%Requisiti rimossi o spostati nell'analisi del rischio ----------------------------------------
 	
 	%Se si verifica attacco freezing dell'account cambiare username.
-	%\item \hypertarget{R1NF}{R1NF} - Il blocco dell'account deve avvenire dopo 3 tentativi
-	%\item \hypertarget{R6NF}{R6NF} - Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
+	%\item \hypertarget{R2NF}{R2NF} - Il blocco dell'account deve avvenire dopo 3 tentativi
+	%\item \hypertarget{R7NF}{R7NF} - Utilizzare uno o più metodi per velocizzare l'autenticazione dell'utente.
 	
 		%Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
-	%\item \hypertarget{R15NF}{R15NF} - Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
+	%\item \hypertarget{R16NF}{R16NF} - Bloccare l'account utente dopo troppi tentativi di accesso e notificarlo nei log.
 	
-	%\item \hypertarget{R16NF}{R16NF} - Ogni ruolo è indipendente.
-	%\item \hypertarget{R17NF}{R17NF} - Ogni staff gestito dal software è indipendente.
+	%\item \hypertarget{R17NF}{R17NF} - Ogni ruolo è indipendente.
+	%\item \hypertarget{R18NF}{R18NF} - Ogni staff gestito dal software è indipendente.
 	
 	%Utilizzo https per la cifratura
-	%\item \hypertarget{R18NF}{R18NF} - Si richiede una comunicazione sicura.
+	%\item \hypertarget{R19NF}{R19NF} - Si richiede una comunicazione sicura.
 	
 	%Sistema locale senza server remoto tramite server locale + wifi
-	%\item \hypertarget{R19NF}{R19NF} - Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
+	%\item \hypertarget{R20NF}{R20NF} - Si richiedono procedure manuali o automatiche per cercare di garantire la disponibilità del servizio.
 	
 	%Codice della prevendita
 	%Prevendita nominativa
-	%\item \hypertarget{R20NF}{R20NF} - Si richiedono metodi per evitare la contraffazione delle prevendite.
+	%\item \hypertarget{R21NF}{R21NF} - Si richiedono metodi per evitare la contraffazione delle prevendite.
 	
 	%Log
-	%\item \hypertarget{R21NF}{R21NF} - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
+	%\item \hypertarget{R22NF}{R22NF} - Prevedere livelli di log per aiutare l'analisi da parte dell'amministratore di sistema.
 	
 	%-----------------------------------------------------------------------------------------------
 \end{itemize}
@@ -308,6 +308,8 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 
 L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tutti i servizi forniti agli attori.\\Con le frecce \textcolor{violet}{viola} abbiamo voluto evidenziare la maggior parte degli scenari che estendono la gestione degli utenti o dello staff.\\Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.    
 
+%TODO: aggiornare scenari tabelle flusso etc.
+
 \newpage
 
 \subsubsection{Scenari}
@@ -350,46 +352,38 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 								 & E) L'utente è gia autenticato:\\
 								 & \quad 1. Mostro la schermata principale.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF}, \hyperlink{R7NF}{R7NF}, \hyperlink{R16NF}{R16NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
 \end{tabularx}
 \end{center}
   
-%Gestione utente
+%Gestione Amministrazione
 
 \begin{center}
 \begin{tabularx}{1\textwidth}{|l|X|}
     \hline
-	\textbf{Titolo} & Gestione utente \\
+	\textbf{Titolo} & Gestione Amministrazione \\
 	\hline
-	\textbf{Descrizione} & Gestione degli utenti presenti nel software gestionale \\
+	\textbf{Descrizione} & Amministrazione del software gestionale \\
 	\hline
-	\textbf{Attori} & Utente \\
+	\textbf{Attori} & Amministratore di sistema \\
 	\hline
-	%\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff, Gestione log, Registrazione utente, Sblocco utente \\
-	\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff, Registrazione utente \\
+	\textbf{Relazioni} & Login, Registrazione utente \\
 	\hline
 	\textbf{Precondizioni} &  \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'utente risulta già autenticato.\\
+	\textbf{Scenario principale} & 1. L'Amministratore di sistema risulta già autenticato.\\
 	                             & 2. Viene mostrata una schermata con le azioni possibili:\\
-								 & \quad a. Cambia Password.\\
-								 & \quad b. Accedi staff.\\
-								 & \quad c. Crea staff.\\
-								 & \quad d. Scegli Staff\\
-								 & 2b. Se l'utente è anche amministratore di sistema, vengono aggiunte delle scelte:\\
-								 %& \quad d. Gestione log.\\
-								 & \quad e. Registrazione utente.\\
-								 %& \quad f. Sblocco utente.\\
-								 & 3. L'utente sceglie l'operazione desiderata.\\
+								 & \quad a. Registrazione utente\\
+								 & 3. L'Amministratore di sistema sceglie l'operazione desiderata.\\
 								 & 4. Il sistema cambia vista a seconda della scelta.\\
 	\hline
-	\textbf{Scenari alternativi} & A) L'utente non è autenticato: \\
-								 & \quad 1. Notifica all'utente.\\
+	\textbf{Scenari alternativi} & A) L'Amministratore di sistema non è autenticato: \\
+								 & \quad 1. Notifica all'Amministratore di sistema.\\
 								 & \quad 2. Passaggio al login.\\
 	\hline
 	\textbf{Requisiti non funzionali} & \\
@@ -399,7 +393,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 \end{tabularx}
 \end{center}
 
-%Qui metto i casi d'uso sotto gestione utente------------------------------------------
+%Qui metto i casi d'uso sotto gestione amministrazione--------------------------------------
 
 %Registrazione utente
 
@@ -412,7 +406,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Attori} & Amministratore di sistema \\
 	\hline
-	\textbf{Relazioni} & Gestione utente \\
+	\textbf{Relazioni} & Gestione Amministrazione \\
 	\hline
 	\textbf{Precondizioni} &  \\
 	\hline
@@ -428,7 +422,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 								 & \quad 2. L'amministratore cerca di correggere i dati.\\
 								 & \quad 3. L'amministratore ripete l'operazione.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -469,12 +463,54 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 % & C) La richiesta di aggiunta log viene
 
 % \hline
-% \textbf{Requisiti non funzionali} &  \hyperlink{R21NF}{R21NF} \\
+% \textbf{Requisiti non funzionali} &  \hyperlink{R22NF}{R22NF} \\
 % \hline
 % \textbf{Punti aperti} & \\
 % \hline
 % \end{tabularx}
 % \end{center}
+
+%------------------------------------------------------
+
+%Gestione utente
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+    \hline
+	\textbf{Titolo} & Gestione utente \\
+	\hline
+	\textbf{Descrizione} & Gestione degli utenti presenti nel software gestionale \\
+	\hline
+	\textbf{Attori} & Utente \\
+	\hline
+	%\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff, Gestione log, Registrazione utente, Sblocco utente \\
+	\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff \\
+	\hline
+	\textbf{Precondizioni} &  \\
+	\hline
+	\textbf{Postcondizioni} &  \\
+	\hline
+	\textbf{Scenario principale} & 1. L'utente risulta già autenticato.\\
+	                             & 2. Viene mostrata una schermata con le azioni possibili:\\
+								 & \quad a. Cambia Password.\\
+								 & \quad b. Accedi staff.\\
+								 & \quad c. Crea staff.\\
+								 & \quad d. Scegli Staff\\
+								 & 3. L'utente sceglie l'operazione desiderata.\\
+								 & 4. Il sistema cambia vista a seconda della scelta.\\
+	\hline
+	\textbf{Scenari alternativi} & A) L'utente non è autenticato: \\
+								 & \quad 1. Notifica all'utente.\\
+								 & \quad 2. Passaggio al login.\\
+	\hline
+	\textbf{Requisiti non funzionali} & \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
+
+%Qui metto i casi d'uso sotto gestione utente------------------------------------------
 
 % Crea staff
 
@@ -504,7 +540,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 									 & \quad 1. Notifica all'utente \\
 									 & \quad 2. Ritorno alla schermata precedente.\\
 		\hline
-		\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
+		\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
 		\hline
 		\textbf{Punti aperti} & \\
 		\hline
@@ -537,7 +573,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -574,7 +610,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 								 & B) L'utente ha fornito un codice di accesso errato:\\
 								 & \quad 1. Notifica all'utente.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -691,7 +727,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R7NF}{R7NF}, \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R11NF}{R11NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R18NF}{R18NF}  \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R12NF}{R12NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF}  \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -728,7 +764,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R18NF}{R18NF}, \hyperlink{R20NF}{R20NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -762,7 +798,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R3NF}{R3NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -793,7 +829,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R5NF}{R5NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R6NF}{R6NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -830,7 +866,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R7NF}{R7NF}, \hyperlink{R10NF}{R10NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R11NF}{R11NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -867,7 +903,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R8NF}{R8NF}, \hyperlink{R15NF}{R15NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R9NF}{R9NF}, \hyperlink{R16NF}{R16NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -905,7 +941,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 								 & \quad 1. Notifica all'utente. \\
 								 & \quad 2. Ritorno alla schermata precedente. \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R16F/NF}{R16F/NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R15F/NF}{R15F/NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -943,10 +979,10 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
                                     & Rappresentano i guadagni per uno staff, nonché il biglietto d'ingresso di un cliente & Perdita d'immagine del software: lo staff ha perso informazioni riguardo i ricavi, perdita d'immagine dello staff: il cliente non riesce a entrare. Possibile perdita economica se vengono aggiunte prevendite non dovute.\\
          \hline
          \multirow{2}{*}{Informazioni su clienti} & Medio & Bassa \\
-                                  & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R25F}{R25F}) & \\
+                                  & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R24F}{R24F}) & \\
          \hline
-         \multirow{2}{*}{\shortstack[l]{Informazioni su\\ amministratori di sistema}} & Medio-Alto &  Alta \\
-                                                    & Hanno lo stesso valore di quelle degli utenti & Tutte le esposizioni sulle informazioni degli utenti, più la possibilità di perdere log\\ 
+         \multirow{2}{*}{\shortstack[l]{Informazioni su\\ amministratori di sistema}} & Alto &  Alta \\
+                                                    & Ha poteri sul sistema gestionale &  Possibilità di perdere informazioni di sistema. Perdita d'immagine del software.\\ 
          \hline
     \end{tabularx}
 \end{center}
@@ -967,10 +1003,10 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
         Alterazione dei dati nella comunicazione & Medio-Alta. Molte comunicazione avvengono nel sistema distribuito client/server. & Uso di canale sicuro & Costo basso anche se si utilizza un mix tra chiave simmetrica e asimmetrica\\
         Man in the Middle &  &  & \\
         \hline
-        %DoS/DDoS & Bassa & Sistema locale durante l'evento (\hyperlink{R19NF}{R19NF}) & Costo medio, richiesta di risorse hardware portatili\\
+        %DoS/DDoS & Bassa & Sistema locale durante l'evento (\hyperlink{R20NF}{R20NF}) & Costo medio, richiesta di risorse hardware portatili\\
         DoS/DDoS & Bassa & Sistema locale durante l'evento & Costo medio, richiesta di risorse hardware portatili\\
         \hline
-        %Contraffazione della prevendita & Alta & Sistema anti-contraffazione (\hyperlink{R20NF}{R20NF}), prevendita nominativa & Costo minimo\\
+        %Contraffazione della prevendita & Alta & Sistema anti-contraffazione (\hyperlink{R21NF}{R21NF}), prevendita nominativa & Costo minimo\\
         Contraffazione della prevendita & Alta & Sistema anti-contraffazione, prevendita nominativa & Costo minimo\\
         \hline
         Furto della prevendita & Media & prevendita nominativa & Costo minimo\\
@@ -1270,22 +1306,22 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 \begin{itemize}
     \item \textbf{REQUISITI FUNZIONALI}
     
-    \item \hypertarget{R26F}{R26F} - Creare un sistema di log per il tracciamento delle operazioni automatico.
-    \item \hypertarget{R27F}{R27F} - L'amministratore di sistema deve avere il pieno controllo dei log.
-    \item \hypertarget{R28F}{R28F} - Creare un sistema per il bloccaggio dell'account dopo vari tentativi. L'amministratore di sistema ha l'autorizzazione a sbloccare l'account.
+    \item \hypertarget{R25F}{R25F} - Creare un sistema di log per il tracciamento delle operazioni automatico.
+    \item \hypertarget{R26F}{R26F} - L'amministratore di sistema deve avere il pieno controllo dei log.
+    \item \hypertarget{R27F}{R27F} - Creare un sistema per il bloccaggio dell'account dopo vari tentativi. L'amministratore di sistema ha l'autorizzazione a sbloccare l'account.
     
     \item \textbf{REQUISITI NON FUNZIONALI}
     
     %HTTPS
-    \item \hypertarget{R21NF}{R21NF} - I dati della comunicazione devono essere protetti.
-    \item \hypertarget{R22NF}{R22NF} - I dati persistenti devono essere protetti.
-    \item \hypertarget{R23NF}{R23NF} - Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
-    \item \hypertarget{R24NF}{R24NF} - Il sistema deve cercare di garantire la disponibilità del servizio.
+    \item \hypertarget{R22NF}{R22NF} - I dati della comunicazione devono essere protetti.
+    \item \hypertarget{R23NF}{R23NF} - I dati persistenti devono essere protetti.
+    \item \hypertarget{R24NF}{R24NF} - Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
+    \item \hypertarget{R25NF}{R25NF} - Il sistema deve cercare di garantire la disponibilità del servizio.
     %Sistema locale senza server remoto tramite server locale + wifi
-    \item \hypertarget{R25NF}{R25NF} - Il sistema deve essere strutturato in modo da essere replicabile localmente.
-    \item \hypertarget{R26NF}{R26NF} - Il sistema deve essere in grado di riconoscere prevendite contraffatte.
+    \item \hypertarget{R26NF}{R26NF} - Il sistema deve essere strutturato in modo da essere replicabile localmente.
+    \item \hypertarget{R27NF}{R27NF} - Il sistema deve essere in grado di riconoscere prevendite contraffatte.
     %Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
-    \item \hypertarget{R27NF}{R27NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
+    \item \hypertarget{R28NF}{R28NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
     
 \end{itemize}
 
@@ -1342,7 +1378,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 	\hline
 	\textbf{Attori} & Amministratore di sistema \\
 	\hline
-	\textbf{Relazioni} & Gestione utente \\
+	\textbf{Relazioni} & Gestione Amministrazione \\
 	\hline
 	\textbf{Precondizioni} &  \\
 	\hline
@@ -1375,7 +1411,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         \textbf{Attori} & Amministratore di sistema \\
         \hline
-        \textbf{Relazioni} & Gestione utente \\
+        \textbf{Relazioni} & Gestione Amministrazione \\
         \hline
         \textbf{Precondizioni} &  \\
         \hline
@@ -1396,7 +1432,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \end{tabularx}
 \end{center}
 
-Nello scenario login ho aggiunto il requisito non funzionale
+%Nello scenario login ho aggiunto il requisito non funzionale
 
 \begin{center}
 \begin{tabularx}{1\textwidth}{|l|X|}
@@ -1434,7 +1470,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
 								 & E) L'utente è gia autenticato:\\
 								 & \quad 1. Mostro la schermata principale.\\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R1NF}{R1NF}, \hyperlink{R6NF}{R6NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R27NF}{R27NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF}, \hyperlink{R7NF}{R7NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R28NF}{R28NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -1443,9 +1479,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \newpage
 
-\subsection{Descrizione delle interfacce grafiche}
-
-\newpage
+%\subsection{Descrizione delle interfacce grafiche}
+%\newpage
 
 \section{Analisi del problema}
 
@@ -1459,43 +1494,44 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Funzionalità} & \textbf{Tipo} & \textbf{Grado di Complessità} & \textbf{Requisiti collegati}\\
         \hline
         \hline
-        %Gestione utente & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R11F}{R11F}\\
+        Autenticazione & Lettura di dati, interazione con l'esterno & Semplice & \hyperlink{R1F}{R1F}, \hyperlink{R2F}{R2F} \\
+        \hline
+        Gestione Amministrazione & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso & \\
+        \hline
+        Gestione log & gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R25F}{R25F}, \hyperlink{R26F}{R26F}\\
+        \hline
+        Scrittura log & memorizzazione di dati & Semplice & \hyperlink{R25F}{R25F}\\
+        \hline
+        Sblocco utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R27F}{R27F}\\
+        \hline
+        Registrazione utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1F}{R1F}, \hyperlink{R2F}{R2F}, \hyperlink{R4F}{R4F} \\
+        \hline
         Gestione utente & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso & \\
         \hline
-        Gestione log & gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R26F}{R26F}, \hyperlink{R27F}{R27F}\\
+        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1NF}{R1NF}, \hyperlink{R3F}{R3F}, \hyperlink{R11F}{R11F}\\
         \hline
-        Scrittura log & memorizzazione di dati & Semplice & \hyperlink{R26F}{R26F}\\
+        Accedi staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R1NF}{R1NF}, \hyperlink{R3F}{R3F}, \hyperlink{R10F}{R10F} \\
         \hline
-        Sblocco utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R28F}{R28F}\\
+        Cambia password & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R2F}{R2F}, \hyperlink{R5F}{R5F} \\
         \hline
-        Registrazione utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R2F}{R2F}, \hyperlink{R3F}{R3F}, \hyperlink{R5F}{R5F} \\
-        \hline
-        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1NFbis}{R1NFbis}, \hyperlink{R4F}{R4F}, \hyperlink{R12F}{R12F}\\
-        \hline
-        Accedi staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R1NFbis}{R1NFbis}, \hyperlink{R4F}{R4F}, \hyperlink{R11F}{R11F} \\
-        \hline
-        Cambia password & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R3F}{R3F}, \hyperlink{R6F}{R6F} \\
-        \hline
-        %Gestione staff & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R10F}{R10F},  \\
+        %Gestione staff & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R6F}{R6F}, \hyperlink{R9F}{R9F},  \\
         Gestione staff & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso &  \\
         \hline
-        Visualizzazione statistiche personali & Lettura dati, interazione con l'esterno & Semplice &  \hyperlink{R24F}{R24F} \\
+        Visualizzazione statistiche personali & Lettura dati, interazione con l'esterno & Semplice &  \hyperlink{R23F}{R23F} \\
         \hline
-        Gestione vendita prevendita & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R9F}{R9F}, \hyperlink{R14F}{R14F}, \hyperlink{R15F}{R15F}, \hyperlink{R23F}{R23F}, \hyperlink{R25F}{R25F} \\
+        Gestione vendita prevendita & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R8F}{R8F}, \hyperlink{R13F}{R13F}, \hyperlink{R14F}{R14F}, \hyperlink{R22F}{R22F}, \hyperlink{R24F}{R24F} \\
         \hline
-        Gestione entrata & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R8F}{R8F}, \hyperlink{R13F}{R13F}, \hyperlink{R14F}{R14F} \\
+        Gestione entrata & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R12F}{R12F}, \hyperlink{R13F}{R13F} \\
         \hline
-        Gestione membri & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R10F}{R10F}, \hyperlink{R16F/NF}{R16F/NF} \\
+        Gestione membri & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R6F}{R6F}, \hyperlink{R9F}{R9F}, \hyperlink{R15F/NF}{R15F/NF} \\
         \hline
-        Cambia codice accesso & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R17F}{R17F}  \\
+        Cambia codice accesso & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R16F}{R16F}  \\
         \hline
-        Visualizzazione statistiche & Lettura dati, interazione con l'esterno & Semplice & \hyperlink{R10F}{R10F}  \\
+        Visualizzazione statistiche & Lettura dati, interazione con l'esterno & Semplice & \hyperlink{R9F}{R9F}  \\
         \hline
-        Gestione eventi & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R10F}{R10F}, \hyperlink{R18F}{R18F}, \hyperlink{R20F}{R20F}, \hyperlink{R21F}{R21F} \\
+        Gestione eventi & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R9F}{R9F}, \hyperlink{R17F}{R17F}, \hyperlink{R19F}{R19F}, \hyperlink{R20F}{R20F} \\
         \hline
-        Gestione tipologie prevendite & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R10F}{R10F}, \hyperlink{R19F}{R19F}, \hyperlink{R22F}{R22F} \\
-        \hline
-        Autenticazione & Lettura di dati, interazione con l'esterno & Semplice & \hyperlink{R2F}{R2F}, \hyperlink{R3F}{R3F} \\
+        Gestione tipologie prevendite & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R9F}{R9F}, \hyperlink{R18F}{R18F}, \hyperlink{R21F}{R21F} \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1504,18 +1540,13 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \subsubsection{Tabelle Informazioni/Flusso}
 
-\textbf{Gestione Utente - Tabella Informazioni/Flusso}
+\textbf{Gestione Amministrazione - Tabella Informazioni/Flusso}
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
-        \hline
-        %Da chiedere se da mettere
-        %Tipologia utente & Semplice & Alto & Input & Enumeratore: Utente normale o Amministratore di sistema \\
-        \hline
-        Staff scelto & Semplice & Medio & Input & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1589,12 +1620,25 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         Username & Semplice & Alto & Input & Non più di 20 caratteri\\
         \hline
-        Password & Semplice & Alto & Input & \hyperlink{R1NF}{R1NF}, non più di 50 caratteri\\
+        Password & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, non più di 50 caratteri\\
         \hline
     \end{tabularx}
 \end{center}
 
 \newpage
+
+\textbf{Gestione Utente - Tabella Informazioni/Flusso}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+        \hline
+        \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
+        \hline
+        \hline
+        Staff scelto & Semplice & Medio & Input & \\
+        \hline
+    \end{tabularx}
+\end{center}
 
 \textbf{Crea staff  - Tabella Informazioni/Flusso}
 
@@ -1606,7 +1650,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         Nome & Semplice & Basso & Input & Non più di 100 caratteri\\
         \hline
-        Codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
+        Codice di accesso & Semplice & Alto & Input & \hyperlink{R3NF}{R3NF}, Non più di 50 caratteri\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1619,9 +1663,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Nome & Semplice & Basso & Input & Non più di 100 caratteri\\
+        Nome & Semplice & Basso & Input & Non più di 50 caratteri\\
         \hline
-        Codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
+        Codice di accesso & Semplice & Alto & Input & \hyperlink{R3NF}{R3NF}, Non più di 50 caratteri\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1634,9 +1678,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Vecchia password & Semplice & Alto & Input & \hyperlink{R1NF}{R1NF}, Non più di 50 caratteri\\
+        Vecchia password & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
         \hline
-        Nuova password & Semplice & Alto & Input & \hyperlink{R1NF}{R1NF}, Non più di 50 caratteri\\
+        Nuova password & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1649,7 +1693,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        %Ruolo & Semplce & Alto & Input & \hyperlink{R7F}{R7F} \\
+        %Ruolo & Semplce & Alto & Input & \hyperlink{R6F}{R6F} \\
         Evento scelto & Semplice & Medio & Input & \\
         \hline
     \end{tabularx}
@@ -1684,7 +1728,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Prevendita & Complesso & Medio & Input & \hyperlink{R25F}{R25F}, \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R18NF}{R18NF}, \hyperlink{R26NF}{R26NF} \\
+        Prevendita & Complesso & Medio & Input & \hyperlink{R24F}{R24F}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF}, \hyperlink{R27NF}{R27NF} \\
         \textbf{Composto da:} & & & & \\
         Nome cliente & Semplice & Medio & Input & \\
         Cognome cliente & Semplice & Medio & Input & \\
@@ -1692,12 +1736,10 @@ Nello scenario login ho aggiunto il requisito non funzionale
         Tipologia prevendita associata & Semplice & Medio & Input & \\
         PR Associato & Semplice & Medio & Input & \\
         \hline
-        %Documento digitale & Complesso & Medio & Output & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
+        %Documento digitale & Complesso & Medio & Output & \hyperlink{R12NF}{R12NF}, \hyperlink{R27NF}{R27NF}  \\
         %\hline
     \end{tabularx}
 \end{center}
-
-\newpage
 
 \textbf{Gestione entrata  - Tabella Informazioni/Flusso}
 
@@ -1707,9 +1749,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        %Documento digitale & Complesso & Medio & Input & \hyperlink{R11NF}{R11NF}, \hyperlink{R26NF}{R26NF}  \\
+        %Documento digitale & Complesso & Medio & Input & \hyperlink{R12NF}{R12NF}, \hyperlink{R27NF}{R27NF}  \\
         %\hline
-        Prevendita & Complesso & Medio & Input & \hyperlink{R25F}{R25F}, \hyperlink{R8NF}{R8NF}, \hyperlink{R9NF}{R9NF}, \hyperlink{R13NF}{R13NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R18NF}{R18NF}, \hyperlink{R26NF}{R26NF} \\
+        Prevendita & Complesso & Medio & Input & \hyperlink{R24F}{R24F}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF}, \hyperlink{R27NF}{R27NF} \\
         \textbf{Composto da:} & & & & \\
         Nome cliente & Semplice & Medio & Input & \\
         Cognome cliente & Semplice & Medio & Input & \\
@@ -1728,7 +1770,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Informazioni membro & Complesso & Alto & Input & \hyperlink{R7F}{R7F}\\
+        Informazioni membro & Complesso & Alto & Input & \hyperlink{R6F}{R6F}\\
         \textbf{Composto da:} & & & & \\
         Membro associato & Semplice & Alto & Input & \\
         Ruoli & Semplice & Alto & Input & \\
@@ -1747,9 +1789,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         Nome dello staff & Semplice & Basso & Input & \\
         \hline
-        Vecchio codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
+        Vecchio codice di accesso & Semplice & Alto & Input & \hyperlink{R3NF}{R3NF}, Non più di 50 caratteri\\
         \hline
-        Nuovo codice di accesso & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, Non più di 50 caratteri\\
+        Nuovo codice di accesso & Semplice & Alto & Input & \hyperlink{R3NF}{R3NF}, Non più di 50 caratteri\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1795,7 +1837,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Evento & Complesso & Medio & Input & \hyperlink{R20F}{R20F}, \hyperlink{R21F}{R21F} \\
+        Evento & Complesso & Medio & Input & \hyperlink{R19F}{R19F}, \hyperlink{R20F}{R20F} \\
         \textbf{Composto da:} & & & & \\
         Nome & Semplice & Medio & Input & \\
         Descrizione & Semplice & Medio & Input & \\
@@ -1813,7 +1855,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Tipologia prevendita & Complesso & Medio & Input & \hyperlink{R22F}{R22F} \\
+        Tipologia prevendita & Complesso & Medio & Input & \hyperlink{R21F}{R21F} \\
         \textbf{Composto da:} & & & & \\
         Nome & Semplice & Medio & Input & \\
         Descrizione & Semplice & Medio & Input & \\
@@ -1833,7 +1875,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
         \hline
         Username & Semplice & Alto & Input & Non più di 20 caratteri\\
         \hline
-        Password & Semplice & Alto & Input & \hyperlink{R1NF}{R1NF}, non più di 50 caratteri\\
+        Password & Semplice & Alto & Input & \hyperlink{R2NF}{R2NF}, non più di 50 caratteri\\
         \hline
     \end{tabularx}
 \end{center}
@@ -1842,9 +1884,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
 \subsubsection{Tabella dei vincoli}
 
 
-%\hyperlink{R21NF}{R21NF} I dati della comunicazione devono essere protetti.
-%\hyperlink{R22NF}{R22NF} I dati persistenti devono essere protetti
-%\hyperlink{R23NF}{R23NF} Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
+%\hyperlink{R22NF}{R22NF} I dati della comunicazione devono essere protetti.
+%\hyperlink{R23NF}{R23NF} I dati persistenti devono essere protetti
+%\hyperlink{R24NF}{R24NF} Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|}
@@ -1852,11 +1894,11 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \textbf{Requisito} & \textbf{Categoria} & \textbf{Impatto} & \textbf{Funzionalità}\\
     \hline
     \hline
-    Facile navigabilità delle schermate (\hyperlink{R20NF}{R20NF} & Usabilità & Cercare di migliorare & Gestione vendite prevendita,  Gestione entrata, Autenticazione\\
+    Facile navigabilità delle schermate (\hyperlink{R21NF}{R21NF} & Usabilità & Cercare di migliorare & Gestione vendite prevendita,  Gestione entrata, Autenticazione\\
     \hline
-    Protezione dei dati (\hyperlink{R21NF}{R21NF}, \hyperlink{R22NF}{R22NF}) & Sicurezza & Peggiorano tempo di risposta, migliorano la privacy dei dati & Gestione log, Scrittura log, Sblocco utente, Registrazione utente, Crea staff, Accedi staff, Cambia password, Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendite, Autenticazione\\
+    Protezione dei dati (\hyperlink{R22NF}{R22NF}, \hyperlink{R23NF}{R23NF}) & Sicurezza & Peggiorano tempo di risposta, migliorano la privacy dei dati & Gestione log, Scrittura log, Sblocco utente, Registrazione utente, Crea staff, Accedi staff, Cambia password, Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendite, Autenticazione\\
     \hline
-    Controllo accessi (\hyperlink{R23NF}{R23NF}) & Sicurezza & Peggiorano tempo di risposta e usabilità, migliorano la privacy dei dati & Gestione utente, Gestione staff\\
+    Controllo accessi (\hyperlink{R24NF}{R24NF}) & Sicurezza & Peggiorano tempo di risposta e usabilità, migliorano la privacy dei dati & Gestione utente, Gestione staff\\
     \hline
     \end{tabularx}
 \end{center}
@@ -1874,7 +1916,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     View Autenticazione & username, password & Autenticazione\\
     \hline
-    Home Gestione utente & navigabilità delle funzioni utente e amministratore di sistema, scelta staff & Gestione utente\\
+    Home Gestione Amministrazione & navigabilità delle funzioni amministratore di sistema & Gestione Amministrazione\\
     \hline
     Home Gestione log & navigabilità delle funzioni gestione log: aggiungi log e leggi log & Gestione log\\
     \hline
@@ -1885,6 +1927,8 @@ Nello scenario login ho aggiunto il requisito non funzionale
     View Sblocco utente & dati utente da sbloccare & Sblocco utente \\
     \hline
     View Registrazione utente & nome, cognome, telefono, username, password & Registrazione utente\\
+    \hline
+    Home Gestione utente & navigabilità delle funzioni utente, scelta staff & Gestione utente\\
     \hline
     View Crea staff & nome, codice di accesso & Crea staff\\
     \hline
@@ -1965,9 +2009,9 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \textbf{Ruolo} & \textbf{Responsabilità} & \mc{2}{\textbf{Maschere}} & \textbf{Riservatezza} & \textbf{Numerosità}\\
     \hline
     \hline
-    Utente & Può creare uno staff, e accedere ad altri staff. & \mc{2}{View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password} & Alto grado di riservatezza & Il numero può essere gestito dall'amministratore di sistema, al più è limitato dalle risorse del sistema \\ 
+    Utente & Può creare uno staff, e accedere ad altri staff. & \mc{2}{View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password} & Alto grado di riservatezza & Il numero può essere gestito da un amministratore di sistema, al più è limitato dalle risorse del sistema \\ 
     \hline
-    Amministratore di sistema & Può fare tutte le operazioni di un utente e in più gestisce il log, lo sblocco di utenti bloccati e la registrazione di un nuovo utente & \mc{2}{View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password, Home gestione log, View Aggiungi log, View Leggi Log, View Sblocco utente, View Registrazione utente} & Massimo grado di riservatezza & per ogni installazione software è sufficiente un amministratore di sistema\\
+    Amministratore di sistema & Gestisce il log, lo sblocco di utenti bloccati e la registrazione di un nuovo utente & \mc{2}{View Autenticazione, Home Gestione Amministrazione, Home gestione log, View Aggiungi log, View Leggi Log, View Sblocco utente, View Registrazione utente} & Massimo grado di riservatezza & Per ogni installazione software è sufficiente un amministratore di sistema\\
     \hline
     Membro di uno staff & Può ricavare informazioni sullo staff, può leggere le statistiche ad esso attribuite. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema \\
     \hline
@@ -2012,8 +2056,6 @@ Nello scenario login ho aggiunto il requisito non funzionale
     Dati personali & Lettura\\
     \hline
     Password personale & Scrittura\\
-    \hline
-    Staff & Lettura/Scrittura\\
     \hline
     Utente & Lettura/Scrittura\\
     \hline
@@ -2126,9 +2168,11 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \textbf{Funzionalità} & \textbf{Scomposizione} \\
     \hline
     \hline
-    Gestione utente & Crea staff, Accedi staff, Cambia password, Gestione log, Sblocco utente, Registrazione utente\\
+    Gestione Amministrazione & Gestione log, Sblocco utente, Registrazione utente\\
     \hline
     Gestione log & Leggi log, Aggiungi log\\
+    \hline
+    Gestione utente & Crea staff, Accedi staff, Cambia password\\
     \hline
     Gestione staff & Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendita\\
     \hline
@@ -2145,8 +2189,7 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \end{tabularx}
 \end{center}
 
-
-\textbf{Gestione utente: Tabella Sotto-Funzionalità}
+\textbf{Gestione Amministrazione: Tabella Sotto-Funzionalità}
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|}
@@ -2155,8 +2198,6 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     \hline
     Registrazione utente & Sblocco utente & Si può sbloccare un utente solo se è registrato & username\\
-    \hline
-    Crea staff & Accedi staff & Si può accedere ad uno staff solo se è stato creato & nome staff\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2170,6 +2211,19 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     \hline
     Aggiungi log & Leggi log & Si può leggere un record solo se è stato aggiunto & record\\
+    \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{Gestione utente: Tabella Sotto-Funzionalità}
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \hline
+    \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
+    \hline
+    \hline
+    Crea staff & Accedi staff & Si può accedere ad uno staff solo se è stato creato & nome staff\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2188,10 +2242,12 @@ Nello scenario login ho aggiunto il requisito non funzionale
     \hline
     Gestione vendita prevendita & Gestione entrata & Non posso annullare una prevendita se è già stata usata & prevendita\\
     \hline
-    Gestione tipologie prevendita & Gestione eventi & Non posso creare una tipologia prevendita con un periodo di vendita durante o dopo l'evento (\hyperlink{R8NF}{R8NF}) & evento\\
+    Gestione tipologie prevendita & Gestione eventi & Non posso creare una tipologia prevendita con un periodo di vendita durante o dopo l'evento (\hyperlink{R9NF}{R9NF}) & evento\\
     \hline
     \end{tabularx}
 \end{center}
+
+\newpage
 
 \textbf{Gestione vendita prevendita: Tabella Sotto-Funzionalità}
 
@@ -2268,9 +2324,10 @@ Nello scenario login ho aggiunto il requisito non funzionale
 
 \subsection{Creazione del modello del dominio}
 
-Analizzando il vocabolario si evidenzia il privilegio dell'utente che può essere normale o amministratore di sistema, i ruoli di un membro che possono essere cassiere, pr o amministratore.\\Dall'analisi del vocabolario, rivisto dopo l'analisi di sicurezza, si evidenzia anche il log, con i livelli di importanza: basso, medio, alto.\\\textbf{Qui sotto il modello del dominio:}\\
+Analizzando il vocabolario si evidenzia la differenza tra utente normale e amministratore di sistema, e i vari ruoli di un membro, che possono essere cassiere, pr o amministratore.\\Dall'analisi del vocabolario, rivisto dopo l'analisi di sicurezza, si evidenzia anche il log, con i livelli di importanza: basso, medio, alto.\\\textbf{Qui sotto il modello del dominio:}\\
 
 %TODO: Rivedere Associazioni dirette.
+%TODO: Chiedere se la separazione amministratore va bene
 %Chiedere se le molteplicità cambiano nella progettazione: Solo se c'è differenza di navigabilità
 
 %\begin{center}
@@ -2303,6 +2360,18 @@ Analizzando il vocabolario si evidenzia il privilegio dell'utente che può esser
 
 \subsubsection{Diagramma delle classi}
 
+\textbf{Diagramma delle classi: Gestione Amministrazione}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.55]{Analisi/Diagrammi_Classi/diagramma_classi_gestione_amministrazione.png}
+    \centering
+    \caption{diagramma\_classi\_gestione\_amministrazione.vsdx}
+\end{figure}
+
+\textbf{Gestione Amministrazione Controller} si occupa di gestire le operazioni associate all'amministratore di sistema. Abbiamo ritenuto utile separare \textbf{Gestione Amministrazione Controller} e \textbf{Gestione Log Controller} per rispettare la scomposizione del problema vista precedentemente.
+
+\newpage
+
 \textbf{Diagramma delle classi: Gestione Utente}
 
 %\begin{center}
@@ -2310,12 +2379,12 @@ Analizzando il vocabolario si evidenzia il privilegio dell'utente che può esser
 %\end{center}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.50]{Analisi/Diagrammi_Classi/diagramma_classi_gestione_utente.png}
+    \includegraphics[scale=0.65]{Analisi/Diagrammi_Classi/diagramma_classi_gestione_utente.png}
     \centering
     \caption{diagramma\_classi\_gestione\_utente.vsdx}
 \end{figure}
 
-\textbf{Gestione Utente Controller} si occupa di gestire le operazioni associate agli utenti. Abbiamo ritenuto utile separare \textbf{Gestione Utente Controller} e \textbf{Gestione Log Controller} per rispettare la scomposizione del problema vista precedentemente.\\La funzione verificaCredenziali() viene utilizzata da \textbf{Autenticazione Controller} per la verifica delle credenziali.
+\textbf{Gestione Utente Controller} si occupa di gestire le operazioni associate agli utenti.
 
 \newpage
 
@@ -2348,7 +2417,7 @@ Le interfacce sono molte, visto le operazioni effettuabili nel sistema gestional
     \caption{diagramma\_classi\_autenticazione.vsdx}
 \end{figure}
 
-\textbf{Autenticazione Controller} gestisce la sessione di un utente, permette di tenere traccia anche del contesto attuale dell'utente. Per esempio nella fase progettuali si potrebbe sfruttare per tenere traccia dello staff e dell'evento in uso dall'utente, semplificando la presentazione.\\ La verifica delle credenziali viene effettuata all'interno della operazione autentica(), chiamando \textbf{Gestione Utente Controller}
+\textbf{Autenticazione Controller} gestisce la sessione di un utente, permette di tenere traccia anche del contesto attuale dell'utente. Per esempio nella fase progettuali si potrebbe sfruttare per tenere traccia dello staff e dell'evento in uso dall'utente, semplificando la presentazione.
 
 \newpage
 
@@ -2414,16 +2483,16 @@ Il cassiere \textbf{ripete} l'operazione di timbratura delle prevendite per tutt
 
 Dopo un'attenta analisi, abbiamo deciso di mostrare i diagrammi di stato riguardo un \textbf{evento} ed una \textbf{prevendita}, sempre basandoci sui requisiti.
 
-%R21F - Un evento puo essere annullato, anche se ci sono prevendite vendute.
-%R23F - Una prevendita puo essere annullata e/o rimborsata.
+%R20F - Un evento puo essere annullato, anche se ci sono prevendite vendute.
+%R22F - Una prevendita puo essere annullata e/o rimborsata.
 
-%R8NF - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell’evento.
-%R9NF - Una prevendita annullata e/o rimborsata rimane tale
-%R10NF - Un evento annullato rimane tale
-%R13NF - Ogni prevendita venduta `e associata ad una sola tipologia di prevendita
-%R14NF - La tipologia di prevendita associata non `e modificabile
-%R15NF - Il prezzo di una tipologia di prevendita `e modificabile solo se non sono state vendute prevendite conquella determinata tipologia
-%R19NF - La timbratura puo essere fatta solo una volta
+%R9NF - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell’evento.
+%R10NF - Una prevendita annullata e/o rimborsata rimane tale
+%R11NF - Un evento annullato rimane tale
+%R14NF - Ogni prevendita venduta `e associata ad una sola tipologia di prevendita
+%R15NF - La tipologia di prevendita associata non `e modificabile
+%R16NF - Il prezzo di una tipologia di prevendita `e modificabile solo se non sono state vendute prevendite conquella determinata tipologia
+%R20NF - La timbratura puo essere fatta solo una volta
 
 \textbf{Diagramma di Stato: Evento}
 
@@ -2433,7 +2502,7 @@ Dopo un'attenta analisi, abbiamo deciso di mostrare i diagrammi di stato riguard
     \caption{diagramma\_stato\_evento.vsdx}
 \end{figure}
 
-Secondo le specifiche \hyperlink{R21F}{R21F} e \hyperlink{R10NF}{R10NF}, un evento può essere \textbf{annullato}, mentre lo stato \textbf{Concluso} si deduce dal requisito \hyperlink{R20F}{R20F} in quanto un evento ha un periodo di svolgimento.\\
+Secondo le specifiche \hyperlink{R20F}{R20F} e \hyperlink{R11NF}{R11NF}, un evento può essere \textbf{annullato}, mentre lo stato \textbf{Concluso} si deduce dal requisito \hyperlink{R19F}{R19F} in quanto un evento ha un periodo di svolgimento.\\
 
 \textbf{Diagramma di Stato: Prevendita}
 
@@ -2443,7 +2512,7 @@ Secondo le specifiche \hyperlink{R21F}{R21F} e \hyperlink{R10NF}{R10NF}, un even
     \caption{diagramma\_stato\_prevendita.vsdx}
 \end{figure}
 
-Secondo le specifiche \hyperlink{R23F}{R23F} \hyperlink{R9NF}{R9NF} una prevendita può essere \textbf{annullata} e \textbf{rimborsata}, mentre dai requisiti \hyperlink{R14F}{R14F} \hyperlink{R19NF}{R19NF} si deduce lo stato \textbf{Timbrata}, in accordo con il diagramma di sequenza di ingresso evento.
+Secondo le specifiche \hyperlink{R22F}{R22F} \hyperlink{R10NF}{R10NF} una prevendita può essere \textbf{annullata} e \textbf{rimborsata}, mentre dai requisiti \hyperlink{R13F}{R13F} \hyperlink{R20NF}{R20NF} si deduce lo stato \textbf{Timbrata}, in accordo con il diagramma di sequenza di ingresso evento.
 
 \newpage
 
@@ -2478,6 +2547,8 @@ Il lavoro di gruppo è stato diviso in base alle competenze dei membri del team.
     \hline
     Dominio & Team progettazione & Team sviluppo DB, Team sicurezza  \\
     \hline
+    GestioneAmministrazione & Team progettazione & Team sviluppo Middleware\\
+    \hline
     GestioneUtente & Team progettazione & Team sviluppo Middleware\\
     \hline
     GestioneStaff & Team progettazione & Team sviluppo Middleware\\
@@ -2485,6 +2556,8 @@ Il lavoro di gruppo è stato diviso in base alle competenze dei membri del team.
     Autenticazione & Team progettazione & Team sviluppo DB, Team sviluppo Middleware, Team sicurezza\\
     \hline
     Log & Team progettazione & Team sviluppo DB, Team sviluppo Middleware, Team sicurezza\\
+    \hline
+    InterfacciaGestioneAmministrazione & Team progettazione & Team sviluppo front-end \\
     \hline
     InterfacciaGestioneUtente & Team progettazione & Team sviluppo front-end \\
     \hline
@@ -2538,14 +2611,14 @@ Dall’analisi dei requisiti sono emersi alcuni vincoli non funzionali, tra cui:
     \item Facilità d’utilizzo
 \end{itemize}
 
-L'integrità e la sicurezza dei dati, soprattutto per quanto riguarda la comunicazione, è di fondamentale importanza, soprattutto in vista ad una architettura 3-tier. Purtroppo, dato il basso costo di sviluppo software, è opportuno scegliere soluzione standard esterne al sistema, come l'uso di protocolli di cifratura, come il TLS, il quale viene utilizzato da protocolli più di alto livello come HTTPS, protocollo che abbiamo deciso di utilizzare, dato la facilità d'utilizzo e il supporto vasto. L'avvento di tecnologie di trasmissione di dati moderne, rende più che affordabile l'utilizzo di tecnologia di cifratura. Inoltre l'utilizzo di uno standard, già implementato e testato da terze parti, riduce il rischio di sicurezza dovuto a difetti all'interno del nostro prodotto software.\\Il controllo degli accessi rappresenta una opportuna soluzione per la garantire il sistema a fronte di malintenzionati. L'uso di un controllo delle autorizzazioni favorisce a separare i ruoli e a migliorare la sicurezza, probabilmente perdendo in facilità d'utilizzo.\\La Disponibilità del servizio e la Replicabilità del sistema servono per garantire i requisiti \hyperlink{R24NF}{R24NF} \hyperlink{R25NF}{R25NF}, per contenere un attacco DoS.
+L'integrità e la sicurezza dei dati, soprattutto per quanto riguarda la comunicazione, è di fondamentale importanza, soprattutto in vista ad una architettura 3-tier. Purtroppo, dato il basso costo di sviluppo software, è opportuno scegliere soluzione standard esterne al sistema, come l'uso di protocolli di cifratura, come il TLS, il quale viene utilizzato da protocolli più di alto livello come HTTPS, protocollo che abbiamo deciso di utilizzare, dato la facilità d'utilizzo e il supporto vasto. L'avvento di tecnologie di trasmissione di dati moderne, rende più che affordabile l'utilizzo di tecnologia di cifratura. Inoltre l'utilizzo di uno standard, già implementato e testato da terze parti, riduce il rischio di sicurezza dovuto a difetti all'interno del nostro prodotto software.\\Il controllo degli accessi rappresenta una opportuna soluzione per la garantire il sistema a fronte di malintenzionati. L'uso di un controllo delle autorizzazioni favorisce a separare i ruoli e a migliorare la sicurezza, probabilmente perdendo in facilità d'utilizzo.\\La Disponibilità del servizio e la Replicabilità del sistema servono per garantire i requisiti \hyperlink{R25NF}{R25NF} \hyperlink{R26NF}{R26NF}, per contenere un attacco DoS.
 
 
 \subsection{Scelta dell'architettura}
 Abbiamo optato per una architettura client/server a tre livelli: abbiamo il database, un software middle-ware e un applicativo front-end. L'applicazione middle-ware fa da intermediario tra il database e l'applicativo lato cliente. Questa scelta rende facile l'implementazione di applicativi front-end multipiattaforma e specializzati: si potranno quindi più applicativi front-end adatti al lavoro dello specifico utilizzatore finale.
 
 \subsubsection{Livello di Persistenza}
-Abbiamo deciso di adottare un database relazionale indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento, si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middle-ware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middle-ware, favorendo la disponiblità del servizio (\hyperlink{R24NF}{R24NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R25NF}{R25N}), nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.\\La persistenza dei log viene gestita attraverso file.
+Abbiamo deciso di adottare un database relazionale indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento, si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middle-ware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middle-ware, favorendo la disponiblità del servizio (\hyperlink{R25NF}{R25NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R26NF}{R25N}), nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.\\La persistenza dei log viene gestita attraverso file.
 
 
 \subsubsection{Livello Middle-ware}
