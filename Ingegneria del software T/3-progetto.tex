@@ -91,6 +91,8 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 	%Accesso e creazione di uno staff
 	\item \hypertarget{R10F}{R10F} - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
 	
+	%TODO: spostare in non funzionali
+	
 	\item \hypertarget{R11F}{R11F} - Quando un utente crea uno staff ne diventa membro e amministratore.
 	
 	%Timbratura (Cassiere)
@@ -2433,7 +2435,7 @@ Saranno riportati solo i diagrammi di sequenza ritenuti principali per il sistem
     \caption{diagramma\_sequenza\_autenticazione.vsdx}
 \end{figure}
 
-Una volta effettuato il logout si richiede di nuovo l'autenticazione tramite \textbf{View Autenticazione}. Effettuato l'accesso, si passa alla schermata di \textbf{Home Gestione Utente}.
+Una volta effettuato il logout si richiede di nuovo l'autenticazione tramite \textbf{View Autenticazione}. Effettuato l'accesso, si passa alla schermata di \textbf{Home Gestione Utente} o \textbf{Home Gestione Amministrazione} in caso di amminstratore di sistema.
 
 \textbf{Diagramma di sequenza: Registrazione utente}
 
@@ -2450,7 +2452,7 @@ Prima della registrazione la persona non è nota al sistema e non può interagir
 \textbf{Diagramma di sequenza: Creazione evento}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.7]{Analisi/Diagrammi_Sequenza/diagramma_sequenza_creazione_evento.png}
+    \includegraphics[scale=0.65]{Analisi/Diagrammi_Sequenza/diagramma_sequenza_creazione_evento.png}
     \centering
     \caption{diagramma\_sequenza\_creazione\_evento.vsdx}
 \end{figure}
@@ -2638,7 +2640,6 @@ Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità or
 
 %Nella figura sottostante è riportata l’Architettura del Sistema organizzata attraverso un diagramma dei package:\\
 
-
 %\begin{figure}[H]
 %    \includegraphics[scale=0.55]{Progettazione/diagramma_architettura_logica_package.png}
 %    \centering
@@ -2648,7 +2649,6 @@ Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità or
 %\newpage
 
 \subsubsection{Diagramma a componenti}
-
 
 \begin{figure}[H]
     \includegraphics[scale=0.55]{Progettazione/diagramma_architettura_logica_componenti.png}
@@ -2836,6 +2836,53 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
 %Interfacce Cambia codice accesso
 %Interfacce Visualizza Statistiche
 
+\newpage
 
+\subsection{Persistenza}
+
+\subsubsection{Schema ER}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.65]{Progettazione/schemaER.PNG}
+    \centering
+    \caption{Progetto\_Ing\_Software\_ER.lun}
+\end{figure}
+
+\paragraph{Entità} Le chiavi primarie (\textbf{id}) sono di tipo intero, autoincrement, questo per semplificare l'utilizzo del pattern DAO. Di seguito l'elenco delle entità più importanti:
+
+\begin{itemize}
+    \item \textbf{Utente}: rappresenta un utente nel sistema. \textbf{tentativiLogin} serve per rispettare il vincolo \hyperlink{R28NF}{R28NF}. L'attributo \textbf{username} deve essere univoco, compresi quelli di \textbf{amministratore di sistema}. L'utente bloccato è sotto-entità di utente.
+    \item \textbf{Membro}: rappresenta un membro di uno staff. I ruoli sono modellati come sotto entità. Nel caso il membro perda il ruolo, le iterazioni del membro devono rimanere.
+    \item \textbf{Prevendita}: gli stati della prevendita sono modellati come sotto-entità di prevendita. \textbf{codice} serve per rispettare il vincolo \hyperlink{R27NF}{R27NF}.
+    \item \textbf{Evento}: gli stati del'evento sono modellati come sotto-entità di evento. Gli attributi \textbf{inizio} e \textbf{fine} rappresentano il periodo temporale in cui è in corso l'evento (\hyperlink{R19F}{R19F}).
+    \item \textbf{Amministratore di sistema}: entità a se stante, che però condivide l'unicità di \textbf{username} con \textbf{utente}.
+    \item \textbf{Tipologia Prevendita}: gli attributi \textbf{aperturaVendite} e \textbf{chiusuraVendite} rappresentano il periodo temporale in cui è possibile vendere le prevendite (\hyperlink{R21F}{R21F}). Questo periodo deve essere logicamente antecedente al periodo di svolgimento dell'evento (\hyperlink{R9NF}{R9NF}).
+\end{itemize}
+
+
+\paragraph{Relazioni} Anche qui vengono mostrate in elenco solo le relazioni più importanti:
+\begin{itemize}
+    \item \textbf{Fa Parte}: relazione ternaria tra \textbf{utente}, \textbf{staff} e \textbf{membro}: si è scelta la relazione ternaria invece che una scomposizione binaria, per mettere in evidenza il collegamento \textbf{utente} - \textbf{staff}, il quale altrimenti diverebbe indiretto.
+    \item \textbf{Crea Staff}: quando si crea lo staff, si diviene anche amministratore (\hyperlink{R11F}{R11F}).
+\end{itemize}
+
+\paragraph{Protezione della persistenza del database} Essendo il database gestito su macchina isolata remota, il rischio di accesso non autorizzato è limitato. Si consiglia di limitare l'accesso ai soli ip dello strato middle-ware.
+
+\paragraph{Integrità della persistenza del database} Si devono effettuare transazioni dove necessario, con dovuti \textbf{savepoint} e \textbf{rollback} in caso di errore, evitando stati non consistenti del database.
+
+\subsubsection{Formato del file del log}
+
+Il file di log deve contenere informazioni utili per l'amministratore di sistema. Sono raccolte molte operazioni svolte, soprattutto quelle ritenute imporanti. L'amministratore di sistema può aggiungere note personali.
+
+\begin{lstlisting}
+    <timestamp> <livello> <descrizione>
+    <timestamp> <livello> <descrizione>
+    <timestamp> <livello> <descrizione>
+    <timestamp> <livello> <descrizione>
+\end{lstlisting}
+
+\paragraph{Protezione della persistenza dei log} Essendo il file salvato nel livello middle-ware, il rischio di accesso di malintenzionati si riduce, ma per migliorare la protezione, bisogna impostare i giusti permessi utente nel file system. Ovviamente solo l'amministratore di sistema può accedere a queste informazioni.
+
+\newpage
 
 \end{document}
