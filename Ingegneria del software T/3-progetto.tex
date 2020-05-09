@@ -1824,7 +1824,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         Guadagni membro & Complesso & Basso & Output & \\
         \textbf{Composto da:} & & & & \\
         Membro associato & Semplice & Basso & Output & \\
-        guadagni totali & Semplice & Basso & Output & \\
+        Guadagni totali & Semplice & Basso & Output & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -2683,37 +2683,76 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
     \item \textbf{Controller}: Collante tra Model e View, con tutta la business logic di supporto
 \end{itemize}
 
-%Package it.unibo.prevenditaelettronica.middleware.model.dao
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.model.dao
 
 %Factory DAO Generale
 %Factory DAO per ogni sotto interfaccia: sarà il broker a fare la connessione
 %Interfacce DAO Utente, DAO Amministratore di sistema, DAO Staff, DAO Membro, DAO Cassiere, DAO Amministratore.
 
+%DAO per log da filesystem
+
 %PersistanceException
 
-%Package it.unibo.prevenditaelettronica.middleware.model.dao.broker
 
-%DatabaseBrokerInterface
+\begin{figure}[H]
+    \includegraphics[scale=0.65]{Progettazione/Package/model/dao/dao_database.png}
+    \centering
+    \caption{dao.vsdx}
+\end{figure}
 
-%Interfaccia per gestire la connessione per ogni dbms
-%Eccezioni 
+Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata.
 
-%Package it.unibo.prevenditaelettronica.middleware.dao.proxy
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/model/dao/dao_log.png}
+    \centering
+    \caption{dao.vsdx}
+\end{figure}
+
+Pattern \textbf{DAO} applicato alla persistenza dei log. Dato che il log è stato pensato come file, il pattern DAO viene applicato al filesystem, anche se sarebbe possibile creare un implementazione per database in una futura versione, grazie alla versatilità del pattern DAO.
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/model/dao/dao_exception.png}
+    \centering
+    \caption{dao.vsdx}
+\end{figure}
+
+Naturalmente gli oggetti \textbf{DAO} possono lanciare eccezioni, qui si incapsulano tali eccezioni, per migliorare la sicurezza.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.dao.proxy
 
 %Dominio che richiede proxy
 
-%Package it.unibo.prevenditaelettronica.middleware.model.log
+\begin{figure}[H]
+    \includegraphics[scale=0.8]{Progettazione/Package/model/dao/proxy/proxy.png}
+    \centering
+    \caption{proxy.vsdx}
+\end{figure}
 
-%FileSystemInterface
-%FileSystemImplementation
+Il package fornisce classi per il \textbf{lazy-load} di alcuni metodi delle classi di dominio, utilizzando il pattern \textbf{Proxy}. La scelta dei metodi da caricare in lazy-load dipende dal caso d'uso.
 
-%Package it.unibo.prevenditaelettronica.middleware.model
+%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.model.log
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.model
 
 %Modello di dominio
 
+\begin{figure}[H]
+    \includegraphics[scale=0.65]{Progettazione/Package/model/model.png}
+    \centering
+    \caption{model.vsdx}
+\end{figure}
 
+Si tratta del modello di dominio visto in analisi. La maggior parte delle operazioni previste in analisi sono spostate in altri package.
 
-%Package it.unibo.prevenditaelettronica.middleware.view
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.view
 
 %JSONSerializable
 %JSONDeserializable
@@ -2721,12 +2760,12 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
 %PrinterInterface
 %JSONPrinter
 
-%Package it.unibo.prevenditaelettronica.middleware.gestioneutente.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.gestioneutente.controller
 
 %Gestione Utente Controller
 %Gestione Log Controller
 
-%Package it.unibo.prevenditaelettronica.middleware.gestionestaff.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.gestionestaff.controller
 
 %Gestione Staff Controller
 %Gestione Entrata Controller
@@ -2735,16 +2774,16 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
 %Gestione Tipologie Prevendita Controller
 %Gestione Membri Controller
 
-%Package it.unibo.prevenditaelettronica.middleware.log.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.log.controller
 
 %Log
 
-%Package it.unibo.prevenditaelettronica.middleware.autenticazione.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.autenticazione.controller
 
 %AutenticazioneController
 
 
-%Package it.unibo.prevenditaelettronica.middleware.handler
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.handler
 
 %HTTPHandler
 
@@ -2760,75 +2799,75 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
     \item \textbf{Controller}: Collante tra Model e View, con business logic limitata.
 \end{itemize}
 
-%Package it.unibo.prevenditaelettronica.frontend.common.model.net
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.common.model.net
 
 %HTTPHandler
 %JSONParser
 
-%Package it.unibo.prevenditaelettronica.frontend.common.model.broker
+\paragraph{Package}it.unibo.prevenditaelettronica.frontend.common.model.broker
 
 %BrokerInterface
 %Broker
 
-%Package it.unibo.prevenditaelettronica.frontend.common.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.common.controller
 
 %Gestione Staff Controller
 %Gestione Utente Controller - alcune funzionalità sono solo di amministratore di sistema
 %Autenticazione Controller
 
-%Package it.unibo.prevenditaelettronica.frontend.utente.controller
-%Package it.unibo.prevenditaelettronica.frontend.amministratoredisistema.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.utente.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.amministratoredisistema.controller
 
 %Gestione Log Controller
 
-%Package it.unibo.prevenditaelettronica.frontend.membro.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.membro.controller
 
-%Package it.unibo.prevenditaelettronica.frontend.pr.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.pr.controller
 
 %Gestione Vendita Prevendite Controller
 
-%Package it.unibo.prevenditaelettronica.frontend.cassiere.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.cassiere.controller
 
 %Gestione Entrata Controller
 
-%Package it.unibo.prevenditaelettronica.frontend.amministratore.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.amministratore.controller
 
 %Gestione Eventi Controller
 %Gestione Tipologie Prevendita Controller
 %Gestione Membri Controller
 
 
-%Package it.unibo.prevenditaelettronica.frontend.common.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.common.view
 
 %Interfaccia Autorizzazione
 %Interfaccie Gestione Utente
 %Interfaccie Gestione Staff
 
-%Package it.unibo.prevenditaelettronica.frontend.utente.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.utente.view
 
 %Interfaccia Accedi staff
 %Interfaccia Crea staff
 %Interfaccia Cambia password
 
-%Package it.unibo.prevenditaelettronica.frontend.amministratoredisistema.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.amministratoredisistema.view
 
 %Interfacce Gestione Log
 %Interfacce Sblocco utente
 %Interfacce Registra utente
 
-%Package it.unibo.prevenditaelettronica.frontend.membro.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.membro.view
 
 %Interaccia Visualizza statistiche personali
 
-%Package it.unibo.prevenditaelettronica.frontend.pr.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.pr.view
 
 %Interfaccie Gestione vendita prevendita
 
-%Package it.unibo.prevenditaelettronica.frontend.cassiere.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.cassiere.view
 
 %Interfaccie Gestione entrata
 
-%Package it.unibo.prevenditaelettronica.frontend.amministratore.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.amministratore.view
 
 %Interfacce Gestione Membri
 %Interfacce Gestione Tipologie Prevendita
@@ -2848,7 +2887,7 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
     \caption{Progetto\_Ing\_Software\_ER.lun}
 \end{figure}
 
-\paragraph{Entità} Le chiavi primarie (\textbf{id}) sono di tipo intero, autoincrement, questo per semplificare l'utilizzo del pattern DAO. Di seguito l'elenco delle entità più importanti:
+\paragraph{Entità} Le chiavi primarie (\textbf{id}) sono di tipo intero, autoincrement, per semplificare l'utilizzo del pattern DAO:
 
 \begin{itemize}
     \item \textbf{Utente}: rappresenta un utente nel sistema. \textbf{tentativiLogin} serve per rispettare il vincolo \hyperlink{R28NF}{R28NF}. L'attributo \textbf{username} deve essere univoco, compresi quelli di \textbf{amministratore di sistema}. L'utente bloccato è sotto-entità di utente.
@@ -2857,6 +2896,7 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
     \item \textbf{Evento}: gli stati del'evento sono modellati come sotto-entità di evento. Gli attributi \textbf{inizio} e \textbf{fine} rappresentano il periodo temporale in cui è in corso l'evento (\hyperlink{R19F}{R19F}).
     \item \textbf{Amministratore di sistema}: entità a se stante, che però condivide l'unicità di \textbf{username} con \textbf{utente}.
     \item \textbf{Tipologia Prevendita}: gli attributi \textbf{aperturaVendite} e \textbf{chiusuraVendite} rappresentano il periodo temporale in cui è possibile vendere le prevendite (\hyperlink{R21F}{R21F}). Questo periodo deve essere logicamente antecedente al periodo di svolgimento dell'evento (\hyperlink{R9NF}{R9NF}).
+    \item \textbf{Utente Bloccato}: potrebbe essere implementato tramite trigger che controlli \textbf{tentativiLogin}.
 \end{itemize}
 
 
@@ -2884,5 +2924,21 @@ Il file di log deve contenere informazioni utili per l'amministratore di sistema
 \paragraph{Protezione della persistenza dei log} Essendo il file salvato nel livello middle-ware, il rischio di accesso di malintenzionati si riduce, ma per migliorare la protezione, bisogna impostare i giusti permessi utente nel file system. Ovviamente solo l'amministratore di sistema può accedere a queste informazioni.
 
 \newpage
+
+\subsection{Collaudo}
+
+\subsection{Deployment}
+\subsubsection{Progettazione del deployment per la sicurezza}
+\subsubsection{Deployment del sistema}
+
+\section{Implementazione}
+
+\subsection{Scelte tecnologiche}
+
+\subsection{Scelte Implementative}
+
+\section{Collaudo}
+
+\section{Deployment}
 
 \end{document}
