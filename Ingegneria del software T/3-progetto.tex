@@ -2401,7 +2401,7 @@ Analizzando il vocabolario si evidenzia la differenza tra utente normale e ammin
 Le interfacce sono molte, visto le operazioni effettuabili nel sistema gestionale. Abbiamo separato le interfacce dai controller per evitare di confondere la lettura. Le interfacce sono comunque collegate ai relativi controller.
 
 \begin{figure}[H]
-    \includegraphics[scale=0.5]{Analisi/Diagrammi_Classi/diagramma_classi_gestione_staff.png}
+    \includegraphics[scale=0.65]{Analisi/Diagrammi_Classi/diagramma_classi_gestione_staff.png}
     \centering
     \caption{diagramma\_classi\_gestione\_staff.vsdx}
 \end{figure}
@@ -2697,7 +2697,7 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
 
 
 \begin{figure}[H]
-    \includegraphics[scale=0.65]{Progettazione/Package/model/dao/dao_database.png}
+    \includegraphics[scale=0.65]{Progettazione/Package/middleware/model/dao/dao_database.png}
     \centering
     \caption{dao.vsdx}
 \end{figure}
@@ -2705,7 +2705,7 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
 Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata.
 
 \begin{figure}[H]
-    \includegraphics[scale=0.9]{Progettazione/Package/model/dao/dao_log.png}
+    \includegraphics[scale=0.9]{Progettazione/Package/middleware/model/dao/dao_log.png}
     \centering
     \caption{dao.vsdx}
 \end{figure}
@@ -2713,7 +2713,7 @@ Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto 
 Pattern \textbf{DAO} applicato alla persistenza dei log. Dato che il log è stato pensato come file, il pattern DAO viene applicato al filesystem, anche se sarebbe possibile creare un implementazione per database in una futura versione, grazie alla versatilità del pattern DAO.
 
 \begin{figure}[H]
-    \includegraphics[scale=1]{Progettazione/Package/model/dao/dao_exception.png}
+    \includegraphics[scale=1]{Progettazione/Package/middleware/model/dao/dao_exception.png}
     \centering
     \caption{dao.vsdx}
 \end{figure}
@@ -2727,7 +2727,7 @@ Naturalmente gli oggetti \textbf{DAO} possono lanciare eccezioni, qui si incapsu
 %Dominio che richiede proxy
 
 \begin{figure}[H]
-    \includegraphics[scale=0.8]{Progettazione/Package/model/dao/proxy/proxy.png}
+    \includegraphics[scale=0.8]{Progettazione/Package/middleware/model/dao/proxy/proxy.png}
     \centering
     \caption{proxy.vsdx}
 \end{figure}
@@ -2743,7 +2743,7 @@ Il package fornisce classi per il \textbf{lazy-load} di alcuni metodi delle clas
 %Modello di dominio
 
 \begin{figure}[H]
-    \includegraphics[scale=0.65]{Progettazione/Package/model/model.png}
+    \includegraphics[scale=0.65]{Progettazione/Package/middleware/model/model.png}
     \centering
     \caption{model.vsdx}
 \end{figure}
@@ -2760,12 +2760,68 @@ Si tratta del modello di dominio visto in analisi. La maggior parte delle operaz
 %PrinterInterface
 %JSONPrinter
 
-\paragraph{Package} it.unibo.prevenditaelettronica.middleware.gestioneutente.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/middleware/view/view.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
+
+Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappresentazione dei dati verso il front-end. Dato la scelta tecnologica di usare JSON come formato di dati, abbiamo implementato una sola classe Printer, ma l'interfaccia rende flessibile l'utilizzo di un altro formato dati.\\L'interfaccia \textbf{JSONSerializable} non è obbligatoria, dipende dalle librerie usate in implementazione, per esempio GSON non ne prevede. Nel caso in cui la serializazzione venga fatta senza aiuti esterni, l'interfaccia va implementata nelle classi di dominio, rispettando i vincoli di sicurezza.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\\L'enumeratore \textbf{Stato} indica lo stato della risposta, mentre l'enumeratore \textbf{Comando} contiene tutti i comandi eseguibili sul middle-ware. La lista non è completa e viene riportata di seguito:
+
+%TODO: FINIRE LISTA
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{X X X}
+        \textbullet REGISTRA\_UTENTE & \textbullet LOGIN  & \textbullet LOGOUT \\
+        \textbullet  & \textbullet  & \textbullet LOGIN\_SYSTEM\_ADMIN \\
+        \textbullet CREA\_STAFF & \textbullet ACCEDI\_STAFF & \textbullet CAMBIA\_PASSWORD \\
+        \textbullet RESTITUISCI\_LISTA\_STAFF & \textbullet  & \textbullet \\
+        \textbullet & \textbullet  & \textbullet \\
+    \end{tabularx}
+\end{center}
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller
+
+%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.autenticazione
+
+%AutenticazioneController
+
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_autenticazione.png}
+    \centering
+    \caption{controller.vsdx}
+\end{figure}
+
+%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.gestioneamministrazione
+
+%Gestione Amministrazione Controller
+%Gestione Log Controller
+
+%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.log
+
+%Log
+
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_amministrazione.png}
+    \centering
+    \caption{controller.vsdx}
+\end{figure}
+
+
+%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.gestioneutente
 
 %Gestione Utente Controller
 %Gestione Log Controller
 
-\paragraph{Package} it.unibo.prevenditaelettronica.middleware.gestionestaff.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_utente.png}
+    \centering
+    \caption{controller.vsdx}
+\end{figure}
+
+%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.gestionestaff
 
 %Gestione Staff Controller
 %Gestione Entrata Controller
@@ -2774,20 +2830,30 @@ Si tratta del modello di dominio visto in analisi. La maggior parte delle operaz
 %Gestione Tipologie Prevendita Controller
 %Gestione Membri Controller
 
-\paragraph{Package} it.unibo.prevenditaelettronica.middleware.log.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_staff_1.png}
+    \centering
+    \caption{controller.vsdx}
+\end{figure}
 
-%Log
 
-\paragraph{Package} it.unibo.prevenditaelettronica.middleware.autenticazione.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_staff_2.png}
+    \centering
+    \caption{controller.vsdx}
+\end{figure}
 
-%AutenticazioneController
-
+\newpage
 
 \paragraph{Package} it.unibo.prevenditaelettronica.middleware.handler
 
-%HTTPHandler
+%RequestHandler
 
-
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/middleware/handler/handler.png}
+    \centering
+    \caption{handler.vsdx}
+\end{figure}
 
 \subsubsection{Struttura front-end}
 
