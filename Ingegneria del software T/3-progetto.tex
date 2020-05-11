@@ -2342,6 +2342,8 @@ Analizzando il vocabolario si evidenzia la differenza tra utente normale e ammin
     \caption{modello\_dominio.vsdx}
 \end{figure}
 
+Le credenziali dovranno essere gestite in maniera sicura, nella fase di progettazione. L'aggiunta del \textbf{telefono} alle entità Utente e AmministratoreDiSistema, garantisce flessibilità per una futura implementazione \textbf{OTP}.
+
 \newpage
 
 \subsection{Architettura logica}
@@ -2357,6 +2359,8 @@ Analizzando il vocabolario si evidenzia la differenza tra utente normale e ammin
     \centering
     \caption{diagramma\_package.vsdx}
 \end{figure}
+
+%Il controller autenticazione utilizza le altre interfacce perché le deve invocare!
 
 \newpage
 
@@ -2702,7 +2706,7 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
     \caption{dao.vsdx}
 \end{figure}
 
-Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata.
+Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default.
 
 \begin{figure}[H]
     \includegraphics[scale=0.9]{Progettazione/Package/middleware/model/dao/dao_log.png}
@@ -2748,7 +2752,7 @@ Il package fornisce classi per il \textbf{lazy-load} di alcuni metodi delle clas
     \caption{model.vsdx}
 \end{figure}
 
-Si tratta del modello di dominio visto in analisi. La maggior parte delle operazioni previste in analisi sono spostate in altri package.
+Si tratta del modello di dominio visto in analisi. La maggior parte delle operazioni previste in analisi sono spostate in altri package. La gestione delle credenziali viene fatta nel package DAO e quindi il modello di dominio non contiene informazioni su credenziali.
 
 \newpage
 
@@ -2766,25 +2770,13 @@ Si tratta del modello di dominio visto in analisi. La maggior parte delle operaz
     \caption{view.vsdx}
 \end{figure}
 
-Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappresentazione dei dati verso il front-end. Dato la scelta tecnologica di usare JSON come formato di dati, abbiamo implementato una sola classe Printer, ma l'interfaccia rende flessibile l'utilizzo di un altro formato dati.\\L'interfaccia \textbf{JSONSerializable} non è obbligatoria, dipende dalle librerie usate in implementazione, per esempio GSON non ne prevede. Nel caso in cui la serializazzione venga fatta senza aiuti esterni, l'interfaccia va implementata nelle classi di dominio, rispettando i vincoli di sicurezza.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\\L'enumeratore \textbf{Stato} indica lo stato della risposta, mentre l'enumeratore \textbf{Comando} contiene tutti i comandi eseguibili sul middle-ware. La lista non è completa e viene riportata di seguito:
-
-%TODO: FINIRE LISTA
-
-\begin{center}
-    \begin{tabularx}{1\textwidth}{X X X}
-        \textbullet REGISTRA\_UTENTE & \textbullet LOGIN  & \textbullet LOGOUT \\
-        \textbullet  & \textbullet  & \textbullet LOGIN\_SYSTEM\_ADMIN \\
-        \textbullet CREA\_STAFF & \textbullet ACCEDI\_STAFF & \textbullet CAMBIA\_PASSWORD \\
-        \textbullet RESTITUISCI\_LISTA\_STAFF & \textbullet  & \textbullet \\
-        \textbullet & \textbullet  & \textbullet \\
-    \end{tabularx}
-\end{center}
+Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappresentazione dei dati verso il front-end. Dato la scelta tecnologica di usare JSON come formato di dati, abbiamo implementato una sola classe Printer, ma l'interfaccia rende flessibile l'utilizzo di un altro formato dati.\\L'interfaccia \textbf{JSONSerializable} non è obbligatoria, dipende dalle librerie usate in implementazione, per esempio GSON non ne prevede. Nel caso in cui la serializazzione venga fatta senza aiuti esterni, l'interfaccia va implementata nelle classi di dominio, rispettando i vincoli di sicurezza.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\\L'enumeratore \textbf{Stato} indica lo stato della risposta, mentre l'enumeratore \textbf{Comando} contiene tutti i comandi eseguibili sul middle-ware. La lista non è completa e viene riportata nel package \textbf{handler} in seguito.
 
 \newpage
 
-\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller
+%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller
 
-%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.autenticazione
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.autenticazione
 
 %AutenticazioneController
 
@@ -2794,34 +2786,52 @@ Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappre
     \caption{controller.vsdx}
 \end{figure}
 
-%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.gestioneamministrazione
+In figura la parte di controller con la responsabilità di gestire la parte di autenticazione e di sessione. Sessione e autenticazione sono divise in due interfacce per rispettare \textbf{Interface Segregation Principle}, con l'interfaccia di sessione usato dagli altri controller per ricavare informazioni utili sulla sessione. Abbiamo deciso di implmenetare le interfacce nella stessa classe perché le interfacce possono essere viste come getter/setter dei parametri di sessione.\\Il controller utilizza \textbf{LogInterface}, che vedremo nella figura successiva, per aggiungere eventuali righe al log.\\L'eccezione \textbf{AuthorizationException} viene lanciata nei più svariati casi di accesso negato: credenziali errate, utente bloccato, ruolo non concesso, eccetera, e viene utilizzato anche da altri controller nel caso sia necessario.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view.
 
-%Gestione Amministrazione Controller
-%Gestione Log Controller
+\newpage
 
-%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.log
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.log
 
 %Log
 
 \begin{figure}[H]
-    \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_amministrazione.png}
+    \includegraphics[scale=0.8]{Progettazione/Package/middleware/controller/controller_log.png}
     \centering
     \caption{controller.vsdx}
 \end{figure}
 
+In figura viene mostrato anche la parte di log interna al sistema, utilizzata dagli altri controller per aggiungere righe al log. \textbf{LogImpl} ha una DAO specializzata per l'accesso al filesystem, dato che i file di log si trovano su di esso.
 
-%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.gestioneutente
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.amministrazione
 
-%Gestione Utente Controller
+%Gestione Amministrazione Controller
 %Gestione Log Controller
 
 \begin{figure}[H]
-    \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_utente.png}
+    \includegraphics[scale=0.8]{Progettazione/Package/middleware/controller/controller_gestione_amministrazione.png}
     \centering
     \caption{controller.vsdx}
 \end{figure}
 
-%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.gestionestaff
+In figura la parte di controller con la responsabilità di gestire la parte di amministrazione e gestione log.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view. \textbf{GestioneLogControllerImpl} ha una DAO diversa, quella specializzata nell'accesso ai file, dato che i log sono salvati sul file system. La sessione serve per accedere alle informazioni sull'amministratore di sistema attualmente connesso. L'operazione \textbf{inizializzaAmministratoreDiSistema} serve durante il \textbf{deployment} del sistema: fornisce un account di amministrazione con paramentri a \textbf{default}. Non è necessario inizializzare altri dati all'interno del database, perché sarà compito dell'amministratore di sistema registrare nuovi utenti, i quali aggiungeranno tutto il necessario per il funzionamento del software gestionale.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.utente
+
+%Gestione Utente Controller
+
+\begin{figure}[H]
+    \includegraphics[scale=0.8]{Progettazione/Package/middleware/controller/controller_gestione_utente.png}
+    \centering
+    \caption{controller.vsdx}
+\end{figure}
+
+In figura la parte di controller con la responsabilità di gestire la parte di utente.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view. La sessione serve per accedere alle informazioni sull'utente  attualmente connesso. Vengono salvate informazioni di log aggiuntive tramite \textbf{LogInterface}.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.staff
 
 %Gestione Staff Controller
 %Gestione Entrata Controller
@@ -2830,18 +2840,23 @@ Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappre
 %Gestione Tipologie Prevendita Controller
 %Gestione Membri Controller
 
+Abbiamo suddiviso il package in due diagrammi per migliorarne la lettura.
+
 \begin{figure}[H]
     \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_staff_1.png}
     \centering
     \caption{controller.vsdx}
 \end{figure}
 
+In figura la parte di controller con la responsabilità di gestire la parte di staff. Qui viene mostrata la parte contenente \textbf{GestioneStaffController}, \textbf{GestioneVenditePrevendite} e \textbf{Gestione Entrata}. Si tratta della parte utilizzata dagli attori \textbf{PR} e\textbf{Cassiere}.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view. La sessione serve per accedere alle informazioni sul membro attualmente connesso e sull'evento scelto. Vengono salvate informazioni di log aggiuntive tramite \textbf{LogInterface}.
 
 \begin{figure}[H]
     \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_staff_2.png}
     \centering
     \caption{controller.vsdx}
 \end{figure}
+
+In figura la parte di controller con la responsabilità di gestire la parte di staff. Qui viene mostrata la parte contenente \textbf{GestioneEventi}, \textbf{GestioneMembri} e \textbf{Gestione Tipologia Prevendita}. Si tratta della parte utilizzata dall'attore \textbf{Amministratore}.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view. La sessione serve per accedere alle informazioni sul membro attualmente connesso e sull'evento scelto. Vengono salvate informazioni di log aggiuntive tramite \textbf{LogInterface}.
 
 \newpage
 
@@ -2850,10 +2865,24 @@ Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappre
 %RequestHandler
 
 \begin{figure}[H]
-    \includegraphics[scale=0.9]{Progettazione/Package/middleware/handler/handler.png}
+    \includegraphics[scale=0.8]{Progettazione/Package/middleware/handler/handler.png}
     \centering
     \caption{handler.vsdx}
 \end{figure}
+
+In figura viene mostrato il package \textbf{handler}, che si occupa si raccogliere le richieste HTTPS ed elaborarle, inoltrando la richiesta al controller apposito. Si utilizza il pattern \textbf{State} per differenziare la presa in carico della richiesta, a seconda del comando utilizzato.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\L'enumeratore \textbf{Comando} contiene tutti i comandi disponibili presso il livello middle-ware.\\Di seguito una lista dei comandi:
+
+%TODO: FINIRE LISTA
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{X X X}
+        \textbullet REGISTRA\_UTENTE & \textbullet LOGIN  & \textbullet LOGOUT \\
+        \textbullet INIZIALIZZA\_SISTEMA & \textbullet LOGIN\_SYSTEM\_ADMIN  & \textbullet CAMBIA\_PASSWORD\_ADMIN \\
+        \textbullet CREA\_STAFF & \textbullet ACCEDI\_STAFF & \textbullet CAMBIA\_PASSWORD \\
+        \textbullet RESTITUISCI\_LISTA\_STAFF & \textbullet  & \textbullet \\
+        \textbullet & \textbullet  & \textbullet \\
+    \end{tabularx}
+\end{center}
 
 \subsubsection{Struttura front-end}
 
@@ -2956,11 +2985,11 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
 \paragraph{Entità} Le chiavi primarie (\textbf{id}) sono di tipo intero, autoincrement, per semplificare l'utilizzo del pattern DAO:
 
 \begin{itemize}
-    \item \textbf{Utente}: rappresenta un utente nel sistema. \textbf{tentativiLogin} serve per rispettare il vincolo \hyperlink{R28NF}{R28NF}. L'attributo \textbf{username} deve essere univoco, compresi quelli di \textbf{amministratore di sistema}. L'utente bloccato è sotto-entità di utente.
+    \item \textbf{Utente}: rappresenta un utente nel sistema. \textbf{tentativiLogin} serve per rispettare il vincolo \hyperlink{R28NF}{R28NF}. L'attributo \textbf{username} deve essere univoco. L'utente bloccato è sotto-entità di utente.
     \item \textbf{Membro}: rappresenta un membro di uno staff. I ruoli sono modellati come sotto entità. Nel caso il membro perda il ruolo, le iterazioni del membro devono rimanere.
     \item \textbf{Prevendita}: gli stati della prevendita sono modellati come sotto-entità di prevendita. \textbf{codice} serve per rispettare il vincolo \hyperlink{R27NF}{R27NF}.
     \item \textbf{Evento}: gli stati del'evento sono modellati come sotto-entità di evento. Gli attributi \textbf{inizio} e \textbf{fine} rappresentano il periodo temporale in cui è in corso l'evento (\hyperlink{R19F}{R19F}).
-    \item \textbf{Amministratore di sistema}: entità a se stante, che però condivide l'unicità di \textbf{username} con \textbf{utente}.
+    \item \textbf{Amministratore di sistema}: entità a se stante, l'\textbf{username} deve essere univoco.
     \item \textbf{Tipologia Prevendita}: gli attributi \textbf{aperturaVendite} e \textbf{chiusuraVendite} rappresentano il periodo temporale in cui è possibile vendere le prevendite (\hyperlink{R21F}{R21F}). Questo periodo deve essere logicamente antecedente al periodo di svolgimento dell'evento (\hyperlink{R9NF}{R9NF}).
     \item \textbf{Utente Bloccato}: potrebbe essere implementato tramite trigger che controlli \textbf{tentativiLogin}.
 \end{itemize}
@@ -2972,7 +3001,40 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
     \item \textbf{Crea Staff}: quando si crea lo staff, si diviene anche amministratore (\hyperlink{R11F}{R11F}).
 \end{itemize}
 
-\paragraph{Protezione della persistenza del database} Essendo il database gestito su macchina isolata remota, il rischio di accesso non autorizzato è limitato. Si consiglia di limitare l'accesso ai soli ip dello strato middle-ware.
+\paragraph{Trigger} Vengono inclusi trigger per far rispettare i vincoli:
+
+\begin{itemize}
+    \item \textbf{Evento}: controllo che il periodo di svolgimento sia valido (inizio < fine, periodo nel futuro), lo stato dell'evento deve rispettare il diagramma di comportamento.
+    \item \textbf{Tipologia Prevendita}: controllo che il periodo di vendita sia valido (inizio < fine, periodo nel futuro). Se sono state vendute prevendite non posso eliminare o modificare la tipologia (\hyperlink{R16NF}{R16NF})
+    \item \textbf{Prevendita} consistenza dell'evento e della tipologia di prevendita. La data di vendita deve essere conforme con il periodo di vendita. L'evento deve essere valido per l'inserimento. Lo stato della prevendita deve rispettare il diagramma di comportamento.
+    \item \textbf{Prevendita Timbrata} Inserimento effettuato nel periodo dell'evento, l'evento deve essere valido e la prevendita deve essere valida e non annullata.
+    \item \textbf{Membro} Verifica del requisito \hyperlink{R15F/NF}{R15F/NF}.
+    \item \textbf{Utente} Verifica unicità username, un utente può creare al massimo uno staff.
+\end{itemize}
+
+\paragraph{Protezione della persistenza del database} Essendo il database gestito su macchina isolata remota, il rischio di accesso non autorizzato è limitato. Si consiglia di limitare l'accesso ai soli ip dello strato middle-ware.\\Per migliorare ulteriormente la sicurezza, si consiglia di spostare l'entità amministratore di sistema in un RDMBS separato.
+
+\paragraph{Viste} Un ulteriore aggiunta, alla sicurezza e alla semplificazione della logica di business, può essere l'introduzione di viste di accesso al database:
+
+\begin{center}
+    \begin{tabularx}{1\textwidth}{|X|X|X|}
+        \hline
+        \textbf{Vista} & \textbf{Entità} & \textbf{Accesso}\\
+        \hline
+        \hline
+        Amministratore di Sistema & Amministratore Di Sistema & Lettura/Scrittura\\
+        Amministratore di Sistema & Utente & Lettura/Scrittura\\
+        Utente & Utente & Lettura/Scrittura\\
+        Utente & Staff & Lettura/Scrittura\\
+        Utente & Evento & Lettura/Scrittura\\
+        Utente & Membro & Lettura/Scrittura\\
+        Utente & Tipoogia Prevendita & Lettura/Scrittura\\
+        Utente & Prevendita & Lettura/Scrittura\\
+        Utente & Statistiche Membro & Lettura\\
+        Utente & Statistiche Evento & Lettura\\
+        \hline
+    \end{tabularx}
+\end{center}
 
 \paragraph{Integrità della persistenza del database} Si devono effettuare transazioni dove necessario, con dovuti \textbf{savepoint} e \textbf{rollback} in caso di errore, evitando stati non consistenti del database.
 
