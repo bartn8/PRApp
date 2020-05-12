@@ -20,15 +20,18 @@
 package com.prapp.model.db.wrapper;
 
 import com.google.gson.Gson;
-import com.prapp.model.db.enums.Diritto;
 import com.prapp.model.db.enums.StatoPrevendita;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class WPrevenditaTest {
+
+
 
     @Test
     public void jsonSerializeTest()

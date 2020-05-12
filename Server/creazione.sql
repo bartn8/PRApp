@@ -26,12 +26,14 @@ CREATE TABLE utente (
   CONSTRAINT chkTokenEScadenza CHECK ((token IS NOT NULL AND scadenzaToken IS NOT NULL) OR token IS NULL)
 );
 
+/*
 CREATE TABLE registro (
   seq int NOT NULL AUTO_INCREMENT,
   livello ENUM('INFO', 'WARNING', 'IMPORTANT') NOT NULL DEFAULT 'INFO',
   timestampInserimento timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   
 );
+*/
 
 CREATE TABLE membro (
   idUtente int NOT NULL,
@@ -66,6 +68,7 @@ CREATE TABLE amministratore (
   FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
 
+/*
 CREATE TABLE macchina (
 	idUtente int NOT NULL,
 	idStaff int NOT NULL,
@@ -73,6 +76,7 @@ CREATE TABLE macchina (
 	PRIMARY KEY(idUtente, idStaff),
 	FOREIGN KEY(idUtente, idStaff) REFERENCES membro(idUtente, idStaff) ON DELETE CASCADE
 );
+*/
 
 CREATE TABLE evento (
   id int NOT NULL AUTO_INCREMENT,

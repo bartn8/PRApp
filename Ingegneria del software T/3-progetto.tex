@@ -2635,7 +2635,7 @@ Si tratta dell'ultimo livello, quello a contatto con gli utilizzatori finali, sp
 
 
 \subsubsection{Patterns \& Design Principle}
-Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVC} sia per l'applicativo middle-ware, sia per la parte front-end. Il software middle-ware avrà una parte di view minima, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
+Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVC} per l'applicativo middle-ware, mentre per la parte front-end si è utilizzato il \textbf{MVVM}. Il software middle-ware avrà una parte di view minima, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
 
 %\subsubsection{Diagramma a package}
 
@@ -2687,8 +2687,6 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
     \item \textbf{Controller}: Collante tra Model e View, con tutta la business logic di supporto
 \end{itemize}
 
-\newpage
-
 \paragraph{Package} it.unibo.prevenditaelettronica.middleware.model.dao
 
 %Factory DAO Generale
@@ -2698,15 +2696,6 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
 %DAO per log da filesystem
 
 %PersistanceException
-
-
-\begin{figure}[H]
-    \includegraphics[scale=0.65]{Progettazione/Package/middleware/model/dao/dao_database.png}
-    \centering
-    \caption{dao.vsdx}
-\end{figure}
-
-Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default.
 
 \begin{figure}[H]
     \includegraphics[scale=0.9]{Progettazione/Package/middleware/model/dao/dao_log.png}
@@ -2723,6 +2712,16 @@ Pattern \textbf{DAO} applicato alla persistenza dei log. Dato che il log è stat
 \end{figure}
 
 Naturalmente gli oggetti \textbf{DAO} possono lanciare eccezioni, qui si incapsulano tali eccezioni, per migliorare la sicurezza.
+
+\newpage
+
+\begin{figure}[H]
+    \includegraphics[scale=0.65]{Progettazione/Package/middleware/model/dao/dao_database.png}
+    \centering
+    \caption{dao.vsdx}
+\end{figure}
+
+Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default.
 
 \newpage
 
@@ -2752,7 +2751,7 @@ Il package fornisce classi per il \textbf{lazy-load} di alcuni metodi delle clas
     \caption{model.vsdx}
 \end{figure}
 
-Si tratta del modello di dominio visto in analisi. La maggior parte delle operazioni previste in analisi sono spostate in altri package. La gestione delle credenziali viene fatta nel package DAO e quindi il modello di dominio non contiene informazioni su credenziali.
+Si tratta del modello di dominio visto in analisi. La maggior parte delle operazioni previste in analisi sono spostate in altri package. La gestione delle credenziali viene fatta nel package DAO e quindi il modello di dominio non contiene informazioni su credenziali. La generazione del documento viene fatta dal componente front-end.
 
 \newpage
 
@@ -2770,7 +2769,7 @@ Si tratta del modello di dominio visto in analisi. La maggior parte delle operaz
     \caption{view.vsdx}
 \end{figure}
 
-Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappresentazione dei dati verso il front-end. Dato la scelta tecnologica di usare JSON come formato di dati, abbiamo implementato una sola classe Printer, ma l'interfaccia rende flessibile l'utilizzo di un altro formato dati.\\L'interfaccia \textbf{JSONSerializable} non è obbligatoria, dipende dalle librerie usate in implementazione, per esempio GSON non ne prevede. Nel caso in cui la serializazzione venga fatta senza aiuti esterni, l'interfaccia va implementata nelle classi di dominio, rispettando i vincoli di sicurezza.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\\L'enumeratore \textbf{Stato} indica lo stato della risposta, mentre l'enumeratore \textbf{Comando} contiene tutti i comandi eseguibili sul middle-ware. La lista non è completa e viene riportata nel package \textbf{handler} in seguito.
+Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappresentazione dei dati verso il front-end. Dato la scelta tecnologica di usare JSON come formato di dati, abbiamo implementato una sola classe Printer, ma l'interfaccia rende flessibile l'utilizzo di un altro formato dati.\\L'interfaccia \textbf{JSONSerializable} non è obbligatoria, dipende dalle librerie usate in implementazione, per esempio GSON non ne prevede. Nel caso in cui la serializazzione venga fatta senza aiuti esterni, l'interfaccia va implementata nelle classi di dominio, rispettando i vincoli di sicurezza.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\\L'enumeratore \textbf{Stato} indica lo stato della risposta, mentre l'enumeratore \textbf{Comando} contiene tutti i comandi eseguibili sul middle-ware. La lista non è completa e viene riportata nel package \textbf{handler} in seguito.\\La classe \textbf{Response} rappresenta le informazioni scambiate con il client in fase di risposta: viene trasferito il \textbf{comando} per cui si è fatta la richiesta, lo stato della risposta, eventuale risultato o eccezione. Il risultato o l'eccezione è già serializzato, mentre l'oggetto Response verrà serializzato successivamente.
 
 \newpage
 
@@ -2786,7 +2785,7 @@ Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappre
     \caption{controller.vsdx}
 \end{figure}
 
-In figura la parte di controller con la responsabilità di gestire la parte di autenticazione e di sessione. Sessione e autenticazione sono divise in due interfacce per rispettare \textbf{Interface Segregation Principle}, con l'interfaccia di sessione usato dagli altri controller per ricavare informazioni utili sulla sessione. Abbiamo deciso di implmenetare le interfacce nella stessa classe perché le interfacce possono essere viste come getter/setter dei parametri di sessione.\\Il controller utilizza \textbf{LogInterface}, che vedremo nella figura successiva, per aggiungere eventuali righe al log.\\L'eccezione \textbf{AuthorizationException} viene lanciata nei più svariati casi di accesso negato: credenziali errate, utente bloccato, ruolo non concesso, eccetera, e viene utilizzato anche da altri controller nel caso sia necessario.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view.
+In figura la parte di controller con la responsabilità di gestire la parte di autenticazione e di sessione. Sessione e autenticazione sono divise in due interfacce per rispettare \textbf{Interface Segregation Principle}, con l'interfaccia di sessione usato dagli altri controller per ricavare informazioni utili sulla sessione. Abbiamo deciso di implmenetare le interfacce nella stessa classe perché le interfacce possono essere viste come getter/setter dei parametri di sessione.\\Il controller utilizza \textbf{LogInterface}, che vedremo nella figura successiva, per aggiungere eventuali righe al log.\\L'eccezione \textbf{AuthorizationException} viene lanciata nei più svariati casi di accesso negato: credenziali errate, utente bloccato, ruolo non concesso, eccetera, e viene utilizzato anche da \textbf{altri} controller nel caso sia necessario.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view.
 
 \newpage
 
@@ -2865,110 +2864,258 @@ In figura la parte di controller con la responsabilità di gestire la parte di s
 %RequestHandler
 
 \begin{figure}[H]
-    \includegraphics[scale=0.8]{Progettazione/Package/middleware/handler/handler.png}
+    \includegraphics[scale=0.70]{Progettazione/Package/middleware/handler/handler.png}
     \centering
     \caption{handler.vsdx}
 \end{figure}
 
-In figura viene mostrato il package \textbf{handler}, che si occupa si raccogliere le richieste HTTPS ed elaborarle, inoltrando la richiesta al controller apposito. Si utilizza il pattern \textbf{State} per differenziare la presa in carico della richiesta, a seconda del comando utilizzato.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\L'enumeratore \textbf{Comando} contiene tutti i comandi disponibili presso il livello middle-ware.\\Di seguito una lista dei comandi:
+In figura viene mostrato il package \textbf{handler}, che si occupa si raccogliere le richieste HTTPS ed elaborarle, inoltrando la richiesta al controller apposito. Si utilizza il pattern \textbf{State} per differenziare la presa in carico della richiesta, a seconda del comando utilizzato. L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta. Il metodo \textbf{handle} viene chiamato dalla piattaforma sottostante, probabilmente da un thread separato per ogni richiesta. La classe astratta \textbf{AbstractRequestHandler} potrebbe subire dei cambiamenti, a seconda della piattaforma sottostante. L'enumeratore \textbf{Comando} contiene tutti i comandi disponibili presso il livello middle-ware. L'interfaccia \textbf{JSONDeserializable} serve per convertire la richiesta JSON in oggetti utilizzabili. Può essere sostituita da una eventuale libreria della piattaforma. La classe \textbf{Request} rappresenta le informazioni in ingresso dal client: contiene il \textbf{comando} da eseguire ed eventuali \textbf{argomenti} per la corretta esecuzione del comando, il tutto già serializzato, mentre l'oggetto Request verrà serializzato successivamente.
 
-%TODO: FINIRE LISTA
+\newpage
+
+Di seguito una lista dei comandi:
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{X X X}
         \textbullet REGISTRA\_UTENTE & \textbullet LOGIN  & \textbullet LOGOUT \\
         \textbullet INIZIALIZZA\_SISTEMA & \textbullet LOGIN\_SYSTEM\_ADMIN  & \textbullet CAMBIA\_PASSWORD\_ADMIN \\
         \textbullet CREA\_STAFF & \textbullet ACCEDI\_STAFF & \textbullet CAMBIA\_PASSWORD \\
-        \textbullet RESTITUISCI\_LISTA\_STAFF & \textbullet  & \textbullet \\
-        \textbullet & \textbullet  & \textbullet \\
+        \textbullet LISTA\_STAFF & \textbullet LISTA\_MEMBRI  &  \textbullet LISTA\_EVENTI\\
+        \textbullet SCEGLI\_EVENTO & \textbullet SCEGLI\_STAFF & \textbullet LISTA\_TIPOLOGIE\_PREVENDITA\\
+        \textbullet AGGIUNGI\_PREVENDITA & \textbullet ANNULLA\_PREVENDITA & \textbullet RIMBORSA\_PREVENDITA \\
+        \textbullet LISTA\_PREVENDITE & \textbullet STATISTICHE\_MEMBRO & \textbullet STATISTICHE\_EVENTO \\
+        \textbullet LISTA\_PREVENDITE\_EVENTO & \textbullet TIMBRA\_PREVENDITA  & \textbullet CAMBIA\_CODICE\_ACCESSO \\
+        \textbullet STATISTICHE\_PERSONALI & \textbullet AGGIUNGI\_EVENTO  & \textbullet ANNULLA\_EVENTO \\
+        \textbullet AGGIUNGI\_TIP\_PREVENDITA & \textbullet MODIFICA\_TIP\_PREVENDITA & \textbullet ELIMINA\_TIP\_PREVENDITA \\
+        \textbullet MODIFICA\_MEMBRO & \textbullet RIMUOVI\_MEMBRO &  \\
     \end{tabularx}
 \end{center}
 
 \subsubsection{Struttura front-end}
 
-Come detto in precedenza, la struttura è basata su \textbf{MVC}.
+Come detto in precedenza, la struttura è basata su \textbf{MVVM}.
 
 \begin{itemize}
     \item \textbf{Model}: Deve elaborare i dati per la ricezione/invio verso il middle-ware.\\L'accesso al middle-ware è dettato dal pattern \textbf{Broker}.
-    \item \textbf{View}: Componente principale del client front-end, utilizziamo il pattern \textbf{Observer} per la gestione di eventi.
-    \item \textbf{Controller}: Collante tra Model e View, con business logic limitata.
+    \item \textbf{View}: Componente principale del client front-end, utilizziamo il pattern \textbf{Observer} per il binding con il ViewModel. Dovrebbe essere ridotta alla sola logica di presentazione.
+    \item \textbf{ViewModel}: Collante tra Model e View, è il responsabile della logica della vista.
 \end{itemize}
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.common.model.net
+La modularità del \textbf{MVVM} permette di combinare facilmente le varie viste, per ottenere client veramente \textbf{personalizzati}.
 
-%HTTPHandler
-%JSONParser
-
-\paragraph{Package}it.unibo.prevenditaelettronica.frontend.common.model.broker
+\paragraph{Package}it.unibo.prevenditaelettronica.frontend.model.net.broker
 
 %BrokerInterface
 %Broker
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.common.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.72]{Progettazione/Package/frontend/model/net/broker/broker.png}
+    \centering
+    \caption{broker.vsdx}
+\end{figure}
 
+Il componente \textbf{HTTPSBrokerInterface} rappresenta una interfaccia in grado di registrare servizi middle-ware, secondo una certa \textbf{priorità}. Utilizzando il metodo \textbf{procuraCanale}, il broker procura un canale per il client, andando a cercare il servizio remoto, seguendo l'ordine di priorità. L'enumeratore \textbf{ServicePriority} serve per classificare i servizi in base ad una priorità: \textbf{Primary} rappresenta il servizio principale, quello chiamato la maggior parte delle volte, \textbf{Backup} rappresenta un possibile livello middle-ware secondario, sempre che si riesca a scalare orizzontalmente, mentre la priorità \textbf{Local} rappresenta il backup locale effettuato dall'amministratore di sistema su richiesta, per limitare gli attacchi DoS.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.model
+
+\begin{figure}[H]
+    \includegraphics[scale=0.65]{Progettazione/Package/frontend/model/model.png}
+    \centering
+    \caption{model.vsdx}
+\end{figure}
+
+Il modello di dominio è uguale a quello del midde-ware, ma cambia il metodo di reperire le informazioni: nel middle-ware le informazioni vengono ottenute attraverso interrogazioni del database, mentre nel front-end, le informazioni vengono ottenute tramite interrogazioni del middle-ware. Serve quindi progettare il meccanismo di accesso al middle-ware.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.model.net
+
+%Stato
+%Comando
+
+%AuthorizationExcepton
+%PersistenceException
+
+\begin{figure}[H]
+    \includegraphics[scale=0.75]{Progettazione/Package/frontend/model/net/net_1.png}
+    \centering
+    \caption{net.vsdx}
+\end{figure}
+
+Molte entità sono in comune con il layer middle-ware. Le interfacce \textbf{JSONSerializable} e \textbf{JSONDeserializable} servono per convertire la richieste e le risposte nel formato JSON. Può essere sostituita da una eventuale libreria della piattaforma. Le interfacce \textbf{Request} e \textbf{Response} contengono le informazioni per la comunicazione. All'interno le informazioni sono già serializzate, mentre gli oggetti stessi verranno serializzati successivamente.
+
+%HTTPS CLient
+
+\begin{figure}[H]
+    \includegraphics[scale=0.72]{Progettazione/Package/frontend/model/net/net_2.png}
+    \centering
+    \caption{net.vsdx}
+\end{figure}
+
+In figura si rappresenta la modalità di comunicazione con il middle-ware: si è introdotto \textbf{HTTPSClientInterface} che rappresenta il client che effettua le richieste al middle-ware. Si ha la possibilità di effettuare richieste in modo sincrono o asincrono, a seconda delle esigenze. Il canale di comunicazione \textbf{HTTPSInterface} viene fornito da \textbf{HTTPSBrokerInterface}, il quale si pone tra client e middle-ware.
+
+\newpage
+
+%TODO: assegnare un posto a sti qui
 %Gestione Staff Controller
-%Gestione Utente Controller - alcune funzionalità sono solo di amministratore di sistema
+%Gestione Utente Controller
+%Gestione Amministrazione Controller
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel
+
+\begin{figure}[H]
+    \includegraphics[scale=0.75]{Progettazione/Package/frontend/viewmodel/viewmodel.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+Come detto in precedenza, si utilizza il pattern \textbf{Observer} per il binding tra \textbf{View} e \textbf{ViewModel}. Si è aggiunta una classe \textbf{MutableData} per la gestione di un oggetto con osservatori esterni. La classe astratta \textbf{AbstractViewModel} rappresenta un ViewModel generale, dentro al quale si trovano il client \textbf{HTTPSClientInterface} per effettuare le richieste e un \textbf{MutableData} per la risposta, la quale sarà osservata dalla view, che si aggiornerà di conseguenza. \textbf{AbstractViewModel} implementa anche l'interfaccia \textbf{Listener}, nel caso sia neccessario effettuare delle richieste asincrone. I ViewModel \textbf{concreti} hanno lo stereotipo $<<$\textbf{ViewModel}$>>$, indicando che estendono \textbf{AbstractViewModel}.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.autenticazione
+
 %Autenticazione Controller
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.utente.controller
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.amministratoredisistema.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.80]{Progettazione/Package/frontend/viewmodel/viewmodel_autenticazione.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+Vengono rappresentate in figura i ViewModel per le viste di autenticazione. Sono quindi previste le viste di login collegate a questi ViewModel. Quando la vista riceve l'evento di submit, essa invoca il suo ViewModel, il quale dopo una verifica dell'input, invia la richiesta al middle-ware. Si potrebbe migliorare il meccanismo di validazione dell'input in futturo, rendendolo più dinamico, rendendo il ViewModel \textbf{Observer} del form di input e ad un cambiamento effettuare il check del form.
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.utente
+
+\begin{figure}[H]
+    \includegraphics[scale=0.75]{Progettazione/Package/frontend/viewmodel/viewmodel_utente.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+Nella figura viene presentato la parte di ViewModel dell'utente. Oltre ai metodi principali viene inserito anche \textbf{ScegliStaff}, per scegliere lo staff durante la sessione. Esiste un ViewModel associato ad una vista per visionare l'utente loggato ed effettuare eventualmente il logout.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.amministrazione
 
 %Gestione Log Controller
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.membro.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.75]{Progettazione/Package/frontend/viewmodel/viewmodel_amministrazione.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.pr.controller
+Sono presenti tutti i ViewModel per gestire un'amministrazione: esiste la possibilità di registrare un utente, sbloccare un utente, cambiare la password dell'amministratore e gestire i log.
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.membro
+
+\begin{figure}[H]
+    \includegraphics[scale=0.80]{Progettazione/Package/frontend/viewmodel/viewmodel_membro.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+Contiene semplici operazioni per la scelta dell'evento e per le statistiche del membro.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.pr
 
 %Gestione Vendita Prevendite Controller
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.cassiere.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.75]{Progettazione/Package/frontend/viewmodel/viewmodel_pr.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.cassiere
 
 %Gestione Entrata Controller
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.amministratore.controller
+\begin{figure}[H]
+    \includegraphics[scale=0.90]{Progettazione/Package/frontend/viewmodel/viewmodel_cassiere.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.amministratore
 
 %Gestione Eventi Controller
 %Gestione Tipologie Prevendita Controller
 %Gestione Membri Controller
 
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.common.view
+\begin{figure}[H]
+    \includegraphics[scale=0.9]{Progettazione/Package/frontend/viewmodel/viewmodel_amministratore.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/frontend/viewmodel/viewmodel_amministratore_evento.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/frontend/viewmodel/viewmodel_amministratore_membri.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/viewmodel/viewmodel_amministratore_tipologia_prevendita.png}
+    \centering
+    \caption{viewmodel.vsdx}
+\end{figure}
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view
 
 %Interfaccia Autorizzazione
 %Interfaccie Gestione Utente
 %Interfaccie Gestione Staff
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.utente.view
+
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.utente
 
 %Interfaccia Accedi staff
 %Interfaccia Crea staff
 %Interfaccia Cambia password
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.amministratoredisistema.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.amministratoresistema
 
 %Interfacce Gestione Log
 %Interfacce Sblocco utente
 %Interfacce Registra utente
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.membro.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.membro
 
 %Interaccia Visualizza statistiche personali
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.pr.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.pr
 
 %Interfaccie Gestione vendita prevendita
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.cassiere.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.cassiere
 
 %Interfaccie Gestione entrata
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.amministratore.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.amministratore
 
 %Interfacce Gestione Membri
 %Interfacce Gestione Tipologie Prevendita
 %Interfacce Gestione Eventi
 %Interfacce Cambia codice accesso
 %Interfacce Visualizza Statistiche
+
 
 \newpage
 
@@ -2985,13 +3132,13 @@ Come detto in precedenza, la struttura è basata su \textbf{MVC}.
 \paragraph{Entità} Le chiavi primarie (\textbf{id}) sono di tipo intero, autoincrement, per semplificare l'utilizzo del pattern DAO:
 
 \begin{itemize}
-    \item \textbf{Utente}: rappresenta un utente nel sistema. \textbf{tentativiLogin} serve per rispettare il vincolo \hyperlink{R28NF}{R28NF}. L'attributo \textbf{username} deve essere univoco. L'utente bloccato è sotto-entità di utente.
+    \item \textbf{Utente}: rappresenta un utente nel sistema. \textbf{tentativiLogin} serve per rispettare il vincolo \hyperlink{R28NF}{R28NF}. L'attributo \textbf{username} deve essere univoco. La password viene salvata come salted hash, con meccanismo di hashing sicuro (SHA256 o superiore). La tecnica salting serve per contrastare la tecnica di attacco \textbf{Rainbow Tables}. Le stesse considerazioni vanno fatte per l'entità \textbf{Amministratore di sistema}.
     \item \textbf{Membro}: rappresenta un membro di uno staff. I ruoli sono modellati come sotto entità. Nel caso il membro perda il ruolo, le iterazioni del membro devono rimanere.
     \item \textbf{Prevendita}: gli stati della prevendita sono modellati come sotto-entità di prevendita. \textbf{codice} serve per rispettare il vincolo \hyperlink{R27NF}{R27NF}.
     \item \textbf{Evento}: gli stati del'evento sono modellati come sotto-entità di evento. Gli attributi \textbf{inizio} e \textbf{fine} rappresentano il periodo temporale in cui è in corso l'evento (\hyperlink{R19F}{R19F}).
     \item \textbf{Amministratore di sistema}: entità a se stante, l'\textbf{username} deve essere univoco.
     \item \textbf{Tipologia Prevendita}: gli attributi \textbf{aperturaVendite} e \textbf{chiusuraVendite} rappresentano il periodo temporale in cui è possibile vendere le prevendite (\hyperlink{R21F}{R21F}). Questo periodo deve essere logicamente antecedente al periodo di svolgimento dell'evento (\hyperlink{R9NF}{R9NF}).
-    \item \textbf{Utente Bloccato}: potrebbe essere implementato tramite trigger che controlli \textbf{tentativiLogin}.
+    \item \textbf{Utente Bloccato}: ci vuole un trigger che controlli \textbf{tentativiLogin}.
 \end{itemize}
 
 
