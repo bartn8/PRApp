@@ -2987,7 +2987,7 @@ Come detto in precedenza, si utilizza il pattern \textbf{Observer} per il bindin
     \caption{viewmodel.vsdx}
 \end{figure}
 
-Vengono rappresentate in figura i ViewModel per le viste di autenticazione. Sono quindi previste le viste di login collegate a questi ViewModel. Quando la vista riceve l'evento di submit, essa invoca il suo ViewModel, il quale dopo una verifica dell'input, invia la richiesta al middle-ware. Si potrebbe migliorare il meccanismo di validazione dell'input in futturo, rendendolo più dinamico, rendendo il ViewModel \textbf{Observer} del form di input e ad un cambiamento effettuare il check del form.
+Vengono rappresentate in figura i ViewModel per le viste di autenticazione. Sono quindi previste le viste di login collegate a questi ViewModel. Quando la vista riceve l'evento di submit, essa invoca il suo ViewModel, il quale dopo una verifica dell'input, invia la richiesta al middle-ware. Si potrebbe migliorare il meccanismo di validazione dell'input in futturo, rendendolo più dinamico, rendendo il ViewModel \textbf{Observer} del form di input e ad un cambiamento effettuare il check del form. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.utente
 
@@ -2997,7 +2997,7 @@ Vengono rappresentate in figura i ViewModel per le viste di autenticazione. Sono
     \caption{viewmodel.vsdx}
 \end{figure}
 
-Nella figura viene presentato la parte di ViewModel dell'utente. Oltre ai metodi principali viene inserito anche \textbf{ScegliStaff}, per scegliere lo staff durante la sessione. Esiste un ViewModel associato ad una vista per visionare l'utente loggato ed effettuare eventualmente il logout.
+Nella figura viene presentato la parte di ViewModel dell'\textbf{utente}. Oltre ai metodi principali viene inserito anche \textbf{ScegliStaff}, per scegliere lo staff durante la sessione. Esiste un ViewModel associato ad una vista per visionare l'utente loggato ed effettuare eventualmente il logout. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \newpage
 
@@ -3011,7 +3011,7 @@ Nella figura viene presentato la parte di ViewModel dell'utente. Oltre ai metodi
     \caption{viewmodel.vsdx}
 \end{figure}
 
-Sono presenti tutti i ViewModel per gestire un'amministrazione: esiste la possibilità di registrare un utente, sbloccare un utente, cambiare la password dell'amministratore e gestire i log.
+Sono presenti tutti i ViewModel per gestire l'\textbf{amministrazione}: esiste la possibilità di registrare un utente, sbloccare un utente, cambiare la password dell'amministratore e gestire i log. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.membro
 
@@ -3021,7 +3021,7 @@ Sono presenti tutti i ViewModel per gestire un'amministrazione: esiste la possib
     \caption{viewmodel.vsdx}
 \end{figure}
 
-Contiene semplici operazioni per la scelta dell'evento e per le statistiche del membro.
+Contiene semplici operazioni per la scelta dell'evento e per le statistiche del membro.  Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \newpage
 
@@ -3035,6 +3035,8 @@ Contiene semplici operazioni per la scelta dell'evento e per le statistiche del 
     \caption{viewmodel.vsdx}
 \end{figure}
 
+Il PR ha alcune viste per la \textbf{vendita di prevendite}. La generazione del documento viene fatta tramite il metodo \textbf{generaDocumento} permette alla vista di mostrare il documento generato, da consegnare al cliente.  Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.cassiere
 
 %Gestione Entrata Controller
@@ -3044,6 +3046,10 @@ Contiene semplici operazioni per la scelta dell'evento e per le statistiche del 
     \centering
     \caption{viewmodel.vsdx}
 \end{figure}
+
+Per il cassiere serve solo il ViewModel per la \textbf{timbratura} e per la lista di prevendite entrate. L'interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+
+\newpage
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.amministratore
 
@@ -3058,11 +3064,15 @@ Contiene semplici operazioni per la scelta dell'evento e per le statistiche del 
     \caption{viewmodel.vsdx}
 \end{figure}
 
+In figura il ViewModel per cambiare il \textbf{codice di accesso} allo staff. L'interfaccia estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+
 \begin{figure}[H]
     \includegraphics[scale=1]{Progettazione/Package/frontend/viewmodel/viewmodel_amministratore_evento.png}
     \centering
     \caption{viewmodel.vsdx}
 \end{figure}
+
+In figura le ViewModel per la gestione di un \textbf{evento}. Alcune viste richiedono l'aggiunta di informazioni prima di eseguire l'operazione. Per esempio \textbf{AnnullaEventoViewModel} richiede la lista degli eventi tramite metodo \textbf{listaEventi}. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Progettazione/Package/frontend/viewmodel/viewmodel_amministratore_membri.png}
@@ -3070,19 +3080,62 @@ Contiene semplici operazioni per la scelta dell'evento e per le statistiche del 
     \caption{viewmodel.vsdx}
 \end{figure}
 
+In figura le ViewModel per la gestione dei \textbf{membri}. Alcune viste richiedono l'aggiunta di informazioni prima di eseguire l'operazione. Per esempio, prima di rimuovere un membro, ho bisogno di sapere la lista dei membri. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+
 \begin{figure}[H]
     \includegraphics[scale=0.85]{Progettazione/Package/frontend/viewmodel/viewmodel_amministratore_tipologia_prevendita.png}
     \centering
     \caption{viewmodel.vsdx}
 \end{figure}
 
+In figura le ViewModel per la gestione delle \textbf{tipologie di prevendita}. Alcune viste richiedono l'aggiunta di informazioni prima di eseguire l'operazione. Per esempio, prima di rimuovere un membro, ho bisogno di sapere la lista dei membri. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+
+\newpage
+
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view
 
+%Interfacce Home
+
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/home.png}
+    \centering
+    \caption{home.vsdx}
+\end{figure}
+
+In figura sono rappresentate le schermate home. Non necessitano di una ViewModel, in quanto non fanno altro che richiamare altre viste. Si espone solo il layout di \textbf{GestioneUtenteHome} per non appesantire troppo il documento, già bello grasso.
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_home_utente.PNG}
+    \centering
+    \caption{layout\_home\_utente.png}
+\end{figure}
+
+Il layout è composto da un titolo per identificare la home e una serie di pulsanti per agire sulla vista desiderata. Alcuni pulsanti potrebbero portare ad altre home invece che alla vista finale.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.autenticazione
+
 %Interfaccia Autorizzazione
-%Interfaccie Gestione Utente
-%Interfaccie Gestione Staff
 
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_autenticazione.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
 
+Le viste di autenticazione offrono la schermata per il login. Il layout delle due viste è completamente interoperabile. Le altre funzionalità del package autenticazione sono state spostate in altri gruppi di viste, a seconda di come risultasse più facile per l'utente finale. Una volta che il login ha avuto successo si sceglie la home specifica: per un utente normale \textbf{GstioneUtenteHome}, mentre per un amministratore di sistema \textbf{GestioneAmministrazioneHome}.
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_autenticazione.png}
+    \centering
+    \caption{layout\_autenticazione.png}
+\end{figure}
+
+Il layout è piuttosto semplicistico: composto da un form per la validazione delle credenziali e un pulsante di submit.
+
+\newpage
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.utente
 
@@ -3090,23 +3143,77 @@ Contiene semplici operazioni per la scelta dell'evento e per le statistiche del 
 %Interfaccia Crea staff
 %Interfaccia Cambia password
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.amministratoresistema
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_utente.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
+
+Sono fornite le viste generali per un utente. Utente View mostra le informazioni sull'utente corrente e la possibilità di effettuare il logout. Viene mostrata solo quest'ultima vista per non appesantire il documento:
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_utente.PNG}
+    \centering
+    \caption{layout\_utente.png}
+\end{figure}
+
+Viene mostrato il nome, il cognome e il telefono. Inoltre è presente il pulsante per effettuare il logout.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.amministrazione
 
 %Interfacce Gestione Log
 %Interfacce Sblocco utente
 %Interfacce Registra utente
 
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministrazione.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
+
+Contiene le viste per la gestione di amministrazione di sistema. A queste viste ha accesso solo l'amministratore di sistema. Permette la lettura del log e un aggiunta ad esso. In seguito viene mostrato il layout di aggiunta di un record di log:
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_aggiungi_record.PNG}
+    \centering
+    \caption{layout\_aggiungi\_record.png}
+\end{figure}
+
+Il layout mostra come è posssibile aggiungere la priorità al log, e la descrizione. Il timestamp viene aggiunto automaticamente. Il pulsante aggiungi record permette l'aggiunta al log del sistema.
+
+\newpage
+
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.membro
 
 %Interaccia Visualizza statistiche personali
 
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_membro.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
+
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.pr
 
-%Interfaccie Gestione vendita prevendita
+%Interfacce Gestione vendita prevendita
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_pr.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.cassiere
 
-%Interfaccie Gestione entrata
+%Interfacce Gestione entrata
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_cassiere.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.amministratore
 
@@ -3116,6 +3223,30 @@ Contiene semplici operazioni per la scelta dell'evento e per le statistiche del 
 %Interfacce Cambia codice accesso
 %Interfacce Visualizza Statistiche
 
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministratore.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministratore_evento.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministratore_membri.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministratore_tipologie_prevendita.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
 
 \newpage
 
