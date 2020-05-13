@@ -3106,7 +3106,7 @@ In figura le ViewModel per la gestione delle \textbf{tipologie di prevendita}. A
 In figura sono rappresentate le schermate home. Non necessitano di una ViewModel, in quanto non fanno altro che richiamare altre viste. Si espone solo il layout di \textbf{GestioneUtenteHome} per non appesantire troppo il documento, già bello grasso.
 
 \begin{figure}[H]
-    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_home_utente.PNG}
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_home_utente.PNG}
     \centering
     \caption{layout\_home\_utente.png}
 \end{figure}
@@ -3128,7 +3128,7 @@ Il layout è composto da un titolo per identificare la home e una serie di pulsa
 Le viste di autenticazione offrono la schermata per il login. Il layout delle due viste è completamente interoperabile. Le altre funzionalità del package autenticazione sono state spostate in altri gruppi di viste, a seconda di come risultasse più facile per l'utente finale. Una volta che il login ha avuto successo si sceglie la home specifica: per un utente normale \textbf{GstioneUtenteHome}, mentre per un amministratore di sistema \textbf{GestioneAmministrazioneHome}.
 
 \begin{figure}[H]
-    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_autenticazione.png}
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_autenticazione.png}
     \centering
     \caption{layout\_autenticazione.png}
 \end{figure}
@@ -3152,7 +3152,7 @@ Il layout è piuttosto semplicistico: composto da un form per la validazione del
 Sono fornite le viste generali per un utente. Utente View mostra le informazioni sull'utente corrente e la possibilità di effettuare il logout. Viene mostrata solo quest'ultima vista per non appesantire il documento:
 
 \begin{figure}[H]
-    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_utente.PNG}
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_utente.PNG}
     \centering
     \caption{layout\_utente.png}
 \end{figure}
@@ -3176,7 +3176,7 @@ Viene mostrato il nome, il cognome e il telefono. Inoltre è presente il pulsant
 Contiene le viste per la gestione di amministrazione di sistema. A queste viste ha accesso solo l'amministratore di sistema. Permette la lettura del log e un aggiunta ad esso. In seguito viene mostrato il layout di aggiunta di un record di log:
 
 \begin{figure}[H]
-    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_aggiungi_record.PNG}
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_aggiungi_record.PNG}
     \centering
     \caption{layout\_aggiungi\_record.png}
 \end{figure}
@@ -3195,6 +3195,18 @@ Il layout mostra come è posssibile aggiungere la priorità al log, e la descriz
     \caption{view.vsdx}
 \end{figure}
 
+Il package membro fornisce delle viste generali per scegliere l'evento della sessione e visualizzare statistiche sul membro. Viene mostrato il layout di \textbf{ScegliEventoView}:
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_scegli_evento.PNG}
+    \centering
+    \caption{layout\_scegli\_evento.png}
+\end{figure}
+
+Il layout rappresenta una lista di eventi che si possono scegliere, cliccandoci sopra. Il layout è applicabile anche a \textbf{ScegliStaffView}
+
+\newpage
+
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.pr
 
 %Interfacce Gestione vendita prevendita
@@ -3204,6 +3216,24 @@ Il layout mostra come è posssibile aggiungere la priorità al log, e la descriz
     \centering
     \caption{view.vsdx}
 \end{figure}
+
+Il package pr contiene le viste per la gestione vendita prevendita. Consente di aggiungere una prevendita, annullare una prevendita e rimborsare una prevendita. \textbf{AggiungiPrevenditaView} ha un metodo per il draw del documento digitale. Viene mostrato il layout AggiungiPrevenditaView e un esempio di documento digitale QR Code:
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/layout/layout_aggiungi_prevendita.PNG}
+    \centering
+    \caption{layout\_aggiungi\_prevendita.png}
+\end{figure}
+
+Il layout permette di inserire il nome e il cognome del cliente e di aggiungere la tipologia di prevendita. Il pulsante aggiungi prevendita permette di effettuare l'operazione.
+
+\begin{figure}[H]
+    \includegraphics[scale=0.2]{Progettazione/esempio_documento.png}
+    \centering
+    \caption{layout\_esempio\_documento.png}
+\end{figure}
+
+Si tratta di un documento digitale formato da un QR Code e una descrizione. Il documento potrebbe essere implementato in un altra forma, ma il codice QR è preferibile, in quanto permette di effettuare una scansione rapida della prevendita.
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.cassiere
 
@@ -3215,6 +3245,18 @@ Il layout mostra come è posssibile aggiungere la priorità al log, e la descriz
     \caption{view.vsdx}
 \end{figure}
 
+Le viste del cassiere permettono la timbratura di una prevendita durante l'evento e la visione delle prevendite che sono entrate all'evento, per un controllo manuale. Contiene il metodo \textbf{leggiDocumento} per effetuare la scansione del documento. Viene mostrata la vista di timbratura della prevendita:
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_timbra_prevendita.PNG}
+    \centering
+    \caption{layout\_timbra\_prevendita.png}
+\end{figure}
+
+Si può vedere che nell'esempio la vista utilizza la camera per la lettura del QR Code visto nell'esempio precedente. Ovviamente il codice QR è a titolo di esempio, ma fortemente consigliato di applicarlo nell'implementazione.
+
+\newpage
+
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.amministratore
 
 %Interfacce Gestione Membri
@@ -3223,6 +3265,8 @@ Il layout mostra come è posssibile aggiungere la priorità al log, e la descriz
 %Interfacce Cambia codice accesso
 %Interfacce Visualizza Statistiche
 
+Abbiamo spezzato il package in più diagrammi vista la complessità. Anche qui vengono mostrate solo alcune viste.
+
 
 \begin{figure}[H]
     \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministratore.png}
@@ -3230,11 +3274,35 @@ Il layout mostra come è posssibile aggiungere la priorità al log, e la descriz
     \caption{view.vsdx}
 \end{figure}
 
+La vista permette di cambiare codice di accesso allo staff. Qui il layout proposto per la vista:
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_cambia_codice.PNG}
+    \centering
+    \caption{layout\_cambia\_codice.png}
+\end{figure}
+
+Si ha un input per inserire i codici e un submit per effettuare l'operazione.
+
+\newpage
+
 \begin{figure}[H]
     \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministratore_evento.png}
     \centering
     \caption{view.vsdx}
 \end{figure}
+
+Qui vengono mostrate le viste per la gestione degli eventi. Viene mostrata la vista di statistiche dell'evento:
+
+\begin{figure}[H]
+    \includegraphics[scale=0.6]{Progettazione/Package/frontend/view/layout/layout_statistiche_evento.png}
+    \centering
+    \caption{layout\_statistiche\_evento.png}
+\end{figure}
+
+Viene mostrato un titolo, i quadagni e le entrate svolte per l'evento.
+
+\newpage
 
 \begin{figure}[H]
     \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministratore_membri.png}
@@ -3242,11 +3310,33 @@ Il layout mostra come è posssibile aggiungere la priorità al log, e la descriz
     \caption{view.vsdx}
 \end{figure}
 
+In figura le viste per la gestione dei membri dello staff. Viene mostrato il layout della lista dei membri:
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_lista_membri.PNG}
+    \centering
+    \caption{layout\_lista\_membri.png}
+\end{figure}
+
+Si tratta di una lista con le informazioni di ogni membro: nome, cognome e telefono.
+
+\newpage
+
 \begin{figure}[H]
     \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view_amministratore_tipologie_prevendita.png}
     \centering
     \caption{view.vsdx}
 \end{figure}
+
+In figura le viste per la gestione delle tipologie prevendita dell'evento scelto. Viene mostrato il layout della lista delle tipologie prevendita dell'evento scelto:
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_lista_tipologie_prevendita.PNG}
+    \centering
+    \caption{layout\_lista\_tipologie\_prevendita.png}
+\end{figure}
+
+La lista prevede il nome della tipologia, il suo periodo di vendita e il prezzo di vendita.
 
 \newpage
 
