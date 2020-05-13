@@ -2584,7 +2584,7 @@ Dopo una dovuta valutazione, i tempi di rilascio previsti sono i seguenti:
 
 \subsubsection{Sviluppi futuri}
 
-Il committente ha richiesto una flessibilità nell'applicazione per quanto riguarda la \textbf{l'utilizzo di nuove tipologie dei documenti digitali} per andare in contro a nuove tecnologie applicabili. Per esempio attualmente una valida proposta, già discussa con il committente, è l'utilizzo di QR code come documento digitale, non è da escludere che in futuro si possa usare una tecnologia alternativa per migliorare la qualità del servizio.   
+Il committente ha richiesto una flessibilità nell'applicazione per quanto riguarda la \textbf{l'utilizzo di nuove tipologie dei documenti digitali} per andare in contro a nuove tecnologie applicabili. Per esempio attualmente una valida proposta, già discussa con il committente, è l'utilizzo di QR code come documento digitale, non è da escludere che in futuro si possa usare una tecnologia alternativa per migliorare la qualità del servizio. L'introduzione di un numero di telefono per gli utenti e per l'amministratore di sistema, potrebbe permettere l'introduzione di un'\textbf{autenticazione a due fattori} con password \textbf{OTP}.  
 
 \newpage
 
@@ -3340,6 +3340,32 @@ La lista prevede il nome della tipologia, il suo periodo di vendita e il prezzo 
 
 \newpage
 
+\subsubsection{Interazione}
+
+\paragraph{Autenticazione Utente} Viene mostrato il diagramma di interazione tra utente, front-end, middle-ware e database per l'autenticazione dell'utente. Viene mostrato il funzionamento del pattern \textbf{Observer}, della richiesta \textbf{Asincrona} e della gestione della sessione a livello \textbf{middle-ware}.
+
+\begin{figure}[H]
+    \includegraphics[angle=90,scale=0.55]{Progettazione/Interazione/diagramma_sequenza_autenticazione_utente.png}
+    \centering
+    \caption{diagramma\_sequenza\_autenticazione\_utente.vsdx}
+\end{figure}
+
+\newpage
+
+\subsubsection{Comportamento}
+
+I diagrammi di stato principali sono presenti nella sezione Analisi. Qui si mostra l'algoritmo utilizzato da \textbf{HTTPSBrokerInterface} per scegliere il servizio middle-ware, tramite diagramma di flusso:
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Comportamento/diagramma_algoritmo_broker.png}
+    \centering
+    \caption{diagramma\_algoritmo\_broker.vsdx}
+\end{figure}
+
+Il diagramma di flusso mostra che il broker esegue la ricerca del canale per \textbf{priorità}. Quella più bassa è quella fornita dal servizio locale posto nell'evento in caso di attacco DoS in corso.
+
+\newpage
+
 \subsection{Persistenza}
 
 \subsubsection{Schema ER}
@@ -3423,9 +3449,25 @@ Il file di log deve contenere informazioni utili per l'amministratore di sistema
 
 \subsection{Collaudo}
 
+Data la natura multi-layer non prevista nella sezione di analisi, sono stati introdotti specifici test sia per il layer di front-end, sia per il layer di middle-ware. I test introdotti sono molti, ma vengono mostrati solo due test, uno per lo strato di middle-ware e un'altro per lo strato front-end.
+
+\lstinputlisting[language=Java]{Progettazione/Test/TestHTTPSBroker.java}
+\lstinputlisting[language=Java]{Progettazione/Test/TestJSONPrinter.java}
+
+\newpage
+
 \subsection{Deployment}
-\subsubsection{Progettazione del deployment per la sicurezza}
-\subsubsection{Deployment del sistema}
+
+Il deployment del sistema avviene in due modi separati, a seconda del layer middle-ware o front-end. Il deployment dello strato intermedio viene gestito dall'amministratore di sistema, che si occupa anche della procedura di aggiornamento. A seconda dell'implementazione, verrà distribuito all'amministratore di sistema un pacchetto automatico o manuale per l'aggiornamento del sistema. Per il deployment lato front-end è previsto un check automatico da parte del client. In caso di aggiornamento, viene mostrato un pop-up all'utente:
+
+\begin{figure}[H]
+    \includegraphics[scale=0.5]{Progettazione/aggiornamento_dialog.png}
+    \centering
+    \caption{aggiornamento\_dialog.png}
+\end{figure}
+
+
+\newpage
 
 \section{Implementazione}
 
