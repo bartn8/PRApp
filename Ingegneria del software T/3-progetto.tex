@@ -2635,7 +2635,7 @@ Si tratta dell'ultimo livello, quello a contatto con gli utilizzatori finali, sp
 
 
 \subsubsection{Patterns \& Design Principle}
-Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVC} per l'applicativo middle-ware, mentre per la parte front-end si è utilizzato il \textbf{MVVM}. Il software middle-ware avrà una parte di view minima, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
+Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVP} per l'applicativo middle-ware, mentre per la parte front-end si è utilizzato il \textbf{MVVM}. Il software middle-ware avrà una parte di view minima, \textbf{passiva}, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
 
 %\subsubsection{Diagramma a package}
 
@@ -2675,16 +2675,18 @@ Abbiamo deciso di utilizzare come protocollo di sicurezza e trasmissione dei dat
 \subsubsection{Struttura}
 
 I cambiamenti del dominio seguente rispetto a quello dell’analisi del problema sono dovuti
-alla decisione di \textbf{dividere il software} in strato middle-ware e strato front-end. Inoltre, i cambiamenti sono dovuti alla decisione di utilizzare il Design Pattern ed il modello architetturale \textbf{MVC}.
+alla decisione di \textbf{dividere il software} in strato middle-ware e strato front-end. Inoltre, i cambiamenti sono dovuti alla decisione di utilizzare i Design Pattern \textbf{MVP} e \textbf{MVVM}.
 
 \subsubsection{Struttura middle-ware}
 
-Come detto in precedenza, la struttura è basata su \textbf{MVC}.
+%TODO: da chiedere se MVP o MVC.
+
+Come detto in precedenza, la struttura è basata su \textbf{MVP}.
 
 \begin{itemize}
     \item \textbf{Model}: Si tratta della parte che gestisce il database.\\Utilizzando il pattern \textbf{DAO}, si crea il mapping delle relazioni con gli oggetti.\\Gli oggetti del dominio utilizzano il pattern \textbf{Proxy} pre implementare il \textbf{lazy-load} nei casi d'uso necessari\\Per l'interazione con i log si è preferito un accesso diretto a file.
-    \item \textbf{View}: Gestisce la risposta al client, formattando i dati nel formato JSON.
-    \item \textbf{Controller}: Collante tra Model e View, con tutta la business logic di supporto
+    \item \textbf{View}: Gestisce la risposta al client, formattando i dati nel formato JSON, si tratta di una vista \textbf{passiva}.
+    \item \textbf{Presenter}: Collante tra Model e View, con tutta la business logic di supporto.
 \end{itemize}
 
 \paragraph{Package} it.unibo.prevenditaelettronica.middleware.model.dao
@@ -3458,7 +3460,7 @@ Data la natura multi-layer non prevista nella sezione di analisi, sono stati int
 
 \subsection{Deployment}
 
-Il deployment del sistema avviene in due modi separati, a seconda del layer middle-ware o front-end. Il deployment dello strato intermedio viene gestito dall'amministratore di sistema, che si occupa anche della procedura di aggiornamento. A seconda dell'implementazione, verrà distribuito all'amministratore di sistema un pacchetto automatico o manuale per l'aggiornamento del sistema. Per il deployment lato front-end è previsto un check automatico da parte del client. In caso di aggiornamento, viene mostrato un pop-up all'utente:
+Il deployment del sistema avviene in due modi separati, a seconda del layer middle-ware o front-end. Il deployment dello strato intermedio viene gestito dall'amministratore di sistema, che si occupa anche della procedura di aggiornamento. A seconda dell'implementazione, verrà distribuito all'amministratore di sistema un pacchetto automatico o manuale per l'aggiornamento del sistema. Per il deployment lato front-end sarà previsto un check automatico da parte del client. In caso di aggiornamento, viene mostrato un pop-up all'utente:
 
 \begin{figure}[H]
     \includegraphics[scale=0.5]{Progettazione/aggiornamento_dialog.png}
@@ -3473,10 +3475,72 @@ Il deployment del sistema avviene in due modi separati, a seconda del layer midd
 
 \subsection{Scelte tecnologiche}
 
+Nella fase di implementazione abbiamo deciso di implementare lo strato di persistenza utilizzando il RDBMS MySQL, mentre lo strato middleware viene implementato usando il linguaggio PHP 7. Abbiamo deciso di implementare lo strato front-end suddividendolo in tre client, uno web-based per la gestione di amministrazione di sistema, un altro web-based per l'amministrazione dello staff e infine un client mobile sviluppato sotto la piattaforma Android per il cassiere e il pr, dato che il loro lavoro viene fatto in vari ambienti. La scelta di queste tecnologie è pensata per risolvere il requisito \hyperlink{R5NF}{R5NF}. Infatti la maggior parte delle soluzioni hosting gratuite offre queste tecnologie di default. La scelta di Android invece che l'utilizzo di iOS è dovuta sempre per lo stesso motivo: per sviluppare con iOS serve hardware proprietario. Android adotta Java come linguaggio di sviluppo. I client web-based sono implementati mediante una combinazione di HTML+CSS+Javascript, con varie librerie come JQuery e Bootstrap, utilizzando la tecnica AJAX per le chiamate allo strato middle-ware. I client web-based si trovano nello stesso spazio di hosting dello strato middle-ware.
+
 \subsection{Scelte Implementative}
 
-\section{Collaudo}
+\begin{itemize}
+    \item Ridotto enumeratore ServicePriority da PRIMARY, BACKUP, LOCAL a PRIMARY, LOCAL. Il servizio di hosting non espone il database all'esterno e quindi non è possibile replicare lo strato middle-ware.
+    \item Package DAO del middle-ware implementato usando PDO, che supporta molti rdbms.
+    \item Nel client Android, viene usata la libreria Volley come HTTPSClient.
+    \item Nel client Android viene usata la libreria GSON per la serializzazione/deserializzazione delle informazioni. Le interfacce JSONSerializable e JSONDeserializable diventano superflue utilizzando la libreria.
+    \item Nel database le credenziali vengono salvate come coppia (username, salted hash), utilizzando come algoritmo di hashing SHA256.
+    \item Nello strato middle-ware, l'interfaccia HTTPSInterface è superflua, in quanto la comunicazione HTTPS è intrinseca nel linguaggio PHP.
+    \item Il certificato HTTPS viene fornito dal servizio di hosting.
+    \item Nello strato middle-ware non c'è bisogno delle interfacce JSONSerializable e JSONDeserializable, in quanto viene usata la libreria integrata nel linguaggio.
+    \item Per rendere sicuro la cartella dei log è stato utilizzato un file .htaccess, per restringerne l'accesso.
+    \item I client web-based non hanno bisogno dell'interfaccia HTTPClient, in quanto utilizzano il browser stesso.
+    \item I client web-based non utilizzano il broker in quanto il servizio di replicazione non è necessario per le funzionalità dei client web-based.
+    \item I client web-based non hanno bisogno delle interfacce JSONSerializable e JSONDeserializable, in quanto viene usata la libreria integrata nel browser.
+    \item HTTPSBroker è stato implementato in maniera diversa: il broker fornisce solo gli URL, è HTTPSClient a verificare lo stato del servizio, e in caso fosse necessario, richiede l'URL alternativo al broker.
+    \item Non è stato possibile separare l'entità Utente e l'entità AmministratoreDiSistema in due database distinti, neppure un accesso al database con autorizzazioni diverse. Il servizio di hosting offre un solo database con credenziali di accesso uniche.
+    \item Come consigliato, abbiamo scelto di utilizzare la tecnologia QRCode come documento digitale. Per la consegna al cliente viene mandato direttamente la foto, oppure un link dove è possibile generare il QRCode sul momento.
+    \item Viene aggiunta una vista nel client Android per aggiungere l'URL del servizio replicato in locale.
+    \item Per replicare il servizio in locale, l'amministratore di sistema esegue un backup del database mediante l'interfaccia fornita dal servizio di hosting, e utilizzando il software XAMPP replica il servizio. I client dovranno aggiungere il servizio tramite il broker.
+    \item Si è deciso di ampliare le statistiche, catalogandole per tipologia di prevendita.
+\end{itemize}
+
+\subsection{Collaudo}
+
+Il collaudo su middle-ware è stato integrato mediante libreria PHPUnit. Nel client Android viene usata la libreria JUnit, integrata nell'ambiente di sviluppo. Per testare il codice Javascript, presente nei client web-based abbiamo deciso di implementare i test senza l'ausilio di librerie esterne, ma utilizzando il Web Developer Kit per monitorare il codice di testing.
+
+\newpage
 
 \section{Deployment}
+
+\subsection{Note di configurazione sul middle-ware}
+
+Il servizio middle-ware deve essere configurato dall'amministatore di sistema, configurando l'accesso al database:
+
+
+\lstinputlisting[language=PHP]{Implementazione/config.php}
+
+
+\subsection{Note di configurazione sul front-end}
+
+I client web-based sono configurati dall'amministratore di sistema, in quanto sono salvati nello spazio di hosting che ospita anche lo strato middle-ware:
+
+\lstinputlisting[language=PHP]{Implementazione/config.js}
+
+Il client Android richiede solamente di inserire l'URL del servizio middle-ware, fornito dall'amministratore di sistema.
+
+\subsection{Artefatti}
+
+\begin{figure}[H]
+    \includegraphics[scale=0.7]{Implementazione/artefatti.png}
+    \centering
+    \caption{artefatti.vsdx}
+\end{figure}
+
+\newpage
+
+\subsection{Deployment Type-Level}
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Implementazione/type_deployment.png}
+    \centering
+    \caption{type\_deployment.vsdx}
+\end{figure}
+
 
 \end{document}
