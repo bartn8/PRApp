@@ -82,6 +82,10 @@ public class TestHTTPSBroker {
 		//Simulo un attacco sul servizio backup e rifaccio il test
 		serviceB.dos();
 		assertEquals("https://localhost:8081", broker.procuraCanale().getUrl());
+		
+		//Simulo un attacco sul servizio local e rifaccio il test
+		serviceC.dos();
+		assertEquals(null, broker.procuraCanale().getUrl());
     }
 
 }

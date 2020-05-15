@@ -302,13 +302,15 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 %    \includegraphics[scale=0.9]{use_cases.png}
 %\end{center}
 
+%TODO: confronto nuovo vecchio
+
 \begin{figure}[H]
     \includegraphics[scale=1]{Analisi/Cases/use_cases.png}
     \centering
     \caption{use\_cases.vsdx}
 \end{figure}
 
-L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tutti i servizi forniti agli attori.\\Con le frecce \textcolor{violet}{viola} abbiamo voluto evidenziare la maggior parte degli scenari che estendono la gestione degli utenti o dello staff.\\Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.    
+L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i casi d'uso.\\Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.
 
 %TODO: aggiornare scenari tabelle flusso etc.
 
@@ -1057,6 +1059,8 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per tu
 %\begin{center}
 %    \includegraphics[scale=0.73]{security_use_cases_misuse_cases.png}
 %\end{center}
+
+%TODO: aggiorna
 
 \begin{figure}[H]
     \includegraphics[scale=0.75]{Analisi/Cases/security_use_cases_misuse_cases.png}
@@ -2332,6 +2336,8 @@ Analizzando il vocabolario si evidenzia la differenza tra utente normale e ammin
 %TODO: Chiedere se la separazione amministratore va bene
 %Chiedere se le molteplicità cambiano nella progettazione: Solo se c'è differenza di navigabilità
 
+%TODO: username password messe qui ma in progettazione tolte
+
 %\begin{center}
 %    \includegraphics[scale=0.68]{modello_dominio.png}
 %\end{center}
@@ -2723,11 +2729,13 @@ Naturalmente gli oggetti \textbf{DAO} possono lanciare eccezioni, qui si incapsu
     \caption{dao.vsdx}
 \end{figure}
 
-Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default.
+Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default. Le \textbf{transazioni} sono gestite al'interno delle implementazioni.
 
 \newpage
 
 \paragraph{Package} it.unibo.prevenditaelettronica.middleware.dao.proxy
+
+%TODO: lazy-load serve?
 
 %Dominio che richiede proxy
 
@@ -2775,9 +2783,33 @@ Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappre
 
 \newpage
 
-%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/middleware/controller/controller.png}
+    \centering
+    \caption{controller.vsdx}
+\end{figure}
+
+Si tratta di un controller astratto, usato dai controller concreti mediante lo stereotipo $<<$Controller$>>$. Utilizza l'interfaccia \textbf{LogInterface} per l'append del log nel caso l'operazione concreta lo preveda. Utilizza l'interfaccia \textbf{SessioneInterface} nel caso serva accedere alla sessione corrente.
+
+\newpage
+
+\paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.sessione
+
+\begin{figure}[H]
+    \includegraphics[scale=1]{Progettazione/Package/middleware/controller/controller_sessione.png}
+    \centering
+    \caption{controller.vsdx}
+\end{figure}
+
+La sessione viene gestita tramite pattern \textbf{Singleton}, nella classe \textbf{GestioneSessione}. Viene mostrata agli altri controller tramite l'interfaccia \textbf{SessioneInterface}. Vengono salvate le informazioni relative al modello del dominio, come l'utente o amministratore di sistema che ha effettuato il login e l'eventuale staff o evento scelto. Staff restituisce Membro, dato che abbiamo bisogno di identificare i ruoli del membro nello staff.
+
+\newpage
 
 \paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.autenticazione
+
+%TODO: chiedere se l'implemnetazione della sessione va bene.
 
 %AutenticazioneController
 
@@ -2787,7 +2819,7 @@ Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappre
     \caption{controller.vsdx}
 \end{figure}
 
-In figura la parte di controller con la responsabilità di gestire la parte di autenticazione e di sessione. Sessione e autenticazione sono divise in due interfacce per rispettare \textbf{Interface Segregation Principle}, con l'interfaccia di sessione usato dagli altri controller per ricavare informazioni utili sulla sessione. Abbiamo deciso di implmenetare le interfacce nella stessa classe perché le interfacce possono essere viste come getter/setter dei parametri di sessione.\\Il controller utilizza \textbf{LogInterface}, che vedremo nella figura successiva, per aggiungere eventuali righe al log.\\L'eccezione \textbf{AuthorizationException} viene lanciata nei più svariati casi di accesso negato: credenziali errate, utente bloccato, ruolo non concesso, eccetera, e viene utilizzato anche da \textbf{altri} controller nel caso sia necessario.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view.
+In figura la parte di controller con la responsabilità di gestire la parte di autenticazione\\L'eccezione \textbf{AuthorizationException} viene lanciata nei più svariati casi di accesso negato: credenziali errate, utente bloccato, ruolo non concesso, eccetera, e viene utilizzato anche da altri controller nel caso sia necessario.
 
 \newpage
 
@@ -2814,7 +2846,7 @@ In figura viene mostrato anche la parte di log interna al sistema, utilizzata da
     \caption{controller.vsdx}
 \end{figure}
 
-In figura la parte di controller con la responsabilità di gestire la parte di amministrazione e gestione log.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view. \textbf{GestioneLogControllerImpl} ha una DAO diversa, quella specializzata nell'accesso ai file, dato che i log sono salvati sul file system. La sessione serve per accedere alle informazioni sull'amministratore di sistema attualmente connesso. L'operazione \textbf{inizializzaAmministratoreDiSistema} serve durante il \textbf{deployment} del sistema: fornisce un account di amministrazione con paramentri a \textbf{default}. Non è necessario inizializzare altri dati all'interno del database, perché sarà compito dell'amministratore di sistema registrare nuovi utenti, i quali aggiungeranno tutto il necessario per il funzionamento del software gestionale.
+In figura la parte di controller con la responsabilità di gestire la parte di amministrazione e gestione log. \textbf{GestioneLogControllerImpl} utilizza la DAO per l'accesso ai file, dato che i log sono salvati sul file system. L'operazione \textbf{inizializzaAmministratoreDiSistema} serve durante il \textbf{deployment} del sistema: fornisce un account di amministrazione con paramentri a \textbf{default}. Non è necessario inizializzare altri dati all'interno del database, perché sarà compito dell'amministratore di sistema registrare nuovi utenti, i quali aggiungeranno tutto il necessario per il funzionamento del software gestionale.
 
 \newpage
 
@@ -2828,9 +2860,7 @@ In figura la parte di controller con la responsabilità di gestire la parte di a
     \caption{controller.vsdx}
 \end{figure}
 
-In figura la parte di controller con la responsabilità di gestire la parte di utente.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view. La sessione serve per accedere alle informazioni sull'utente  attualmente connesso. Vengono salvate informazioni di log aggiuntive tramite \textbf{LogInterface}.
-
-\newpage
+In figura la parte di controller con la responsabilità di gestire la parte di utente.
 
 \paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.staff
 
@@ -2849,7 +2879,7 @@ Abbiamo suddiviso il package in due diagrammi per migliorarne la lettura.
     \caption{controller.vsdx}
 \end{figure}
 
-In figura la parte di controller con la responsabilità di gestire la parte di staff. Qui viene mostrata la parte contenente \textbf{GestioneStaffController}, \textbf{GestioneVenditePrevendite} e \textbf{Gestione Entrata}. Si tratta della parte utilizzata dagli attori \textbf{PR} e\textbf{Cassiere}.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view. La sessione serve per accedere alle informazioni sul membro attualmente connesso e sull'evento scelto. Vengono salvate informazioni di log aggiuntive tramite \textbf{LogInterface}.
+In figura la parte di controller con la responsabilità di gestire la parte di staff. Qui viene mostrata la parte contenente \textbf{GestioneStaffController}, \textbf{GestioneVenditePrevendite} e \textbf{Gestione Entrata}. Si tratta della parte utilizzata dagli attori \textbf{PR} e\textbf{Cassiere}.\\
 
 \begin{figure}[H]
     \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_staff_2.png}
@@ -2857,7 +2887,7 @@ In figura la parte di controller con la responsabilità di gestire la parte di s
     \caption{controller.vsdx}
 \end{figure}
 
-In figura la parte di controller con la responsabilità di gestire la parte di staff. Qui viene mostrata la parte contenente \textbf{GestioneEventi}, \textbf{GestioneMembri} e \textbf{Gestione Tipologia Prevendita}. Si tratta della parte utilizzata dall'attore \textbf{Amministratore}.\\Gli attributi \textbf{daoFactory} e \textbf{printer} servono per accedere rispettivamente al dominio e alla view. La sessione serve per accedere alle informazioni sul membro attualmente connesso e sull'evento scelto. Vengono salvate informazioni di log aggiuntive tramite \textbf{LogInterface}.
+In figura la parte di controller con la responsabilità di gestire la parte di staff. Qui viene mostrata la parte contenente \textbf{GestioneEventi}, \textbf{GestioneMembri} e \textbf{Gestione Tipologia Prevendita}. Si tratta della parte utilizzata dall'attore \textbf{Amministratore}.
 
 \newpage
 
@@ -3092,9 +3122,19 @@ In figura le ViewModel per la gestione dei \textbf{membri}. Alcune viste richied
 
 In figura le ViewModel per la gestione delle \textbf{tipologie di prevendita}. Alcune viste richiedono l'aggiunta di informazioni prima di eseguire l'operazione. Per esempio, prima di rimuovere un membro, ho bisogno di sapere la lista dei membri. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view
+
+\begin{figure}[H]
+    \includegraphics[scale=0.85]{Progettazione/Package/frontend/view/view.png}
+    \centering
+    \caption{view.vsdx}
+\end{figure}
+
+L'\textbf{AbstractView} serve per aggiungere un comportamento comune a tutte le view: il \textbf{binding} tra View e ViewModel, tramite il metodo bind e il metodo per effettuare il draw su schermo della vista. Di conseguenza la classe abstract implementa \textbf{Observer}, per restare aggiornato sul risultato presente nel ViewModel. Tutte le viste utilizzano lo stereotipo $<<$View$>>$ per indicare che estendono AbstractView.
+
 \newpage
 
-\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view
+\paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.home
 
 %Interfacce Home
 
@@ -3127,7 +3167,7 @@ Il layout è composto da un titolo per identificare la home e una serie di pulsa
     \caption{view.vsdx}
 \end{figure}
 
-Le viste di autenticazione offrono la schermata per il login. Il layout delle due viste è completamente interoperabile. Le altre funzionalità del package autenticazione sono state spostate in altri gruppi di viste, a seconda di come risultasse più facile per l'utente finale. Una volta che il login ha avuto successo si sceglie la home specifica: per un utente normale \textbf{GstioneUtenteHome}, mentre per un amministratore di sistema \textbf{GestioneAmministrazioneHome}.
+Le viste di autenticazione offrono la schermata per il login. Il layout delle due viste è completamente interoperabile. Le altre funzionalità del package autenticazione sono state spostate in altri gruppi di viste, a seconda di come risultasse più facile per l'utente finale. Una volta che il login ha avuto successo si sceglie la home specifica: per un utente normale \textbf{GestioneUtenteHome}, mentre per un amministratore di sistema \textbf{GestioneAmministrazioneHome}.
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_autenticazione.png}
@@ -3498,6 +3538,7 @@ Nella fase di implementazione abbiamo deciso di implementare lo strato di persis
     \item Viene aggiunta una vista nel client Android per aggiungere l'URL del servizio replicato in locale.
     \item Per replicare il servizio in locale, l'amministratore di sistema esegue un backup del database mediante l'interfaccia fornita dal servizio di hosting, e utilizzando il software XAMPP replica il servizio. I client dovranno aggiungere il servizio tramite il broker.
     \item Si è deciso di ampliare le statistiche, catalogandole per tipologia di prevendita.
+    \item Nel client Android abbiamo modificato alcuni ViewModel del front-end, rendendoli osservatori dei form delle viste, per rendere la validazione dell'input in tempo reale.
 \end{itemize}
 
 \subsection{Collaudo}
@@ -3526,6 +3567,8 @@ Il client Android richiede solamente di inserire l'URL del servizio middle-ware,
 
 \subsection{Artefatti}
 
+%TODO: chiedere se va bene
+
 \begin{figure}[H]
     \includegraphics[scale=0.7]{Implementazione/artefatti.png}
     \centering
@@ -3533,6 +3576,9 @@ Il client Android richiede solamente di inserire l'URL del servizio middle-ware,
 \end{figure}
 
 \newpage
+
+%TODO: chiedere se va bene
+%TODO: da chiedere se aggiungere db
 
 \subsection{Deployment Type-Level}
 
