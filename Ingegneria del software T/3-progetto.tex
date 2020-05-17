@@ -10,6 +10,7 @@
 \usepackage{float}
 \usepackage{listings}
 \usepackage{adjustbox}
+\usepackage{svg}
 
 \lstset{
 tabsize = 4, %% set tab space width
@@ -231,51 +232,51 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 		\hline
 		Privilegio di sistema & Autorizzazione intrinseca concessa ad un amministratore di sistema che riguarda la gestione del software stesso. Non riguarda gli staff. & \\
 		\hline
-        Staff & Gruppo di utenti con lo scopo di organizzare eventi. & Ente organizzatore \\
+        Staff & Gruppo di utenti con lo scopo di organizzare eventi. & Ente organizzatore. \\
         \hline
         Utente & Persona registrata nel software gestione. & \\
         \hline
-		Cliente & Persona che vuole partecipare ad un evento di uno staff & \\
+		Cliente & Persona che vuole partecipare ad un evento di uno staff. & \\
 		\hline
         Membro & Utente che è iscritto ad uno staff. & Organizzatore \\
         \hline
-		PR & Membro di uno staff che si occupa della vendita di prevendite & \\
+		PR & Membro di uno staff che si occupa della vendita di prevendite. & \\
 		\hline
-		Cassiere & Membro di uno staff che si occupa dell'entrata dei clienti ad un evento & \\
+		Cassiere & Membro di uno staff che si occupa dell'entrata dei clienti ad un evento. & \\
 		\hline
-		Amministratore & Membro di uno staff che si occupa della gestione dello staff steso & \\
+		Amministratore & Membro di uno staff che si occupa della gestione dello staff stesso. & \\
 		\hline
-        Ruolo & Autorizzazione che ha il membro all'interno dello staff & Autorizzazione \\
+        Ruolo & Autorizzazione che ha il membro all'interno dello staff. & Autorizzazione \\
         \hline
-        Evento & Avvenimento registrato dallo staff, per il quale è possibile vendere prevendite e registrare ingressi & Festa \\
+        Evento & Avvenimento registrato dallo staff, per il quale è possibile vendere prevendite e registrare ingressi. & Festa \\
         \hline
-        Tipologia Prevendita & Modello associato ad un evento, la quale da le caratteristiche di prezzo e descrizione alla prevendita venduta & Tipo Prevendita \\
+        Tipologia Prevendita & Modello associato ad un evento, la quale dà le caratteristiche di prezzo e descrizione alla prevendita venduta. & Tipo Prevendita \\
         \hline
-        Prevendita & Biglietto venduto anticipatamente, che consente l'entrata all'evento pagato & Ticket, Prevendita Elettronica \\
+        Prevendita & Biglietto venduto anticipatamente, che consente l'entrata all'evento pagato. & Ticket, Prevendita Elettronica \\
         \hline
-		Statistiche & Informazioni di carattere gestionale, riguardo ad un evento o a un membro dello staff & \\
+		Statistiche & Informazioni di carattere gestionale, riguardo ad un evento o a un membro dello staff. & \\
 		\hline
-		Documento digitale & Si tratta di una risorsa digitale, consegnata al cliente, che serve a identificare una prevendita venduta & \\
+		Documento digitale & Si tratta di una risorsa digitale, consegnata al cliente, che serve a identificare una prevendita venduta. & \\
 		\hline
-		Operazione & Comando richiesto al software gestionale da parte di un utente & \\
+		Operazione & Comando richiesto al software gestionale da parte di un utente. & \\
 		\hline
-		Login & Operazione per identificare e autenticare un utente & Accesso utente, Autenticazione \\
+		Login & Operazione per identificare e autenticare un utente. & Accesso utente, Autenticazione \\
 		\hline
-		Timbratura & Operazione svolta da un cassiere svolta per validare una prevendita di un cliente & Convalida della prevendita \\
+		Timbratura & Operazione svolta da un cassiere svolta per validare una prevendita di un cliente. & Convalida della prevendita \\
 		\hline
-		Credenziali & Coppia di valori username e password utilizzata per l'autenticazione dell'utente & \\
+		Credenziali & Coppia di valori username e password utilizzata per l'autenticazione dell'utente. & \\
 		\hline
 		Username & Stringa di caratteri alfanumerici. Serve a identificare l'utente & \\
 		\hline
 		Password & String di caratteri alfanumerici. Può contenere caratteri speciali. & \\
 		\hline
-		Periodo di vendita & Periodo temporale in cui la prevendita è vendibile ai clienti & \\
+		Periodo di vendita & Periodo temporale in cui la prevendita è vendibile ai clienti. & \\
 		\hline
-		Anullamento Prevendita & Operazione che consiste nell'annullare una prevendita acquistata da un cliente & \\
+		Anullamento Prevendita & Operazione che consiste nell'annullare una prevendita acquistata da un cliente. & \\
 		\hline
-		Rimborso Prevendita & Operazione eseguita su una prevendita annullata, al fine di tenere traccia del conto economico dello staff & \\
+		Rimborso Prevendita & Operazione eseguita su una prevendita annullata, al fine di tenere traccia del conto economico dello staff. & \\
 		\hline
-		Annullamento Evento & Operazione eseguita da un amministratore quando decide di annullare l'evento & \\
+		Annullamento Evento & Operazione eseguita da un amministratore quando decide di annullare l'evento. & \\
 		\hline
 		%Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte. Composto da una serie di voci & Registro \\
 		%\hline
@@ -303,6 +304,7 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 %\end{center}
 
 %TODO: confronto nuovo vecchio
+%TODO: ridurre ancora lo schema
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Analisi/Cases/use_cases.png}
@@ -329,7 +331,9 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Utente \\
 	\hline
-	\textbf{Relazioni} & Cambia Password \\
+	\textbf{Caso d'uso} & Login \\
+	\hline
+	\textbf{Relazioni} &  \\
 	\hline
 	\textbf{Precondizioni} & L'utente deve essere registato nel sistema \\
 	\hline
@@ -374,7 +378,10 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Amministratore di sistema \\
 	\hline
-	\textbf{Relazioni} & Login, Registrazione utente \\
+	\textbf{Caso d'uso} & Gestione Amministrazione \\
+	\hline
+	%\textbf{Relazioni} & Login, Registrazione utente \\
+	\textbf{Relazioni} & Login \\
 	\hline
 	\textbf{Precondizioni} &  \\
 	\hline
@@ -410,16 +417,17 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Amministratore di sistema \\
 	\hline
-	\textbf{Relazioni} & Gestione Amministrazione \\
+	\textbf{Caso d'uso} & Gestione Amministrazione \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} & L'amministratore di sistema è autenticato \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore di sistema è già autenticato.\\
-	                             & 2. L'amministratore si informa riguardo l'utente, chiedendo informazioni per la registrazione.\\
-								 & 3. L'utente fornisce i dati all'amministratore.\\
-								 & 4. L'amministratore sceglie username e password iniziale per l'utente, utilizzando criteri di sicurezza.\\
+	\textbf{Scenario principale} & 1. L'amministratore si informa riguardo l'utente, chiedendo informazioni per la registrazione.\\
+								 & 2. L'utente fornisce i dati all'amministratore.\\
+								 & 3. L'amministratore sceglie username e password iniziale per l'utente, utilizzando criteri di sicurezza.\\
 	\hline
 	\textbf{Scenari alternativi} & A) Dati dell'utente da registrare in conflitto o non validi: \\
 								 & \quad 1. Notifica all'amministratore.\\
@@ -487,8 +495,11 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Utente \\
 	\hline
+	\textbf{Caso d'uso} & Gestione utente \\
+	\hline
 	%\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff, Gestione log, Registrazione utente, Sblocco utente \\
-	\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff \\
+	%\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff \\
+	\textbf{Relazioni} & Login \\
 	\hline
 	\textbf{Precondizioni} &  \\
 	\hline
@@ -527,18 +538,19 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 		\hline
 		\textbf{Attori} & Utente \\
 		\hline
-		\textbf{Relazioni} & Gestione utente \\
+		\textbf{Caso d'uso} & Gestione utente \\
+	    \hline
+		\textbf{Relazioni} &  \\
 		\hline
-		\textbf{Precondizioni} &  \\
+		\textbf{Precondizioni} & Utente già autenticato \\
 		\hline
 		\textbf{Postcondizioni} &  \\
 		\hline
-		\textbf{Scenario principale} & 1. L'utente è già autenticato.\\
-		                             & 2. L'utente accede alla creazione staff. \\
-									 & 3. Il sistema fornisce una vista di creazione. \\
-									 & 4. L'utente inserisce i dati del nuovo staff. \\
-									 & 5. L'utente esegue l'operazione.\\
-									 & 6. Ritorno alla schermata precedente.\\
+		\textbf{Scenario principale} & 1. L'utente accede alla creazione staff. \\
+									 & 2. Il sistema fornisce una vista di creazione. \\
+									 & 3. L'utente inserisce i dati del nuovo staff. \\
+									 & 4. L'utente esegue l'operazione.\\
+									 & 5. Ritorno alla schermata precedente.\\
 		\hline
 		\textbf{Scenari alternativi} & A) L'utente ha già creato uno staff: \\
 									 & \quad 1. Notifica all'utente \\
@@ -562,18 +574,19 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Utente \\
 	\hline
-	\textbf{Relazioni} & Gestione utente \\
+	\textbf{Caso d'uso} & Gestione utente \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} & Utente già autenticato \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'utente è già autenticato.\\
-	                             & 2. L'utente accede al cambio password. \\
-								 & 3. Il sistema fornisce una vista. \\
-								 & 4. L'utente inserisce i dati per il cambio di password. \\
-								 & 5. L'utente esegue l'operazione.\\
-								 & 6. Ritorno alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. L'utente accede al cambio password. \\
+								 & 2. Il sistema fornisce una vista. \\
+								 & 3. L'utente inserisce i dati per il cambio di password. \\
+								 & 4. L'utente esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -595,18 +608,19 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Utente \\
 	\hline
-	\textbf{Relazioni} & Gestione utente\\
+	\textbf{Caso d'uso} & Gestione utente \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} & \\
+	\hline
+	\textbf{Precondizioni} & Utente già autenticato \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'utente è già autenticato.\\
-	                             & 2. L'utente accede alla schermata di accedi staff. \\
-								 & 3. Il sistema fornisce una vista. \\
-								 & 4. L'utente inserisce i dati per l'accesso allo staff. \\
-								 & 5. L'utente esegue l'operazione.\\
-								 & 6. Ritorno alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. L'utente accede alla schermata di accedi staff. \\
+								 & 2. Il sistema fornisce una vista. \\
+								 & 3. L'utente inserisce i dati per l'accesso allo staff. \\
+								 & 4. L'utente esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & A) L'utente è già membro dello staff:\\
 								 & \quad 1. Notifica all'utente.\\
@@ -623,48 +637,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 
 %----------------------------------------------------------------------------------------
 
-%Gestione staff
-
-\begin{center}
-\begin{tabularx}{1\textwidth}{|l|X|}
-    \hline
-	\textbf{Titolo} & Gestione staff \\
-	\hline
-	\textbf{Descrizione} & Gestione dello staff dell'utente \\
-	\hline
-	\textbf{Attori} & Membro \\
-	\hline
-	\textbf{Relazioni} & Login, Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice di accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendite \\
-	\hline
-	\textbf{Precondizioni} & \\
-	\hline
-	\textbf{Postcondizioni} & \\
-	\hline
-	\textbf{Scenario principale} & 1. Il membro è già autenticato.\\
-	                             & 2. Viene mostrata una schermata con le azioni possibili:\\
-								 & \quad a. Visualizza statistiche personali.\\
-								 & \quad b. Scegli evento.\\
-								 & 2b. Se il membro è anche PR dello staff, vengono aggiunte delle scelte:\\
-								 & \quad b. Gestione vendita prevendita.\\
-								 & 2c. Se il membro è anche cassiere dello staff, vengono aggiunte delle scelte:\\
-								 & \quad c. Gestione entrata.\\
-								 & 2d. Se il membro è anche amministratore dello staff, vengono aggiunte delle scelte:\\
-								 & \quad d. Gestione membri.\\
-								 & \quad d. Cambia codice di accesso.\\
-								 & \quad d. Visualizzazione statistiche.\\
-								 & \quad d. Gestione eventi.\\
-								 & \quad d. Gestione tipologie prevendite.\\
-								 & 3. il membro sceglie l'operazione desiderata.\\
-								 & 4. Il sistema cambia vista a seconda della scelta.\\
-	\hline
-	\textbf{Scenari alternativi} & \\
-	\hline
-	\textbf{Requisiti non funzionali} & \\
-	\hline
-	\textbf{Punti aperti} & \\
-	\hline
-\end{tabularx}
-\end{center}
+%rimosso Gestione staff
   
 %Qui metto i casi d'uso sotto gestione staff--------------------------------------------------
 
@@ -680,16 +653,17 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Membro \\
 	\hline
-	\textbf{Relazioni} & Gestione staff \\
+	\textbf{Caso d'uso} & Visualizza statistiche personali \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} & Il membro è già autenticato  \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. Il membro è già autenticato.\\
-	                             & 2. Il membro accede alla schermata di vusualizzazione delle statistiche personali.\\
-								 & 3. Il sistema fornisce una vista con tutte le statistiche. \\
-								 & 4. Quando il membro ha finito la consultazione, ritorna alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. Il membro accede alla schermata di vusualizzazione delle statistiche personali.\\
+								 & 2. Il sistema fornisce una vista con tutte le statistiche. \\
+								 & 3. Quando il membro ha finito la consultazione, ritorna alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -711,14 +685,15 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & PR, Cliente \\
 	\hline
-	\textbf{Relazioni} & Gestione staff \\
+	\textbf{Caso d'uso} & Gestione vendita prevendita \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} & Il PR è già autenticato \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. Il PR è già autenticato.\\
-	                             & 2. Il PR accede alla schermata di gestione prevenite. \\
+	\textbf{Scenario principale} & 1. Il PR accede alla schermata di gestione prevenite. \\
 								 & 3. Il sistema fornisce una vista con le opzioni possibili. \\
 								 & 4. Il PR sceglie l'operazione:\\
 								 & \quad a. Aggiungi prevendita.\\
@@ -749,22 +724,23 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Cassiere, Cliente \\
 	\hline
-	\textbf{Relazioni} & Gestone staff \\
+	\textbf{Caso d'uso} & Gestione entrata \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} & \\
+	\hline
+	\textbf{Precondizioni} & Il Cassiere è già autenticato \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. Il Cassiere è già autenticato.\\
-	                             & 2. Il Cassiere accede alla schermata di gestione entrata. \\
-								 & 3. Il sistema fornisce una vista con le opzioni disponibile.\\
-								 & 4. Il Cassiere sceglie l'operazione:\\
+	\textbf{Scenario principale} & 1. Il Cassiere accede alla schermata di gestione entrata. \\
+								 & 2. Il sistema fornisce una vista con le opzioni disponibile.\\
+								 & 3. Il Cassiere sceglie l'operazione:\\
 								 & \quad a.Timbra entrata.\\
 								 & \quad b. Lista entrate.\\
-								 & 5. Il Cassiere inserisce i dati dell'operazione, consultando il cliente se necessario.\\
-								 & 6. Il cassiere esegue l'operazione.\\
-								 & 7. Il Cassiere informa il cliente riguardo l'esito dell'operazione, se necessario.\\
-								 & 8. Ritorno alla schermata precedente.\\
+								 & 4. Il Cassiere inserisce i dati dell'operazione, consultando il cliente se necessario.\\
+								 & 5. Il cassiere esegue l'operazione.\\
+								 & 6. Il Cassiere informa il cliente riguardo l'esito dell'operazione, se necessario.\\
+								 & 7. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -775,6 +751,42 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 \end{tabularx}
 \end{center}
 
+%Gestione Amministrazione staff
+
+\begin{center}
+\begin{tabularx}{1\textwidth}{|l|X|}
+   \hline
+	\textbf{Titolo} & Gestione Amministrazione staff \\
+	\hline
+	\textbf{Descrizione} & Gestione dello staff dell'utente \\
+	\hline
+	\textbf{Attori} & Amministratore \\
+	\hline
+	\textbf{Caso d'uso} & Gestione Amministrazione staff \\
+	\hline
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} & Utente autenticato \\
+	\hline
+	\textbf{Postcondizioni} & \\
+	\hline
+	\textbf{Scenario principale} & 1. Viene mostrata una schermata con le azioni possibili:\\
+								 & \quad a. Gestione membri.\\
+								 & \quad b. Cambia codice di accesso.\\
+								 & \quad c. Visualizzazione statistiche.\\
+								 & \quad d. Gestione eventi.\\
+								 & \quad e. Gestione tipologie prevendite.\\
+								 & 2. L'amministratore sceglie l'operazione desiderata.\\
+								 & 3. Il sistema cambia vista a seconda della scelta.\\
+	\hline
+	\textbf{Scenari alternativi} & \\
+	\hline
+	\textbf{Requisiti non funzionali} & \\
+	\hline
+	\textbf{Punti aperti} & \\
+	\hline
+\end{tabularx}
+\end{center}
 
 %Cambia codice accesso
 
@@ -787,18 +799,19 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Amministratore \\
 	\hline
-	\textbf{Relazioni} & Gestone staff \\
+	\textbf{Caso d'uso} & Gestone amministrazione staff \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} &  L'amministratore è già autenticato. \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
-	                             & 2. L'amministratore accede al cambio codice di accesso. \\
-								 & 3. Il sistema fornisce una vista. \\
-								 & 4. L'amministratore inserisce i dati per il cambio del codice. \\
-								 & 5. L'amministratore esegue l'operazione.\\
-								 & 6. Ritorno alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. L'amministratore accede al cambio codice di accesso. \\
+								 & 2. Il sistema fornisce una vista. \\
+								 & 3. L'amministratore inserisce i dati per il cambio del codice. \\
+								 & 4. L'amministratore esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -820,16 +833,17 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Amministratore \\
 	\hline
-	\textbf{Relazioni} & Gestone staff \\
+	\textbf{Caso d'uso} & Gestone amministrazione staff \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} & L'amministratore è già autenticato.  \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
-	                             & 2. L'amministratore accede alla schermata di vusualizzazione. \\
-								 & 3. Il sistema fornisce una vista con tutte le statistiche. \\
-								 & 4. Quando l'amministratore ha finito la consultazione, ritorna alla schermata precedente.\\
+	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 2. Il sistema fornisce una vista con tutte le statistiche. \\
+								 & 3. Quando l'amministratore ha finito la consultazione, ritorna alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -851,22 +865,23 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Amministratore \\
 	\hline
-	\textbf{Relazioni} & Gestone staff \\
+	\textbf{Caso d'uso} & Gestone amministrazione staff \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} & L'amministratore è già autenticato \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
-	                             & 2. L'amministratore accede alla schermata di vusualizzazione. \\
-								 & 3. Il sistema fornisce una vista con le scelte: \\
+	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 2. Il sistema fornisce una vista con le scelte: \\
 								 & \quad a. Aggiungi evento.\\
 								 & \quad b. Modifica evento.\\
 								 & \quad c. Annulla evento.\\
 								 & \quad d. Lista eventi.\\
-								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-								 & 5. L'amministratore esegue l'operazione.\\
-								 & 6. Ritorno alla schermata precedente.\\
+								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 4. L'amministratore esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -888,22 +903,23 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Amministratore \\
 	\hline
-	\textbf{Relazioni} & Gestone staff \\
+	\textbf{Caso d'uso} & Gestone amministrazione staff \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} & L'amministratore è già autenticato  \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
-	                             & 2. L'amministratore accede alla schermata di vusualizzazione. \\
-								 & 3. Il sistema fornisce una vista con le scelte: \\
+	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 2. Il sistema fornisce una vista con le scelte: \\
 								 & \quad a. Aggiungi tipologia evento.\\
 								 & \quad b. Modifica tipologia evento.\\
 								 & \quad c. Elimina tipologia evento.\\
 								 & \quad d. Lista tipologie evento.\\
-								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-								 & 5. L'amministratore esegue l'operazione.\\
-								 & 6. Ritorno alla schermata precedente.\\
+								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 4. L'amministratore esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & \\
 	\hline
@@ -925,21 +941,22 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Attori} & Amministratore \\
 	\hline
-	\textbf{Relazioni} & Gestone staff \\
+	\textbf{Caso d'uso} & Gestone amministrazione staff \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Relazioni} &  \\
+	\hline
+	\textbf{Precondizioni} &  L'amministratore è già autenticato. \\
 	\hline
 	\textbf{Postcondizioni} &  \\
 	\hline
-	\textbf{Scenario principale} & 1. L'amministratore è già autenticato.\\
-	                             & 2. L'amministratore accede alla schermata di vusualizzazione. \\
-								 & 3. Il sistema fornisce una vista con le scelte: \\
+	\textbf{Scenario principale} & 1. L'amministratore accede alla schermata di vusualizzazione. \\
+								 & 2. Il sistema fornisce una vista con le scelte: \\
 								 & \quad a. Modifica ruoli membro.\\
 								 & \quad b. Rimuovi membro.\\
 								 & \quad c. Lista membri.\\
-								 & 4. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
-								 & 5. L'amministratore esegue l'operazione.\\
-								 & 6. Ritorno alla schermata precedente.\\
+								 & 3. Una volta scelta l'operazione, l'amministratore inserisce i dati richiesti. \\
+								 & 4. L'amministratore esegue l'operazione.\\
+								 & 5. Ritorno alla schermata precedente.\\
 	\hline
 	\textbf{Scenari alternativi} & A) L'amministratore si vuole rimuovere ma è l'unico amministratore rimasto nello staff: \\
 								 & \quad 1. Notifica all'utente. \\
@@ -1011,7 +1028,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
         DoS/DDoS & Bassa & Sistema locale durante l'evento & Costo medio, richiesta di risorse hardware portatili\\
         \hline
         %Contraffazione della prevendita & Alta & Sistema anti-contraffazione (\hyperlink{R21NF}{R21NF}), prevendita nominativa & Costo minimo\\
-        Contraffazione della prevendita & Alta & Sistema anti-contraffazione, prevendita nominativa & Costo minimo\\
+        Contraffazione della prevendita & Media & Sistema anti-contraffazione, prevendita nominativa & Costo minimo\\
         \hline
         Furto della prevendita & Media & prevendita nominativa & Costo minimo\\
         \hline
@@ -1036,7 +1053,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
                                       & \quad Cifratura Asimmetrica:\\
                                       & \quad\quad 1. Lunghezza della chiave\\
                                       & \quad\quad 2. Memorizzazione della chiave privata\\
-                                      & L'utilizzo di cifrature standard potrebbero causare vulnerabilià ulteriori.\\
+                                      & L'utilizzo di cifrature standard non recenti potrebbero causare vulnerabilià ulteriori.\\
         \hline
         \multirow{3}{*}{Autenticazione tramite credenziali} & Social engineering \\
                                            & Password cracking \\
@@ -1063,7 +1080,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 %TODO: aggiorna
 
 \begin{figure}[H]
-    \includegraphics[scale=0.75]{Analisi/Cases/security_use_cases_misuse_cases.png}
+    \includegraphics[scale=0.8]{Analisi/Cases/security_use_cases_misuse_cases.png}
     \centering
     \caption{security\_use\_cases\_misuse\_cases.vsdx}
 \end{figure}
@@ -1283,7 +1300,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
     \hline
     & & L'attaccante tenta un attacco DDoS/DoS. \\
     \cline{2-3}
-    & Il sistema rileva l’attacco e informal’amministratore di sistema, mentrecerca di attuare misure per ridurrel’efficacia dell’attacco. & \\
+    & Il sistema rileva l’attacco e informa l’amministratore di sistema, mentre cerca di attuare misure per ridurre l’efficacia dell’attacco. & \\
     \cline{2-3}
     & Il sistema non riesce a contenere l'attacco e va fuori uso. & \\
     \cline{2-3}
@@ -1297,27 +1314,29 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione dei dati:
 
 \begin{itemize}
-    \item Crazione di un sistema di log per il tracciamento delle operazioni svolte nel sistema gestionale, garantendo la persistenza dei log. L'amministratore di sistema è l'unico a poter accedere ai log. Per evitare l'uscita di informazioni riservate, cercare di memorizzare nei log solo le informazioni utili per l'analisi da parte dell'amministratore.
+    \item Creazione di un sistema di log per il tracciamento delle operazioni svolte nel sistema gestionale, garantendo la persistenza dei log. L'amministratore di sistema è l'unico a poter accedere ai log. Per evitare l'uscita di informazioni riservate, cercare di memorizzare nei log solo le informazioni utili per l'analisi da parte dell'amministratore.
     \item Creare un sistema per il blocco dell'utente dopo un certo numero di tentativi. L'amministratore di sistema ha la possibilità di sbloccare l'utente.
     \item I dati scambiati devono essere protetti con cifratura sicura per evitare alterazione e lettura di dati privati.
     \item I dati persistenti del sistema devono essere protetti da eventuali intrusioni.
     \item Necessità di un sistema per il controllo delle autorizzazioni degli utenti.
-    \item Il sistema deve essere in grado di ridurre l'impatto di attacchi DoS, per esempio tramite blacklisting di IP o tramite servzizi esterni, come l'uso di reverse proxy, ovviamente configurato a dovere, non come il sistema dell'INPS.
+    \item Il sistema deve essere in grado di ridurre l'impatto di attacchi DoS, per esempio tramite blacklisting di IP o tramite servizi esterni, come l'uso di reverse proxy, ovviamente configurato a dovere, non come il sistema dell'INPS.
     \item Inoltre il sistema deve essere strutturato in maniera da consentire il ripristino locale ad un evento da parte dell'amministratore di sistema, nel caso che l'attacco DoS funzioni.
     \item Il sistema deve prevedere un sistema di anti-contraffazione per garantire l'autenticità delle preventite.
 \end{itemize}
 
 \subsubsection{Requisiti di sistema aggiornati}
 
+\paragraph{REQUISITI FUNZIONALI}
+
 \begin{itemize}
-    \item \textbf{REQUISITI FUNZIONALI}
-    
     \item \hypertarget{R25F}{R25F} - Creare un sistema di log per il tracciamento delle operazioni automatico.
     \item \hypertarget{R26F}{R26F} - L'amministratore di sistema deve avere il pieno controllo dei log.
     \item \hypertarget{R27F}{R27F} - Creare un sistema per il bloccaggio dell'account dopo vari tentativi. L'amministratore di sistema ha l'autorizzazione a sbloccare l'account.
-    
-    \item \textbf{REQUISITI NON FUNZIONALI}
-    
+\end{itemize}
+
+\paragraph{REQUISITI NON FUNZIONALI}
+
+\begin{itemize}
     %HTTPS
     \item \hypertarget{R22NF}{R22NF} - I dati della comunicazione devono essere protetti.
     \item \hypertarget{R23NF}{R23NF} - I dati persistenti devono essere protetti.
@@ -1328,8 +1347,8 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
     \item \hypertarget{R27NF}{R27NF} - Il sistema deve essere in grado di riconoscere prevendite contraffatte.
     %Devo contare i tentativi falliti nel db: nella sessione potrei cancellare i cookie.
     \item \hypertarget{R28NF}{R28NF} - Il blocco dell'account deve avvenire dopo 3 tentativi.
-    
 \end{itemize}
+
 
 \subsubsection{Glossario aggiornato}
 
@@ -1339,13 +1358,13 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
         \textbf{Voce} & \textbf{Definizione} & \textbf{Sinonimi}\\
         \hline
         \hline
-		Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte. Composto da una serie di voci & Registro \\
+		Log & Registro dove vengono salvate informazioni per risalire ad operazioni critiche svolte. Composto da una serie di voci. & Registro \\
 		\hline
 		Voce di log & Si tratta di una riga del log. & Record del log\\
 		\hline
-		Blocco dell'utente & Operazione automatica eseguita per la protezione del sistema. L'utente non può più effettuare l'operazione di autenticazione con successo & Blocco dell'account utente \\
+		Blocco dell'utente & Operazione automatica eseguita per la protezione del sistema. L'utente non può più effettuare l'operazione di autenticazione con successo. & Blocco dell'account utente \\
 		\hline
-		Sblocco dell'utente & Operazione eseguita da un amministratore di sistema, per il ripristino di un utente con autenticazione bloccata & Sblocco dell'account utente\\
+		Sblocco dell'utente & Operazione eseguita da un amministratore di sistema, per il ripristino di un utente con autenticazione bloccata. & Sblocco dell'account utente\\
 		\hline
 		Verifica Contraffazione & Sistema volto a verificare l'autenticità di un documento digitale & \\
 		\hline
@@ -1449,9 +1468,9 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 	\hline
 	\textbf{Attori} & Utente \\
 	\hline
-	\textbf{Relazioni} & Cambia Password \\
+	\textbf{Relazioni} &  \\
 	\hline
-	\textbf{Precondizioni} & L'utente deve essere registato nel sistema \\
+	\textbf{Precondizioni} & L'utente deve essere registrato nel sistema \\
 	\hline
 	\textbf{Postcondizioni} & L'utente è autenticato nel sistema \\
 	\hline
@@ -1504,9 +1523,9 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         Gestione Amministrazione & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso & \\
         \hline
-        Gestione log & gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R25F}{R25F}, \hyperlink{R26F}{R26F}\\
+        Gestione log & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R25F}{R25F}, \hyperlink{R26F}{R26F}\\
         \hline
-        Scrittura log & memorizzazione di dati & Semplice & \hyperlink{R25F}{R25F}\\
+        Scrittura log & Memorizzazione di dati & Semplice & \hyperlink{R25F}{R25F}\\
         \hline
         Sblocco utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R27F}{R27F}\\
         \hline
@@ -1521,7 +1540,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         Cambia password & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R2F}{R2F}, \hyperlink{R5F}{R5F} \\
         \hline
         %Gestione staff & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R6F}{R6F}, \hyperlink{R9F}{R9F},  \\
-        Gestione staff & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso &  \\
+        Gestione amministrazione staff & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso &  \\
         \hline
         Visualizzazione statistiche personali & Lettura dati, interazione con l'esterno & Semplice &  \hyperlink{R23F}{R23F} \\
         \hline
@@ -1904,7 +1923,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \hline
     Protezione dei dati (\hyperlink{R22NF}{R22NF}, \hyperlink{R23NF}{R23NF}) & Sicurezza & Peggiorano tempo di risposta, migliorano la privacy dei dati & Gestione log, Scrittura log, Sblocco utente, Registrazione utente, Crea staff, Accedi staff, Cambia password, Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendite, Autenticazione\\
     \hline
-    Controllo accessi (\hyperlink{R24NF}{R24NF}) & Sicurezza & Peggiorano tempo di risposta e usabilità, migliorano la privacy dei dati & Gestione utente, Gestione staff\\
+    Controllo accessi (\hyperlink{R24NF}{R24NF}) & Sicurezza & Peggiorano tempo di risposta e usabilità, migliorano la privacy dei dati & Gestione utente, Gestione amministrazione\\
     \hline
     \end{tabularx}
 \end{center}
@@ -1920,57 +1939,57 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Maschera} & \textbf{Informazioni} & \textbf{Funzionalità}\\
     \hline
     \hline
-    View Autenticazione & username, password & Autenticazione\\
+    View Autenticazione & Username, password & Autenticazione\\
     \hline
-    Home Gestione Amministrazione & navigabilità delle funzioni amministratore di sistema & Gestione Amministrazione\\
+    Home Gestione Amministrazione & Navigabilità delle funzioni amministratore di sistema & Gestione Amministrazione\\
     \hline
-    Home Gestione log & navigabilità delle funzioni gestione log: aggiungi log e leggi log & Gestione log\\
+    Home Gestione log & Navigabilità delle funzioni gestione log: aggiungi log e leggi log & Gestione log\\
     \hline
-    View Aggiungi log & timestamp, descrizione, livello & Gestione log\\
+    View Aggiungi log & Timestamp, descrizione, livello & Gestione log\\
     \hline
-    View Leggi log & timestamp, descrizione, livello & Gestione log\\
+    View Leggi log & Timestamp, descrizione, livello & Gestione log\\
     \hline
-    View Sblocco utente & dati utente da sbloccare & Sblocco utente \\
+    View Sblocco utente & Dati utente da sbloccare & Sblocco utente \\
     \hline
-    View Registrazione utente & nome, cognome, telefono, username, password & Registrazione utente\\
+    View Registrazione utente & Nome, cognome, telefono, username, password & Registrazione utente\\
     \hline
-    Home Gestione utente & navigabilità delle funzioni utente, scelta staff & Gestione utente\\
+    Home Gestione utente & Navigabilità delle funzioni utente, scelta staff & Gestione utente\\
     \hline
-    View Crea staff & nome, codice di accesso & Crea staff\\
+    View Crea staff & Nome, codice di accesso & Crea staff\\
     \hline
-    View Accedi staff & nome, codice di accesso & Accedi staff\\
+    View Accedi staff & Nome, codice di accesso & Accedi staff\\
     \hline
-    View Cambia password & vecchia password, nuova password & Cambia password\\
+    View Cambia password & Vecchia password, nuova password & Cambia password\\
     \hline
-    Home Gestione staff & consente la navigabilità delle funzioni del membro, PR, cassiere e amministratore, scelta evento & Gestione staff\\
+    Home Gestione staff & Consente la navigabilità delle funzioni del membro, PR, cassiere e amministratore, scelta evento & Gestione amministrazione staff, Gestione entrata, Gestione vendita prevendita, Visualizza statistiche personali\\
     \hline
-    View Visualizzazione statistiche personali & entrate svolte, guadagni, filtri dei dati per evento, staff e totale & Visualizzazione statistiche personali\\
+    View Visualizzazione statistiche personali & Entrate svolte, guadagni, filtri dei dati per evento, staff e totale & Visualizzazione statistiche personali\\
     \hline
-    Home Gestione vendita prevendita & navigabilità tra le funzioni del PR & Gestione vendita prevendita\\
+    Home Gestione vendita prevendita & Navigabilità tra le funzioni del PR & Gestione vendita prevendita\\
     \hline
-    View Aggiungi prevendita & informazioni cliente, evento prevendita, tipologia prenvendita, documento finale & Gestione vendita prevendita\\
+    View Aggiungi prevendita & Informazioni cliente, evento prevendita, tipologia prenvendita, documento finale & Gestione vendita prevendita\\
     \hline
-    View Lista prevendite & informazioni cliente, evento e tipologia, filtri in base al cliente e all'evento & Gestione vendita prevendita\\
+    View Lista prevendite & Informazioni cliente, evento e tipologia, filtri in base al cliente e all'evento & Gestione vendita prevendita\\
     \hline
-    View Annulla prevendita & informazioni prevendita per l'annullamento & Gestionve vendita prevendita\\
+    View Annulla prevendita & Informazioni prevendita per l'annullamento & Gestionve vendita prevendita\\
     \hline
-    Home Gestione entrata & fornisce la navigabilità tra le funzioni del Cassiere & Gestione entrata\\
+    Home Gestione entrata & Fornisce la navigabilità tra le funzioni del Cassiere & Gestione entrata\\
     \hline
-    View Timbra entrata & documento digitale & Gestione entrata\\
+    View Timbra entrata & Documento digitale & Gestione entrata\\
     \hline
-    View Lista entrate & entrata, filtri per evento, staff & Gestione entrata\\
+    View Lista entrate & Entrata, filtri per evento, staff & Gestione entrata\\
     \hline
-    Home gestione membri & fornisce la navigabilità tra le funzioni di gestione dei membri da parte dell'amministratore & Gestione membri\\
+    Home gestione membri & Fornisce la navigabilità tra le funzioni di gestione dei membri da parte dell'amministratore & Gestione membri\\
     \hline
-    View lista membri & informazioni sui membri & Gestione membri\\
+    View lista membri & Informazioni sui membri & Gestione membri\\
     \hline
-    View Modifica ruoli membro & informazioni del membro da modficare, nuovi ruoli & Gestione membri\\
+    View Modifica ruoli membro & Informazioni del membro da modficare, nuovi ruoli & Gestione membri\\
     \hline
-    View Rimuovi membro & informazioni del membro da eliminare & Gestione membri\\
+    View Rimuovi membro & Informazioni del membro da eliminare & Gestione membri\\
     \hline
-    View Cambia codice di accesso & nome staff, vecchio codice, nuovo codice & Cambia codice accesso\\
+    View Cambia codice di accesso & Nome staff, vecchio codice, nuovo codice & Cambia codice accesso\\
     \hline
-    View Visualizzazione statistiche & informazioni membro, entrate effettuate, guadagni, informazioni evento, entrate evento, guadagni evento, filtro per membro o per evento & Visualizzazione statistiche\\
+    View Visualizzazione statistiche & Informazioni membro, entrate effettuate, guadagni, informazioni evento, entrate evento, guadagni evento, filtro per membro o per evento & Visualizzazione statistiche\\
     \hline
     \end{tabularx}
 \end{center}
@@ -1981,24 +2000,25 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Maschera} & \textbf{Informazioni} & \textbf{Funzionalità}\\
     \hline
     \hline
-    Home Gestione eventi & fornisce la navigabilità tra le funzioni di gestione eventi da parte dell'amministratore & Gestione eventi \\
+    Home Gestione eventi & Fornisce la navigabilità tra le funzioni di gestione eventi da parte dell'amministratore & Gestione eventi \\
     \hline
-    View Aggiungi evento & nome, descrizione, periodo temporale e luogo di svolgimento & Gestione eventi\\
+    View Aggiungi evento & Nome, descrizione, periodo temporale e luogo di svolgimento & Gestione eventi\\
     \hline
-    View Lista eventi & nome, descrizione, periodo temporale e luogo di svolgimento & Gestione eventi\\
+    View Lista eventi & Nome, descrizione, periodo temporale e luogo di svolgimento & Gestione eventi\\
     \hline
-    View Modifica evento & informazioni dell'evento da modificare, modifiche da effettuare & Gestione eventi\\
+    View Modifica evento & Informazioni dell'evento da modificare, modifiche da effettuare & Gestione eventi\\
     \hline
-    View Annulla evento & informazioni dell'evento da annullare & Gestione eventi\\
+    View Annulla evento & Informazioni dell'evento da annullare & Gestione eventi\\
     \hline
-    Home Gestione tipologie prevendite & fornisce la navigabilità tra le funzioni di gestione tipologie prevendite da parte dell'amministratore & Gestione tipologie prevendite \\
+    Home Gestione tipologie prevendite & Fornisce la navigabilità tra le funzioni di gestione tipologie prevendite da parte dell'amministratore & Gestione tipologie prevendite \\
     \hline
-    View Aggiungi tipologia prevendita & nome, descrizione, periodo temporale di vendita e prezzo & Gestione tipologie prevendite\\
+    View Aggiungi tipologia prevendita & Nome, descrizione, periodo temporale di vendita e prezzo & Gestione tipologie prevendite\\
     \hline
-    View Lista tipologie prevendite & nome, descrizione, periodo temporale di vendita e prezzo & Gestione tipologie prevendite\\
-    View Modifica tipologia prevendita & informazioni della tipologia prevendita da modificare, modifiche da effettuare & Gestione tipologie prevendite\\
+    View Lista tipologie prevendite & Nome, descrizione, periodo temporale di vendita e prezzo & Gestione tipologie prevendite\\
     \hline
-    View Elimina tipologia prevendita & informazioni della tipologia prevendita da eliminare & Gestione tipologie prevendite\\
+    View Modifica tipologia prevendita & Informazioni della tipologia prevendita da modificare, modifiche da effettuare & Gestione tipologie prevendite\\
+    \hline
+    View Elimina tipologia prevendita & Informazioni della tipologia prevendita da eliminare & Gestione tipologie prevendite\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2180,7 +2200,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \hline
     Gestione utente & Crea staff, Accedi staff, Cambia password\\
     \hline
-    Gestione staff & Visualizzazione statistiche personali, Gestione vendita prevendita, Gestione entrata, Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendita\\
+    Gestione Amministrazione staff & Gestione membri, Cambia codice accesso, Visualizzazione statistiche, Gestione eventi, Gestione tipologie prevendita\\
     \hline
     Gestione vendita prevendita & Aggiungi prevendita, Lista prevendite, Annulla prevendita\\
     \hline
@@ -2203,7 +2223,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Registrazione utente & Sblocco utente & Si può sbloccare un utente solo se è registrato & username\\
+    Registrazione utente & Sblocco utente & Si può sbloccare un utente solo se è registrato & Username\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2216,7 +2236,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Aggiungi log & Leggi log & Si può leggere un record solo se è stato aggiunto & record\\
+    Aggiungi log & Leggi log & Si può leggere un record solo se è stato aggiunto & Record\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2229,12 +2249,12 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Crea staff & Accedi staff & Si può accedere ad uno staff solo se è stato creato & nome staff\\
+    Crea staff & Accedi staff & Si può accedere ad uno staff solo se è stato creato & Nome staff\\
     \hline
     \end{tabularx}
 \end{center}
 
-\textbf{Gestione staff: Tabella Sotto-Funzionalità}
+\textbf{Gestione amministrazione staff: Tabella Sotto-Funzionalità}
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|X|}
@@ -2242,13 +2262,13 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Gestione vendita prevendita & Gestione eventi & La gestione vendita prevendita deve poter leggere gli eventi per inserirlo nella prevendita & eventi\\
-    \hline
-    Gestione vendita prevendita & Gestione tipologie prevendita & La gestione vendita prevendita deve poter leggere le tipologie prevendita per l'associazione alla prevendita & tipologie prevendita\\
-    \hline
-    Gestione vendita prevendita & Gestione entrata & Non posso annullare una prevendita se è già stata usata & prevendita\\
-    \hline
-    Gestione tipologie prevendita & Gestione eventi & Non posso creare una tipologia prevendita con un periodo di vendita durante o dopo l'evento (\hyperlink{R9NF}{R9NF}) & evento\\
+    %Gestione vendita prevendita & Gestione eventi & La gestione vendita prevendita deve poter leggere gli eventi per inserirlo nella prevendita & Eventi\\
+    %\hline
+    %Gestione vendita prevendita & Gestione tipologie prevendita & La gestione vendita prevendita deve poter leggere le tipologie prevendita per l'associazione alla prevendita & Tipologie prevendita\\
+    %\hline
+    %Gestione vendita prevendita & Gestione entrata & Non posso annullare una prevendita se è già stata usata & Prevendita\\
+    %\hline
+    Gestione tipologie prevendita & Gestione eventi & Non posso creare una tipologia prevendita con un periodo di vendita durante o dopo l'evento (\hyperlink{R9NF}{R9NF}) & Evento\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2263,9 +2283,9 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Aggiungi prevendita & Lista prevendite & La lista delle prevendite è condizionata dalle prevendite aggiunte & prevendita\\
+    Aggiungi prevendita & Lista prevendite & La lista delle prevendite è condizionata dalle prevendite aggiunte & Prevendita\\
     \hline
-    Aggiungi prevendita & Annulla prevendita & Si può annullare una prevendita solo se è stata aggiunta & prevendita\\
+    Aggiungi prevendita & Annulla prevendita & Si può annullare una prevendita solo se è stata aggiunta & Prevendita\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2278,7 +2298,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Timbra Entrata & Lista entrate & La lista delle entrate è condizionata dalle entrate aggiunte & entrata\\
+    Timbra Entrata & Lista entrate & La lista delle entrate è condizionata dalle entrate aggiunte & Entrata\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2291,7 +2311,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Lista membri & Rimuovi membro & Posso eliminare un membro solo se fa parte della lista, cioè dello staff & membro\\
+    Lista membri & Rimuovi membro & Posso eliminare un membro solo se fa parte della lista, cioè dello staff & Membro\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2304,9 +2324,9 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Aggiungi evento & Lista eventi & La lista delle prevendite è condizionata dalle prevendite aggiunte & prevendita\\
+    Aggiungi evento & Lista eventi & La lista delle prevendite è condizionata dalle prevendite aggiunte & Prevendita\\
     \hline
-    Aggiungi prevendita & Annulla prevendita & Si può annullare una prevendita solo se è stata aggiunta & prevendita\\
+    Aggiungi prevendita & Annulla prevendita & Si può annullare una prevendita solo se è stata aggiunta & Prevendita\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2319,9 +2339,9 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Sotto-funzionalità} & \textbf{Sotto-funzionalità} & \textbf{Legame} & \textbf{Informazioni}\\
     \hline
     \hline
-    Aggiungi tipologia prevendita & Lista tipologie prevendita & La lista delle tipologie prevendita è condizionata dalle tipologie prevendita aggiunte & tipologia prevendita\\
+    Aggiungi tipologia prevendita & Lista tipologie prevendita & La lista delle tipologie prevendita è condizionata dalle tipologie prevendita aggiunte & Tipologia prevendita\\
     \hline
-    Aggiungi tipologie prevendita & Annulla tipologie prevendita & Si può annullare una tipologie prevendita solo se è stata aggiunta & tipologia prevendita\\
+    Aggiungi tipologie prevendita & Annulla tipologie prevendita & Si può annullare una tipologie prevendita solo se è stata aggiunta & Tipologia prevendita\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2731,21 +2751,21 @@ Naturalmente gli oggetti \textbf{DAO} possono lanciare eccezioni, qui si incapsu
 
 Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default. Le \textbf{transazioni} sono gestite al'interno delle implementazioni.
 
-\newpage
+%\newpage
 
-\paragraph{Package} it.unibo.prevenditaelettronica.middleware.dao.proxy
+%\paragraph{Package} it.unibo.prevenditaelettronica.middleware.dao.proxy
 
 %TODO: lazy-load serve?
 
 %Dominio che richiede proxy
 
-\begin{figure}[H]
-    \includegraphics[scale=0.8]{Progettazione/Package/middleware/model/dao/proxy/proxy.png}
-    \centering
-    \caption{proxy.vsdx}
-\end{figure}
+%\begin{figure}[H]
+%    \includegraphics[scale=0.8]{Progettazione/Package/middleware/model/dao/proxy/proxy.png}
+%    \centering
+%    \caption{proxy.vsdx}
+%\end{figure}
 
-Il package fornisce classi per il \textbf{lazy-load} di alcuni metodi delle classi di dominio, utilizzando il pattern \textbf{Proxy}. La scelta dei metodi da caricare in lazy-load dipende dal caso d'uso.
+%Il package fornisce classi per il \textbf{lazy-load} di alcuni metodi delle classi di dominio, utilizzando il pattern \textbf{Proxy}. La scelta dei metodi da caricare in lazy-load dipende dal caso d'uso.
 
 %\paragraph{Package} it.unibo.prevenditaelettronica.middleware.model.log
 
@@ -3386,8 +3406,10 @@ La lista prevede il nome della tipologia, il suo periodo di vendita e il prezzo 
 
 \paragraph{Autenticazione Utente} Viene mostrato il diagramma di interazione tra utente, front-end, middle-ware e database per l'autenticazione dell'utente. Viene mostrato il funzionamento del pattern \textbf{Observer}, della richiesta \textbf{Asincrona} e della gestione della sessione a livello \textbf{middle-ware}.
 
+%TODO: da chiedere se i messaggi callback sono restituiti o normali
+
 \begin{figure}[H]
-    \includegraphics[angle=90,scale=0.55]{Progettazione/Interazione/diagramma_sequenza_autenticazione_utente.png}
+    \includegraphics[angle=90,scale=0.55]{Progettazione/Interazione/diagramma_sequenza_autenticazione_utente.pdf}
     \centering
     \caption{diagramma\_sequenza\_autenticazione\_utente.vsdx}
 \end{figure}
@@ -3522,6 +3544,8 @@ Nella fase di implementazione abbiamo deciso di implementare lo strato di persis
 \begin{itemize}
     \item Ridotto enumeratore ServicePriority da PRIMARY, BACKUP, LOCAL a PRIMARY, LOCAL. Il servizio di hosting non espone il database all'esterno e quindi non è possibile replicare lo strato middle-ware.
     \item Package DAO del middle-ware implementato usando PDO, che supporta molti rdbms.
+    \item Utilizzo di chiavi surrogate per identificare gli oggetti, anche a lato client.
+    \item Implementazione della Sessione mediante sessione gestita da PHP.
     \item Nel client Android, viene usata la libreria Volley come HTTPSClient.
     \item Nel client Android viene usata la libreria GSON per la serializzazione/deserializzazione delle informazioni. Le interfacce JSONSerializable e JSONDeserializable diventano superflue utilizzando la libreria.
     \item Nel database le credenziali vengono salvate come coppia (username, salted hash), utilizzando come algoritmo di hashing SHA256.
@@ -3539,6 +3563,7 @@ Nella fase di implementazione abbiamo deciso di implementare lo strato di persis
     \item Per replicare il servizio in locale, l'amministratore di sistema esegue un backup del database mediante l'interfaccia fornita dal servizio di hosting, e utilizzando il software XAMPP replica il servizio. I client dovranno aggiungere il servizio tramite il broker.
     \item Si è deciso di ampliare le statistiche, catalogandole per tipologia di prevendita.
     \item Nel client Android abbiamo modificato alcuni ViewModel del front-end, rendendoli osservatori dei form delle viste, per rendere la validazione dell'input in tempo reale.
+    
 \end{itemize}
 
 \subsection{Collaudo}
@@ -3578,7 +3603,7 @@ Il client Android richiede solamente di inserire l'URL del servizio middle-ware,
 \newpage
 
 %TODO: chiedere se va bene
-%TODO: da chiedere se aggiungere db
+%TODO: da chiedere se aggiungere db, php, apache
 
 \subsection{Deployment Type-Level}
 
