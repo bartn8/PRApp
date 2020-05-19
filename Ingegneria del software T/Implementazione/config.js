@@ -1,1 +1,1 @@
-var middlewareURL = "https://prapp.altervista.org"
+var middlewareURL = "https://prapp.altervista.org";

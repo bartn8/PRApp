@@ -58,7 +58,7 @@ numberstyle = \tiny,
 
 \section{Abstract}
 
-Il progetto riguarda la creazione di un applicativo software gestionale per prevendite elettroniche.\\Abbiamo pensato il software per un gruppo di amici che organizzano feste, con obiettivi cardine l'abbattimento di costi, l'ottimizzazione dell'entrata dei partecipanti all'evento e una semplificazione dei conti di bilancio.\\L'idea di fondo è di utilizzare, come sostitutivo alla prevendita cartacea, un codice QR in grado di far entrare il cliente dopo relativo check all'entrata.\\Il risparmio economico ottenuto è ovviamente importante in confronto alla vendita tradizionale. Tuttavia bisogna tenere in conto dei problemi tecnologici che si possono verificare durante la vendita e l'entrata: problemi di connessione Internet, incompatibilità dei dispositivi dei clienti, training del personale addetto alle entrate, eccetera.\\Viene gestito oltre alle prevendite e relatvi clienti, anche l'organizzazione e i vari membri dell'organizzazione, con divisione dei ruoli.\\Per facilitare i conti di bilancio è disponibile una sezione in cui è possibile ricavare statistiche sull'andamento dell'evento.
+Il progetto riguarda la creazione di un applicativo software gestionale per prevendite elettroniche.\\Abbiamo pensato il software per un gruppo di amici che organizzano feste, con obiettivi cardine l'abbattimento di costi, l'ottimizzazione dell'entrata dei partecipanti all'evento e una semplificazione dei conti di bilancio.\\L'idea di fondo è di utilizzare, come sostitutivo alla prevendita cartacea, un documento digitale in grado di far entrare il cliente dopo relativo check all'entrata.\\Il risparmio economico ottenuto è ovviamente importante in confronto alla vendita tradizionale. Tuttavia bisogna tenere in conto dei problemi tecnologici che si possono verificare durante la vendita e l'entrata: problemi di connessione Internet, incompatibilità dei dispositivi dei clienti, training del personale addetto alle entrate, eccetera.\\Viene gestito oltre alle prevendite e relatvi clienti, anche l'organizzazione e i vari membri dell'organizzazione, con divisione dei ruoli.\\Per facilitare i conti di bilancio è disponibile una sezione in cui è possibile ricavare statistiche sull'andamento dell'evento.
 
 \newpage
 
@@ -329,7 +329,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	\hline
 	\textbf{Descrizione} & Autenticazione nel software gestionale \\
 	\hline
-	\textbf{Attori} & Utente \\
+	\textbf{Attori} & Utente, Amministratore di Sistema \\
 	\hline
 	\textbf{Caso d'uso} & Login \\
 	\hline
@@ -1045,25 +1045,25 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
         \textbf{Tecnologia} & \textbf{Vulnerabilità} \\
         \hline
         \hline
-       \multirow{9}{*}{Cifratura delle comunicazioni} & Utilizzo di una doppia cifratura simmetrica e asimmetrica con le loro relative vulnerabilità:\\
-                                      & \quad Cifratura Simmetrica:\\
+       \multirow{9}{*}{Cifratura delle comunicazioni} & Utilizzo di una \textbf{doppia cifratura} simmetrica e asimmetrica con le loro relative vulnerabilità:\\
+                                      & \quad \textbf{Cifratura Simmetrica}:\\
                                       & \quad\quad 1. Tempo di vita della chiave\\
                                       & \quad\quad 2. Memorizzazione della chiave\\
                                       & \quad\quad 3. Lunghezza della chiave\\
-                                      & \quad Cifratura Asimmetrica:\\
+                                      & \quad \textbf{Cifratura Asimmetrica}:\\
                                       & \quad\quad 1. Lunghezza della chiave\\
                                       & \quad\quad 2. Memorizzazione della chiave privata\\
                                       & L'utilizzo di cifrature standard non recenti potrebbero causare vulnerabilià ulteriori.\\
         \hline
-        \multirow{3}{*}{Autenticazione tramite credenziali} & Social engineering \\
-                                           & Password cracking \\
-                                           & Negligenza \\
+        \multirow{3}{*}{Autenticazione tramite credenziali} & \textbf{Social engineering}: un utente potrebbe essere vittima di un attacco di social engineering, volto al furto delle credenziali \\
+                                           & \textbf{Password cracking}: attraverso metodologie di cracking delle password, l'attaccante risale alla password di un utente o amministratore di sistema. \\
+                                           & \textbf{Negligenza}: L'utente volontariamente o per sbaglio fornisce le credenziali a terzi. \\
         \hline
-        \multirow{5}{*}{Architettura Client/Server} & Attacco DDoS/DoS \\
-                                   & Attacco Man in the Middle\\
-                                   & Sniffing della comunicazione\\
-                                   & Deadlock\\
-                                   & Esposizione dei client\\
+        \multirow{5}{*}{Architettura Client/Server} & \textbf{Attacco DDoS/DoS}: l'obiettivo dell'attacco è quello di negare il servizio offerto agli utenti. \\
+                                   & \textbf{Attacco Man in the Middle}: un malintenzionato potrebbe riuscire a sottrarre informazioni o effettuare operazioni illecite. \\
+                                   & \textbf{Sniffing della comunicazione}: un malintezionato potrebbe riusire ad intercettare una comunicazione e a sottrarne informazioni. \\
+                                   & \textbf{Deadlock}: Il servitore potrebbe trovarsi in una situzione di stallo generata da una richiesta ciclica. \\
+                                   & \textbf{Esposizione dei client}: I client sono esposti, dato che devono connettersi al servitore.\\
         \hline
         %Non so se questa va bene.
         %Servizio di hosting esterno & Esposizione dei dati \\
@@ -1080,7 +1080,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 %TODO: aggiorna
 
 \begin{figure}[H]
-    \includegraphics[scale=0.8]{Analisi/Cases/security_use_cases_misuse_cases.png}
+    \includegraphics[scale=0.9]{Analisi/Cases/security_use_cases_misuse_cases.png}
     \centering
     \caption{security\_use\_cases\_misuse\_cases.vsdx}
 \end{figure}
@@ -1460,47 +1460,50 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 %Nello scenario login ho aggiunto il requisito non funzionale
 
 \begin{center}
-\begin{tabularx}{1\textwidth}{|l|X|}
-    \hline
-	\textbf{Titolo} & Login \\
-	\hline
-	\textbf{Descrizione} & Autenticazione nel software gestionale \\
-	\hline
-	\textbf{Attori} & Utente \\
-	\hline
-	\textbf{Relazioni} &  \\
-	\hline
-	\textbf{Precondizioni} & L'utente deve essere registrato nel sistema \\
-	\hline
-	\textbf{Postcondizioni} & L'utente è autenticato nel sistema \\
-	\hline
-	\textbf{Scenario principale} & 1. Impostazione di una schermata per l'inserimento di username e password. \\
-								 & 2. L'utente inserisce i dati del proprio account. \\
-								 & 3. L'utente esegue l'operazione. \\
-								 & 4. Il sistema verifica le credenziali. \\
-								 & 5. Dopo l'autenticazione viene mostrata una schermata principale.\\
-	\hline
-	\textbf{Scenari alternativi} & A) L'utente sbaglia credenziali: \\
-								 & \quad 1. Notifica all'utente.\\
-								 & \quad 2. Ritorno alla schermata di login.\\
-								 & B) L'utente ha sbagliato troppe volte le credenziali: \\
-								 & \quad 1. Blocco dell'account.\\
-								 & \quad 2. Notifica all'utente.\\
-								 & \quad 3. Ritorno alla schermata di login.\\
-								 & C) L'utente ha la password di default impostata dall'amministratore di sistema:\\
-								 & \quad 1. Passaggio al cambio password.\\
-								 & D) L'utente ha l'account bloccato:\\
-								 & \quad 1. Notifica all'utente.\\
-								 & \quad 2. Ritorno alla schermata di login.\\
-								 & E) L'utente è gia autenticato:\\
-								 & \quad 1. Mostro la schermata principale.\\
-	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF}, \hyperlink{R7NF}{R7NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R28NF}{R28NF} \\
-	\hline
-	\textbf{Punti aperti} & \\
-	\hline
-\end{tabularx}
+    \begin{tabularx}{1\textwidth}{|l|X|}
+        \hline
+    	\textbf{Titolo} & Login \\
+    	\hline
+    	\textbf{Descrizione} & Autenticazione nel software gestionale \\
+    	\hline
+    	\textbf{Attori} & Utente, Amministratore di Sistema \\
+    	\hline
+    	\textbf{Relazioni} &  \\
+    	\hline
+    	\textbf{Precondizioni} & L'utente deve essere registrato nel sistema \\
+    	\hline
+    	\textbf{Postcondizioni} & L'utente è autenticato nel sistema \\
+    	\hline
+    	\textbf{Scenario principale} & 1. Impostazione di una schermata per l'inserimento di username e password. \\
+    								 & 2. L'utente inserisce i dati del proprio account. \\
+    								 & 3. L'utente esegue l'operazione. \\
+    								 & 4. Il sistema verifica le credenziali. \\
+    								 & 5. Dopo l'autenticazione viene mostrata una schermata principale.\\
+    	\hline
+    	\textbf{Scenari alternativi} & A) L'utente sbaglia credenziali: \\
+    								 & \quad 1. Notifica all'utente.\\
+    								 & \quad 2. Ritorno alla schermata di login.\\
+    								 & B) L'utente ha sbagliato troppe volte le credenziali: \\
+    								 & \quad 1. Blocco dell'account.\\
+    								 & \quad 2. Notifica all'utente.\\
+    								 & \quad 3. Ritorno alla schermata di login.\\
+    								 & C) L'utente ha la password di default impostata dall'amministratore di sistema:\\
+    								 & \quad 1. Passaggio al cambio password.\\
+    								 & D) L'utente ha l'account bloccato:\\
+    								 & \quad 1. Notifica all'utente.\\
+    								 & \quad 2. Ritorno alla schermata di login.\\
+    								 & E) L'utente è gia autenticato:\\
+    								 & \quad 1. Mostro la schermata principale.\\
+    	\hline
+    	\textbf{Requisiti non funzionali} & \hyperlink{R2NF}{R2NF}, \hyperlink{R7NF}{R7NF}, \hyperlink{R16NF}{R16NF}, \hyperlink{R28NF}{R28NF} \\
+    	\hline
+    	\textbf{Punti aperti} & \\
+    	\hline
+    \end{tabularx}
+    \textit{Viene aggiunto semplicemente il requisito} \hyperlink{R28NF}{R28NF}
 \end{center}
+
+
 
 \newpage
 
@@ -1914,7 +1917,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 %\hyperlink{R24NF}{R24NF} Il sistema deve verificare le autorizzazioni degli utenti e dei membri.
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|}
     \hline
     \textbf{Requisito} & \textbf{Categoria} & \textbf{Impatto} & \textbf{Funzionalità}\\
     \hline
@@ -2643,14 +2646,14 @@ Dall’analisi dei requisiti sono emersi alcuni vincoli non funzionali, tra cui:
     \item Facilità d’utilizzo
 \end{itemize}
 
-L'integrità e la sicurezza dei dati, soprattutto per quanto riguarda la comunicazione, è di fondamentale importanza, soprattutto in vista ad una architettura 3-tier. Purtroppo, dato il basso costo di sviluppo software, è opportuno scegliere soluzione standard esterne al sistema, come l'uso di protocolli di cifratura, come il TLS, il quale viene utilizzato da protocolli più di alto livello come HTTPS, protocollo che abbiamo deciso di utilizzare, dato la facilità d'utilizzo e il supporto vasto. L'avvento di tecnologie di trasmissione di dati moderne, rende più che affordabile l'utilizzo di tecnologia di cifratura. Inoltre l'utilizzo di uno standard, già implementato e testato da terze parti, riduce il rischio di sicurezza dovuto a difetti all'interno del nostro prodotto software.\\Il controllo degli accessi rappresenta una opportuna soluzione per la garantire il sistema a fronte di malintenzionati. L'uso di un controllo delle autorizzazioni favorisce a separare i ruoli e a migliorare la sicurezza, probabilmente perdendo in facilità d'utilizzo.\\La Disponibilità del servizio e la Replicabilità del sistema servono per garantire i requisiti \hyperlink{R25NF}{R25NF} \hyperlink{R26NF}{R26NF}, per contenere un attacco DoS.
+L'integrità e la sicurezza dei dati, soprattutto per quanto riguarda la comunicazione, è di fondamentale importanza, soprattutto in vista ad una architettura 3-tier. Purtroppo, dato il basso costo di sviluppo software, è opportuno scegliere soluzione standard esterne al sistema, come l'uso di protocolli di cifratura, come il TLS, il quale viene utilizzato da protocolli più di alto livello come HTTPS, protocollo che abbiamo deciso di utilizzare, dato la facilità d'utilizzo e il supporto vasto. L'avvento di tecnologie di trasmissione di dati moderne, rende più che affordabile l'utilizzo di tecnologia di cifratura. Inoltre l'utilizzo di uno standard, già implementato e testato da terze parti, riduce il rischio di sicurezza dovuto a difetti all'interno del nostro prodotto software.\\Il controllo degli accessi rappresenta una opportuna soluzione per la garantire il sistema a fronte di malintenzionati. L'uso di un controllo delle autorizzazioni favorisce a separare i ruoli e a migliorare la sicurezza, probabilmente perdendo in facilità d'utilizzo.\\La Disponibilità del servizio e la Replicabilità del sistema servono per garantire i requisiti \hyperlink{R25NF}{R25NF} \hyperlink{R26NF}{R26NF}, per contenere un attacco DoS: questi vincoli potrebbero essere in conflitto con la strutturazione di un'architettura client/server, si cerca quindi un trade-off tra disponibilità e architettura.
 
 
 \subsection{Scelta dell'architettura}
 Abbiamo optato per una architettura client/server a tre livelli: abbiamo il database, un software middle-ware e un applicativo front-end. L'applicazione middle-ware fa da intermediario tra il database e l'applicativo lato cliente. Questa scelta rende facile l'implementazione di applicativi front-end multipiattaforma e specializzati: si potranno quindi più applicativi front-end adatti al lavoro dello specifico utilizzatore finale.
 
 \subsubsection{Livello di Persistenza}
-Abbiamo deciso di adottare un database relazionale indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento, si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middle-ware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middle-ware, favorendo la disponiblità del servizio (\hyperlink{R25NF}{R25NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R26NF}{R25N}), nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.\\La persistenza dei log viene gestita attraverso file.
+Abbiamo deciso di adottare un database relazionale indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento, si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middle-ware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middle-ware, favorendo la disponiblità del servizio (\hyperlink{R25NF}{R25NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R26NF}{R26NF}), nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.\\La persistenza dei log viene gestita attraverso file.
 
 
 \subsubsection{Livello Middle-ware}
@@ -2661,7 +2664,7 @@ Si tratta dell'ultimo livello, quello a contatto con gli utilizzatori finali, sp
 
 
 \subsubsection{Patterns \& Design Principle}
-Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVP} per l'applicativo middle-ware, mentre per la parte front-end si è utilizzato il \textbf{MVVM}. Il software middle-ware avrà una parte di view minima, \textbf{passiva}, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
+Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware, dato che viene definito a priori il protocollo di comunicazione.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVP} per l'applicativo middle-ware, mentre per la parte front-end si è utilizzato il \textbf{MVVM}. Il software middle-ware avrà una parte di view minima, \textbf{passiva}, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
 
 %\subsubsection{Diagramma a package}
 
@@ -2687,7 +2690,7 @@ Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità or
 \end{figure}
 
 \subsubsection{Scelte tecnologiche}
-Abbiamo deciso di utilizzare come protocollo di sicurezza e trasmissione dei dati HTTPS: la sicurezza è garantita dal layer TLS, che garantisce una comunicazione sicura end-to-end, e l'ampio bacino di utilizzatori del protocollo permette la produzione di un prodotto software versatile.\\Per il formato dei dati abbiamo scelto JSON, dato il grande supporto e la facilità di utilizzo.
+Abbiamo deciso di utilizzare come protocollo di sicurezza e trasmissione dei dati \textbf{HTTPS}: la sicurezza è garantita dal layer TLS, che garantisce una comunicazione sicura end-to-end, e l'ampio bacino di utilizzatori del protocollo permette la produzione di un prodotto software versatile: un possibile servizio esterno potrebbe interfacciarsi con l'applicativo middle-ware, senza troppe difficoltà.\\Per il formato dei dati abbiamo scelto \textbf{JSON}, dato il grande supporto e la facilità di utilizzo.
 
 \newpage
 
@@ -2710,7 +2713,7 @@ alla decisione di \textbf{dividere il software} in strato middle-ware e strato f
 Come detto in precedenza, la struttura è basata su \textbf{MVP}.
 
 \begin{itemize}
-    \item \textbf{Model}: Si tratta della parte che gestisce il database.\\Utilizzando il pattern \textbf{DAO}, si crea il mapping delle relazioni con gli oggetti.\\Gli oggetti del dominio utilizzano il pattern \textbf{Proxy} pre implementare il \textbf{lazy-load} nei casi d'uso necessari\\Per l'interazione con i log si è preferito un accesso diretto a file.
+    \item \textbf{Model}: Si tratta della parte che gestisce il database.\\Utilizzando il pattern \textbf{DAO}, si crea il mapping delle relazioni con gli oggetti.\\Non viene utilizzato il pattern \textbf{Proxy} per implementare il \textbf{lazy-load}: dato che le richieste al middle-ware sono definite a priori, si conosce esattamente quali dati reperire, potendo usufruire del \textbf{JOIN} fornito dal DBMS.\\Per l'interazione con i log si è preferito un accesso diretto a file, sempre con un accesso tramite pattern \textbf{DAO}.
     \item \textbf{View}: Gestisce la risposta al client, formattando i dati nel formato JSON, si tratta di una vista \textbf{passiva}.
     \item \textbf{Presenter}: Collante tra Model e View, con tutta la business logic di supporto.
 \end{itemize}
@@ -2731,7 +2734,7 @@ Come detto in precedenza, la struttura è basata su \textbf{MVP}.
     \caption{dao.vsdx}
 \end{figure}
 
-Pattern \textbf{DAO} applicato alla persistenza dei log. Dato che il log è stato pensato come file, il pattern DAO viene applicato al filesystem, anche se sarebbe possibile creare un implementazione per database in una futura versione, grazie alla versatilità del pattern DAO.
+Pattern \textbf{DAO} applicato alla persistenza dei log. Dato che il log è stato pensato come file, il pattern DAO viene applicato al filesystem, anche se sarebbe possibile creare un implementazione per un data source differente in una futura versione, grazie alla versatilità del pattern DAO.
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Progettazione/Package/middleware/model/dao/dao_exception.png}
@@ -2749,7 +2752,7 @@ Naturalmente gli oggetti \textbf{DAO} possono lanciare eccezioni, qui si incapsu
     \caption{dao.vsdx}
 \end{figure}
 
-Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default. Le \textbf{transazioni} sono gestite al'interno delle implementazioni.
+Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default. Le \textbf{transazioni} sono gestite al'interno delle implementazioni, a seconda dei casi d'uso.
 
 %\newpage
 
@@ -2978,7 +2981,7 @@ Il componente \textbf{HTTPSBrokerInterface} rappresenta una interfaccia in grado
     \caption{model.vsdx}
 \end{figure}
 
-Il modello di dominio è uguale a quello del midde-ware, ma cambia il metodo di reperire le informazioni: nel middle-ware le informazioni vengono ottenute attraverso interrogazioni del database, mentre nel front-end, le informazioni vengono ottenute tramite interrogazioni del middle-ware. Serve quindi progettare il meccanismo di accesso al middle-ware.
+Il modello di dominio è uguale a quello del midde-ware, ma cambia il metodo di reperire le informazioni: nel middle-ware le informazioni vengono ottenute attraverso interrogazioni del database, mentre nel front-end, le informazioni vengono ottenute tramite interrogazioni del middle-ware. Serve quindi progettare il meccanismo di accesso al middle-ware. Ovviamente è possibile che le informazioni ottenute dal servizio \textbf{non siano complete}: ci si limita alle sole informazioni richieste dal comando inviato.
 
 \newpage
 
@@ -3563,7 +3566,7 @@ Nella fase di implementazione abbiamo deciso di implementare lo strato di persis
     \item Per replicare il servizio in locale, l'amministratore di sistema esegue un backup del database mediante l'interfaccia fornita dal servizio di hosting, e utilizzando il software XAMPP replica il servizio. I client dovranno aggiungere il servizio tramite il broker.
     \item Si è deciso di ampliare le statistiche, catalogandole per tipologia di prevendita.
     \item Nel client Android abbiamo modificato alcuni ViewModel del front-end, rendendoli osservatori dei form delle viste, per rendere la validazione dell'input in tempo reale.
-    
+    \item Le connessioni al database sono sincronizzate con il fuso orario dello strato middle-ware e dati temporali ricevuti e inviati ai client sono formattati con standard \textbf{ISO8601}: così facendo, si rende l'applicativo utilizzabile in un contesto globale.
 \end{itemize}
 
 \subsection{Collaudo}
