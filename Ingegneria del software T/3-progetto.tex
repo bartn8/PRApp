@@ -2655,7 +2655,7 @@ Abbiamo optato per una architettura client/server a tre livelli: un database, un
 Abbiamo deciso di adottare un database relazionale indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middleware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middleware, favorendo la disponiblità del servizio (\hyperlink{R25NF}{R25NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R26NF}{R26NF}) nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.\\La persistenza dei log viene gestita attraverso file.
 
 
-\subsubsection{Livello middleware}
+\subsubsection{Livello Middleware}
 Le funzionalità di questo livello sono pensate per facilitare lo sviluppo multipiattaforma centralizzato, sfruttando una comunicazione con la controparte front-end. Si tratta dell'unico livello che può interagire con il livello di persistenza, e nel caso ci siano vincoli non direttamente implementabili nel progetto del database, saranno implentati qui, senza il rischio che una terza applicazione che utilizza il database, non implementi tali vincoli, rendendo intrinsecamente più semplice la struttura del front-end.
 
 \subsubsection{Livello Front-end}
