@@ -58,15 +58,13 @@ numberstyle = \tiny,
 
 \section{Abstract}
 
-Il progetto riguarda la creazione di un applicativo software gestionale per prevendite elettroniche.\\Abbiamo pensato il software per un gruppo di amici che organizzano feste, con obiettivi cardine l'abbattimento di costi, l'ottimizzazione dell'entrata dei partecipanti all'evento e una semplificazione dei conti di bilancio.\\L'idea di fondo è di utilizzare, come sostitutivo alla prevendita cartacea, un documento digitale in grado di far entrare il cliente dopo relativo check all'entrata.\\Il risparmio economico ottenuto è ovviamente importante in confronto alla vendita tradizionale. Tuttavia bisogna tenere in conto dei problemi tecnologici che si possono verificare durante la vendita e l'entrata: problemi di connessione Internet, incompatibilità dei dispositivi dei clienti, training del personale addetto alle entrate, eccetera.\\Viene gestito oltre alle prevendite e relatvi clienti, anche l'organizzazione e i vari membri dell'organizzazione, con divisione dei ruoli.\\Per facilitare i conti di bilancio è disponibile una sezione in cui è possibile ricavare statistiche sull'andamento dell'evento.
+Il progetto riguarda la creazione di un applicativo software gestionale per prevendite elettroniche.\\Abbiamo pensato il software per un gruppo di amici che organizzano feste, con obiettivi cardine l'abbattimento di costi, l'ottimizzazione dell'entrata dei partecipanti all'evento e una semplificazione dei conti di bilancio.\\L'idea di fondo è di utilizzare, come sostitutivo alla prevendita cartacea, un documento digitale in grado di far entrare il cliente dopo relativo check all'entrata.\\Il risparmio economico ottenuto è ovviamente importante in confronto alla vendita tradizionale. Tuttavia bisogna tenere in conto dei problemi tecnologici che si possono verificare durante la vendita e l'entrata: problemi di connessione Internet, incompatibilità dei dispositivi dei clienti, training del personale addetto alle entrate, eccetera.\\Vengono gestiti, oltre alle prevendite e i relativi clienti, anche la pianificazione dell'evento e i vari membri organizzativi, con relativa suddivisione dei ruoli.\\Per facilitare i conti di bilancio è disponibile una sezione in cui è possibile ricavare statistiche sull'andamento dell'evento.
 
 \newpage
 
 \section{Analisi dei requisiti}
 
 \subsection{Requisiti del sistema}
-
-%TODO: aggiornare link
 
 \subsubsection{Requesiti Funzionali}
 
@@ -92,52 +90,48 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 	%Accesso e creazione di uno staff
 	\item \hypertarget{R10F}{R10F} - Ogni utente registrato nel gestionale può diventare membro di uno o più staff. 
 	
-	%TODO: spostare in non funzionali
-	
-	\item \hypertarget{R11F}{R11F} - Quando un utente crea uno staff ne diventa membro e amministratore.
-	
 	%Timbratura (Cassiere)
-	\item \hypertarget{R12F}{R12F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
+	\item \hypertarget{R11F}{R11F} - La timbratura di una prevendita valida permette al cliente di entrare all'evento, ovviamente lo staff potrà effettuare ulteriori controlli non previsti dal sistema e decidere di far entrare un cliente.
 	
-	\item \hypertarget{R13F}{R13F} - Si prevede la generazione di un documento elettronico da consegnare al cliente, associato alla prevendita, per il riconoscimento all'entrata dell'evento.
+	\item \hypertarget{R12F}{R12F} - Si prevede la generazione di un documento elettronico da consegnare al cliente, associato alla prevendita, per il riconoscimento all'entrata dell'evento.
 	
 	%Non viene specificata la modalità di consegna: URL, file immagine file testo etc.
-	\item \hypertarget{R14F}{R14F} - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
+	\item \hypertarget{R13F}{R13F} - La vendita di una prevendita elettronica consiste nella consegna al cliente di un documento digitale di qualche forma, associato alla prevendita elettronica venduta.
 	
 	%Gestione staff (Amministratore)
-	\item \hypertarget{R15F/NF}{R15F/NF} - Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
-	\item \hypertarget{R16F}{R16F} - Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
+	\item \hypertarget{R14F/NF}{R14F/NF} - Un amministratore può concedere/revocare i ruoli a qualsiasi membro dello staff. Unico vincolo è che rimanga almeno un amministratore.
+	\item \hypertarget{R15F}{R15F} - Possibilità di cambiare il codice di accesso dello staff da parte di un amministratore.
 	   
-	\item \hypertarget{R17F}{R17F} - Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
+	\item \hypertarget{R16F}{R16F} - Per gestione degli eventi di uno staff si intende la possibilità di vedere gli staff di un evento, di creane uno nuovo e di poter modificare un evento dello staff.
 		
-	\item \hypertarget{R18F}{R18F} - La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
+	\item \hypertarget{R17F}{R17F} - La gestione delle tipologie di prevedita di un evento indica l'aggiunta, la modifica e la rimozione delle tipologie di prevendita.
 	
 	%Definizioni
 	%-Eventi
-	\item \hypertarget{R19F}{R19F} - Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
-	\item \hypertarget{R20F}{R20F} - Un evento può essere annullato, anche se ci sono prevendite vendute.
+	\item \hypertarget{R18F}{R18F} - Un evento è composto da un nome, una descrizione, un periodo temporale di svolgimento e un luogo. 
+	\item \hypertarget{R19F}{R19F} - Un evento può essere annullato, anche se ci sono prevendite vendute.
 	
 	%Tipologia Prevendita
-	\item \hypertarget{R21F}{R21F} - Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
+	\item \hypertarget{R20F}{R20F} - Una tipologia di prevendita serve ad associare alla prevendita un prezzo, una descrizione e un periodo di vendita a tutte le prevendite con la stessa tipologia.
 
 	%-Prevendite
-	\item \hypertarget{R22F}{R22F} - Una prevendita può essere annullata e/o rimborsata. 
+	\item \hypertarget{R21F}{R21F} - Una prevendita può essere annullata e/o rimborsata. 
 	
 	%-Statistiche
-	\item \hypertarget{R23F}{R23F} - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
+	\item \hypertarget{R22F}{R22F} - Le statistiche di un membro sono suddivise per ruolo coperto all'interno dello staff: cassiere o PR.
 	
-	\item \hypertarget{R24F}{R24F} - Ogni prevedita è nominativa.
+	\item \hypertarget{R23F}{R23F} - Ogni prevedita è nominativa.
 	
 	%Requisiti rimossi o spostati nell'analisi del rischio ----------------------------------------
 	
 	%Si deduce dalla precedente
 	%\item Il ruolo di amministratore non prevede statistiche personali.
-	%\item \hypertarget{R26F}{R26F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
+	%\item \hypertarget{R25F}{R25F} - Lo sblocco dell'utente è a carico dell'amministratore di sistema.
 	%--Requisiti di scoperta alle intrusioni
 	%\item \hypertarget{R10F}{R10F} - Utilizzo di log per monitorare operazioni critiche.
 
 	%--Requisiti di riservatezza
-	%\item \hypertarget{R11F}{R11F} - Le password devono essere salvate in modo sicuro.
+	%\item \hypertarget{R21NFbis}{R21NFbis} - Le password devono essere salvate in modo sicuro.
 	
 	%Non vuol dire cifrato! Basta un controllo agli accessi.
 	%Se salvi in DB ricorda di indicizzare.
@@ -184,6 +178,8 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 	\item \hypertarget{R20NF}{R20NF} - La timbratura può essere fatta solo una volta.
 	
 	\item \hypertarget{R21NF}{R21NF} - L'interfaccia utente deve garantire velocità d'utilizzo, soprattutto per il cassiere.
+	
+	\item \hypertarget{R21NFbis}{R21NFbis} - Quando un utente crea uno staff ne diventa membro e amministratore.
 	
 	%Requisiti rimossi o spostati nell'analisi del rischio ----------------------------------------
 	
@@ -303,9 +299,6 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 %    \includegraphics[scale=0.9]{use_cases.png}
 %\end{center}
 
-%TODO: confronto nuovo vecchio
-%TODO: ridurre ancora lo schema
-
 \begin{figure}[H]
     \includegraphics[scale=1]{Analisi/Cases/use_cases.png}
     \centering
@@ -313,8 +306,6 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 \end{figure}
 
 L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i casi d'uso.\\Abbiamo differenziato i casi d'uso delle statistiche perché si tratta di concetti diversi.
-
-%TODO: aggiornare scenari tabelle flusso etc.
 
 \newpage
 
@@ -962,7 +953,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 								 & \quad 1. Notifica all'utente. \\
 								 & \quad 2. Ritorno alla schermata precedente. \\
 	\hline
-	\textbf{Requisiti non funzionali} & \hyperlink{R15F/NF}{R15F/NF} \\
+	\textbf{Requisiti non funzionali} & \hyperlink{R14F/NF}{R14F/NF} \\
 	\hline
 	\textbf{Punti aperti} & \\
 	\hline
@@ -991,19 +982,19 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
          \hline
          \hline
          \multirow{2}{*}{Sistema gestionale} & Alto & Alta \\
-                            & Registra tutte le prevendite di uno staff. Critico dal punto di vista della sicurezza & Perdita d'immagine del software e degli staff, spesa in tempo per il ripristino del backup, se il sistema fallisce è necessario acquistare prevendite fisiche. Possibili perdite finanziare \\
+                            & Registra tutte le prevendite di uno staff. Critico dal punto di vista della sicurezza. & Perdita d'immagine del software e degli staff, spesa in tempo per il ripristino del backup, se il sistema fallisce è necessario acquistare prevendite fisiche. Possibili perdite finanziare. \\
          \hline
          \multirow{2}{*}{Informazioni su utenti} & Medio-Alto & Alta\\
-                            & Informazioni relative agli utenti del sistema, anche le credenziali, le quali potrebbero permettere l'accesso ai dati dello staff e relativi clienti & Perdita d'immagine del software, un membro con ruolo amministrativo potrebbe compromettere temporaneamente uno staff fino a ripristino backup. Possibile perdita economica dovuta all'aggiunta di prevendite.\\
+                            & Informazioni relative agli utenti del sistema, anche le credenziali, le quali potrebbero permettere l'accesso ai dati dello staff e relativi clienti. & Perdita d'immagine del software, un membro con ruolo amministrativo potrebbe compromettere temporaneamente uno staff fino a ripristino backup. Possibile perdita economica dovuta all'aggiunta di prevendite.\\
          \hline
          \multirow{2}{*}{Informazioni su prevendite} & Alto & Alta \\
-                                    & Rappresentano i guadagni per uno staff, nonché il biglietto d'ingresso di un cliente & Perdita d'immagine del software: lo staff ha perso informazioni riguardo i ricavi, perdita d'immagine dello staff: il cliente non riesce a entrare. Possibile perdita economica se vengono aggiunte prevendite non dovute.\\
+                                    & Rappresentano i guadagni per uno staff, nonché il biglietto d'ingresso di un cliente. & Perdita d'immagine del software: lo staff ha perso informazioni riguardo i ricavi. Perdita d'immagine dello staff: il cliente non riesce a entrare. Possibile perdita economica se vengono aggiunte prevendite non dovute.\\
          \hline
          \multirow{2}{*}{Informazioni su clienti} & Medio & Bassa \\
-                                  & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R24F}{R24F}) & \\
+                                  & Le informazioni sono ridotte al solo nome e cognome (\hyperlink{R23F}{R23F}). & \\
          \hline
          \multirow{2}{*}{\shortstack[l]{Informazioni su\\ amministratori di sistema}} & Alto &  Alta \\
-                                                    & Ha poteri sul sistema gestionale &  Possibilità di perdere informazioni di sistema. Perdita d'immagine del software.\\ 
+                                                    & Ha poteri sul sistema gestionale. &  Possibilità di perdere informazioni di sistema. Perdita d'immagine del software.\\ 
          \hline
     \end{tabularx}
 \end{center}
@@ -1017,20 +1008,20 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
         \textbf{Minaccia} & \textbf{Probabilità} & \textbf{Controllo} & \textbf{Fattibilità}  \\
         \hline
         \hline
-        Furto d’identità (utente) & Media-Bassa. Username e password scelti dall'amministratore di sistema & Log degli accessi, blocco dell'utente & Costo minimo\\
+        Furto d’identità (utente) & Media-Bassa. Username e password scelti dall'amministratore di sistema. & Log degli accessi, blocco dell'utente. & Costo minimo\\
         \hline
         Furto d’identità (amministratore di sistema) & Bassa & Log degli accessi & Costo minimo\\
         \hline
-        Alterazione dei dati nella comunicazione & Medio-Alta. Molte comunicazione avvengono nel sistema distribuito client/server. & Uso di canale sicuro & Costo basso anche se si utilizza un mix tra chiave simmetrica e asimmetrica\\
+        Alterazione dei dati nella comunicazione & Medio-Alta. Molte comunicazione avvengono nel sistema distribuito client/server. & Uso di canale sicuro & Costo basso anche se si utilizza un mix tra chiave simmetrica e asimmetrica.\\
         Man in the Middle &  &  & \\
         \hline
         %DoS/DDoS & Bassa & Sistema locale durante l'evento (\hyperlink{R20NF}{R20NF}) & Costo medio, richiesta di risorse hardware portatili\\
-        DoS/DDoS & Bassa & Sistema locale durante l'evento & Costo medio, richiesta di risorse hardware portatili\\
+        DoS/DDoS & Bassa & Sistema locale durante l'evento & Costo medio, richiesta di risorse hardware portatili.\\
         \hline
         %Contraffazione della prevendita & Alta & Sistema anti-contraffazione (\hyperlink{R21NF}{R21NF}), prevendita nominativa & Costo minimo\\
         Contraffazione della prevendita & Media & Sistema anti-contraffazione, prevendita nominativa & Costo minimo\\
         \hline
-        Furto della prevendita & Media & prevendita nominativa & Costo minimo\\
+        Furto della prevendita & Media & Prevendita nominativa & Costo minimo\\
         \hline
     \end{tabulary}
 \end{center}
@@ -1055,7 +1046,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
                                       & \quad\quad 2. Memorizzazione della chiave privata\\
                                       & L'utilizzo di cifrature standard non recenti potrebbero causare vulnerabilià ulteriori.\\
         \hline
-        \multirow{3}{*}{Autenticazione tramite credenziali} & \textbf{Social engineering}: un utente potrebbe essere vittima di un attacco di social engineering, volto al furto delle credenziali \\
+        \multirow{3}{*}{Autenticazione tramite credenziali} & \textbf{Social engineering}: un utente potrebbe essere vittima di un attacco di social engineering, volto al furto delle credenziali. \\
                                            & \textbf{Password cracking}: attraverso metodologie di cracking delle password, l'attaccante risale alla password di un utente o amministratore di sistema. \\
                                            & \textbf{Negligenza}: L'utente volontariamente o per sbaglio fornisce le credenziali a terzi. \\
         \hline
@@ -1077,8 +1068,6 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 %    \includegraphics[scale=0.73]{security_use_cases_misuse_cases.png}
 %\end{center}
 
-%TODO: aggiorna
-
 \begin{figure}[H]
     \includegraphics[scale=0.9]{Analisi/Cases/security_use_cases_misuse_cases.png}
     \centering
@@ -1098,7 +1087,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
     \hline
     \textbf{Descrizione} & \mc{2}{I dati persistenti devono essere protetti.}\\
     \hline
-    \textbf{Rischi alla sicurezza} & \mc{2}{Un utente malintenzionato potrebbe modificare o compromettere i dati relativi al software gestionale, come i gli utenti registrati o le prevendite di un evento.}\\
+    \textbf{Rischi alla sicurezza} & \mc{2}{Un utente malintenzionato potrebbe modificare o compromettere i dati relativi al software gestionale, come gli utenti registrati o le prevendite di un evento.}\\
     \hline
     \textbf{Precondizioni} & \mc{2}{ 1. Il sistema è già stato utilizzato dall'amministratore di sistema per la registrazione degli utenti e/o uno staff ha già registrato delle prevendite per un evento.}\\
     & \mc{2}{2. L'attaccante ha i mezzi necessari per tentare di modificare i dati persistenti.}\\
@@ -1107,17 +1096,17 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
     \hline
     \textbf{Scenario principale} & \textbf{Sistema} & \textbf{Attaccante}\\
     \hline
-    & & L'attaccante cerca di modificare dati persistenti del sistema gestionale \\
+    & & L'attaccante cerca di modificare dati persistenti del sistema gestionale. \\
     \cline{2-3}
     & Il sistema blocca l'attacco e notifica l'amministratore di sistema.  &  \\
     \hline
     \textbf{Scenario di attacco avvenuto con successo} & \textbf{Sistema} & \textbf{Attaccante}\\
     \hline
-    & & L'attaccante riesce ad accedere/modificare dati persistenti\\
+    & & L'attaccante riesce ad accedere/modificare dati persistenti.\\
     \cline{2-3}
-    & Il sistema registra nei log le modifiche effettuate & \\
+    & Il sistema registra nei log le modifiche effettuate. & \\
     \cline{2-3}
-    & L'amministratore di sistema nota i log anomali e opera di conseguenza & \\
+    & L'amministratore di sistema nota i log anomali e opera di conseguenza. & \\
     \hline
 \end{tabularx}
 \end{center}
@@ -1212,7 +1201,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
     \hline
     \textbf{Misuse case} & \mc{2}{Furto credenziali}\\
     \hline
-    \textbf{Descrizione} & \mc{2}{Il sistema deve proteggere l'utente da intrusioni di malintenzionati}\\
+    \textbf{Descrizione} & \mc{2}{Il sistema deve proteggere l'utente da intrusioni di malintenzionati.}\\
     \hline
     \textbf{Rischi alla sicurezza} & \mc{2}{Un malintenzionato ruba i dati di identificazione e autenticazione ad un utente.}\\
     \hline
@@ -1229,7 +1218,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
     \hline
     \textbf{Scenario di attacco avvenuto con successo} & \textbf{Sistema} & \textbf{Attaccante}\\
     \hline
-    & & L'attaccante riesce a scoprire la password \\
+    & & L'attaccante riesce a scoprire la password. \\
     \cline{2-3}
     & Il sistema fornisce l'accesso al sistema. & \\
     \cline{2-3}
@@ -1278,7 +1267,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
     \hline
     \textbf{Misuse case} & \mc{2}{DDoS/DoS}\\
     \hline
-    \textbf{Descrizione} & \mc{2}{Il sistema deve cercare di proteggersi da attacchi DDoS/DoS}\\
+    \textbf{Descrizione} & \mc{2}{Il sistema deve cercare di proteggersi da attacchi DDoS/DoS.}\\
     \hline
     \textbf{Rischi alla sicurezza} & \mc{2}{Un malintenzionato vuole impedire l'accesso al sistema durante un evento.}\\
     \hline
@@ -1329,9 +1318,9 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 \paragraph{REQUISITI FUNZIONALI}
 
 \begin{itemize}
-    \item \hypertarget{R25F}{R25F} - Creare un sistema di log per il tracciamento delle operazioni automatico.
-    \item \hypertarget{R26F}{R26F} - L'amministratore di sistema deve avere il pieno controllo dei log.
-    \item \hypertarget{R27F}{R27F} - Creare un sistema per il bloccaggio dell'account dopo vari tentativi. L'amministratore di sistema ha l'autorizzazione a sbloccare l'account.
+    \item \hypertarget{R24F}{R24F} - Creare un sistema di log per il tracciamento delle operazioni automatico.
+    \item \hypertarget{R25F}{R25F} - L'amministratore di sistema deve avere il pieno controllo dei log.
+    \item \hypertarget{R26F}{R26F} - Creare un sistema per il bloccaggio dell'account dopo vari tentativi. L'amministratore di sistema ha l'autorizzazione a sbloccare l'account.
 \end{itemize}
 
 \paragraph{REQUISITI NON FUNZIONALI}
@@ -1366,7 +1355,7 @@ Dall’analisi del rischio sono emersi altri requisiti riguardanti la protezione
 		\hline
 		Sblocco dell'utente & Operazione eseguita da un amministratore di sistema, per il ripristino di un utente con autenticazione bloccata. & Sblocco dell'account utente\\
 		\hline
-		Verifica Contraffazione & Sistema volto a verificare l'autenticità di un documento digitale & \\
+		Verifica Contraffazione & Sistema volto a verificare l'autenticità di un documento digitale. & \\
 		\hline
     \end{tabulary}
   \end{center}
@@ -1464,15 +1453,15 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
     	\textbf{Titolo} & Login \\
     	\hline
-    	\textbf{Descrizione} & Autenticazione nel software gestionale \\
+    	\textbf{Descrizione} & Autenticazione nel software gestionale. \\
     	\hline
     	\textbf{Attori} & Utente, Amministratore di Sistema \\
     	\hline
     	\textbf{Relazioni} &  \\
     	\hline
-    	\textbf{Precondizioni} & L'utente deve essere registrato nel sistema \\
+    	\textbf{Precondizioni} & L'utente deve essere registrato nel sistema. \\
     	\hline
-    	\textbf{Postcondizioni} & L'utente è autenticato nel sistema \\
+    	\textbf{Postcondizioni} & L'utente è autenticato nel sistema. \\
     	\hline
     	\textbf{Scenario principale} & 1. Impostazione di una schermata per l'inserimento di username e password. \\
     								 & 2. L'utente inserisce i dati del proprio account. \\
@@ -1526,17 +1515,17 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         Gestione Amministrazione & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso & \\
         \hline
-        Gestione log & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R25F}{R25F}, \hyperlink{R26F}{R26F}\\
+        Gestione log & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R24F}{R24F}, \hyperlink{R25F}{R25F}\\
         \hline
-        Scrittura log & Memorizzazione di dati & Semplice & \hyperlink{R25F}{R25F}\\
+        Scrittura log & Memorizzazione di dati & Semplice & \hyperlink{R24F}{R24F}\\
         \hline
-        Sblocco utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R27F}{R27F}\\
+        Sblocco utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R26F}{R26F}\\
         \hline
         Registrazione utente & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1F}{R1F}, \hyperlink{R2F}{R2F}, \hyperlink{R4F}{R4F} \\
         \hline
         Gestione utente & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso & \\
         \hline
-        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1NF}{R1NF}, \hyperlink{R3F}{R3F}, \hyperlink{R11F}{R11F}\\
+        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1NF}{R1NF}, \hyperlink{R3F}{R3F}, \hyperlink{R21NFbis}{R21NFbis}\\
         \hline
         Accedi staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R1NF}{R1NF}, \hyperlink{R3F}{R3F}, \hyperlink{R10F}{R10F} \\
         \hline
@@ -1545,21 +1534,21 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         %Gestione staff & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R6F}{R6F}, \hyperlink{R9F}{R9F},  \\
         Gestione amministrazione staff & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso &  \\
         \hline
-        Visualizzazione statistiche personali & Lettura dati, interazione con l'esterno & Semplice &  \hyperlink{R23F}{R23F} \\
+        Visualizzazione statistiche personali & Lettura dati, interazione con l'esterno & Semplice &  \hyperlink{R22F}{R22F} \\
         \hline
-        Gestione vendita prevendita & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R8F}{R8F}, \hyperlink{R13F}{R13F}, \hyperlink{R14F}{R14F}, \hyperlink{R22F}{R22F}, \hyperlink{R24F}{R24F} \\
+        Gestione vendita prevendita & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R8F}{R8F}, \hyperlink{R12F}{R12F}, \hyperlink{R13F}{R13F}, \hyperlink{R21F}{R21F}, \hyperlink{R23F}{R23F} \\
         \hline
-        Gestione entrata & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R12F}{R12F}, \hyperlink{R13F}{R13F} \\
+        Gestione entrata & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R7F}{R7F}, \hyperlink{R11F}{R11F}, \hyperlink{R12F}{R12F} \\
         \hline
-        Gestione membri & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R6F}{R6F}, \hyperlink{R9F}{R9F}, \hyperlink{R15F/NF}{R15F/NF} \\
+        Gestione membri & Gestione dei dati, interazione con l'esterno & Complesso & \hyperlink{R6F}{R6F}, \hyperlink{R9F}{R9F}, \hyperlink{R14F/NF}{R14F/NF} \\
         \hline
-        Cambia codice accesso & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R16F}{R16F}  \\
+        Cambia codice accesso & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R15F}{R15F}  \\
         \hline
         Visualizzazione statistiche & Lettura dati, interazione con l'esterno & Semplice & \hyperlink{R9F}{R9F}  \\
         \hline
-        Gestione eventi & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R9F}{R9F}, \hyperlink{R17F}{R17F}, \hyperlink{R19F}{R19F}, \hyperlink{R20F}{R20F} \\
+        Gestione eventi & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R9F}{R9F}, \hyperlink{R16F}{R16F}, \hyperlink{R18F}{R18F}, \hyperlink{R19F}{R19F} \\
         \hline
-        Gestione tipologie prevendite & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R9F}{R9F}, \hyperlink{R18F}{R18F}, \hyperlink{R21F}{R21F} \\
+        Gestione tipologie prevendite & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R9F}{R9F}, \hyperlink{R17F}{R17F}, \hyperlink{R20F}{R20F} \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1571,7 +1560,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Gestione Amministrazione - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1582,7 +1571,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Gestione log  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1605,7 +1594,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Scrittura log  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1622,7 +1611,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Sblocco utente  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1635,7 +1624,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Registrazione utente  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1658,7 +1647,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Gestione Utente - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1671,7 +1660,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Crea staff  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1686,7 +1675,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Accedi staff  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1701,7 +1690,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Cambia password  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1713,10 +1702,10 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \end{tabularx}
 \end{center}
 
-\textbf{Gestione staff  - Tabella Informazioni/Flusso}
+\textbf{Gestione amministrazione staff  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1730,7 +1719,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Visualizzazione statistiche personali  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1751,12 +1740,12 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Gestione vendita prevendita  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Prevendita & Complesso & Medio & Input & \hyperlink{R24F}{R24F}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF}, \hyperlink{R27NF}{R27NF} \\
+        Prevendita & Complesso & Medio & Input & \hyperlink{R23F}{R23F}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF}, \hyperlink{R27NF}{R27NF} \\
         \textbf{Composto da:} & & & & \\
         Nome cliente & Semplice & Medio & Input & \\
         Cognome cliente & Semplice & Medio & Input & \\
@@ -1766,20 +1755,22 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         %Documento digitale & Complesso & Medio & Output & \hyperlink{R12NF}{R12NF}, \hyperlink{R27NF}{R27NF}  \\
         %\hline
+        Evento scelto & Semplice & Medio & Input & \\
+        \hline
     \end{tabularx}
 \end{center}
 
 \textbf{Gestione entrata  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
         %Documento digitale & Complesso & Medio & Input & \hyperlink{R12NF}{R12NF}, \hyperlink{R27NF}{R27NF}  \\
         %\hline
-        Prevendita & Complesso & Medio & Input & \hyperlink{R24F}{R24F}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF}, \hyperlink{R27NF}{R27NF} \\
+        Prevendita & Complesso & Medio & Input & \hyperlink{R23F}{R23F}, \hyperlink{R9NF}{R9NF}, \hyperlink{R10NF}{R10NF}, \hyperlink{R14NF}{R14NF}, \hyperlink{R15NF}{R15NF}, \hyperlink{R17NF}{R17NF}, \hyperlink{R19NF}{R19NF}, \hyperlink{R27NF}{R27NF} \\
         \textbf{Composto da:} & & & & \\
         Nome cliente & Semplice & Medio & Input & \\
         Cognome cliente & Semplice & Medio & Input & \\
@@ -1787,13 +1778,15 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         Tipologia prevendita associata & Medio & Input & \\
         PR Associato & Medio & Input & \\
         \hline
+        Evento scelto & Semplice & Medio & Input & \\
+        \hline
     \end{tabularx}
 \end{center}
 
 \textbf{Gestione membri  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1803,6 +1796,8 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         Membro associato & Semplice & Alto & Input & \\
         Ruoli & Semplice & Alto & Input & \\
         \hline
+        Evento scelto & Semplice & Medio & Input & \\
+        \hline
     \end{tabularx}
 \end{center}
 
@@ -1810,7 +1805,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Cambia codice accesso  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1827,7 +1822,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Visualizzazione statistiche  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -1852,6 +1847,8 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         Membro associato & Semplice & Basso & Output & \\
         Guadagni totali & Semplice & Basso & Output & \\
         \hline
+        Evento scelto & Semplice & Medio & Input & \\
+        \hline
     \end{tabularx}
 \end{center}
 
@@ -1860,17 +1857,19 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Gestione eventi  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Evento & Complesso & Medio & Input & \hyperlink{R19F}{R19F}, \hyperlink{R20F}{R20F} \\
+        Evento & Complesso & Medio & Input & \hyperlink{R18F}{R18F}, \hyperlink{R19F}{R19F} \\
         \textbf{Composto da:} & & & & \\
         Nome & Semplice & Medio & Input & \\
         Descrizione & Semplice & Medio & Input & \\
         Periodo temporale & Semplice & Medio & Input & \\
         Luogo & Semplice & Medio & Input & \\
+        \hline
+        Evento scelto & Semplice & Medio & Input & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1878,17 +1877,19 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Gestione tipologie prevendite  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
         \hline
-        Tipologia prevendita & Complesso & Medio & Input & \hyperlink{R21F}{R21F} \\
+        Tipologia prevendita & Complesso & Medio & Input & \hyperlink{R20F}{R20F} \\
         \textbf{Composto da:} & & & & \\
         Nome & Semplice & Medio & Input & \\
         Descrizione & Semplice & Medio & Input & \\
         Periodo temporale & Semplice & Medio & Input & \\
         Prezzo & Semplice & Medio & Input & \\
+        \hline
+        Evento scelto & Semplice & Medio & Input & \\
         \hline
     \end{tabularx}
 \end{center}
@@ -1896,7 +1897,7 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 \textbf{Autenticazione  - Tabella Informazioni/Flusso}
 
 \begin{center}
-    \begin{tabularx}{1\textwidth}{|X|X|X|X|X|}
+    \begin{tabularx}{1\textwidth}{|X|l|X|X|X|}
         \hline
         \textbf{Informazione} &\textbf{Tipo} & \textbf{Livello protezione / Privacy} & \textbf{Input/Output} & \textbf{Vincoli}\\
         \hline
@@ -2038,17 +2039,17 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
     \textbf{Ruolo} & \textbf{Responsabilità} & \mc{2}{\textbf{Maschere}} & \textbf{Riservatezza} & \textbf{Numerosità}\\
     \hline
     \hline
-    Utente & Può creare uno staff, e accedere ad altri staff. & \mc{2}{View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password} & Alto grado di riservatezza & Il numero può essere gestito da un amministratore di sistema, al più è limitato dalle risorse del sistema \\ 
+    Utente & Può creare uno staff, e accedere ad altri staff. & \mc{2}{View Autenticazione, Home Gestione utente, View Crea staff, View Accedi staff, View Cambia password} & Alto grado di riservatezza & Il numero può essere gestito da un amministratore di sistema, al più è limitato dalle risorse del sistema. \\ 
     \hline
-    Amministratore di sistema & Gestisce il log, lo sblocco di utenti bloccati e la registrazione di un nuovo utente & \mc{2}{View Autenticazione, Home Gestione Amministrazione, Home gestione log, View Aggiungi log, View Leggi Log, View Sblocco utente, View Registrazione utente} & Massimo grado di riservatezza & Per ogni installazione software è sufficiente un amministratore di sistema\\
+    Amministratore di sistema & Gestisce il log, lo sblocco di utenti bloccati e la registrazione di un nuovo utente. & \mc{2}{View Autenticazione, Home Gestione Amministrazione, Home gestione log, View Aggiungi log, View Leggi Log, View Sblocco utente, View Registrazione utente} & Massimo grado di riservatezza & Per ogni installazione software è sufficiente un amministratore di sistema.\\
     \hline
-    Membro di uno staff & Può ricavare informazioni sullo staff, può leggere le statistiche ad esso attribuite. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema \\
+    Membro di uno staff & Può ricavare informazioni sullo staff, può leggere le statistiche ad esso attribuite. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema. \\
     \hline
-    Cassiere di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce le entrate di un evento. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione entrata, View Timbra entrata, View lista entrate} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    Cassiere di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce le entrate di un evento. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione entrata, View Timbra entrata, View lista entrate} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema.\\
     \hline
-    PR di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce la vendita di prevendite & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione vendita prevendita, View Aggiungi prevendita, View Lista prevendite, View Annulla prevendita} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    PR di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce la vendita di prevendite. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione vendita prevendita, View Aggiungi prevendita, View Lista prevendite, View Annulla prevendita} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema.\\
     \hline
-    Amministratore di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce lo staff & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione membri, View lista membri, View Modifica ruoli membro, View Rimuovi membro, View Cambia codice di accesso, View Visualizzazione statistiche, Home Gestione eventi, View Aggiungi evento, View lista eventi, View Modifica evento, View Annulla evento, Home gestione tipologie prevendite, View Aggiungi tipologia prevendita, View lista tipologie prevendite, View modifica tipologia prevendita, View elimina tipologia prevendita} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema\\
+    Amministratore di uno staff & Può effettuare tutte le operazioni di un membro e in più gestisce lo staff. & \mc{2}{Home gestione staff, View Visualizzazione statistiche personali, Home Gestione membri, View lista membri, View Modifica ruoli membro, View Rimuovi membro, View Cambia codice di accesso, View Visualizzazione statistiche, Home Gestione eventi, View Aggiungi evento, View lista eventi, View Modifica evento, View Annulla evento, Home gestione tipologie prevendite, View Aggiungi tipologia prevendita, View lista tipologie prevendite, View modifica tipologia prevendita, View elimina tipologia prevendita} & Alto grado di riservatezza & Numero massimo limitato dalle risorse del sistema.\\
     \hline
     \end{tabularx}
 \end{center}
@@ -2355,11 +2356,9 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
 
 Analizzando il vocabolario si evidenzia la differenza tra utente normale e amministratore di sistema, e i vari ruoli di un membro, che possono essere cassiere, pr o amministratore.\\Dall'analisi del vocabolario, rivisto dopo l'analisi di sicurezza, si evidenzia anche il log, con i livelli di importanza: basso, medio, alto.\\\textbf{Qui sotto il modello del dominio:}\\
 
-%TODO: Rivedere Associazioni dirette.
-%TODO: Chiedere se la separazione amministratore va bene
 %Chiedere se le molteplicità cambiano nella progettazione: Solo se c'è differenza di navigabilità
 
-%TODO: username password messe qui ma in progettazione tolte
+%username password messe qui ma in progettazione tolte
 
 %\begin{center}
 %    \includegraphics[scale=0.68]{modello_dominio.png}
@@ -2371,7 +2370,7 @@ Analizzando il vocabolario si evidenzia la differenza tra utente normale e ammin
     \caption{modello\_dominio.vsdx}
 \end{figure}
 
-Le credenziali dovranno essere gestite in maniera sicura, nella fase di progettazione. L'aggiunta del \textbf{telefono} alle entità Utente e AmministratoreDiSistema, garantisce flessibilità per una futura implementazione \textbf{OTP}.
+Le credenziali dovranno essere gestite in maniera sicura, nella fase di progettazione. L'aggiunta del \textbf{telefono} alle entità Utente e AmministratoreDiSistema garantisce flessibilità per una futura implementazione \textbf{OTP}.
 
 \newpage
 
@@ -2452,13 +2451,13 @@ Le interfacce sono molte, visto le operazioni effettuabili nel sistema gestional
     \caption{diagramma\_classi\_autenticazione.vsdx}
 \end{figure}
 
-\textbf{Autenticazione Controller} gestisce la sessione di un utente, permette di tenere traccia anche del contesto attuale dell'utente. Per esempio nella fase progettuali si potrebbe sfruttare per tenere traccia dello staff e dell'evento in uso dall'utente, semplificando la presentazione.
+\textbf{Autenticazione Controller} gestisce la sessione di un utente; permette di tenere traccia anche del contesto attuale dell'utente. Per esempio, nella fase progettuale si potrebbe sfruttare per tenere traccia dello staff e dell'evento in uso dall'utente, semplificando la presentazione.
 
 \newpage
 
 \subsubsection{Interazione}
 
-Saranno riportati solo i diagrammi di sequenza ritenuti principali per il sistema di gestione prevendite
+Saranno riportati solo i diagrammi di sequenza ritenuti principali per il sistema di gestione prevendite.
 
 \textbf{Diagramma di sequenza: Autenticazione con successo}
 
@@ -2468,7 +2467,7 @@ Saranno riportati solo i diagrammi di sequenza ritenuti principali per il sistem
     \caption{diagramma\_sequenza\_autenticazione.vsdx}
 \end{figure}
 
-Una volta effettuato il logout si richiede di nuovo l'autenticazione tramite \textbf{View Autenticazione}. Effettuato l'accesso, si passa alla schermata di \textbf{Home Gestione Utente} o \textbf{Home Gestione Amministrazione} in caso di amminstratore di sistema.
+Una volta effettuato il logout si richiede di nuovo l'autenticazione tramite \textbf{View Autenticazione}. Effettuato l'accesso, si passa alla schermata di \textbf{Home Gestione Utente} o \textbf{Home Gestione Amministrazione} in caso di amminstratore di sistema. 
 
 \textbf{Diagramma di sequenza: Registrazione utente}
 
@@ -2518,8 +2517,8 @@ Il cassiere \textbf{ripete} l'operazione di timbratura delle prevendite per tutt
 
 Dopo un'attenta analisi, abbiamo deciso di mostrare i diagrammi di stato riguardo un \textbf{evento} ed una \textbf{prevendita}, sempre basandoci sui requisiti.
 
-%R20F - Un evento puo essere annullato, anche se ci sono prevendite vendute.
-%R22F - Una prevendita puo essere annullata e/o rimborsata.
+%R19F - Un evento puo essere annullato, anche se ci sono prevendite vendute.
+%R21F - Una prevendita puo essere annullata e/o rimborsata.
 
 %R9NF - Il periodo di vendita delle prevendite deve essere antecedente il periodo dell’evento.
 %R10NF - Una prevendita annullata e/o rimborsata rimane tale
@@ -2537,7 +2536,7 @@ Dopo un'attenta analisi, abbiamo deciso di mostrare i diagrammi di stato riguard
     \caption{diagramma\_stato\_evento.vsdx}
 \end{figure}
 
-Secondo le specifiche \hyperlink{R20F}{R20F} e \hyperlink{R11NF}{R11NF}, un evento può essere \textbf{annullato}, mentre lo stato \textbf{Concluso} si deduce dal requisito \hyperlink{R19F}{R19F} in quanto un evento ha un periodo di svolgimento.\\
+Secondo le specifiche \hyperlink{R19F}{R19F} e \hyperlink{R11NF}{R11NF}, un evento può essere \textbf{annullato}, mentre lo stato \textbf{Concluso} si deduce dal requisito \hyperlink{R18F}{R18F} in quanto un evento ha un periodo di svolgimento.\\
 
 \textbf{Diagramma di Stato: Prevendita}
 
@@ -2547,13 +2546,13 @@ Secondo le specifiche \hyperlink{R20F}{R20F} e \hyperlink{R11NF}{R11NF}, un even
     \caption{diagramma\_stato\_prevendita.vsdx}
 \end{figure}
 
-Secondo le specifiche \hyperlink{R22F}{R22F} \hyperlink{R10NF}{R10NF} una prevendita può essere \textbf{annullata} e \textbf{rimborsata}, mentre dai requisiti \hyperlink{R13F}{R13F} \hyperlink{R20NF}{R20NF} si deduce lo stato \textbf{Timbrata}, in accordo con il diagramma di sequenza di ingresso evento.
+Secondo le specifiche \hyperlink{R21F}{R21F} \hyperlink{R10NF}{R10NF} una prevendita può essere \textbf{annullata} e \textbf{rimborsata}, mentre dai requisiti \hyperlink{R12F}{R12F} \hyperlink{R20NF}{R20NF} si deduce lo stato \textbf{Timbrata}, in accordo con il diagramma di sequenza di ingresso evento.
 
 \newpage
 
 \subsection{Piano del lavoro}
 
-Il lavoro di gruppo è stato diviso in base alle competenze dei membri del team. Si prevede un team per lo sviluppo del database, uno per una possibile applicazione middleware da interlacciare tra database e applicativo finale. \textbf{Tutti i dettagli nella tabelle sottostanti:}
+Il lavoro di gruppo è stato diviso in base alle competenze dei membri del team. Si prevede un team per lo sviluppo del database e uno per una possibile applicazione middleware da inserire tra database e applicativo finale. \textbf{Tutti i dettagli nella tabelle sottostanti}:
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|}
@@ -2613,7 +2612,7 @@ Dopo una dovuta valutazione, i tempi di rilascio previsti sono i seguenti:
 
 \subsubsection{Sviluppi futuri}
 
-Il committente ha richiesto una flessibilità nell'applicazione per quanto riguarda la \textbf{l'utilizzo di nuove tipologie dei documenti digitali} per andare in contro a nuove tecnologie applicabili. Per esempio attualmente una valida proposta, già discussa con il committente, è l'utilizzo di QR code come documento digitale, non è da escludere che in futuro si possa usare una tecnologia alternativa per migliorare la qualità del servizio. L'introduzione di un numero di telefono per gli utenti e per l'amministratore di sistema, potrebbe permettere l'introduzione di un'\textbf{autenticazione a due fattori} con password \textbf{OTP}.  
+Il committente ha richiesto una flessibilità nell'applicazione per quanto riguarda \textbf{l'utilizzo di nuove tipologie dei documenti digitali}, in modo da andare incontro a nuove tecnologie applicabili. Per esempio una valida proposta, già discussa con il committente, è l'utilizzo di QR code come documento digitale. Non è da escludere che in futuro si possa usare una tecnologia alternativa per migliorare la qualità del servizio. L'introduzione di un numero di telefono per gli utenti e per l'amministratore di sistema, potrebbe permettere l'introduzione di un'\textbf{autenticazione a due fattori} con password \textbf{OTP}.  
 
 \newpage
 
@@ -2646,29 +2645,29 @@ Dall’analisi dei requisiti sono emersi alcuni vincoli non funzionali, tra cui:
     \item Facilità d’utilizzo
 \end{itemize}
 
-L'integrità e la sicurezza dei dati, soprattutto per quanto riguarda la comunicazione, è di fondamentale importanza, soprattutto in vista ad una architettura 3-tier. Purtroppo, dato il basso costo di sviluppo software, è opportuno scegliere soluzione standard esterne al sistema, come l'uso di protocolli di cifratura, come il TLS, il quale viene utilizzato da protocolli più di alto livello come HTTPS, protocollo che abbiamo deciso di utilizzare, dato la facilità d'utilizzo e il supporto vasto. L'avvento di tecnologie di trasmissione di dati moderne, rende più che affordabile l'utilizzo di tecnologia di cifratura. Inoltre l'utilizzo di uno standard, già implementato e testato da terze parti, riduce il rischio di sicurezza dovuto a difetti all'interno del nostro prodotto software.\\Il controllo degli accessi rappresenta una opportuna soluzione per la garantire il sistema a fronte di malintenzionati. L'uso di un controllo delle autorizzazioni favorisce a separare i ruoli e a migliorare la sicurezza, probabilmente perdendo in facilità d'utilizzo.\\La Disponibilità del servizio e la Replicabilità del sistema servono per garantire i requisiti \hyperlink{R25NF}{R25NF} \hyperlink{R26NF}{R26NF}, per contenere un attacco DoS: questi vincoli potrebbero essere in conflitto con la strutturazione di un'architettura client/server, si cerca quindi un trade-off tra disponibilità e architettura.
+L'integrità e la sicurezza dei dati, soprattutto per quanto riguarda la comunicazione, sono di fondamentale importanza, soprattutto in vista di una architettura 3-tier. Purtroppo, dato il basso costo di sviluppo software, è opportuno scegliere soluzioni standard esterne al sistema, come l'uso di protocolli di cifratura come il TLS, il quale viene utilizzato da protocolli più di alto livello come HTTPS, che abbiamo deciso di utilizzare data la facilità d'utilizzo e il vasto supporto. L'avvento di tecnologie di trasmissione di dati moderne rende più che abbordabile l'utilizzo di tecnologia di cifratura. Inoltre l'utilizzo di uno standard già implementato e testato da terze parti riduce il rischio di sicurezza dovuto a difetti all'interno del nostro prodotto software.\\Il controllo degli accessi rappresenta una opportuna soluzione per la garantire il sistema a fronte di malintenzionati. L'uso di un controllo delle autorizzazioni favorisce a separare i ruoli e a migliorare la sicurezza, probabilmente perdendo in facilità d'utilizzo.\\La Disponibilità del servizio e la Replicabilità del sistema servono a garantire i requisiti \hyperlink{R25NF}{R25NF} \hyperlink{R26NF}{R26NF}, per contenere un attacco DoS: questi vincoli potrebbero essere in conflitto con la strutturazione di un'architettura client/server, si cerca quindi un trade-off tra disponibilità e architettura.
 
 
 \subsection{Scelta dell'architettura}
-Abbiamo optato per una architettura client/server a tre livelli: abbiamo il database, un software middle-ware e un applicativo front-end. L'applicazione middle-ware fa da intermediario tra il database e l'applicativo lato cliente. Questa scelta rende facile l'implementazione di applicativi front-end multipiattaforma e specializzati: si potranno quindi più applicativi front-end adatti al lavoro dello specifico utilizzatore finale.
+Abbiamo optato per una architettura client/server a tre livelli: un database, un software middleware e un applicativo front-end. L'applicazione middleware fa da intermediario tra il database e l'applicativo lato cliente. Questa scelta rende facile l'implementazione di applicativi front-end multipiattaforma e specializzati: si potranno avere quindi più applicativi front-end adatti al lavoro dello specifico utilizzatore finale.
 
 \subsubsection{Livello di Persistenza}
-Abbiamo deciso di adottare un database relazionale indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento, si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middle-ware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middle-ware, favorendo la disponiblità del servizio (\hyperlink{R25NF}{R25NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R26NF}{R26NF}), nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.\\La persistenza dei log viene gestita attraverso file.
+Abbiamo deciso di adottare un database relazionale indipendente per la persistenza dei dati. Inoltre abbiamo capito che il software di gestione ha dei momenti di picco: per esempio durante l'entrata ad un evento si generano molte richieste. Vista la natura del software gestionale, l'utilizzo di modelli di persistenza integrata dell'applicazione middleware potrebbe scaturirsi in basse prestazioni. Inoltre, l'utilizzo di un database indipendente permette anche una scalabilità orizzontale del parco middleware, favorendo la disponiblità del servizio (\hyperlink{R25NF}{R25NF}), ma limitando la replicabilità del sistema in locale (\hyperlink{R26NF}{R26NF}) nel caso in cui il database non sia accessible all'esterno. Il problema si può affrontare creando uno "scatto" del database, prima dell'inizio dell'evento, risolvendo localmente così il problema riscontrato nell'analisi del rischio.\\La persistenza dei log viene gestita attraverso file.
 
 
-\subsubsection{Livello Middle-ware}
+\subsubsection{Livello middleware}
 Le funzionalità di questo livello sono pensate per facilitare lo sviluppo multipiattaforma centralizzato, sfruttando una comunicazione con la controparte front-end. Si tratta dell'unico livello che può interagire con il livello di persistenza, e nel caso ci siano vincoli non direttamente implementabili nel progetto del database, saranno implentati qui, senza il rischio che una terza applicazione che utilizza il database, non implementi tali vincoli, rendendo intrinsecamente più semplice la struttura del front-end.
 
 \subsubsection{Livello Front-end}
-Si tratta dell'ultimo livello, quello a contatto con gli utilizzatori finali, specializzato nel rappresentare le informazioni reperite dallo strato server intermedio. Il livello è pensato per essere altamente specializzato e multipiattaforma: una implementazione può sfruttare la piattaforma sottostante e reperire le informazioni in maniera più rapida. Inoltre si potrebbe introdurre di diverse implementazioni, a seconda dell'utilizzatore finale.\\
+Si tratta dell'ultimo livello, quello a contatto con gli utilizzatori finali, specializzato nel rappresentare le informazioni reperite dallo strato server intermedio. Il livello è pensato per essere altamente specializzato e multipiattaforma: un'implementazione può sfruttare la piattaforma sottostante e reperire le informazioni in maniera più rapida. Inoltre si potrebbero introdurre diverse implementazioni, a seconda dell'utilizzatore finale.\\
 
 
 \subsubsection{Patterns \& Design Principle}
-Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta inoltre permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middle-ware, dato che viene definito a priori il protocollo di comunicazione.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVP} per l'applicativo middle-ware, mentre per la parte front-end si è utilizzato il \textbf{MVVM}. Il software middle-ware avrà una parte di view minima, \textbf{passiva}, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e con meno business logic.
+Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità orizzontale dello strato intermedio, facilitando anche il compito di replicazione locale in caso di necessità. Tale scelta, inoltre, permette di applicare \textbf{The Dependency Inversion Principle} disaccoppiando i client dallo specifico middleware, dato che viene definito a priori il protocollo di comunicazione.\\Abbiamo deciso di adottare il pattern architetturale \textbf{MVP} per l'applicativo middleware, mentre per la parte front-end si è utilizzato il \textbf{MVVM}. Il software middleware avrà una parte di view minima, \textbf{passiva}, volta solo alla comunicazione lato front-end, mentre il software front-end sarà decisamente più orientato alla presentazione e avente meno business logic.
 
 %\subsubsection{Diagramma a package}
 
-%Da chiedere dove mettere il protocollo di comunicazione tra middle-ware e front-end: Va in implementazione
+%Da chiedere dove mettere il protocollo di comunicazione tra middleware e front-end: Va in implementazione
 
 
 %Nella figura sottostante è riportata l’Architettura del Sistema organizzata attraverso un diagramma dei package:\\
@@ -2690,30 +2689,30 @@ Abbiamo adottato il pattern \textbf{Broker}, che rende facile la scalabilità or
 \end{figure}
 
 \subsubsection{Scelte tecnologiche}
-Abbiamo deciso di utilizzare come protocollo di sicurezza e trasmissione dei dati \textbf{HTTPS}: la sicurezza è garantita dal layer TLS, che garantisce una comunicazione sicura end-to-end, e l'ampio bacino di utilizzatori del protocollo permette la produzione di un prodotto software versatile: un possibile servizio esterno potrebbe interfacciarsi con l'applicativo middle-ware, senza troppe difficoltà.\\Per il formato dei dati abbiamo scelto \textbf{JSON}, dato il grande supporto e la facilità di utilizzo.
+Abbiamo deciso di utilizzare come protocollo di sicurezza e trasmissione dei dati il protocollo \textbf{HTTPS}: la sicurezza è garantita dal layer TLS, che assicura una comunicazione sicura end-to-end, inoltre l'ampio bacino di utilizzatori del protocollo permette la produzione di un prodotto software versatile: un possibile servizio esterno potrebbe interfacciarsi con l'applicativo middleware, senza riscontrare troppe difficoltà.\\Per il formato dei dati abbiamo scelto \textbf{JSON}, dato il grande supporto e la sua facilità di utilizzo.
 
 \newpage
 
 \subsection{Progettazione di dettaglio}
 
-%Chiedere la divisione di package in base al livello middle-ware o front-end: si
-%Chiedere come definire lo scambio dei dati tra middle-ware e front-end: implementazione
+%Chiedere la divisione di package in base al livello middleware o front-end: si
+%Chiedere come definire lo scambio dei dati tra middleware e front-end: implementazione
 %Chiedere se aggiungere le chiavi del db nel dominio: Si
 %Chiedere se gli oggetti delle relazioni vanno esplicitate nella progettazione: no
 
 \subsubsection{Struttura}
 
 I cambiamenti del dominio seguente rispetto a quello dell’analisi del problema sono dovuti
-alla decisione di \textbf{dividere il software} in strato middle-ware e strato front-end. Inoltre, i cambiamenti sono dovuti alla decisione di utilizzare i Design Pattern \textbf{MVP} e \textbf{MVVM}.
+alla decisione di \textbf{dividere il software} in strato middleware e strato front-end. Inoltre, i cambiamenti sono imposti dalla scelta di utilizzare i Design Pattern \textbf{MVP} e \textbf{MVVM}.
 
-\subsubsection{Struttura middle-ware}
+\subsubsection{Struttura middleware}
 
-%TODO: da chiedere se MVP o MVC.
+%da chiedere se MVP o MVC: MVP circa non bisogna essere rigidi
 
 Come detto in precedenza, la struttura è basata su \textbf{MVP}.
 
 \begin{itemize}
-    \item \textbf{Model}: Si tratta della parte che gestisce il database.\\Utilizzando il pattern \textbf{DAO}, si crea il mapping delle relazioni con gli oggetti.\\Non viene utilizzato il pattern \textbf{Proxy} per implementare il \textbf{lazy-load}: dato che le richieste al middle-ware sono definite a priori, si conosce esattamente quali dati reperire, potendo usufruire del \textbf{JOIN} fornito dal DBMS.\\Per l'interazione con i log si è preferito un accesso diretto a file, sempre con un accesso tramite pattern \textbf{DAO}.
+    \item \textbf{Model}: Si tratta della parte che gestisce il database.\\Utilizzando il pattern \textbf{DAO}, si crea il mapping delle relazioni con gli oggetti.\\Non viene utilizzato il pattern \textbf{Proxy} per implementare il \textbf{lazy-load}: dato che le richieste al middleware sono definite a priori, si conosce esattamente quali dati reperire, potendo usufruire del \textbf{JOIN} fornito dal DBMS.\\Per l'interazione con i log si è preferito un accesso diretto a file, sempre con un accesso tramite pattern \textbf{DAO}.
     \item \textbf{View}: Gestisce la risposta al client, formattando i dati nel formato JSON, si tratta di una vista \textbf{passiva}.
     \item \textbf{Presenter}: Collante tra Model e View, con tutta la business logic di supporto.
 \end{itemize}
@@ -2752,13 +2751,13 @@ Naturalmente gli oggetti \textbf{DAO} possono lanciare eccezioni, qui si incapsu
     \caption{dao.vsdx}
 \end{figure}
 
-Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dalla implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default. Le \textbf{transazioni} sono gestite al'interno delle implementazioni, a seconda dei casi d'uso.
+Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto il log, salvato su file. L'accesso al database dipende dall'implementazione che si sceglie, infatti \textbf{DatabaseConnection} è un oggetto dipendente dalla piattaforma utilizzata. L'operazione \textbf{inizializzaAmministratore} inizializza l'amministratore di sistema ai valori di default. L'operazione può essere fatta ovviamente una volta e l'amministratore dovrà poi cambiare la password di default. Le \textbf{transazioni} sono gestite all'interno delle implementazioni, a seconda dei casi d'uso. Se necessario aggiungere nell'implementazione i metodi CRUD.
 
 %\newpage
 
 %\paragraph{Package} it.unibo.prevenditaelettronica.middleware.dao.proxy
 
-%TODO: lazy-load serve?
+%lazy-load serve? NO
 
 %Dominio che richiede proxy
 
@@ -2778,13 +2777,15 @@ Pattern \textbf{DAO} applicato alla persistenza del modello di dominio, eccetto 
 
 %Modello di dominio
 
+%TODO: chiedere le molteplicità, vedi matrimonio
+
 \begin{figure}[H]
     \includegraphics[scale=0.65]{Progettazione/Package/middleware/model/model.png}
     \centering
     \caption{model.vsdx}
 \end{figure}
 
-Si tratta del modello di dominio visto in analisi. La maggior parte delle operazioni previste in analisi sono spostate in altri package. La gestione delle credenziali viene fatta nel package DAO e quindi il modello di dominio non contiene informazioni su credenziali. La generazione del documento viene fatta dal componente front-end.
+Si tratta del modello di dominio visto in analisi. La maggior parte delle operazioni previste in analisi sono spostate in altri package. La gestione delle credenziali viene fatta nel package DAO e quindi il modello di dominio non contiene informazioni sulle credenziali. La generazione del documento viene fatta dal componente front-end. Rappresentano anche le classi di \textbf{DTO} per referenziare gli oggetti persistenti tramite chiavi surrogate (le chiavi da aggiungere sono viste nella progettazione della persistenza). Gli oggetti del modello di dominio vengono usati anche per trasmettere i dati ai client.
 
 \newpage
 
@@ -2802,7 +2803,7 @@ Si tratta del modello di dominio visto in analisi. La maggior parte delle operaz
     \caption{view.vsdx}
 \end{figure}
 
-Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappresentazione dei dati verso il front-end. Dato la scelta tecnologica di usare JSON come formato di dati, abbiamo implementato una sola classe Printer, ma l'interfaccia rende flessibile l'utilizzo di un altro formato dati.\\L'interfaccia \textbf{JSONSerializable} non è obbligatoria, dipende dalle librerie usate in implementazione, per esempio GSON non ne prevede. Nel caso in cui la serializazzione venga fatta senza aiuti esterni, l'interfaccia va implementata nelle classi di dominio, rispettando i vincoli di sicurezza.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\\L'enumeratore \textbf{Stato} indica lo stato della risposta, mentre l'enumeratore \textbf{Comando} contiene tutti i comandi eseguibili sul middle-ware. La lista non è completa e viene riportata nel package \textbf{handler} in seguito.\\La classe \textbf{Response} rappresenta le informazioni scambiate con il client in fase di risposta: viene trasferito il \textbf{comando} per cui si è fatta la richiesta, lo stato della risposta, eventuale risultato o eccezione. Il risultato o l'eccezione è già serializzato, mentre l'oggetto Response verrà serializzato successivamente.
+Il package it.unibo.prevenditaelettronica.middleware.view si occupa della rappresentazione dei dati verso il front-end. Data la scelta tecnologica di usare JSON come formato dati, abbiamo implementato una sola classe Printer, ma l'interfaccia rende flessibile l'utilizzo di un altro formato dati.\\L'interfaccia \textbf{JSONSerializable} non è obbligatoria, dipende dalle librerie usate in fase di implementazione, per esempio GSON non ne prevede. Nel caso in cui la serializazzione venga fatta senza aiuti esterni, l'interfaccia va implementata nelle classi di dominio, rispettando i vincoli di sicurezza.\\L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta.\\\L'enumeratore \textbf{Stato} indica lo stato della risposta, mentre l'enumeratore \textbf{Comando} contiene tutti i comandi eseguibili sul middleware. La lista non è completa e viene riportata nel package \textbf{handler} in seguito.\\La classe \textbf{Response} rappresenta le informazioni scambiate con il client in fase di risposta: viene trasferito il \textbf{comando} per cui si è fatta la richiesta, lo stato della risposta, l'eventuale risultato o eccezione. Il risultato o l'eccezione è già serializzato, mentre l'oggetto Response verrà serializzato successivamente.
 
 \newpage
 
@@ -2832,7 +2833,7 @@ La sessione viene gestita tramite pattern \textbf{Singleton}, nella classe \text
 
 \paragraph{Package} it.unibo.prevenditaelettronica.middleware.controller.autenticazione
 
-%TODO: chiedere se l'implemnetazione della sessione va bene.
+%Chiedere se l'implemnetazione della sessione va bene. OK
 
 %AutenticazioneController
 
@@ -2842,7 +2843,7 @@ La sessione viene gestita tramite pattern \textbf{Singleton}, nella classe \text
     \caption{controller.vsdx}
 \end{figure}
 
-In figura la parte di controller con la responsabilità di gestire la parte di autenticazione\\L'eccezione \textbf{AuthorizationException} viene lanciata nei più svariati casi di accesso negato: credenziali errate, utente bloccato, ruolo non concesso, eccetera, e viene utilizzato anche da altri controller nel caso sia necessario.
+In figura la parte di controller con la responsabilità di gestire la parte di autenticazione.\\L'eccezione \textbf{AuthorizationException} viene lanciata nei più svariati casi di accesso negato: credenziali errate, utente bloccato, ruolo non concesso, eccetera, e viene utilizzato anche da altri controller nel caso sia necessario.
 
 \newpage
 
@@ -2902,7 +2903,7 @@ Abbiamo suddiviso il package in due diagrammi per migliorarne la lettura.
     \caption{controller.vsdx}
 \end{figure}
 
-In figura la parte di controller con la responsabilità di gestire la parte di staff. Qui viene mostrata la parte contenente \textbf{GestioneStaffController}, \textbf{GestioneVenditePrevendite} e \textbf{Gestione Entrata}. Si tratta della parte utilizzata dagli attori \textbf{PR} e\textbf{Cassiere}.\\
+In figura la parte di controller con la responsabilità di gestire la parte di staff. Qui viene mostrata la parte contenente \textbf{GestioneStaffController}, \textbf{GestioneVenditePrevendite} e \textbf{Gestione Entrata}. Si tratta della parte utilizzata dagli attori \textbf{PR} e \textbf{Cassiere}.\\
 
 \begin{figure}[H]
     \includegraphics[scale=0.9]{Progettazione/Package/middleware/controller/controller_gestione_staff_2.png}
@@ -2924,7 +2925,7 @@ In figura la parte di controller con la responsabilità di gestire la parte di s
     \caption{handler.vsdx}
 \end{figure}
 
-In figura viene mostrato il package \textbf{handler}, che si occupa si raccogliere le richieste HTTPS ed elaborarle, inoltrando la richiesta al controller apposito. Si utilizza il pattern \textbf{State} per differenziare la presa in carico della richiesta, a seconda del comando utilizzato. L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta. Il metodo \textbf{handle} viene chiamato dalla piattaforma sottostante, probabilmente da un thread separato per ogni richiesta. La classe astratta \textbf{AbstractRequestHandler} potrebbe subire dei cambiamenti, a seconda della piattaforma sottostante. L'enumeratore \textbf{Comando} contiene tutti i comandi disponibili presso il livello middle-ware. L'interfaccia \textbf{JSONDeserializable} serve per convertire la richiesta JSON in oggetti utilizzabili. Può essere sostituita da una eventuale libreria della piattaforma. La classe \textbf{Request} rappresenta le informazioni in ingresso dal client: contiene il \textbf{comando} da eseguire ed eventuali \textbf{argomenti} per la corretta esecuzione del comando, il tutto già serializzato, mentre l'oggetto Request verrà serializzato successivamente.
+In figura viene mostrato il package \textbf{handler}, che si occupa di raccogliere le richieste HTTPS ed elaborarle, inoltrando la richiesta al controller opportuno. Si utilizza il pattern \textbf{State} per differenziare la presa in carico della richiesta, a seconda del comando utilizzato. L'interfaccia \textbf{HTTPSInterface} serve per ricevere la richiesta e inviare la risposta. Può essere sostituita in implementazione dalla relativa classe di supporto della piattaforma scelta. Il metodo \textbf{handleRequest} viene chiamato quando si deve gestire una richiesta, utilizzando un thread separato per ogni richiesta. La classe astratta \textbf{AbstractRequestHandler} potrebbe subire dei cambiamenti, a seconda della piattaforma sottostante. L'enumeratore \textbf{Comando} contiene tutti i comandi disponibili presso il livello middleware. L'interfaccia \textbf{JSONDeserializable} serve per convertire la richiesta JSON in oggetti utilizzabili. Può essere sostituita da un'eventuale libreria della piattaforma. La classe \textbf{Request} rappresenta le informazioni in ingresso dal client: contiene il \textbf{comando} da eseguire ed eventuali \textbf{argomenti} per la corretta esecuzione del comando, il tutto già serializzato, mentre l'oggetto Request verrà serializzato successivamente.
 
 \newpage
 
@@ -2951,7 +2952,7 @@ Di seguito una lista dei comandi:
 Come detto in precedenza, la struttura è basata su \textbf{MVVM}.
 
 \begin{itemize}
-    \item \textbf{Model}: Deve elaborare i dati per la ricezione/invio verso il middle-ware.\\L'accesso al middle-ware è dettato dal pattern \textbf{Broker}.
+    \item \textbf{Model}: Deve elaborare i dati per la ricezione/invio verso il middleware.\\L'accesso al middleware è dettato dal pattern \textbf{Broker}.
     \item \textbf{View}: Componente principale del client front-end, utilizziamo il pattern \textbf{Observer} per il binding con il ViewModel. Dovrebbe essere ridotta alla sola logica di presentazione.
     \item \textbf{ViewModel}: Collante tra Model e View, è il responsabile della logica della vista.
 \end{itemize}
@@ -2969,7 +2970,7 @@ La modularità del \textbf{MVVM} permette di combinare facilmente le varie viste
     \caption{broker.vsdx}
 \end{figure}
 
-Il componente \textbf{HTTPSBrokerInterface} rappresenta una interfaccia in grado di registrare servizi middle-ware, secondo una certa \textbf{priorità}. Utilizzando il metodo \textbf{procuraCanale}, il broker procura un canale per il client, andando a cercare il servizio remoto, seguendo l'ordine di priorità. L'enumeratore \textbf{ServicePriority} serve per classificare i servizi in base ad una priorità: \textbf{Primary} rappresenta il servizio principale, quello chiamato la maggior parte delle volte, \textbf{Backup} rappresenta un possibile livello middle-ware secondario, sempre che si riesca a scalare orizzontalmente, mentre la priorità \textbf{Local} rappresenta il backup locale effettuato dall'amministratore di sistema su richiesta, per limitare gli attacchi DoS.
+Il componente \textbf{HTTPSBrokerInterface} rappresenta un'interfaccia in grado di registrare servizi middleware, secondo una certa \textbf{priorità}. Utilizzando il metodo \textbf{procuraCanale}, il broker procura un canale per il client, in particolare andando a cercare il servizio remoto, seguendo l'ordine di priorità. L'enumeratore \textbf{ServicePriority} serve per classificare i servizi in base ad una priorità: \textbf{Primary} rappresenta il servizio principale, quello chiamato la maggior parte delle volte, \textbf{Backup} rappresenta un possibile livello middleware secondario, sempre che si riesca a scalare orizzontalmente, mentre la priorità \textbf{Local} rappresenta il backup locale effettuato dall'amministratore di sistema su richiesta, per limitare gli attacchi DoS.
 
 \newpage
 
@@ -2981,7 +2982,7 @@ Il componente \textbf{HTTPSBrokerInterface} rappresenta una interfaccia in grado
     \caption{model.vsdx}
 \end{figure}
 
-Il modello di dominio è uguale a quello del midde-ware, ma cambia il metodo di reperire le informazioni: nel middle-ware le informazioni vengono ottenute attraverso interrogazioni del database, mentre nel front-end, le informazioni vengono ottenute tramite interrogazioni del middle-ware. Serve quindi progettare il meccanismo di accesso al middle-ware. Ovviamente è possibile che le informazioni ottenute dal servizio \textbf{non siano complete}: ci si limita alle sole informazioni richieste dal comando inviato.
+Il modello di dominio è uguale a quello del midde-ware, ma cambia il metodo di reperire le informazioni: nel middleware le informazioni vengono ottenute attraverso interrogazioni del database, mentre nel front-end, le informazioni vengono ottenute tramite interrogazioni del middleware. Serve quindi progettare il meccanismo di accesso al middleware. Ovviamente è possibile che le informazioni ottenute dal servizio \textbf{non siano complete}: ci si limita alle sole informazioni richieste dal comando inviato. Inoltre i vari client implementeranno solo la parte di modello \textbf{necessaria}.
 
 \newpage
 
@@ -2999,7 +3000,7 @@ Il modello di dominio è uguale a quello del midde-ware, ma cambia il metodo di 
     \caption{net.vsdx}
 \end{figure}
 
-Molte entità sono in comune con il layer middle-ware. Le interfacce \textbf{JSONSerializable} e \textbf{JSONDeserializable} servono per convertire la richieste e le risposte nel formato JSON. Può essere sostituita da una eventuale libreria della piattaforma. Le interfacce \textbf{Request} e \textbf{Response} contengono le informazioni per la comunicazione. All'interno le informazioni sono già serializzate, mentre gli oggetti stessi verranno serializzati successivamente.
+Molte entità sono in comune con il layer middleware. Le interfacce \textbf{JSONSerializable} e \textbf{JSONDeserializable} servono per convertire la richieste e le risposte nel formato JSON. Può essere sostituita da una eventuale libreria della piattaforma. Le interfacce \textbf{Request} e \textbf{Response} contengono le informazioni per la comunicazione. All'interno le informazioni sono già serializzate, mentre gli oggetti stessi verranno serializzati successivamente.
 
 %HTTPS CLient
 
@@ -3009,14 +3010,7 @@ Molte entità sono in comune con il layer middle-ware. Le interfacce \textbf{JSO
     \caption{net.vsdx}
 \end{figure}
 
-In figura si rappresenta la modalità di comunicazione con il middle-ware: si è introdotto \textbf{HTTPSClientInterface} che rappresenta il client che effettua le richieste al middle-ware. Si ha la possibilità di effettuare richieste in modo sincrono o asincrono, a seconda delle esigenze. Il canale di comunicazione \textbf{HTTPSInterface} viene fornito da \textbf{HTTPSBrokerInterface}, il quale si pone tra client e middle-ware.
-
-\newpage
-
-%TODO: assegnare un posto a sti qui
-%Gestione Staff Controller
-%Gestione Utente Controller
-%Gestione Amministrazione Controller
+In figura si rappresenta la modalità di comunicazione con il middleware: si è introdotto \textbf{HTTPSClientInterface} che rappresenta il client che effettua le richieste al middleware. Si ha la possibilità di effettuare richieste in modo sincrono o asincrono, a seconda delle esigenze. Il canale di comunicazione \textbf{HTTPSInterface} viene fornito da \textbf{HTTPSBrokerInterface}, il quale si pone tra client e middleware.
 
 \newpage
 
@@ -3028,7 +3022,7 @@ In figura si rappresenta la modalità di comunicazione con il middle-ware: si è
     \caption{viewmodel.vsdx}
 \end{figure}
 
-Come detto in precedenza, si utilizza il pattern \textbf{Observer} per il binding tra \textbf{View} e \textbf{ViewModel}. Si è aggiunta una classe \textbf{MutableData} per la gestione di un oggetto con osservatori esterni. La classe astratta \textbf{AbstractViewModel} rappresenta un ViewModel generale, dentro al quale si trovano il client \textbf{HTTPSClientInterface} per effettuare le richieste e un \textbf{MutableData} per la risposta, la quale sarà osservata dalla view, che si aggiornerà di conseguenza. \textbf{AbstractViewModel} implementa anche l'interfaccia \textbf{Listener}, nel caso sia neccessario effettuare delle richieste asincrone. I ViewModel \textbf{concreti} hanno lo stereotipo $<<$\textbf{ViewModel}$>>$, indicando che estendono \textbf{AbstractViewModel}.
+Come detto in precedenza, si utilizza il pattern \textbf{Observer} per il binding tra \textbf{View} e \textbf{ViewModel}. Si è aggiunta una classe \textbf{MutableData} per la gestione di un oggetto con osservatori esterni. La classe astratta \textbf{AbstractViewModel} rappresenta un ViewModel generale, dentro alla quale si trovano il client \textbf{HTTPSClientInterface} per effettuare le richieste e un \textbf{MutableData} per la risposta, la quale sarà osservata dalla view e si aggiornerà di conseguenza. \textbf{AbstractViewModel} implementa anche l'interfaccia \textbf{Listener}, nel caso sia neccessario effettuare delle richieste asincrone. I ViewModel \textbf{concreti} hanno lo stereotipo $<<$\textbf{ViewModel}$>>$, indicando che estendono \textbf{AbstractViewModel}.
 
 \newpage
 
@@ -3042,7 +3036,7 @@ Come detto in precedenza, si utilizza il pattern \textbf{Observer} per il bindin
     \caption{viewmodel.vsdx}
 \end{figure}
 
-Vengono rappresentate in figura i ViewModel per le viste di autenticazione. Sono quindi previste le viste di login collegate a questi ViewModel. Quando la vista riceve l'evento di submit, essa invoca il suo ViewModel, il quale dopo una verifica dell'input, invia la richiesta al middle-ware. Si potrebbe migliorare il meccanismo di validazione dell'input in futturo, rendendolo più dinamico, rendendo il ViewModel \textbf{Observer} del form di input e ad un cambiamento effettuare il check del form. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+Vengono rappresentate in figura i ViewModel per le viste di autenticazione. Sono quindi previste le viste di login collegate a questi ViewModel. Quando la vista riceve l'evento di submit, essa invoca il suo ViewModel, il quale dopo una verifica dell'input, invia la richiesta al middleware. Si potrebbe migliorare il meccanismo di validazione dell'input in futuro, rendendolo più dinamico, utilizzando sempre il pattern \textbf{Observer} per effettuare un check di valutazione dinamico. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.utente
 
@@ -3090,7 +3084,7 @@ Contiene semplici operazioni per la scelta dell'evento e per le statistiche del 
     \caption{viewmodel.vsdx}
 \end{figure}
 
-Il PR ha alcune viste per la \textbf{vendita di prevendite}. La generazione del documento viene fatta tramite il metodo \textbf{generaDocumento} permette alla vista di mostrare il documento generato, da consegnare al cliente.  Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+Il PR ha alcune viste per la \textbf{vendita di prevendite}. La generazione del documento viene fatta tramite il metodo \textbf{generaDocumento} che permette alla vista di mostrare il documento generato, da consegnare al cliente.  Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.viewmodel.cassiere
 
@@ -3102,7 +3096,7 @@ Il PR ha alcune viste per la \textbf{vendita di prevendite}. La generazione del 
     \caption{viewmodel.vsdx}
 \end{figure}
 
-Per il cassiere serve solo il ViewModel per la \textbf{timbratura} e per la lista di prevendite entrate. L'interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+Per il cassiere serve solo il ViewModel per la \textbf{timbratura} e per la lista di prevendite entrate. Le interfacce estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \newpage
 
@@ -3119,7 +3113,7 @@ Per il cassiere serve solo il ViewModel per la \textbf{timbratura} e per la list
     \caption{viewmodel.vsdx}
 \end{figure}
 
-In figura il ViewModel per cambiare il \textbf{codice di accesso} allo staff. L'interfaccia estendono \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
+In figura il ViewModel per cambiare il \textbf{codice di accesso} allo staff. L'interfaccia estende \textbf{Subject} per rendere possibile la registrazione della vista agli eventi.
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Progettazione/Package/frontend/viewmodel/viewmodel_amministratore_evento.png}
@@ -3168,7 +3162,7 @@ L'\textbf{AbstractView} serve per aggiungere un comportamento comune a tutte le 
     \caption{home.vsdx}
 \end{figure}
 
-In figura sono rappresentate le schermate home. Non necessitano di una ViewModel, in quanto non fanno altro che richiamare altre viste. Si espone solo il layout di \textbf{GestioneUtenteHome} per non appesantire troppo il documento, già bello grasso.
+In figura sono rappresentate le schermate home. Non necessitano di una ViewModel, in quanto non fanno altro che richiamare altre viste. Si espone solo il layout di \textbf{GestioneUtenteHome} per non appesantire troppo il documento, essendo già notevolmente ricco.
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_home_utente.PNG}
@@ -3238,7 +3232,7 @@ Viene mostrato il nome, il cognome e il telefono. Inoltre è presente il pulsant
     \caption{view.vsdx}
 \end{figure}
 
-Contiene le viste per la gestione di amministrazione di sistema. A queste viste ha accesso solo l'amministratore di sistema. Permette la lettura del log e un aggiunta ad esso. In seguito viene mostrato il layout di aggiunta di un record di log:
+Contiene le viste per la gestione di amministrazione di sistema. A queste viste ha accesso solo l'amministratore di sistema. Permette la lettura del log e un'aggiunta ad esso. In seguito viene mostrato il layout di aggiunta di un record di log:
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Progettazione/Package/frontend/view/layout/layout_aggiungi_record.PNG}
@@ -3246,7 +3240,7 @@ Contiene le viste per la gestione di amministrazione di sistema. A queste viste 
     \caption{layout\_aggiungi\_record.png}
 \end{figure}
 
-Il layout mostra come è posssibile aggiungere la priorità al log, e la descrizione. Il timestamp viene aggiunto automaticamente. Il pulsante aggiungi record permette l'aggiunta al log del sistema.
+Il layout mostra come è posssibile aggiungere la priorità al log e la descrizione. Il timestamp viene aggiunto automaticamente. Il pulsante aggiungi record permette l'aggiunta al log del sistema.
 
 \newpage
 
@@ -3268,7 +3262,7 @@ Il package membro fornisce delle viste generali per scegliere l'evento della ses
     \caption{layout\_scegli\_evento.png}
 \end{figure}
 
-Il layout rappresenta una lista di eventi che si possono scegliere, cliccandoci sopra. Il layout è applicabile anche a \textbf{ScegliStaffView}
+Il layout rappresenta una lista di eventi che si possono scegliere, cliccandoci sopra. Il layout è applicabile anche a \textbf{ScegliStaffView}.
 
 \newpage
 
@@ -3298,7 +3292,7 @@ Il layout permette di inserire il nome e il cognome del cliente e di aggiungere 
     \caption{layout\_esempio\_documento.png}
 \end{figure}
 
-Si tratta di un documento digitale formato da un QR Code e una descrizione. Il documento potrebbe essere implementato in un altra forma, ma il codice QR è preferibile, in quanto permette di effettuare una scansione rapida della prevendita.
+Si tratta di un documento digitale formato da un QR Code e una descrizione. Il documento potrebbe essere implementato in un'altra forma, ma il codice QR è preferibile, in quanto permette di effettuare una scansione rapida della prevendita.
 
 \paragraph{Package} it.unibo.prevenditaelettronica.frontend.view.cassiere
 
@@ -3407,7 +3401,7 @@ La lista prevede il nome della tipologia, il suo periodo di vendita e il prezzo 
 
 \subsubsection{Interazione}
 
-\paragraph{Autenticazione Utente} Viene mostrato il diagramma di interazione tra utente, front-end, middle-ware e database per l'autenticazione dell'utente. Viene mostrato il funzionamento del pattern \textbf{Observer}, della richiesta \textbf{Asincrona} e della gestione della sessione a livello \textbf{middle-ware}.
+\paragraph{Autenticazione Utente} Viene mostrato il diagramma di interazione tra utente, front-end, middleware e database per l'autenticazione dell'utente. Viene mostrato il funzionamento del pattern \textbf{Observer}, della richiesta \textbf{Asincrona} e della gestione della sessione a livello \textbf{middleware}.
 
 %TODO: da chiedere se i messaggi callback sono restituiti o normali
 
@@ -3421,7 +3415,7 @@ La lista prevede il nome della tipologia, il suo periodo di vendita e il prezzo 
 
 \subsubsection{Comportamento}
 
-I diagrammi di stato principali sono presenti nella sezione Analisi. Qui si mostra l'algoritmo utilizzato da \textbf{HTTPSBrokerInterface} per scegliere il servizio middle-ware, tramite diagramma di flusso:
+I diagrammi di stato principali sono presenti nella sezione Analisi. Qui si mostra l'algoritmo utilizzato da \textbf{HTTPSBrokerInterface} per scegliere il servizio middleware, tramite diagramma di flusso:
 
 \begin{figure}[H]
     \includegraphics[scale=1]{Progettazione/Comportamento/diagramma_algoritmo_broker.png}
@@ -3429,7 +3423,7 @@ I diagrammi di stato principali sono presenti nella sezione Analisi. Qui si most
     \caption{diagramma\_algoritmo\_broker.vsdx}
 \end{figure}
 
-Il diagramma di flusso mostra che il broker esegue la ricerca del canale per \textbf{priorità}. Quella più bassa è quella fornita dal servizio locale posto nell'evento in caso di attacco DoS in corso.
+Il diagramma di flusso mostra il broker che esegue la ricerca del canale per \textbf{priorità}. Quella più bassa è quella fornita dal servizio locale posto nell'evento in caso di attacco DoS in corso.
 
 \newpage
 
@@ -3443,39 +3437,39 @@ Il diagramma di flusso mostra che il broker esegue la ricerca del canale per \te
     \caption{Progetto\_Ing\_Software\_ER.lun}
 \end{figure}
 
-\paragraph{Entità} Le chiavi primarie (\textbf{id}) sono di tipo intero, autoincrement, per semplificare l'utilizzo del pattern DAO:
+\paragraph{Entità} Le chiavi primarie (\textbf{id}) sono di tipo intero ed autoincrement, per semplificare l'utilizzo del pattern DAO:
 
 \begin{itemize}
     \item \textbf{Utente}: rappresenta un utente nel sistema. \textbf{tentativiLogin} serve per rispettare il vincolo \hyperlink{R28NF}{R28NF}. L'attributo \textbf{username} deve essere univoco. La password viene salvata come salted hash, con meccanismo di hashing sicuro (SHA256 o superiore). La tecnica salting serve per contrastare la tecnica di attacco \textbf{Rainbow Tables}. Le stesse considerazioni vanno fatte per l'entità \textbf{Amministratore di sistema}.
     \item \textbf{Membro}: rappresenta un membro di uno staff. I ruoli sono modellati come sotto entità. Nel caso il membro perda il ruolo, le iterazioni del membro devono rimanere.
     \item \textbf{Prevendita}: gli stati della prevendita sono modellati come sotto-entità di prevendita. \textbf{codice} serve per rispettare il vincolo \hyperlink{R27NF}{R27NF}.
-    \item \textbf{Evento}: gli stati del'evento sono modellati come sotto-entità di evento. Gli attributi \textbf{inizio} e \textbf{fine} rappresentano il periodo temporale in cui è in corso l'evento (\hyperlink{R19F}{R19F}).
-    \item \textbf{Amministratore di sistema}: entità a se stante, l'\textbf{username} deve essere univoco.
-    \item \textbf{Tipologia Prevendita}: gli attributi \textbf{aperturaVendite} e \textbf{chiusuraVendite} rappresentano il periodo temporale in cui è possibile vendere le prevendite (\hyperlink{R21F}{R21F}). Questo periodo deve essere logicamente antecedente al periodo di svolgimento dell'evento (\hyperlink{R9NF}{R9NF}).
+    \item \textbf{Evento}: gli stati del'evento sono modellati come sotto-entità di evento. Gli attributi \textbf{inizio} e \textbf{fine} rappresentano il periodo temporale in cui è in corso l'evento (\hyperlink{R18F}{R18F}).
+    \item \textbf{Amministratore di sistema}: entità a sé stante, l'\textbf{username} deve essere univoco.
+    \item \textbf{Tipologia Prevendita}: gli attributi \textbf{aperturaVendite} e \textbf{chiusuraVendite} rappresentano il periodo temporale in cui è possibile vendere le prevendite (\hyperlink{R20F}{R20F}). Questo periodo deve essere logicamente antecedente al periodo di svolgimento dell'evento (\hyperlink{R9NF}{R9NF}).
     \item \textbf{Utente Bloccato}: ci vuole un trigger che controlli \textbf{tentativiLogin}.
 \end{itemize}
 
 
 \paragraph{Relazioni} Anche qui vengono mostrate in elenco solo le relazioni più importanti:
 \begin{itemize}
-    \item \textbf{Fa Parte}: relazione ternaria tra \textbf{utente}, \textbf{staff} e \textbf{membro}: si è scelta la relazione ternaria invece che una scomposizione binaria, per mettere in evidenza il collegamento \textbf{utente} - \textbf{staff}, il quale altrimenti diverebbe indiretto.
-    \item \textbf{Crea Staff}: quando si crea lo staff, si diviene anche amministratore (\hyperlink{R11F}{R11F}).
+    \item \textbf{Membro}: In origine era una relazione molti a molti tra \textbf{utente} e \textbf{staff} per associare l'utente allo staff. Viene scomposta nell'entità \textbf{Membro} per riuscire a modellare i ruoli.
+    \item \textbf{Crea Staff}: quando si crea lo staff, si diviene anche amministratore (\hyperlink{R21NFbis}{R21NFbis}).
 \end{itemize}
 
 \paragraph{Trigger} Vengono inclusi trigger per far rispettare i vincoli:
 
 \begin{itemize}
-    \item \textbf{Evento}: controllo che il periodo di svolgimento sia valido (inizio < fine, periodo nel futuro), lo stato dell'evento deve rispettare il diagramma di comportamento.
-    \item \textbf{Tipologia Prevendita}: controllo che il periodo di vendita sia valido (inizio < fine, periodo nel futuro). Se sono state vendute prevendite non posso eliminare o modificare la tipologia (\hyperlink{R16NF}{R16NF})
-    \item \textbf{Prevendita} consistenza dell'evento e della tipologia di prevendita. La data di vendita deve essere conforme con il periodo di vendita. L'evento deve essere valido per l'inserimento. Lo stato della prevendita deve rispettare il diagramma di comportamento.
-    \item \textbf{Prevendita Timbrata} Inserimento effettuato nel periodo dell'evento, l'evento deve essere valido e la prevendita deve essere valida e non annullata.
-    \item \textbf{Membro} Verifica del requisito \hyperlink{R15F/NF}{R15F/NF}.
-    \item \textbf{Utente} Verifica unicità username, un utente può creare al massimo uno staff.
+    \item \textbf{Evento}: controllo che il periodo di svolgimento sia valido (inizio $<$ fine, periodo nel futuro), lo stato dell'evento deve rispettare il diagramma di comportamento.
+    \item \textbf{Tipologia Prevendita}: controllo che il periodo di vendita sia valido (inizio $<$ fine, periodo nel futuro). Se sono state vendute prevendite non posso eliminare o modificare la tipologia (\hyperlink{R16NF}{R16NF}).
+    \item \textbf{Prevendita}: consistenza dell'evento e della tipologia di prevendita. La data di vendita deve essere conforme con il periodo di vendita. L'evento deve essere valido per l'inserimento. Lo stato della prevendita deve rispettare il diagramma di comportamento.
+    \item \textbf{Prevendita Timbrata}: Inserimento effettuato nel periodo dell'evento, l'evento deve essere valido e la prevendita deve essere valida e non annullata.
+    \item \textbf{Membro}: Verifica del requisito \hyperlink{R14F/NF}{R14F/NF}.
+    \item \textbf{Utente}: Verifica unicità username, un utente può creare al massimo uno staff.
 \end{itemize}
 
-\paragraph{Protezione della persistenza del database} Essendo il database gestito su macchina isolata remota, il rischio di accesso non autorizzato è limitato. Si consiglia di limitare l'accesso ai soli ip dello strato middle-ware.\\Per migliorare ulteriormente la sicurezza, si consiglia di spostare l'entità amministratore di sistema in un RDMBS separato.
+\paragraph{Protezione della persistenza del database} Essendo il database gestito su una macchina isolata remota, il rischio di accesso non autorizzato è limitato. Si consiglia di limitare l'accesso ai soli ip dello strato middleware.\\Per migliorare ulteriormente la sicurezza, si consiglia di spostare l'entità amministratore di sistema in un RDMBS separato.
 
-\paragraph{Viste} Un ulteriore aggiunta, alla sicurezza e alla semplificazione della logica di business, può essere l'introduzione di viste di accesso al database:
+\paragraph{Viste} Un'ulteriore aggiunta, alla sicurezza e alla semplificazione della logica di business, può essere l'introduzione di viste di accesso al database:
 
 \begin{center}
     \begin{tabularx}{1\textwidth}{|X|X|X|}
@@ -3489,7 +3483,7 @@ Il diagramma di flusso mostra che il broker esegue la ricerca del canale per \te
         Utente & Staff & Lettura/Scrittura\\
         Utente & Evento & Lettura/Scrittura\\
         Utente & Membro & Lettura/Scrittura\\
-        Utente & Tipoogia Prevendita & Lettura/Scrittura\\
+        Utente & Tipologia Prevendita & Lettura/Scrittura\\
         Utente & Prevendita & Lettura/Scrittura\\
         Utente & Statistiche Membro & Lettura\\
         Utente & Statistiche Evento & Lettura\\
@@ -3501,7 +3495,7 @@ Il diagramma di flusso mostra che il broker esegue la ricerca del canale per \te
 
 \subsubsection{Formato del file del log}
 
-Il file di log deve contenere informazioni utili per l'amministratore di sistema. Sono raccolte molte operazioni svolte, soprattutto quelle ritenute imporanti. L'amministratore di sistema può aggiungere note personali.
+Il file di log deve contenere informazioni utili per l'amministratore di sistema. Sono raccolte molte operazioni svolte, soprattutto quelle ritenute importanti. L'amministratore di sistema può aggiungere note personali.
 
 \begin{lstlisting}
     <timestamp> <livello> <descrizione>
@@ -3510,13 +3504,13 @@ Il file di log deve contenere informazioni utili per l'amministratore di sistema
     <timestamp> <livello> <descrizione>
 \end{lstlisting}
 
-\paragraph{Protezione della persistenza dei log} Essendo il file salvato nel livello middle-ware, il rischio di accesso di malintenzionati si riduce, ma per migliorare la protezione, bisogna impostare i giusti permessi utente nel file system. Ovviamente solo l'amministratore di sistema può accedere a queste informazioni.
+\paragraph{Protezione della persistenza dei log} Essendo il file salvato nel livello middleware, il rischio di accesso di malintenzionati si riduce, ma per migliorare la protezione, bisogna impostare i giusti permessi utente nel file system. Ovviamente solo l'amministratore di sistema può accedere a queste informazioni.
 
 \newpage
 
 \subsection{Collaudo}
 
-Data la natura multi-layer non prevista nella sezione di analisi, sono stati introdotti specifici test sia per il layer di front-end, sia per il layer di middle-ware. I test introdotti sono molti, ma vengono mostrati solo due test, uno per lo strato di middle-ware e un'altro per lo strato front-end.
+Data la natura multi-layer non prevista nella sezione di analisi, sono stati introdotti specifici test sia per il layer di front-end, sia per il layer di middleware. I test introdotti sono molti, ma vengono mostrati solo due test, uno per lo strato di middleware e un altro per lo strato front-end.
 
 \lstinputlisting[language=Java]{Progettazione/Test/TestHTTPSBroker.java}
 \lstinputlisting[language=Java]{Progettazione/Test/TestJSONPrinter.java}
@@ -3525,7 +3519,7 @@ Data la natura multi-layer non prevista nella sezione di analisi, sono stati int
 
 \subsection{Deployment}
 
-Il deployment del sistema avviene in due modi separati, a seconda del layer middle-ware o front-end. Il deployment dello strato intermedio viene gestito dall'amministratore di sistema, che si occupa anche della procedura di aggiornamento. A seconda dell'implementazione, verrà distribuito all'amministratore di sistema un pacchetto automatico o manuale per l'aggiornamento del sistema. Per il deployment lato front-end sarà previsto un check automatico da parte del client. In caso di aggiornamento, viene mostrato un pop-up all'utente:
+Il deployment del sistema avviene in due modi separati, a seconda del layer middleware o front-end. Il deployment dello strato intermedio viene gestito dall'amministratore di sistema, egli si occupa anche della procedura di aggiornamento. A seconda dell'implementazione, verrà distribuito all'amministratore di sistema un pacchetto automatico o manuale per l'aggiornamento del sistema. Per il deployment lato front-end sarà previsto un check automatico da parte del client. In caso di aggiornamento, viene mostrato un pop-up all'utente:
 
 \begin{figure}[H]
     \includegraphics[scale=0.5]{Progettazione/aggiornamento_dialog.png}
@@ -3540,21 +3534,21 @@ Il deployment del sistema avviene in due modi separati, a seconda del layer midd
 
 \subsection{Scelte tecnologiche}
 
-Nella fase di implementazione abbiamo deciso di implementare lo strato di persistenza utilizzando il RDBMS MySQL, mentre lo strato middleware viene implementato usando il linguaggio PHP 7. Abbiamo deciso di implementare lo strato front-end suddividendolo in tre client, uno web-based per la gestione di amministrazione di sistema, un altro web-based per l'amministrazione dello staff e infine un client mobile sviluppato sotto la piattaforma Android per il cassiere e il pr, dato che il loro lavoro viene fatto in vari ambienti. La scelta di queste tecnologie è pensata per risolvere il requisito \hyperlink{R5NF}{R5NF}. Infatti la maggior parte delle soluzioni hosting gratuite offre queste tecnologie di default. La scelta di Android invece che l'utilizzo di iOS è dovuta sempre per lo stesso motivo: per sviluppare con iOS serve hardware proprietario. Android adotta Java come linguaggio di sviluppo. I client web-based sono implementati mediante una combinazione di HTML+CSS+Javascript, con varie librerie come JQuery e Bootstrap, utilizzando la tecnica AJAX per le chiamate allo strato middle-ware. I client web-based si trovano nello stesso spazio di hosting dello strato middle-ware.
+Nella fase di implementazione abbiamo deciso di implementare lo strato di persistenza utilizzando il RDBMS MySQL, mentre lo strato middleware viene implementato usando il linguaggio PHP 7. Abbiamo deciso di implementare lo strato front-end suddividendolo in tre client, uno web-based per la gestione di amministrazione di sistema, un altro web-based per l'amministrazione dello staff e infine un client mobile sviluppato sotto la piattaforma Android per il cassiere e il pr, dato che il loro lavoro viene fatto in vari ambienti. La scelta di queste tecnologie è pensata per risolvere il requisito \hyperlink{R5NF}{R5NF}. Infatti la maggior parte delle soluzioni hosting gratuite offre queste tecnologie di default. La scelta di Android invece che l'utilizzo di iOS è dovuta sempre per lo stesso motivo: per sviluppare con iOS serve hardware proprietario. Android adotta Java come linguaggio di sviluppo. I client web-based sono implementati mediante una combinazione di HTML+CSS+Javascript, con varie librerie come JQuery e Bootstrap, utilizzando la tecnica AJAX per le chiamate allo strato middleware. I client web-based si trovano nello stesso spazio di hosting dello strato middleware.
 
 \subsection{Scelte Implementative}
 
 \begin{itemize}
-    \item Ridotto enumeratore ServicePriority da PRIMARY, BACKUP, LOCAL a PRIMARY, LOCAL. Il servizio di hosting non espone il database all'esterno e quindi non è possibile replicare lo strato middle-ware.
-    \item Package DAO del middle-ware implementato usando PDO, che supporta molti rdbms.
+    \item Ridotto enumeratore ServicePriority da PRIMARY, BACKUP, LOCAL a PRIMARY, LOCAL. Il servizio di hosting non espone il database all'esterno e quindi non è possibile replicare lo strato middleware.
+    \item Package DAO del middleware implementato usando PDO, che supporta molti rdbms.
     \item Utilizzo di chiavi surrogate per identificare gli oggetti, anche a lato client.
     \item Implementazione della Sessione mediante sessione gestita da PHP.
     \item Nel client Android, viene usata la libreria Volley come HTTPSClient.
     \item Nel client Android viene usata la libreria GSON per la serializzazione/deserializzazione delle informazioni. Le interfacce JSONSerializable e JSONDeserializable diventano superflue utilizzando la libreria.
     \item Nel database le credenziali vengono salvate come coppia (username, salted hash), utilizzando come algoritmo di hashing SHA256.
-    \item Nello strato middle-ware, l'interfaccia HTTPSInterface è superflua, in quanto la comunicazione HTTPS è intrinseca nel linguaggio PHP.
+    \item Nello strato middleware, l'interfaccia HTTPSInterface è superflua, in quanto la comunicazione HTTPS è intrinseca nel linguaggio PHP.
     \item Il certificato HTTPS viene fornito dal servizio di hosting.
-    \item Nello strato middle-ware non c'è bisogno delle interfacce JSONSerializable e JSONDeserializable, in quanto viene usata la libreria integrata nel linguaggio.
+    \item Nello strato middleware non c'è bisogno delle interfacce JSONSerializable e JSONDeserializable, in quanto viene usata la libreria integrata nel linguaggio.
     \item Per rendere sicuro la cartella dei log è stato utilizzato un file .htaccess, per restringerne l'accesso.
     \item I client web-based non hanno bisogno dell'interfaccia HTTPClient, in quanto utilizzano il browser stesso.
     \item I client web-based non utilizzano il broker in quanto il servizio di replicazione non è necessario per le funzionalità dei client web-based.
@@ -3566,20 +3560,20 @@ Nella fase di implementazione abbiamo deciso di implementare lo strato di persis
     \item Per replicare il servizio in locale, l'amministratore di sistema esegue un backup del database mediante l'interfaccia fornita dal servizio di hosting, e utilizzando il software XAMPP replica il servizio. I client dovranno aggiungere il servizio tramite il broker.
     \item Si è deciso di ampliare le statistiche, catalogandole per tipologia di prevendita.
     \item Nel client Android abbiamo modificato alcuni ViewModel del front-end, rendendoli osservatori dei form delle viste, per rendere la validazione dell'input in tempo reale.
-    \item Le connessioni al database sono sincronizzate con il fuso orario dello strato middle-ware e dati temporali ricevuti e inviati ai client sono formattati con standard \textbf{ISO8601}: così facendo, si rende l'applicativo utilizzabile in un contesto globale.
+    \item Le connessioni al database sono sincronizzate con il fuso orario dello strato middleware e dati temporali ricevuti e inviati ai client sono formattati con standard \textbf{ISO8601}: così facendo, si rende l'applicativo utilizzabile in un contesto globale.
 \end{itemize}
 
 \subsection{Collaudo}
 
-Il collaudo su middle-ware è stato integrato mediante libreria PHPUnit. Nel client Android viene usata la libreria JUnit, integrata nell'ambiente di sviluppo. Per testare il codice Javascript, presente nei client web-based abbiamo deciso di implementare i test senza l'ausilio di librerie esterne, ma utilizzando il Web Developer Kit per monitorare il codice di testing.
+Il collaudo su middleware è stato integrato mediante libreria PHPUnit. Nel client Android viene usata la libreria JUnit, integrata nell'ambiente di sviluppo. Per testare il codice Javascript, presente nei client web-based abbiamo deciso di implementare i test senza l'ausilio di librerie esterne, ma utilizzando il Web Developer Kit per monitorare il codice di testing.
 
 \newpage
 
 \section{Deployment}
 
-\subsection{Note di configurazione sul middle-ware}
+\subsection{Note di configurazione sul middleware}
 
-Il servizio middle-ware deve essere configurato dall'amministatore di sistema, configurando l'accesso al database:
+Il servizio middleware deve essere configurato dall'amministatore di sistema, configurando l'accesso al database:
 
 
 \lstinputlisting[language=PHP]{Implementazione/config.php}
@@ -3587,15 +3581,15 @@ Il servizio middle-ware deve essere configurato dall'amministatore di sistema, c
 
 \subsection{Note di configurazione sul front-end}
 
-I client web-based sono configurati dall'amministratore di sistema, in quanto sono salvati nello spazio di hosting che ospita anche lo strato middle-ware:
+I client web-based sono configurati dall'amministratore di sistema, in quanto sono salvati nello spazio di hosting che ospita anche lo strato middleware:
 
 \lstinputlisting[language=PHP]{Implementazione/config.js}
 
-Il client Android richiede solamente di inserire l'URL del servizio middle-ware, fornito dall'amministratore di sistema.
+Il client Android richiede solamente di inserire l'URL del servizio middleware, fornito dall'amministratore di sistema.
 
 \subsection{Artefatti}
 
-%TODO: chiedere se va bene
+%Chiedere se va bene OK
 
 \begin{figure}[H]
     \includegraphics[scale=0.7]{Implementazione/artefatti.png}
@@ -3605,8 +3599,8 @@ Il client Android richiede solamente di inserire l'URL del servizio middle-ware,
 
 \newpage
 
-%TODO: chiedere se va bene
-%TODO: da chiedere se aggiungere db, php, apache
+%chiedere se va bene OK
+%da chiedere se aggiungere db, php, apache NO
 
 \subsection{Deployment Type-Level}
 
