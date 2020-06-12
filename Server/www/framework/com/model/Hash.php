@@ -120,7 +120,7 @@ class Hash
      * @param string $hash
      *            hash generato precedentemente da hashPassword
      * @throws InvalidArgumentException Password o hash non validi
-     * @return boolean risultato vero se password giusta
+     * @return bool risultato vero se password giusta
      */
     public function evalutatePassword($password, $hash)
     {

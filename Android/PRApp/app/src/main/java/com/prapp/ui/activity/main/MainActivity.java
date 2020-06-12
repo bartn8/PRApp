@@ -96,10 +96,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                         cambiaTab(false);
                         return true;
 
-                    case R.id.navigation_amministratore:
-                        currentFragment = ID_FRAGMENT_AMMINISTRATORE;
-                        cambiaTab(false);
-                        return true;
+//                    case R.id.navigation_amministratore:
+//                        currentFragment = ID_FRAGMENT_AMMINISTRATORE;
+//                        cambiaTab(false);
+//                        return true;
                 }
 
                 return false;
@@ -141,13 +141,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                 if(setBottomNavigationBar)
                     navView.setSelectedItemId(R.id.navigation_cassiere);
                 break;
-            case ID_FRAGMENT_AMMINISTRATORE:
-                if (!amminisratoreFragment.isInLayout())
-                    cambiaFragment(amminisratoreFragment);
-
-                if(setBottomNavigationBar)
-                    navView.setSelectedItemId(R.id.navigation_amministratore);
-                break;
+//            case ID_FRAGMENT_AMMINISTRATORE:
+//                if (!amminisratoreFragment.isInLayout())
+//                    cambiaFragment(amminisratoreFragment);
+//
+//                if(setBottomNavigationBar)
+//                    navView.setSelectedItemId(R.id.navigation_amministratore);
+//                break;
 
             default:
                 if (!utenteFragment.isInLayout())
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         menu.findItem(R.id.navigation_pr).setEnabled(diritti.contains(Diritto.PR));
         menu.findItem(R.id.navigation_cassiere).setEnabled(diritti.contains(Diritto.CASSIERE));
-        menu.findItem(R.id.navigation_amministratore).setEnabled(diritti.contains(Diritto.AMMINISTRATORE));
+//        menu.findItem(R.id.navigation_amministratore).setEnabled(diritti.contains(Diritto.AMMINISTRATORE));
 
         //Listener del menù sottostante
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

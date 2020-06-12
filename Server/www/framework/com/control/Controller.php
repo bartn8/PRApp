@@ -22,12 +22,12 @@
 namespace com\control;
 
 use com\model\Context;
+use com\handler\Command;
 use com\handler\Retriver;
 use com\view\printer\Printer;
-use \InvalidArgumentException;
+use InvalidArgumentException;
 use com\model\db\table\Membro;
 use com\model\db\table\Utente;
-use com\model\handler\Command;
 use com\model\session\exception\SessionExpiredException;
 
 abstract class Controller
@@ -47,7 +47,7 @@ abstract class Controller
      */
     private $retriver;
         
-    protected function __construct($printer, $retriver)
+    protected function __construct( $printer, $retriver)
     {
         if(!($printer instanceof Printer))
             throw new InvalidArgumentException("Printer non valido");

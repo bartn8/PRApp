@@ -135,7 +135,7 @@ class UpdateNetWEvento implements NetWrapper
 
     /**
      *
-     * @return string|boolean
+     * @return string|bool
      */
     public function getDescrizione()
     {

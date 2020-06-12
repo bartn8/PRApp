@@ -49,7 +49,7 @@ class ControllerUtente extends Controller
      */
     private static $tentativiLogin = 3;
 
-    private static function loadParameters(){
+    public static function loadParameters(){
         if(isset($GLOBALS['tentativiLogin']))
         ControllerUtente::$tentativiLogin = $GLOBALS['tentativiLogin'];
     }
@@ -90,7 +90,7 @@ class ControllerUtente extends Controller
         parent::__construct($printer, $retriver);
     }
 
-    public function internalHandle(Command $command, Context $context)
+    protected function internalHandle(Command $command, Context $context)
     { 
         // Effettuo l'operazione.
         switch ($command->getCommand()) {
@@ -215,7 +215,7 @@ class ControllerUtente extends Controller
             throw new InvalidArgumentException("Parametri non validi.");
 
         //Effettuo il login da db: eccezione se non fa il login.
-        $utente = Utente::login($login);
+        $utente = Utente::login($login, ControllerUtente::$tentativiLogin);
 
         // Salvo il contesto.
         $context->login($utente, ControllerUtente::$tentativiLogin);

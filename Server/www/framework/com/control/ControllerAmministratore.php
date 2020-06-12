@@ -80,7 +80,7 @@ class ControllerAmministratore extends Controller
         parent::__construct($printer, $retriver);
     }
 
-    public function internalHandle(Command $command, Context $context)
+    protected function internalHandle(Command $command, Context $context)
     {
         switch ($command->getCommand()) {                        
             case ControllerAmministratore::CMD_AGGIUNGI_EVENTO:

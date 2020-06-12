@@ -35,7 +35,6 @@ use com\model\db\wrapper\WToken;
 use com\model\db\wrapper\WUtente;
 use com\model\net\wrapper\NetWLogin;
 use com\model\net\wrapper\NetWToken;
-use com\model\db\enum\TipologiaUtente;
 use com\model\net\wrapper\NetWStaffAccess;
 use com\utils\DateTimeImmutableAdapterJSON;
 use com\model\db\exception\InsertUpdateException;
@@ -114,7 +113,7 @@ class Utente extends Table
 
         $conn = parent::getConnection();
 
-        $stmtSelezione = $conn->prepare("SELECT id, tipologiaUtente, nome, cognome, telefono, hash, tentativiLogin FROM utente WHERE username = :username");
+        $stmtSelezione = $conn->prepare("SELECT id, nome, cognome, telefono, hash, tentativiLogin FROM utente WHERE username = :username");
         $stmtSelezione->bindValue(":username", $login->getUsername(), PDO::PARAM_STR);
         $stmtSelezione->execute();
 
@@ -123,21 +122,22 @@ class Utente extends Table
 
         // Se riga falsa restituisco falso.
         if ($riga !== FALSE) {
-
-            $tipologiaUtente = TipologiaUtente::parse($riga["tipologiaUtente"]);
-
             //Controllo tentativi
-            if($riga["tentativiLogin"] < $tentativiLogin && $tipologiaUtente->getId() === TipologiaUtente::NORMALE){
+            if($riga["tentativiLogin"] < $tentativiLogin){
                 // Controllo della password.
                 if (Hash::getSingleton()->evalutatePassword($login->getPassword(), $riga["hash"])) {
+
+                    //TODO: pulizia tentativi login
 
                     // Pulisco i campi di login.
                     $login->clear();
 
                     return WUtente::of($riga);
+                }else{
+                    //TODO: incremento tentativi login
                 }
             }else{
-                //TODO:Devo anche aggiornare i log
+                //TODO:Devo aggiornare i log
             }
         }
 

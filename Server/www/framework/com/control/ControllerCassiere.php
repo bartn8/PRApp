@@ -66,7 +66,7 @@ class ControllerCassiere extends Controller
         parent::__construct($printer, $retriver);
     }
 
-    public function internalHandle(Command $command, Context $context)
+    protected function internalHandle(Command $command, Context $context)
     {
         switch ($command->getCommand()) {
             case ControllerCassiere::CMD_TIMBRA_ENTRATA:

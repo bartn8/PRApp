@@ -195,9 +195,9 @@ class WRuoliMembro implements DatabaseWrapper
     /**
      * Dice se il membro è cassiere nello staff.
      * 
-     * @return boolean
+     * @return bool
      */
-    public function isCassiere() : boolean
+    public function isCassiere() : bool
     {
         foreach($this->ruoli as $ruolo){
             if(Ruolo::CASSIERE == $ruolo->getId()){
@@ -211,9 +211,9 @@ class WRuoliMembro implements DatabaseWrapper
     /**
      * Dice se il membro è PR nello staff.
      * 
-     * @return boolean
+     * @return bool
      */
-    public function isPR() : boolean
+    public function isPR() : bool
     {
         foreach($this->ruoli as $ruolo){
             if(Ruolo::PR == $ruolo->getId()){
@@ -227,9 +227,9 @@ class WRuoliMembro implements DatabaseWrapper
     /**
      * Dice se il membro è amministratore nello staff.
      * 
-     * @return boolean
+     * @return bool
      */
-    public function isAmministratore() : boolean
+    public function isAmministratore() : bool
     {
         foreach($this->ruoli as $ruolo){
             if(Ruolo::AMMINISTRATORE == $ruolo->getId()){

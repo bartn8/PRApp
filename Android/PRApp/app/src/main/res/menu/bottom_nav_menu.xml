@@ -40,9 +40,13 @@
         android:icon="@drawable/ic_navbar_cassiere"
         android:title="@string/title_cassiere" />
 
+    <!--
+
     <item
         android:id="@+id/navigation_amministratore"
         android:icon="@drawable/ic_navbar_amministratore"
         android:title="@string/title_amministratore" />
+
+    -->
 
 </menu>

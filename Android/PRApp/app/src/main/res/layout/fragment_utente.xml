@@ -86,46 +86,46 @@
                 android:background="?android:attr/listDivider" />
 
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-<!--                <TextView-->
-<!--                    android:id="@+id/fragment_utente_nome_staff"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:text="@string/fragment_utente_nome_staff"-->
-<!--                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"-->
-<!--                    android:textColor="@color/primaryTextColor" />-->
+                <TextView
+                    android:id="@+id/fragment_utente_nome_staff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:text="@string/fragment_utente_nome_staff"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/primaryTextColor" />
 
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:orientation="horizontal">-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:textColor="@color/primaryTextColor"-->
-<!--                        android:text="@string/fragment_utente_diritti_label" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:text="@string/fragment_utente_diritti_label" />
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/fragment_utente_diritti"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:textColor="@color/primaryTextColor"-->
-<!--                        android:text="@string/fragment_utente_diritti" />-->
+                    <TextView
+                        android:id="@+id/fragment_utente_diritti"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/primaryTextColor"
+                        android:text="@string/fragment_utente_diritti" />
 
 
-<!--                </LinearLayout>-->
+                </LinearLayout>
 
-<!--            </LinearLayout>-->
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -135,39 +135,39 @@
 
 
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-<!--                <TextView-->
-<!--                    android:id="@+id/fragment_utente_nomeEvento"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginEnd="5dp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"-->
-<!--                    android:textColor="@color/primaryTextColor"-->
-<!--                    tools:text="@string/fragment_utente_nomeEvento" />-->
+                <TextView
+                    android:id="@+id/fragment_utente_nomeEvento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/primaryTextColor"
+                    tools:text="@string/fragment_utente_nomeEvento" />
 
 
-<!--                <TextView-->
-<!--                    android:id="@+id/fragment_utente_descrizioneEvento"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
-<!--                    android:textColor="@color/primaryTextColor"-->
-<!--                    tools:text="@string/fragment_utente_descrizioneEvento" />-->
+                <TextView
+                    android:id="@+id/fragment_utente_descrizioneEvento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/primaryTextColor"
+                    tools:text="@string/fragment_utente_descrizioneEvento" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/fragment_utente_periodoEvento"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
-<!--                    android:textColor="@color/primaryTextColor"-->
-<!--                    tools:text="@string/fragment_utente_periodoEvento" />-->
+                <TextView
+                    android:id="@+id/fragment_utente_periodoEvento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/primaryTextColor"
+                    tools:text="@string/fragment_utente_periodoEvento" />
 
-<!--            </LinearLayout>-->
+            </LinearLayout>
 
             <Button
                 android:id="@+id/fragment_utente_logout"

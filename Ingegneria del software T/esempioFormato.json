@@ -1,0 +1,11 @@
+{
+	stato: "OK",
+	comando: 101,
+	risultato: {nomeStaff:"Prova"}
+}
+
+{
+	stato: "Exception",
+	comando: 102,
+	risultato: {messaggio:"Membro non autorizzato"}
+}

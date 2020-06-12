@@ -309,7 +309,7 @@ class WEvento implements DatabaseWrapper
 
     /**
      *
-     * @return string|boolean
+     * @return string|bool
      */
     public function getDescrizione()
     {

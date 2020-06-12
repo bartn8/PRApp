@@ -41,7 +41,7 @@ class Context
      */
     private static $watchdogThreshold = 20;
 
-    private static function loadParameters(){
+    public static function loadParameters(){
         if(isset($GLOBALS['watchdogThreshold']))
             Context::$watchdogThreshold = $GLOBALS['watchdogThreshold'];
     }
@@ -57,8 +57,6 @@ class Context
         if (session_status() != PHP_SESSION_ACTIVE)
             throw new Exception("Sessione non attiva");
         
-        loadParameters();
-
         $context = new Context(NULL, TRUE);
 
         $_SESSION["context"] = $context;
@@ -113,7 +111,7 @@ class Context
     /**
      * Indica se il contesto è valido.
      *
-     * @var boolean
+     * @var bool
      */
     private $valid;
 
@@ -128,12 +126,12 @@ class Context
      * Genera un contesto.
      * Utilizzato solo da factory.
      *
-     * @param int $userID
-     * @param boolean $valid
+     * @param UserSession $userSession
+     * @param bool $valid
      */
-    private function __construct($utente, $valid)
+    private function __construct($userSession, $valid)
     {
-        $this->utente = $utente;
+        $this->userSession = $userSession;
         $this->valid = $valid;
     }
 
@@ -150,7 +148,7 @@ class Context
     /**
      * Restituisce vero se il contesto è utilizzabile.
      *
-     * @return boolean
+     * @return bool
      */
     public function isValid()
     {
@@ -177,14 +175,14 @@ class Context
     /**
      * Restituisce vero se l'utente è loggato
      */
-    public function isLogged() : boolean {
+    public function isLogged() : bool {
         return !is_null($this->userSession);
     }
 
     /**
      * Indica se il watchdog è stato attivato.
      * 
-     * @return boolean
+     * @return bool
      */
     public function isWatchdogTriggered(){
         return $this->watchdogCounter >= Context::$watchdogThreshold;

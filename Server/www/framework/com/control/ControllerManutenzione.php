@@ -37,7 +37,7 @@ class ControllerManutenzione extends Controller
         parent::__construct($printer, $retriver);
     }
     
-    public function internalHandle(Command $command, Context $context)
+    protected function internalHandle(Command $command, Context $context)
     {
         // Effettuo l'operazione.
         switch ($command->getCommand()) {
