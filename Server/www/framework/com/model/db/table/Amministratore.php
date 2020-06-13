@@ -97,7 +97,7 @@ class Amministratore extends Table
 
         $conn = NULL;
 
-        return $evento->getWEvento($id, $idUtente, $idUtente, new DateTimeImmutableAdapterJSON(new \DateTimeImmutable()));
+        return $evento->getWEvento($id, $idStaff, $idUtente, $idUtente, new DateTimeImmutableAdapterJSON(new \DateTimeImmutable()));
     }
 
     /**

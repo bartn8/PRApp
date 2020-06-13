@@ -92,7 +92,7 @@ class PR extends Table
 
         $conn = NULL;
 
-        return WPrevendita::make($id, $idEvento, $idUtente, $prevendita->getIdCliente(), $prevendita->getIdTipoPrevendita(), $prevendita->getCodice(), $prevendita->getStato(), new DateTimeImmutableAdapterJSON(new \DateTimeImmutable()));
+        return $prevendita->getWPrevendita($id, $idEvento, $idUtente);
     }
 
     /**

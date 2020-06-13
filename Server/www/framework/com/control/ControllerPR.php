@@ -32,6 +32,7 @@ use \InvalidArgumentException;
 use com\model\db\exception\AuthorizationException;
 use com\model\net\wrapper\insert\InsertNetWCliente;
 use com\model\net\wrapper\NetWFiltriStatoPrevendita;
+use com\model\net\wrapper\insert\InsertNetWPrevendita;
 use com\model\net\wrapper\update\UpdateNetWPrevendita;
 use com\model\db\exception\NotAvailableOperationException;
 

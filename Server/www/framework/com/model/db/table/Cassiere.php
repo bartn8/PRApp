@@ -153,7 +153,7 @@ class Cassiere extends Table
         
 EOT;
 
-        $stmtSelezione = $conn->prepare("SELECT idUtente, entrate FROM statisticheCassiereTotali WHERE idUtente = :idUtente");
+        $stmtSelezione = $conn->prepare($query);
         $stmtSelezione->bindValue(":idUtente", $utente, PDO::PARAM_INT);
         $stmtSelezione->execute();
 
@@ -295,9 +295,8 @@ EOT;
     public static function getPrevenditeEvento(int $evento): array
     {
         $conn = parent::getConnection();
-
-        //Vecchia Query: 
-        $query = "SELECT id, idEvento, idPR, idCliente, idTipoPrevendita, codice, stato, timestampUltimaModifica FROM prevendita WHERE idEvento = :idEvento";
+ 
+        $query = "SELECT id, idEvento, idPR, nomeCliente, cognomeCliente, idTipoPrevendita, codice, stato, timestampUltimaModifica FROM prevendita WHERE idEvento = :idEvento";
 
 
         //Query modificata con nome e cognome cliente: nuova versione WPrevendita.
@@ -339,11 +338,10 @@ EOT;
 
         $query = <<<EOT
         SELECT prevendita.id AS id, prevendita.idEvento AS idEvento, evento.nome AS nomeEvento, prevendita.idPR AS idPR, 
-        utente.nome AS nomePR, utente.cognome AS cognomePR, prevendita.idCliente AS idCliente, cliente.nome AS nomeCliente, 
-        cliente.cognome AS cognomeCliente, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, 
+        utente.nome AS nomePR, utente.cognome AS cognomePR, prevendita.nomeCliente AS nomeCliente, prevendita.cognomeCliente AS cognomeCliente, 
+        prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, 
         tipoPrevendita.prezzo AS prezzoTipoPrevendita, prevendita.codice AS codice, prevendita.stato AS stato 
         FROM prevendita 
-        LEFT JOIN cliente ON cliente.id = prevendita.idCliente 
         INNER JOIN evento ON evento.id = prevendita.idEvento 
         INNER JOIN utente ON utente.id = prevendita.idPR 
         INNER JOIN tipoPrevendita ON tipoPrevendita.id = prevendita.idTipoPrevendita 
@@ -379,11 +377,10 @@ EOT;
         //Query: 
         $query = <<<EOT
         SELECT prevendita.id AS id, prevendita.idEvento AS idEvento, evento.nome AS nomeEvento, prevendita.idPR AS idPR, 
-        utente.nome AS nomePR, utente.cognome AS cognomePR, prevendita.idCliente AS idCliente, cliente.nome AS nomeCliente, 
-        cliente.cognome AS cognomeCliente, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, 
+        utente.nome AS nomePR, utente.cognome AS cognomePR, prevendita.nomeCliente AS nomeCliente, prevendita.cognomeCliente AS cognomeCliente, 
+        prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, 
         tipoPrevendita.prezzo AS prezzoTipoPrevendita, prevendita.codice AS codice, prevendita.stato AS stato 
         FROM prevendita 
-        LEFT JOIN cliente ON cliente.id = prevendita.idCliente 
         INNER JOIN evento ON evento.id = prevendita.idEvento 
         INNER JOIN utente ON utente.id = prevendita.idPR 
         INNER JOIN tipoPrevendita ON tipoPrevendita.id = prevendita.idTipoPrevendita 
@@ -421,11 +418,10 @@ EOT;
         //Query: 
         $query = <<<EOT
         SELECT prevendita.id AS id, prevendita.idEvento AS idEvento, evento.nome AS nomeEvento, prevendita.idPR AS idPR, 
-        utente.nome AS nomePR, utente.cognome AS cognomePR, prevendita.idCliente AS idCliente, cliente.nome AS nomeCliente, 
-        cliente.cognome AS cognomeCliente, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, 
+        utente.nome AS nomePR, utente.cognome AS cognomePR, prevendita.nomeCliente AS nomeCliente, prevendita.cognomeCliente AS cognomeCliente, 
+        prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, 
         tipoPrevendita.prezzo AS prezzoTipoPrevendita, prevendita.codice AS codice, prevendita.stato AS stato 
         FROM prevendita 
-        LEFT JOIN cliente ON cliente.id = prevendita.idCliente 
         INNER JOIN evento ON evento.id = prevendita.idEvento 
         INNER JOIN utente ON utente.id = prevendita.idPR 
         INNER JOIN tipoPrevendita ON tipoPrevendita.id = prevendita.idTipoPrevendita 

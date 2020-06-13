@@ -87,7 +87,7 @@ class WStaff implements DatabaseWrapper
         if (strlen($nome) > self::NOME_MAX)
             throw new InvalidArgumentException("Nome non valido (MAX)");
 
-        return new WStaff($id, $nome, $timestampCreazione);
+        return new WStaff($id, $idCreatore, $nome, $timestampCreazione);
     }
 
     /**
@@ -188,7 +188,7 @@ class WStaff implements DatabaseWrapper
         if ($id <= 0)
             throw new InvalidArgumentException("ID non valido");
 
-        return new WStaff($id, $this->nome, $this->timestampCreazione);
+        return new WStaff($id, $this->idCreatore, $this->nome, $this->timestampCreazione);
     }
 
     public function changeTimestampCreazione($timestamp)
@@ -196,7 +196,7 @@ class WStaff implements DatabaseWrapper
         if (! ($timestamp instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Parametro timestampCreazione non valido");
 
-        return new WStaff($this->id, $this->nome, $timestamp);
+        return new WStaff($this->id, $this->idCreatore, $this->nome, $timestamp);
     }
 }
 

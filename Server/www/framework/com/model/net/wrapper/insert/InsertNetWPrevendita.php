@@ -21,11 +21,13 @@
 
 namespace com\model\net\wrapper\insert;
 
-use com\model\db\enum\StatoPrevendita;
-use com\model\db\wrapper\WPrevendita;
+use DateTimeImmutable;
 use InvalidArgumentException;
-use com\model\net\serialize\ArrayDeserializable;
+use com\model\db\wrapper\WPrevendita;
 use com\model\net\wrapper\NetWrapper;
+use com\model\db\enum\StatoPrevendita;
+use com\utils\DateTimeImmutableAdapterJSON;
+use com\model\net\serialize\ArrayDeserializable;
 
 class InsertNetWPrevendita implements NetWrapper
 {
@@ -52,10 +54,10 @@ class InsertNetWPrevendita implements NetWrapper
         if (strlen($codice) > WPrevendita::CODICE_MAX_LENGTH)
             throw new InvalidArgumentException("Codice non valido (MAX)");
 
-        if (strlen($nomeCliente) > self::NOME_MAX_LENGTH)
+        if (strlen($nomeCliente) > WPrevendita::NOME_MAX_LENGTH)
             throw new InvalidArgumentException("Nome cliente non valido (MAX)");            
 
-        if (strlen($cognomeCliente) > self::COGNOME_MAX_LENGTH)
+        if (strlen($cognomeCliente) > WPrevendita::COGNOME_MAX_LENGTH)
             throw new InvalidArgumentException("Cognome cliente non valido (MAX)");               
 
         if ($idTipoPrevendita <= 0)
@@ -179,7 +181,9 @@ class InsertNetWPrevendita implements NetWrapper
         return $this->stato;
     }
 
-    
+    public function getWPrevendita($id, $idEvento, $idPR) : WPrevendita{
+        return WPrevendita::make($id, $idEvento, $idPR, $this->getNomeCliente(), $this->getCognomeCliente(), $this->getIdTipoPrevendita(), $this->getCodice(), $this->getStato(), new DateTimeImmutableAdapterJSON(new \DateTimeImmutable()));
+    }
     
     
 }

@@ -26,6 +26,8 @@ use JsonSerializable;
 class StatoEvento extends BasicEnum
 {
 
+    //TODO: aggiornare seguendo lo schema
+
     public const VALIDO = 0;
 
     public const ANNULLATO = 1;

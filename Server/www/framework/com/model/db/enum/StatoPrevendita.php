@@ -26,6 +26,8 @@ use com\model\net\serialize\ArrayDeserializable;
 class StatoPrevendita extends BasicEnum
 {
 
+    //TODO: aggiornare seguendo lo schema
+    
     public const VALIDA = 0;
 
     public const ANNULLATA = 1;

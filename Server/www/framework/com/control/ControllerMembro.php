@@ -29,6 +29,7 @@ use com\view\printer\Printer;
 use \InvalidArgumentException;
 use com\model\db\table\Membro;
 use com\control\ControllerMembro;
+use com\model\net\wrapper\NetWId;
 use com\model\db\exception\AuthorizationException;
 use com\model\db\exception\NotAvailableOperationException;
 
@@ -130,7 +131,7 @@ class ControllerMembro extends Controller
         $utente = $context->getUserSession()->getUtente();
         $staff = $context->getUserSession()->getStaffScelto();
 
-        parent::getPrinter()->addResult(Membro::getRuoli($utente->getId(), $staff->getId()));
+        parent::getPrinter()->addResult(Membro::getRuoliPersonali($utente->getId(), $staff->getId()));
     }
 
     private function cmd_restituisci_lista_eventi(Command $command, Context $context)

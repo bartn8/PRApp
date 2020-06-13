@@ -33,6 +33,7 @@ use com\model\db\wrapper\WStaff;
 use com\model\db\wrapper\WToken;
 use com\control\ControllerUtente;
 use com\model\db\wrapper\WUtente;
+use com\model\net\wrapper\NetWId;
 use com\model\net\wrapper\NetWLogin;
 use com\model\net\wrapper\NetWToken;
 use com\model\net\wrapper\NetWStaffAccess;
@@ -82,7 +83,7 @@ class ControllerUtente extends Controller
 
     public const CMD_RESTITUISCI_UTENTE = 11;
 	
-    public const CMD_SCEGLI_STAFF = 8;
+    public const CMD_SCEGLI_STAFF = 12;
     public const CMD_SCEGLI_STAFF_ARG_0 = "staff";
 
     public function __construct($printer, $retriver)
@@ -387,7 +388,7 @@ class ControllerUtente extends Controller
             
             //Ricavo anche i ruoli dell'utente
             //Tecnicamente se vengono aggiornati i ruoli, la modifica non viene vista fino all'aggiornamento della sessione.
-            $ruoliPersonali = Membro::getRuoli($utente->getId(), $staffScelto->getId());
+            $ruoliPersonali = Membro::getRuoliPersonali($utente->getId(), $staffScelto->getId());
 
             $context->getUserSession()->setRuoliMembro($ruoliPersonali);
             

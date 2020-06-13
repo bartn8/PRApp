@@ -37,7 +37,6 @@ class WPrevenditaPlus implements DatabaseWrapper
      * @param int $id
      * @param int $idEvento
      * @param int $idPR
-     * @param int $idCliente
      * @param int $idTipoPrevendita
      * @param string $codice
      * @param StatoPrevendita $stato
@@ -45,21 +44,13 @@ class WPrevenditaPlus implements DatabaseWrapper
      * @return \com\model\db\wrapper\WPrevenditaPlus
      */
     //TODO: Anche qui bisogna aggiungere qualche controllino che non ho voglia di aggiungere
-    public static function make($id, $idEvento, $nomeEvento, $idPR, $nomePR, $cognomePR, $idCliente, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $nomeTipoPrevendita, $prezzoTipoPrevendita, $codice, $stato)
+    public static function make($id, $idEvento, $nomeEvento, $idPR, $nomePR, $cognomePR, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $nomeTipoPrevendita, $prezzoTipoPrevendita, $codice, $stato)
     {
         if (is_null($id) || is_null($idEvento) || is_null($idPR) || is_null($idTipoPrevendita) || is_null($codice) || is_null($stato))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
         if (! is_int($id) || ! is_int($idEvento) || ! is_int($idPR) || ! is_int($idTipoPrevendita) || ! ($stato instanceof StatoPrevendita))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
-
-        if (! is_null($idCliente)) {
-            if (! is_int($idCliente))
-                throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
-
-            if ($idCliente <= 0)
-                throw new InvalidArgumentException("ID Cliente non valido");
-        }
 
         if (strlen($codice) > self::CODICE_MAX)
             throw new InvalidArgumentException("Codice non valido (MAX)");
@@ -76,7 +67,7 @@ class WPrevenditaPlus implements DatabaseWrapper
         if ($idTipoPrevendita <= 0)
             throw new InvalidArgumentException("ID Tipo Prevendita non valido");
 
-        return new WPrevenditaPlus($id, $idEvento, $nomeEvento, $idPR, $nomePR, $cognomePR, $idCliente, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $nomeTipoPrevendita, $prezzoTipoPrevendita, $codice, $stato);
+        return new WPrevenditaPlus($id, $idEvento, $nomeEvento, $idPR, $nomePR, $cognomePR, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $nomeTipoPrevendita, $prezzoTipoPrevendita, $codice, $stato);
     }
 
     /**
@@ -109,17 +100,11 @@ class WPrevenditaPlus implements DatabaseWrapper
         if (! array_key_exists("cognomePR", $array))
             throw new InvalidArgumentException("Dato cognomePR non trovato.");
 
-        if (! array_key_exists("idCliente", $array))
-			$array["idCliente"] = NULL;
-            //throw new InvalidArgumentException("Dato idCliente non trovato.");
-
         if (! array_key_exists("nomeCliente", $array))
-			$array["nomeCliente"] = NULL;
-            //throw new InvalidArgumentException("Dato nomeCliente non trovato.");
+            throw new InvalidArgumentException("Dato nomeCliente non trovato.");
 
         if (! array_key_exists("cognomeCliente", $array))
-			$array["cognomeCliente"] = NULL;
-            //throw new InvalidArgumentException("Dato cognomeCliente non trovato.");
+			throw new InvalidArgumentException("Dato cognomeCliente non trovato.");
 
         if (! array_key_exists("idTipoPrevendita", $array))
             throw new InvalidArgumentException("Dato idTipoPrevendita non trovato.");
@@ -136,10 +121,9 @@ class WPrevenditaPlus implements DatabaseWrapper
         if (! array_key_exists("stato", $array))
             throw new InvalidArgumentException("Dato stato non trovato.");
 
-        $idCliente = is_null($array["idCliente"]) ? NULL : (int) $array["idCliente"];
         $prezzoTipoPrevendita = is_null($array["prezzoTipoPrevendita"]) ? NULL : (float) $array["prezzoTipoPrevendita"];
 
-        return self::make((int) $array["id"], (int) $array["idEvento"], $array["nomeEvento"], (int) $array["idPR"], $array["nomePR"], $array["cognomePR"], $idCliente, $array["nomeCliente"], $array["cognomeCliente"], (int) $array["idTipoPrevendita"], $array["nomeTipoPrevendita"], $prezzoTipoPrevendita, $array["codice"], StatoPrevendita::parse($array["stato"]));
+        return self::make((int) $array["id"], (int) $array["idEvento"], $array["nomeEvento"], (int) $array["idPR"], $array["nomePR"], $array["cognomePR"], $array["nomeCliente"], $array["cognomeCliente"], (int) $array["idTipoPrevendita"], $array["nomeTipoPrevendita"], $prezzoTipoPrevendita, $array["codice"], StatoPrevendita::parse($array["stato"]));
     }
 
     /**
@@ -186,14 +170,6 @@ class WPrevenditaPlus implements DatabaseWrapper
      * @var string
      */
     private $cognomePR;
-
-    /**
-     * Identificativo del cliente che ha comprato la prevendita.
-     * (>0). (OZPTIONALE)
-     *
-     * @var int|NULL
-     */
-    private $idCliente;
 
     /**
      * Nome del cliente.(OZPTIONALE)
@@ -245,7 +221,7 @@ class WPrevenditaPlus implements DatabaseWrapper
     private $stato;
 
 
-    protected function __construct($id, $idEvento, $nomeEvento, $idPR, $nomePR, $cognomePR, $idCliente, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $nomeTipoPrevendita, $prezzoTipoPrevendita, $codice, $stato)
+    protected function __construct($id, $idEvento, $nomeEvento, $idPR, $nomePR, $cognomePR, $nomeCliente, $cognomeCliente, $idTipoPrevendita, $nomeTipoPrevendita, $prezzoTipoPrevendita, $codice, $stato)
     {
         $this->id = $id;
         $this->idEvento = $idEvento;
@@ -253,7 +229,6 @@ class WPrevenditaPlus implements DatabaseWrapper
         $this->idPR = $idPR;
         $this->nomePR = $nomePR;
         $this->cognomePR = $cognomePR;
-        $this->idCliente = $idCliente;
         $this->nomeCliente = $nomeCliente;
         $this->cognomeCliente = $cognomeCliente;
         $this->idTipoPrevendita = $idTipoPrevendita;
@@ -306,15 +281,6 @@ class WPrevenditaPlus implements DatabaseWrapper
     public function getIdPR()
     {
         return $this->idPR;
-    }
-
-    /**
-     *
-     * @return number|NULL
-     */
-    public function getIdCliente()
-    {
-        return is_null($this->idCliente) ? NULL : $this->idCliente;
     }
 
     /**

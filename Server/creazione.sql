@@ -1,3 +1,5 @@
+/*TODO: Modificare le tabelle per raggiungere gli stati presenti nel documento di progetto*/
+
 CREATE TABLE staff (
   id int NOT NULL AUTO_INCREMENT,
   idCreatore int NOT NULL,
@@ -557,7 +559,8 @@ DELIMITER ;
 Verifica che la prevendita è aggiornabile:
   1)Il nuovo tipo prevendita è compatibile.
   2)Il nuovo tipo prevendita si puù modificare solo se rispetta il periodo di vendita
-  3)Lo stato deve seguire il relativo grafo (stati.png).
+  3)TODO: La prevendita non è timbrata
+  4)Lo stato deve seguire il relativo grafo (stati.png).
 */
 
 DELIMITER $$
