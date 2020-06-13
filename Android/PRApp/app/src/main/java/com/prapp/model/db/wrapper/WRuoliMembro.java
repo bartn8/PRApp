@@ -21,11 +21,11 @@ package com.prapp.model.db.wrapper;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.prapp.model.db.enums.Diritto;
+import com.prapp.model.db.enums.Ruolo;
 import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONDeserializable;
 import com.prapp.model.net.serialize.JSONSerializable;
-import com.prapp.model.net.serialize.adapter.DirittoSetAdapter;
+import com.prapp.model.net.serialize.adapter.RuoloSetAdapter;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -33,15 +33,15 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class WDirittiUtente implements Serializable, DatabaseWrapper, Twinned, JSONSerializable, JSONDeserializable {
+public class WRuoliMembro implements Serializable, DatabaseWrapper, Twinned, JSONSerializable, JSONDeserializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String CLASS_PATH = "com\\model\\db\\wrapper\\WDirittiUtente";
+    public static final String CLASS_PATH = "com\\model\\db\\wrapper\\WRuoliMembro";
 
-    public static WDirittiUtente getEmpty()
+    public static WRuoliMembro getEmpty()
     {
-        return new WDirittiUtente(0,0,new TreeSet<Diritto>());
+        return new WRuoliMembro(0,0,new TreeSet<Ruolo>());
     }
 
     @SerializedName("idUtente")
@@ -50,32 +50,32 @@ public class WDirittiUtente implements Serializable, DatabaseWrapper, Twinned, J
     @SerializedName("idStaff")
     private Integer idStaff;
 
-    @SerializedName("diritti")
-    @JsonAdapter(DirittoSetAdapter.class)
-    private Set<Diritto> diritti;
+    @SerializedName("ruoli")
+    @JsonAdapter(RuoloSetAdapter.class)
+    private Set<Ruolo> ruoli;
 
-    public WDirittiUtente(Integer idUtente, Integer idStaff, Set<Diritto> diritti) {
+    public WRuoliMembro(Integer idUtente, Integer idStaff, Set<Ruolo> ruoli) {
         this.idUtente = idUtente;
         this.idStaff = idStaff;
-        this.diritti = diritti;
+        this.ruoli = ruoli;
     }
 
-    public WDirittiUtente(Integer idUtente, Integer idStaff, Diritto[] diritti) {
+    public WRuoliMembro(Integer idUtente, Integer idStaff, Ruolo[] ruoli) {
         this.idUtente = idUtente;
         this.idStaff = idStaff;
-        this.diritti = new TreeSet<>();
+        this.ruoli = new TreeSet<>();
 
-        Collections.addAll(this.diritti, diritti);
+        Collections.addAll(this.ruoli, ruoli);
     }
 
-    public WDirittiUtente(Integer idUtente, Integer idStaff, Integer[] intDiritti) throws ParseException {
+    public WRuoliMembro(Integer idUtente, Integer idStaff, Integer[] intDiritti) throws ParseException {
         this.idUtente = idUtente;
         this.idStaff = idStaff;
-        this.diritti = new TreeSet<>();
+        this.ruoli = new TreeSet<>();
 
         for (Integer intDiritto : intDiritti) {
-            Diritto tmp = Diritto.parseId(intDiritto);
-            diritti.add(tmp);
+            Ruolo tmp = Ruolo.parseId(intDiritto);
+            ruoli.add(tmp);
         }
 
     }
@@ -88,8 +88,8 @@ public class WDirittiUtente implements Serializable, DatabaseWrapper, Twinned, J
         return idStaff;
     }
 
-    public Set<Diritto> getDiritti() {
-        return diritti;
+    public Set<Ruolo> getRuoli() {
+        return ruoli;
     }
 
     @Override

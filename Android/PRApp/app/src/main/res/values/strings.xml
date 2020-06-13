@@ -246,7 +246,7 @@
 
     <!-- Roba da aggiungere nel QR -->
     <string name="fragment_pr_qr_text_persona">
-        <xliff:g example="Piero" id="nome">%1$s</xliff:g> <xliff:g example="Marconi" id="cognome">%2$s</xliff:g> - <xliff:g example="XX-XX-XXXX" id="dataDiNascita">%3$s</xliff:g>\n
+        <xliff:g example="Piero" id="nome">%1$s</xliff:g> <xliff:g example="Marconi" id="cognome">%2$s</xliff:g>\n
     </string>
 
     <string name="fragment_pr_qr_text_warning">PRESENTARSI CON UN DOCUMENTO VALIDO ALL\'INGRESSO</string>

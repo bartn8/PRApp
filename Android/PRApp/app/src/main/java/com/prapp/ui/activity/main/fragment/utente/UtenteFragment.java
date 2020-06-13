@@ -36,7 +36,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.prapp.R;
-import com.prapp.model.db.wrapper.WDirittiUtente;
+import com.prapp.model.db.wrapper.WRuoliMembro;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WUtente;
@@ -212,10 +212,10 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
 
             if (viewModel.isStaffScelto()) {
                 WStaff staff = viewModel.getStaff();
-                WDirittiUtente dirittiUtente = viewModel.getDirittiUtente();
+                WRuoliMembro dirittiUtente = viewModel.getDirittiUtente();
 
                 textViewNomeStaff.setText(staff.getNome());
-                textViewDiritti.setText(dirittiUtente.getDiritti().toString());
+                textViewDiritti.setText(dirittiUtente.getRuoli().toString());
             }
 
             if (viewModel.isEventoScelto()) {

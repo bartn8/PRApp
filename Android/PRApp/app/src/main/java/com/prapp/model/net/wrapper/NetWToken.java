@@ -19,6 +19,7 @@
 
 package com.prapp.model.net.wrapper;
 
+import com.google.gson.annotations.SerializedName;
 import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONSerializable;
 
@@ -29,13 +30,21 @@ public class NetWToken implements Twinned, NetWrapper, JSONSerializable {
 
     public static NetWToken getEmpty()
     {
-        return new NetWToken( "");
+        return new NetWToken("", "");
     }
 
+    @SerializedName("username")
+    private String username;
+    @SerializedName("token")
     private String token;
 
-    public NetWToken(String token) {
+    public NetWToken(String username, String token) {
+        this.username = username;
         this.token = token;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getToken() {
@@ -51,13 +60,5 @@ public class NetWToken implements Twinned, NetWrapper, JSONSerializable {
     {
         this.token = "";
     }
-
-/*    @Override
-    public JSONObject jsonSerialize() throws JSONException {
-        JSONObject obj = new JSONObject();
-        obj.put("username", getUsername());
-        obj.put("token", getToken());
-        return obj;
-    }*/
-
+    
 }

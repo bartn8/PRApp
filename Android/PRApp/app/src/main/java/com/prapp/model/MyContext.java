@@ -19,7 +19,7 @@
 
 package com.prapp.model;
 
-import com.prapp.model.db.wrapper.WDirittiUtente;
+import com.prapp.model.db.wrapper.WRuoliMembro;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WUtente;
@@ -35,30 +35,35 @@ import java.util.TreeSet;
 public class MyContext {
 
     private static final String LOCAL_HOST = "192.168.1.51";//10.0.0.2
+    private static final String LOCAL_PROXY_HOST = "192.168.1.51";//10.0.0.2
     private static final String ALTERVISTA_HOST = "prapp.altervista.org";
-    private static final String DEFAULT_HOST = ALTERVISTA_HOST;
+    private static final String DEFAULT_HOST = LOCAL_PROXY_HOST;
 
     private static final String LOCAL_ADDRESS = "http://192.168.1.51";//10.0.0.2
+    private static final String LOCAL_PROXY_ADDRESS = "http://192.168.1.51:8080";//10.0.0.2
     private static final String ALTERVISTA_ADDRESS = "https://prapp.altervista.org";
-    private static final String DEFAULT_ADDRESS = ALTERVISTA_ADDRESS;
+    private static final String DEFAULT_ADDRESS = LOCAL_PROXY_ADDRESS;
 
     private static final String LOCAL_FRAMEWORK_ADDRESS = "http://192.168.1.51/framework/ajax.php";//10.0.0.2
+    private static final String LOCAL_PROXY_FRAMEWORK_ADDRESS = "http://192.168.1.51:8080/framework/ajax.php";//10.0.0.2
     private static final String ALTERVISTA_FRAMEWORK_ADDRESS = "https://prapp.altervista.org/framework/ajax.php";
-    private static final String DEFAULT_FRAMEWORK_ADDRESS = ALTERVISTA_FRAMEWORK_ADDRESS;
+    private static final String DEFAULT_FRAMEWORK_ADDRESS = LOCAL_PROXY_FRAMEWORK_ADDRESS;
 
     private static final String LOCAL_WEBAPP_ADDRESS = "http://192.168.1.51/webapppr/index.html";
+    private static final String LOCAL_PROXY_WEBAPP_ADDRESS = "http://192.168.1.51:8080/webapppr/index.html";
     private static final String ALTERVISTA_WEBAPP_ADDRESS = "https://prapp.altervista.org/webapppr/login.html";
     //private static final String ALTERVISTA_WEBAPP_ADDRESS = "https://prapp.altervista.org/showCookies.html";
-    private static final String DEFAULT_WEBAPP_ADDRESS = ALTERVISTA_WEBAPP_ADDRESS;
-
+    private static final String DEFAULT_WEBAPP_ADDRESS = LOCAL_PROXY_WEBAPP_ADDRESS;
 
     private static final String LOCAL_WEBAPP_LOGIN_ADDRESS = "http://192.168.1.51/webapppr/login.html";
+    private static final String LOCAL_PROXY_WEBAPP_LOGIN_ADDRESS = "http://192.168.1.51:8080/webapppr/login.html";
     private static final String ALTERVISTA_WEBAPP_LOGIN_ADDRESS = "https://prapp.altervista.org/webapppr/login.html";
-    private static final String DEFAULT_WEBAPP_LOGIN_ADDRESS = ALTERVISTA_WEBAPP_LOGIN_ADDRESS;
+    private static final String DEFAULT_WEBAPP_LOGIN_ADDRESS = LOCAL_PROXY_WEBAPP_LOGIN_ADDRESS;
 
     private static final String LOCAL_WEBAPP_LOGOUT_ADDRESS = "http://192.168.1.51/webapppr/logout.html";
+    private static final String LOCAL_PROXY_WEBAPP_LOGOUT_ADDRESS = "http://192.168.1.51:8080/webapppr/logout.html";
     private static final String ALTERVISTA_WEBAPP_LOGOUT_ADDRESS = "https://prapp.altervista.org/webapppr/logout.html";
-    private static final String DEFAULT_WEBAPP_LOGOUT_ADDRESS = ALTERVISTA_WEBAPP_LOGOUT_ADDRESS;
+    private static final String DEFAULT_WEBAPP_LOGOUT_ADDRESS = LOCAL_PROXY_WEBAPP_LOGOUT_ADDRESS;
 
     public static final String WEBAPP_NAME = "webapppr";
 
@@ -90,7 +95,7 @@ public class MyContext {
     private WEvento evento;
     private boolean eventoScelto;
 
-    private WDirittiUtente dirittiUtente;
+    private WRuoliMembro dirittiUtente;
 
     private RandomString random = new RandomString();
 
@@ -132,17 +137,17 @@ public class MyContext {
         clearEvento();
     }
 
-    public WDirittiUtente getDirittiUtente() {
+    public WRuoliMembro getDirittiUtente() {
         return dirittiUtente;
     }
 
-    public void setDirittiUtente(WDirittiUtente dirittiUtente) {
+    public void setDirittiUtente(WRuoliMembro dirittiUtente) {
         this.dirittiUtente = dirittiUtente;
     }
 
     public void setNoDirittiUtente()
     {
-        this.dirittiUtente = new WDirittiUtente(utente.getId(), staff.getId(), new TreeSet<>());
+        this.dirittiUtente = new WRuoliMembro(utente.getId(), staff.getId(), new TreeSet<>());
     }
 
     public WStaff getStaff() {

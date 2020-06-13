@@ -33,11 +33,14 @@ public class InsertNetWPrevendita implements Twinned, NetWrapper, JSONSerializab
 
     public static InsertNetWPrevendita getEmpty()
     {
-        return new InsertNetWPrevendita(0,0,0,"", StatoPrevendita.CONSEGNATA);
+        return new InsertNetWPrevendita("", "",0,0,"", StatoPrevendita.VALIDA);
     }
 
-    @SerializedName("idCliente")
-    private Integer idCliente;
+    @SerializedName("nomeCliente")
+    private String nomeCliente;
+
+    @SerializedName("cognomeCliente")
+    private String cognomeCliente;
 
     @SerializedName("idEvento")
     private Integer idEvento;
@@ -53,16 +56,21 @@ public class InsertNetWPrevendita implements Twinned, NetWrapper, JSONSerializab
     private StatoPrevendita stato;
 
 
-    public InsertNetWPrevendita(Integer idCliente, Integer idEvento, Integer idTipoPrevendita, String codice, StatoPrevendita stato) {
-        this.idCliente = idCliente;
+    public InsertNetWPrevendita(String nomeCliente, String cognomeCliente, Integer idEvento, Integer idTipoPrevendita, String codice, StatoPrevendita stato) {
+        this.nomeCliente = nomeCliente;
+        this.cognomeCliente = cognomeCliente;
         this.idEvento = idEvento;
         this.idTipoPrevendita = idTipoPrevendita;
         this.codice = codice;
         this.stato = stato;
     }
 
-    public Integer getIdCliente() {
-        return idCliente;
+    public String getCognomeCliente() {
+        return cognomeCliente;
+    }
+
+    public String getNomeCliente() {
+        return nomeCliente;
     }
 
     public Integer getIdEvento() {

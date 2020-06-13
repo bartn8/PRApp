@@ -23,7 +23,6 @@ import android.content.Context;
 
 import com.android.volley.Response;
 import com.prapp.PRAppApplication;
-import com.prapp.model.db.wrapper.WCliente;
 import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
@@ -37,7 +36,6 @@ import com.prapp.model.net.Risultato;
 import com.prapp.model.net.enums.Comando;
 import com.prapp.model.net.wrapper.NetWFiltriStatoPrevendita;
 import com.prapp.model.net.wrapper.NetWId;
-import com.prapp.model.net.wrapper.insert.InsertNetWCliente;
 import com.prapp.model.net.wrapper.insert.InsertNetWPrevendita;
 import com.prapp.model.net.wrapper.update.UpdateNetWPrevendita;
 
@@ -70,19 +68,6 @@ public class ManagerPR extends Manager {
 
     public ManagerPR(URL indirizzo, Context context) {
         super(indirizzo);
-    }
-
-    public void aggiungiCliente(InsertNetWCliente newCliente, final Response.Listener<WCliente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
-        Comando comando = Comando.COMANDO_PR_AGGIUNGI_CLIENTE;
-        final Richiesta richiesta = new Richiesta(comando);
-        richiesta.aggiungiArgomento(new Argomento(AGGIUNGI_CLIENTE_ARG_CLIENTE, newCliente.getRemoteClassPath(), newCliente));
-
-
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WCliente.class)), onException, errorListener);
-
-        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
-
-        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void aggiungiPrevendita(InsertNetWPrevendita newPrevendita, final Response.Listener<WPrevendita> onSuccess, final Response.Listener<List<Eccezione>> onException)  {

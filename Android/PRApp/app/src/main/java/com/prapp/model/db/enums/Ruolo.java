@@ -24,23 +24,23 @@ import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
 
-public enum Diritto {
+public enum Ruolo {
 
     PR(0, "PR"),
     CASSIERE(1, "CASSIERE"),
     AMMINISTRATORE(2, "AMMINISTRATORE");
 
-    private static final SparseArray<Diritto> mappaId = new SparseArray<>();
+    private static final SparseArray<Ruolo> mappaId = new SparseArray<>();
 
     static {
         //Inizializzo le mappe
-        mappaId.put(Diritto.PR.getId(), Diritto.PR);
-        mappaId.put(Diritto.CASSIERE.getId(), Diritto.CASSIERE);
-        mappaId.put(Diritto.AMMINISTRATORE.getId(), Diritto.AMMINISTRATORE);
+        mappaId.put(Ruolo.PR.getId(), Ruolo.PR);
+        mappaId.put(Ruolo.CASSIERE.getId(), Ruolo.CASSIERE);
+        mappaId.put(Ruolo.AMMINISTRATORE.getId(), Ruolo.AMMINISTRATORE);
     }
 
     @Nullable
-    public static Diritto parseId(int id) {
+    public static Ruolo parseId(int id) {
         return mappaId.get(id);
     }
 
@@ -49,7 +49,7 @@ public enum Diritto {
     private int resId;
     private String resValue;
 
-    private Diritto(int id, String nome)
+    private Ruolo(int id, String nome)
     {
         this.id = id;
         this.nome = nome;

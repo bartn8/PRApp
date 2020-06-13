@@ -22,17 +22,14 @@ package com.prapp.model.net.wrapper.insert;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.prapp.model.db.enums.StatoEvento;
-import com.prapp.model.db.enums.StatoPrevendita;
 import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONSerializable;
 import com.prapp.model.net.serialize.adapter.DateTimeAdapter;
-import com.prapp.model.net.serialize.adapter.LocalDateAdapter;
 import com.prapp.model.net.serialize.adapter.StatoEventoAdapter;
 import com.prapp.model.net.wrapper.NetWrapper;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 public class InsertNetWEvento implements Twinned, NetWrapper, JSONSerializable {
 
@@ -42,11 +39,8 @@ public class InsertNetWEvento implements Twinned, NetWrapper, JSONSerializable {
     @org.jetbrains.annotations.Contract(" -> new")
     public static InsertNetWEvento getEmpty()
     {
-        return new InsertNetWEvento(0, "", "", new DateTime("1970-01-01T00:00:00.000Z"), new DateTime("1970-01-01T00:00:00.000Z"), "", StatoEvento.VALIDO);
+        return new InsertNetWEvento("", "", new DateTime("1970-01-01T00:00:00.000Z"), new DateTime("1970-01-01T00:00:00.000Z"), "", StatoEvento.VALIDO);
     }
-
-    @SerializedName("idStaff")
-    private Integer idStaff;
 
     @SerializedName("nome")
     private String nome;
@@ -65,27 +59,22 @@ public class InsertNetWEvento implements Twinned, NetWrapper, JSONSerializable {
     @SerializedName("indirizzo")
     private String indirizzo;
 
-    @SerializedName("statoEvento")
+    @SerializedName("stato")
     @JsonAdapter(StatoEventoAdapter.class)
-    private StatoEvento statoEvento;
+    private StatoEvento stato;
 
 
-    public InsertNetWEvento(Integer idStaff, String nome, String descrizione, DateTime inizio, DateTime fine, String indirizzo, StatoEvento statoEvento) {
-        this.idStaff = idStaff;
+    public InsertNetWEvento(String nome, String descrizione, DateTime inizio, DateTime fine, String indirizzo, StatoEvento stato) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.inizio = inizio;
         this.fine = fine;
         this.indirizzo = indirizzo;
-        this.statoEvento = statoEvento;
+        this.stato = stato;
     }
 
-    public InsertNetWEvento(Integer idStaff, String nome, String descrizione, String inizio, String fine, String indirizzo, StatoEvento statoEvento) {
-        this(idStaff, nome, descrizione, new DateTime(inizio), new DateTime(fine), indirizzo, statoEvento);
-    }
-
-    public Integer getIdStaff() {
-        return idStaff;
+    public InsertNetWEvento(String nome, String descrizione, String inizio, String fine, String indirizzo, StatoEvento stato) {
+        this(nome, descrizione, new DateTime(inizio), new DateTime(fine), indirizzo, stato);
     }
 
     public String getNome() {
@@ -108,8 +97,8 @@ public class InsertNetWEvento implements Twinned, NetWrapper, JSONSerializable {
         return indirizzo;
     }
 
-    public StatoEvento getStatoEvento() {
-        return statoEvento;
+    public StatoEvento getStato() {
+        return stato;
     }
 
     public boolean isDescrizionePresent()

@@ -37,7 +37,7 @@ public class WPrevendita implements DatabaseWrapper, Twinned, JSONSerializable, 
     public static final String CLASS_PATH = "com\\model\\db\\wrapper\\WPrevendita";
 
     public static WPrevendita getEmpty() {
-        return new WPrevendita(0, 0, 0, 0, 0, "", StatoPrevendita.CONSEGNATA, "1970-01-01T00:00:00.000Z");
+        return new WPrevendita(0, 0, 0, "", "", 0, "", StatoPrevendita.VALIDA, "1970-01-01T00:00:00.000Z");
     }
 
     @SerializedName("id")
@@ -49,10 +49,10 @@ public class WPrevendita implements DatabaseWrapper, Twinned, JSONSerializable, 
     @SerializedName("idPR")
     private Integer idPR;
 
-    //Optional
-    //Optional perchè il cliente può cancellarsi.
-    @SerializedName("idCliente")
-    private Integer idCliente;
+    @SerializedName("nomeCliente")
+    private String nomeCliente;
+    @SerializedName("cognomeCliente")
+    private String cognomeCliente;
 
     @SerializedName("idTipoPrevendita")
     private Integer idTipoPrevendita;
@@ -68,23 +68,24 @@ public class WPrevendita implements DatabaseWrapper, Twinned, JSONSerializable, 
     @JsonAdapter(DateTimeAdapter.class)
     private DateTime timestampUltimaModifica;
 
-    public WPrevendita(Integer id, Integer idEvento, Integer idPR, Integer idCliente, Integer idTipoPrevendita, String codice, StatoPrevendita stato, DateTime timestampUltimaModifica) {
+    public WPrevendita(Integer id, Integer idEvento, Integer idPR, String nomeCliente, String cognomeCliente, Integer idTipoPrevendita, String codice, StatoPrevendita stato, DateTime timestampUltimaModifica) {
         this.id = id;
         this.idEvento = idEvento;
         this.idPR = idPR;
-        this.idCliente = idCliente;
+        this.nomeCliente = nomeCliente;
+        this.cognomeCliente = cognomeCliente;
         this.idTipoPrevendita = idTipoPrevendita;
         this.codice = codice;
         this.stato = stato;
         this.timestampUltimaModifica = timestampUltimaModifica;
     }
 
-    public WPrevendita(Integer id, Integer idEvento, Integer idPR, Integer idCliente, Integer idTipoPrevendita, String codice, StatoPrevendita stato, String timestampUltimaModifica) {
-        this(id, idEvento, idPR, idCliente, idTipoPrevendita, codice, stato, new DateTime(timestampUltimaModifica));
+    public WPrevendita(Integer id, Integer idEvento, Integer idPR, String nomeCliente, String cognomeCliente, Integer idTipoPrevendita, String codice, StatoPrevendita stato, String timestampUltimaModifica) {
+        this(id, idEvento, idPR, nomeCliente, cognomeCliente, idTipoPrevendita, codice, stato, new DateTime(timestampUltimaModifica));
     }
 
-    public WPrevendita(Integer id, Integer idEvento, Integer idPR, Integer idCliente, Integer idTipoPrevendita, String codice, int stato, String timestampUltimaModifica) throws ParseException {
-        this(id, idEvento, idPR, idCliente, idTipoPrevendita, codice, StatoPrevendita.parseId(stato), timestampUltimaModifica);
+    public WPrevendita(Integer id, Integer idEvento, Integer idPR, String nomeCliente, String cognomeCliente, Integer idTipoPrevendita, String codice, int stato, String timestampUltimaModifica) throws ParseException {
+        this(id, idEvento, idPR, nomeCliente, cognomeCliente, idTipoPrevendita, codice, StatoPrevendita.parseId(stato), timestampUltimaModifica);
     }
 
     public Integer getId() {
@@ -99,8 +100,12 @@ public class WPrevendita implements DatabaseWrapper, Twinned, JSONSerializable, 
         return idPR;
     }
 
-    public Integer getIdCliente() {
-        return idCliente;
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public String getCognomeCliente() {
+        return cognomeCliente;
     }
 
     public Integer getIdTipoPrevendita() {
@@ -117,11 +122,6 @@ public class WPrevendita implements DatabaseWrapper, Twinned, JSONSerializable, 
 
     public DateTime getTimestampUltimaModifica() {
         return timestampUltimaModifica;
-    }
-
-    public boolean isIdClientePresent()
-    {
-        return idCliente != null;
     }
 
     @Override

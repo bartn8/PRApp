@@ -21,8 +21,7 @@ package com.prapp.model.net.manager;
 
 import com.android.volley.Response;
 import com.prapp.PRAppApplication;
-import com.prapp.model.db.wrapper.WCliente;
-import com.prapp.model.db.wrapper.WDirittiUtente;
+import com.prapp.model.db.wrapper.WRuoliMembro;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WTipoPrevendita;
 import com.prapp.model.db.wrapper.WUtente;
@@ -87,21 +86,21 @@ public class ManagerMembro extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciDirittiPersonaliStaff(int idStaff, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void restituisciDirittiPersonaliStaff(int idStaff, final Response.Listener<WRuoliMembro> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_DIRITTI_PERSONALI;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWId = new NetWId(idStaff);
         richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_DIRITTI_PERSONALI_ARG_STAFF, netWId.getRemoteClassPath(), netWId));
 
 
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WDirittiUtente.class)), onException, errorListener);
+        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WRuoliMembro.class)), onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciDirittiUtenteStaff(int idUtente, int idStaff, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void restituisciDirittiUtenteStaff(int idUtente, int idStaff, final Response.Listener<WRuoliMembro> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_DIRITTI_UTENTE;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWIdUtente = new NetWId(idUtente);
@@ -110,7 +109,7 @@ public class ManagerMembro extends Manager {
         richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_DIRITTI_UTENTE_ARG_STAFF, netWIdStaff.getRemoteClassPath(), netWIdStaff));
 
 
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WDirittiUtente.class)), onException, errorListener);
+        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WRuoliMembro.class)), onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 
@@ -151,28 +150,6 @@ public class ManagerMembro extends Manager {
 
             for (Risultato risultato : element) {
                 myList.add(risultato.castRisultato(WTipoPrevendita.class));
-            }
-
-            onSuccess.onResponse(myList);
-        }, onException, errorListener);
-
-        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
-
-        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
-    }
-
-    public void restituisciListaClientiStaff(int idStaff, final Response.Listener<List<WCliente>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
-        Comando comando = Comando.COMANDO_MEMBRO_RESTITUISCI_LISTA_CLIENTI;
-        final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idStaff);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_LISTA_CLIENTI_ARG_STAFF, netWId.getRemoteClassPath(), netWId));
-
-
-        ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
-            List<WCliente> myList = new ArrayList<>();
-
-            for (Risultato risultato : element) {
-                myList.add(risultato.castRisultato(WCliente.class));
             }
 
             onSuccess.onResponse(myList);

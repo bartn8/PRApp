@@ -21,7 +21,6 @@ package com.prapp.model.net.manager;
 
 import com.android.volley.Response;
 import com.prapp.PRAppApplication;
-import com.prapp.model.db.wrapper.WCliente;
 import com.prapp.model.db.wrapper.WEntrata;
 import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
@@ -77,20 +76,6 @@ public class ManagerCassiere extends Manager {
 
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WEntrata.class)), onException, errorListener);
-
-        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
-
-        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
-    }
-
-    public void restituisciDatiCliente(int idPrevendita, final Response.Listener<WCliente> onSuccess, final Response.Listener<List<Eccezione>> onException) {
-        Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_DATI_CLIENTE;
-        final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idPrevendita);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_DATI_CLIENTE_ARG_RPEVENDITA, netWId.getRemoteClassPath(), netWId));
-
-
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WCliente.class)), onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 

@@ -34,11 +34,14 @@ public class WStaff implements  DatabaseWrapper, Twinned, JSONSerializable, JSON
 
     public static WStaff getEmpty()
     {
-        return new WStaff(0, "", "1970-01-01T00:00:00.000Z");
+        return new WStaff(0, 0, "", "1970-01-01T00:00:00.000Z");
     }
 
     @SerializedName("id")
     private Integer id;
+
+    @SerializedName("idCreatore")
+    private Integer idCreatore;
 
     @SerializedName("nome")
     private String nome;
@@ -47,18 +50,23 @@ public class WStaff implements  DatabaseWrapper, Twinned, JSONSerializable, JSON
     @JsonAdapter(DateTimeAdapter.class)
     private DateTime timestampCreazione;
 
-    public WStaff(Integer id, String nome, DateTime timestampCreazione) {
+    public WStaff(Integer id, Integer idCreatore, String nome, DateTime timestampCreazione) {
         this.id = id;
+        this.idCreatore = idCreatore;
         this.nome = nome;
         this.timestampCreazione = timestampCreazione;
     }
 
-    public WStaff(Integer id, String nome, String timestampCreazione) {
-        this(id, nome, new DateTime(timestampCreazione));
+    public WStaff(Integer id, Integer idCreatore, String nome, String timestampCreazione) {
+        this(id, idCreatore, nome, new DateTime(timestampCreazione));
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getIdCreatore() {
+        return idCreatore;
     }
 
     public String getNome() {

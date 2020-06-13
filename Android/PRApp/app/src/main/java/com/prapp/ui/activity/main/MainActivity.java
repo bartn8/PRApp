@@ -30,8 +30,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.prapp.R;
-import com.prapp.model.db.enums.Diritto;
-import com.prapp.model.db.wrapper.WDirittiUtente;
+import com.prapp.model.db.enums.Ruolo;
+import com.prapp.model.db.wrapper.WRuoliMembro;
 import com.prapp.ui.activity.main.fragment.amministratore.AmministratoreFragment;
 import com.prapp.ui.activity.main.fragment.cassiere.CassiereFragment;
 import com.prapp.ui.activity.main.fragment.membro.MembroFragment;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
     private MainViewModel mainViewModel;
 
-    private Set<Diritto> diritti;
+    private Set<Ruolo> diritti;
 
     private int currentFragment = 0;
 
@@ -207,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         mainViewModel = ViewModelProviders.of(this, new MainViewModelFactory()).get(MainViewModel.class);
 
         //Recupero i diritti dell'utente.
-        WDirittiUtente dirittiUtente = mainViewModel.getDirittiUtente();
+        WRuoliMembro dirittiUtente = mainViewModel.getDirittiUtente();
 
-        diritti = dirittiUtente.getDiritti();
+        diritti = dirittiUtente.getRuoli();
 
         //Controllo se era presente un fragment precedente.
         //https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
@@ -225,8 +225,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         Menu menu = navView.getMenu();
 
-        menu.findItem(R.id.navigation_pr).setEnabled(diritti.contains(Diritto.PR));
-        menu.findItem(R.id.navigation_cassiere).setEnabled(diritti.contains(Diritto.CASSIERE));
+        menu.findItem(R.id.navigation_pr).setEnabled(diritti.contains(Ruolo.PR));
+        menu.findItem(R.id.navigation_cassiere).setEnabled(diritti.contains(Ruolo.CASSIERE));
 //        menu.findItem(R.id.navigation_amministratore).setEnabled(diritti.contains(Diritto.AMMINISTRATORE));
 
         //Listener del menù sottostante

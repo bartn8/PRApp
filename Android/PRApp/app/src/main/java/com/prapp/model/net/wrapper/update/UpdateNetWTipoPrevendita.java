@@ -37,8 +37,8 @@ public class UpdateNetWTipoPrevendita implements Twinned, NetWrapper, JSONSerial
         return new UpdateNetWTipoPrevendita(0,"","",0.00f, new DateTime("1970-01-01T00:00:00.000Z"), new DateTime("1970-01-01T00:00:00.000Z"));
     }
 
-    @SerializedName("idTipoPrevendita")
-    private Integer idTipoPrevendita;
+    @SerializedName("id")
+    private Integer id;
 
     @SerializedName("nome")
     private String nome;
@@ -57,8 +57,8 @@ public class UpdateNetWTipoPrevendita implements Twinned, NetWrapper, JSONSerial
     @JsonAdapter(DateTimeAdapter.class)
     private DateTime chiusuraPrevendite;
 
-    public UpdateNetWTipoPrevendita(Integer idTipoPrevendita, String nome, String descrizione, Float prezzo, DateTime aperturaPrevendite, DateTime chiusuraPrevendite) {
-        this.idTipoPrevendita = idTipoPrevendita;
+    public UpdateNetWTipoPrevendita(Integer id, String nome, String descrizione, Float prezzo, DateTime aperturaPrevendite, DateTime chiusuraPrevendite) {
+        this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
         this.prezzo = prezzo;
@@ -66,12 +66,12 @@ public class UpdateNetWTipoPrevendita implements Twinned, NetWrapper, JSONSerial
         this.chiusuraPrevendite = chiusuraPrevendite;
     }
 
-    public UpdateNetWTipoPrevendita(Integer idTipoPrevendita, String nome, String descrizione, Float prezzo, String aperturaPrevendite, String chiusuraPrevendite) {
-        this(idTipoPrevendita, nome, descrizione, prezzo, new DateTime(aperturaPrevendite), new DateTime(chiusuraPrevendite));
+    public UpdateNetWTipoPrevendita(Integer id, String nome, String descrizione, Float prezzo, String aperturaPrevendite, String chiusuraPrevendite) {
+        this(id, nome, descrizione, prezzo, new DateTime(aperturaPrevendite), new DateTime(chiusuraPrevendite));
     }
 
-    public Integer getIdTipoPrevendita() {
-        return idTipoPrevendita;
+    public Integer getId() {
+        return id;
     }
 
     public String getNome() {

@@ -35,7 +35,7 @@ public class WTipoPrevendita  implements DatabaseWrapper, Twinned, JSONSerializa
 
     public static WTipoPrevendita getEmpty()
     {
-        return new WTipoPrevendita(0,0,"","",0.00f, "1970-01-01T00:00:00.000Z", "1970-01-01T00:00:00.000Z");
+        return new WTipoPrevendita(0,0,"","",0.00f, "1970-01-01T00:00:00.000Z", "1970-01-01T00:00:00.000Z", 0, "1970-01-01T00:00:00.000Z");
     }
 
     @SerializedName("id")
@@ -61,7 +61,14 @@ public class WTipoPrevendita  implements DatabaseWrapper, Twinned, JSONSerializa
     @JsonAdapter(DateTimeAdapter.class)
     private DateTime chiusuraPrevendite;
 
-    public WTipoPrevendita(Integer id, Integer idEvento, String nome, String descrizione, Float prezzo, DateTime aperturaPrevendite, DateTime chiusuraPrevendite) {
+    @SerializedName("idModificatore")
+    private Integer idModificatore;
+
+    @SerializedName("timestampUltimaModifica")
+    @JsonAdapter(DateTimeAdapter.class)
+    private DateTime timestampUltimaModifica;
+
+    public WTipoPrevendita(Integer id, Integer idEvento, String nome, String descrizione, Float prezzo, DateTime aperturaPrevendite, DateTime chiusuraPrevendite, Integer idModificatore, DateTime timestampUltimaModifica) {
         this.id = id;
         this.idEvento = idEvento;
         this.nome = nome;
@@ -69,10 +76,12 @@ public class WTipoPrevendita  implements DatabaseWrapper, Twinned, JSONSerializa
         this.prezzo = prezzo;
         this.aperturaPrevendite = aperturaPrevendite;
         this.chiusuraPrevendite = chiusuraPrevendite;
+        this.idModificatore = idModificatore;
+        this.timestampUltimaModifica = timestampUltimaModifica;
     }
 
-    public WTipoPrevendita(Integer id, Integer idEvento, String nome, String descrizione, Float prezzo, String aperturaPrevendite, String chiusuraPrevendite) {
-        this(id, idEvento, nome, descrizione, prezzo, new DateTime(aperturaPrevendite), new DateTime(chiusuraPrevendite));
+    public WTipoPrevendita(Integer id, Integer idEvento, String nome, String descrizione, Float prezzo, String aperturaPrevendite, String chiusuraPrevendite, Integer idModificatore, String timestampUltimaModifica) {
+        this(id, idEvento, nome, descrizione, prezzo, new DateTime(aperturaPrevendite), new DateTime(chiusuraPrevendite), idModificatore, new DateTime(timestampUltimaModifica));
     }
 
     public Integer getId() {
@@ -101,6 +110,14 @@ public class WTipoPrevendita  implements DatabaseWrapper, Twinned, JSONSerializa
 
     public DateTime getChiusuraPrevendite() {
         return chiusuraPrevendite;
+    }
+
+    public DateTime getTimestampUltimaModifica() {
+        return timestampUltimaModifica;
+    }
+
+    public Integer getIdModificatore() {
+        return idModificatore;
     }
 
     @Override

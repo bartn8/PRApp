@@ -35,19 +35,16 @@ import com.prapp.PRAppApplication;
 import com.prapp.R;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.enums.StatoPrevendita;
-import com.prapp.model.db.wrapper.WCliente;
 import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WPrevenditaPlus;
 import com.prapp.model.db.wrapper.WTipoPrevendita;
 import com.prapp.model.net.manager.ManagerMembro;
 import com.prapp.model.net.manager.ManagerPR;
-import com.prapp.model.net.wrapper.insert.InsertNetWCliente;
 import com.prapp.model.net.wrapper.insert.InsertNetWPrevendita;
 import com.prapp.model.net.wrapper.update.UpdateNetWPrevendita;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -156,21 +153,6 @@ public class PRViewModel extends AbstractViewModel {
     }
 
     //Roba di stati
-    private MutableLiveData<Integer> clienteMode = new MutableLiveData<>(CLIENTE_ADD_MODE);
-
-    public int getClienteMode() {
-        Integer value = clienteMode.getValue();
-        return value == null ? -1 : value;
-    }
-
-    public LiveData<Integer> getClienteModeLiveData() {
-        return clienteMode;
-    }
-
-    public void setClienteMode(int clienteMode) {
-        this.clienteMode.setValue(clienteMode);
-    }
-
     private MutableLiveData<Integer> prevenditaMode = new MutableLiveData<>(PREVENDITA_NOT_SELECT_MODE);
 
     public int getPrevenditaMode() {
@@ -189,8 +171,6 @@ public class PRViewModel extends AbstractViewModel {
     //Roba generale
 
     //Roba lato network
-    private MutableLiveData<Result<List<WCliente>, Void>> listaClientiResult = new MutableLiveData<>();
-    private MutableLiveData<Result<WCliente, Void>> aggiungiClienteResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WTipoPrevendita>, Void>> listaTipoPrevenditaResult = new MutableLiveData<>();
     private MutableLiveData<Result<WPrevendita, Void>> aggiungiPrevenditaResult = new MutableLiveData<>();
     private MutableLiveData<Result<List<WPrevenditaPlus>, Void>> listaPrevenditeResult = new MutableLiveData<>();
@@ -200,13 +180,6 @@ public class PRViewModel extends AbstractViewModel {
         return modificaPrevenditaResult;
     }
 
-    public LiveData<Result<List<WCliente>, Void>> getListaClientiResult() {
-        return listaClientiResult;
-    }
-
-    public LiveData<Result<WCliente, Void>> getAggiungiClienteResult() {
-        return aggiungiClienteResult;
-    }
 
     public LiveData<Result<List<WTipoPrevendita>, Void>> getListaTipoPrevenditaResult() {
         return listaTipoPrevenditaResult;
@@ -225,41 +198,6 @@ public class PRViewModel extends AbstractViewModel {
         super();
     }
 
-    public void getListaClienti() {
-        MyContext myContext = getMyContext();
-
-        if (myContext.isLoggato() && myContext.isStaffScelto()) {
-
-            ManagerMembro managerMembro = getManagerMembro();
-            Integer idStaff = myContext.getStaff().getId();
-
-            managerMembro.restituisciListaClientiStaff(idStaff, new DefaultSuccessListener<>(listaClientiResult), new DefaultExceptionListener<>(listaClientiResult));
-
-        } else {
-            listaClientiResult.setValue(new Result<>(R.string.no_login));
-        }
-    }
-
-    public void aggiungiCliente(String nome, String cognome, String dataDiNascita) {
-        MyContext myContext = getMyContext();
-        if (myContext.isLoggato() && myContext.isStaffScelto()) {
-            Integer idStaff = getStaff().getId();
-            ManagerPR managerPR = getManagerPR();
-
-            LocalDate convDataNascita = null;
-
-            if (isStringNotBlank(dataDiNascita)) {
-                convDataNascita = DATE_FORMAT.parseLocalDate(dataDiNascita);
-            }
-
-            InsertNetWCliente insertNetWCliente = new InsertNetWCliente(idStaff, nome, cognome, null, convDataNascita, null);
-
-            managerPR.aggiungiCliente(insertNetWCliente, new DefaultSuccessListener<>(aggiungiClienteResult), new DefaultExceptionListener<>(aggiungiClienteResult));
-        } else {
-            aggiungiClienteResult.setValue(new Result<>(R.string.no_login));
-        }
-    }
-
     public void getListaTipoPrevendita() {
         MyContext myContext = getMyContext();
 
@@ -274,19 +212,19 @@ public class PRViewModel extends AbstractViewModel {
         }
     }
 
-    public void aggiungiPrevendita(WCliente cliente, WTipoPrevendita tipoPrevendita, StatoPrevendita statoPrevendita) {
+    public void aggiungiPrevendita(String nomeCliente, String cognomeCliente, WTipoPrevendita tipoPrevendita, StatoPrevendita statoPrevendita) {
         MyContext myContext = getMyContext();
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerPR managerPR = getManagerPR();
 
-            Integer idCliente = cliente.getId();
+
             Integer idEvento = getEvento().getId();
             Integer idTipoPrevendita = tipoPrevendita.getId();
             String codice = myContext.generatePrevenditaCode();
 
             //Creo la struttura interna
-            InsertNetWPrevendita insertNetWPrevendita = new InsertNetWPrevendita(idCliente, idEvento, idTipoPrevendita, codice, statoPrevendita);
+            InsertNetWPrevendita insertNetWPrevendita = new InsertNetWPrevendita(nomeCliente, cognomeCliente, idEvento, idTipoPrevendita, codice, statoPrevendita);
 
             managerPR.aggiungiPrevendita(insertNetWPrevendita, new DefaultSuccessListener<>(aggiungiPrevenditaResult), new DefaultExceptionListener<>(aggiungiPrevenditaResult));
         } else {
@@ -331,13 +269,11 @@ public class PRViewModel extends AbstractViewModel {
         return false;
     }
 
-    public void aggiungiClienteStateChanged(String nome, String cognome, String dataDiNascita) {
+    public void aggiungiClienteStateChanged(String nome, String cognome) {
         if (!isNomeClienteValid(nome)) {
             aggiungiClienteState.setValue(new AggiungiClienteState(R.string.fragment_pr_add_cliente_invalid_nome, null, null));
         } else if (!isCognomeClienteValid(cognome)) {
             aggiungiClienteState.setValue(new AggiungiClienteState(null, R.string.fragment_pr_add_cliente_invalid_cognome, null));
-        } else if (!isDataDiNascitaClienteValid(dataDiNascita)) {
-            aggiungiClienteState.setValue(new AggiungiClienteState(null, null, R.string.fragment_pr_add_cliente_invalid_dataDiNascita));
         } else {
             aggiungiClienteState.setValue(new AggiungiClienteState(true));
         }
@@ -351,20 +287,6 @@ public class PRViewModel extends AbstractViewModel {
         return isStringNotBlank(cognome);
     }
 
-    private boolean isDataDiNascitaClienteValid(String dataDiNascita) {
-        if (isStringNotBlank(dataDiNascita)) {
-            try {
-                LocalDate date = DATE_FORMAT.parseLocalDate(dataDiNascita);
-                //Conversione riuscita ritorno vero
-                return true;
-            } catch (IllegalArgumentException e) {
-                return false;
-            }
-        }
-
-        //Accetto anche senza data di nascita.
-        return true;
-    }
 
     public void shareImage(Activity activty, Bitmap image, String shareText){
         ShareTask shareTask = new ShareTask(activty, shareText);

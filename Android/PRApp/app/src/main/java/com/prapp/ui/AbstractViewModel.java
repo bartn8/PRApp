@@ -25,7 +25,7 @@ import androidx.lifecycle.ViewModel;
 import com.android.volley.Response;
 import com.prapp.PRAppApplication;
 import com.prapp.model.MyContext;
-import com.prapp.model.db.wrapper.WDirittiUtente;
+import com.prapp.model.db.wrapper.WRuoliMembro;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WUtente;
@@ -126,7 +126,7 @@ public abstract class AbstractViewModel extends ViewModel {
         }
     }
 
-    public WDirittiUtente getDirittiUtente() {
+    public WRuoliMembro getDirittiUtente() {
         return myContext.getDirittiUtente();
     }
 

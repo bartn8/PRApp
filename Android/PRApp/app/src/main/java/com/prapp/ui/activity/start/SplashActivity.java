@@ -28,7 +28,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.prapp.R;
-import com.prapp.model.db.wrapper.WDirittiUtente;
+import com.prapp.model.db.wrapper.WRuoliMembro;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.ui.Result;
@@ -86,16 +86,16 @@ public class SplashActivity extends AppCompatActivity {
         }
     };
 
-    private Observer<Result<WDirittiUtente, Void>> getInfoUtenteResultObserver = new Observer<Result<WDirittiUtente, Void>>() {
+    private Observer<Result<WRuoliMembro, Void>> getInfoUtenteResultObserver = new Observer<Result<WRuoliMembro, Void>>() {
         @Override
-        public void onChanged(Result<WDirittiUtente, Void> getInfoUtenteResult) {
+        public void onChanged(Result<WRuoliMembro, Void> getInfoUtenteResult) {
             if (getInfoUtenteResult == null) {
                 return;
             }
 
             Integer integerError = getInfoUtenteResult.getIntegerError();
             List<Exception> error = getInfoUtenteResult.getError();
-            WDirittiUtente success = getInfoUtenteResult.getSuccess();
+            WRuoliMembro success = getInfoUtenteResult.getSuccess();
 
             if (integerError != null)
                 uiUtil.showError(integerError);

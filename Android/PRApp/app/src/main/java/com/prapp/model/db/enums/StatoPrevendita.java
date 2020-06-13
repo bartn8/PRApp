@@ -25,10 +25,9 @@ import androidx.annotation.Nullable;
 
 public enum StatoPrevendita {
 
-    CONSEGNATA(0, "CONSEGNATA"),
-    PAGATA(1, "PAGATA"),
+    VALIDA(0, "VALIDA"),
     ANNULLATA(2, "ANNULLATA"),
-    RIMBORSATA(3, "RIMBORSATA");
+    ANNULLATA_NON_RIMBORSATA(3, "ANNULLATA_NON_RIMBORSATA");
 
     private static final int LENGTH = 4;
 
@@ -36,12 +35,9 @@ public enum StatoPrevendita {
 
     static {
         //Inizializzo le mappe
-        mappaId.put(StatoPrevendita.CONSEGNATA.getId(), StatoPrevendita.CONSEGNATA);
-        mappaId.put(StatoPrevendita.PAGATA.getId(), StatoPrevendita.PAGATA);
+        mappaId.put(StatoPrevendita.VALIDA.getId(), StatoPrevendita.VALIDA);
         mappaId.put(StatoPrevendita.ANNULLATA.getId(), StatoPrevendita.ANNULLATA);
-        mappaId.put(StatoPrevendita.RIMBORSATA.getId(), StatoPrevendita.RIMBORSATA);
-
-
+        mappaId.put(StatoPrevendita.ANNULLATA_NON_RIMBORSATA.getId(), StatoPrevendita.ANNULLATA_NON_RIMBORSATA);
     }
 
     @Nullable

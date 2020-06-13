@@ -19,11 +19,9 @@
 
 package com.prapp.model.net.wrapper;
 
+import com.google.gson.annotations.SerializedName;
 import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONSerializable;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class NetWLogin implements NetWrapper, Twinned, JSONSerializable {
 
@@ -34,7 +32,9 @@ public class NetWLogin implements NetWrapper, Twinned, JSONSerializable {
         return new NetWLogin("", "");
     }
 
+    @SerializedName("username")
     private String username;
+    @SerializedName("password")
     private String password;
 
     public NetWLogin(String username, String password) {

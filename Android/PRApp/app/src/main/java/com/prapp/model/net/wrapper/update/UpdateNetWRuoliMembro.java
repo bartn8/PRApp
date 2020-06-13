@@ -21,50 +21,42 @@ package com.prapp.model.net.wrapper.update;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.prapp.model.db.enums.Diritto;
+import com.prapp.model.db.enums.Ruolo;
 import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONSerializable;
-import com.prapp.model.net.serialize.adapter.DirittoSetAdapter;
+import com.prapp.model.net.serialize.adapter.RuoloSetAdapter;
 import com.prapp.model.net.wrapper.NetWrapper;
 
 import java.util.Set;
 import java.util.TreeSet;
 
-public class UpdateNetWDirittiUtente implements Twinned, NetWrapper, JSONSerializable {
+public class UpdateNetWRuoliMembro implements Twinned, NetWrapper, JSONSerializable {
 
-    public static final String CLASS_PATH = "com\\model\\net\\wrapper\\update\\UpdateNetWDirittiUtente";
+    public static final String CLASS_PATH = "com\\model\\net\\wrapper\\update\\UpdateNetWRuoliMembro";
 
-    public UpdateNetWDirittiUtente getEmpty()
+    public UpdateNetWRuoliMembro getEmpty()
     {
-        return new UpdateNetWDirittiUtente(0,0, new TreeSet<Diritto>());
+        return new UpdateNetWRuoliMembro(0, new TreeSet<Ruolo>());
     }
 
     @SerializedName("idUtente")
     private Integer idUtente;
 
-    @SerializedName("idStaff")
-    private Integer idStaff;
+    @SerializedName("ruoli")
+    @JsonAdapter(RuoloSetAdapter.class)
+    private Set<Ruolo> ruoli;
 
-    @SerializedName("diritti")
-    @JsonAdapter(DirittoSetAdapter.class)
-    private Set<Diritto> diritti;
-
-    public UpdateNetWDirittiUtente(Integer idUtente, Integer idStaff, Set<Diritto> diritti) {
+    public UpdateNetWRuoliMembro(Integer idUtente, Set<Ruolo> ruoli) {
         this.idUtente = idUtente;
-        this.idStaff = idStaff;
-        this.diritti = diritti;
+        this.ruoli = ruoli;
     }
 
     public Integer getIdUtente() {
         return idUtente;
     }
 
-    public Integer getIdStaff() {
-        return idStaff;
-    }
-
-    public Set<Diritto> getDiritti() {
-        return diritti;
+    public Set<Ruolo> getRuoli() {
+        return ruoli;
     }
 
     @Override

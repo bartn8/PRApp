@@ -21,8 +21,7 @@ package com.prapp.model.net.manager;
 
 import com.android.volley.Response;
 import com.prapp.PRAppApplication;
-import com.prapp.model.db.wrapper.WCliente;
-import com.prapp.model.db.wrapper.WDirittiUtente;
+import com.prapp.model.db.wrapper.WRuoliMembro;
 import com.prapp.model.db.wrapper.WEvento;
 import com.prapp.model.db.wrapper.WPrevendita;
 import com.prapp.model.db.wrapper.WStatisticheCassiereEvento;
@@ -41,7 +40,7 @@ import com.prapp.model.net.enums.Comando;
 import com.prapp.model.net.wrapper.NetWId;
 import com.prapp.model.net.wrapper.insert.InsertNetWEvento;
 import com.prapp.model.net.wrapper.insert.InsertNetWTipoPrevendita;
-import com.prapp.model.net.wrapper.update.UpdateNetWDirittiUtente;
+import com.prapp.model.net.wrapper.update.UpdateNetWRuoliMembro;
 import com.prapp.model.net.wrapper.update.UpdateNetWEvento;
 import com.prapp.model.net.wrapper.update.UpdateNetWStaff;
 import com.prapp.model.net.wrapper.update.UpdateNetWTipoPrevendita;
@@ -88,19 +87,6 @@ public class ManagerAmministratore extends Manager {
 
     public ManagerAmministratore(URL indirizzo) {
         super(indirizzo);
-    }
-
-    public void rimuoviCliente(int idCliente, final Response.Listener<WCliente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
-        Comando comando = Comando.COMANDO_AMMINISTRATORE_RIMUOVI_CLIENTE;
-        final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idCliente);
-        richiesta.aggiungiArgomento(new Argomento(RIMUOVI_CLIENTE_ARG_CLIENTE, netWId.getRemoteClassPath(), netWId));
-
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WCliente.class)), onException, errorListener);
-
-        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
-
-        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
     public void aggiungiEvento(InsertNetWEvento evento, final Response.Listener<WEvento> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
@@ -164,12 +150,12 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void modificaDirittiUtente(UpdateNetWDirittiUtente tipoPrevendita, final Response.Listener<WDirittiUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void modificaDirittiUtente(UpdateNetWRuoliMembro tipoPrevendita, final Response.Listener<WRuoliMembro> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_MODIFICA_DIRITTI_UTENTE;
         final Richiesta richiesta = new Richiesta(comando);
         richiesta.aggiungiArgomento(new Argomento(MODIFICA_DIRITTI_UTENTE_ARG_DIRITTI, tipoPrevendita.getRemoteClassPath(), tipoPrevendita));
 
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WDirittiUtente.class)), onException, errorListener);
+        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WRuoliMembro.class)), onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 

@@ -70,9 +70,9 @@ public class WEvento implements  DatabaseWrapper, Twinned, JSONSerializable, JSO
     private String provincia;
     private String stato;*/
 
-    @SerializedName("statoEvento")
+    @SerializedName("stato")
     @JsonAdapter(StatoEventoAdapter.class)
-    private StatoEvento statoEvento;
+    private StatoEvento stato;
 
     @SerializedName("idModificatore")
     private Integer idModificatore;
@@ -82,7 +82,7 @@ public class WEvento implements  DatabaseWrapper, Twinned, JSONSerializable, JSO
     private DateTime timestampUltimaModifica;
 
 
-    public WEvento(Integer id, Integer idStaff, Integer idCreatore, String nome, String descrizione, DateTime inizio, DateTime fine, String indirizzo, StatoEvento statoEvento, Integer idModificatore, DateTime timestampUltimaModifica) {
+    public WEvento(Integer id, Integer idStaff, Integer idCreatore, String nome, String descrizione, DateTime inizio, DateTime fine, String indirizzo, StatoEvento stato, Integer idModificatore, DateTime timestampUltimaModifica) {
         this.id = id;
         this.idStaff = idStaff;
         this.idCreatore = idCreatore;
@@ -91,13 +91,13 @@ public class WEvento implements  DatabaseWrapper, Twinned, JSONSerializable, JSO
         this.inizio = inizio;
         this.fine = fine;
         this.indirizzo = indirizzo;
-        this.statoEvento = statoEvento;
+        this.stato = stato;
         this.idModificatore = idModificatore;
         this.timestampUltimaModifica = timestampUltimaModifica;
     }
 
-    public WEvento(Integer id, Integer idStaff, Integer idCreatore, String nome, String descrizione, String inizio, String fine, String indirizzo, StatoEvento statoEvento, Integer idModificatore, String timestampUltimaModifica) {
-        this(id, idStaff, idCreatore, nome, descrizione, new DateTime(timestampUltimaModifica), new DateTime(timestampUltimaModifica), indirizzo, statoEvento, idModificatore, new DateTime(timestampUltimaModifica));
+    public WEvento(Integer id, Integer idStaff, Integer idCreatore, String nome, String descrizione, String inizio, String fine, String indirizzo, StatoEvento stato, Integer idModificatore, String timestampUltimaModifica) {
+        this(id, idStaff, idCreatore, nome, descrizione, new DateTime(timestampUltimaModifica), new DateTime(timestampUltimaModifica), indirizzo, stato, idModificatore, new DateTime(timestampUltimaModifica));
     }
 
     public Integer getId() {
@@ -132,8 +132,8 @@ public class WEvento implements  DatabaseWrapper, Twinned, JSONSerializable, JSO
         return indirizzo;
     }
 
-    public StatoEvento getStatoEvento() {
-        return statoEvento;
+    public StatoEvento getStato() {
+        return stato;
     }
 
     public Integer getIdModificatore() {

@@ -22,10 +22,9 @@ package com.prapp.ui.activity.start;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Response;
 import com.prapp.R;
 import com.prapp.model.MyContext;
-import com.prapp.model.db.wrapper.WDirittiUtente;
+import com.prapp.model.db.wrapper.WRuoliMembro;
 import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
@@ -38,7 +37,7 @@ import com.prapp.ui.Result;
 public class SplashViewModel extends AbstractViewModel {
 
     private MutableLiveData<Result<WUtente, Void>> loginResult = new MutableLiveData<>();
-    private MutableLiveData<Result<WDirittiUtente, Void>> getInfoUtenteResult = new MutableLiveData<>();
+    private MutableLiveData<Result<WRuoliMembro, Void>> getInfoUtenteResult = new MutableLiveData<>();
     private MutableLiveData<Result<WToken, Void>> renewTokenResult = new MutableLiveData<>();
 
     public SplashViewModel() {
@@ -49,7 +48,7 @@ public class SplashViewModel extends AbstractViewModel {
         return loginResult;
     }
 
-    public LiveData<Result<WDirittiUtente, Void>> getGetInfoUtenteResult() {
+    public LiveData<Result<WRuoliMembro, Void>> getGetInfoUtenteResult() {
         return getInfoUtenteResult;
     }
 
@@ -73,23 +72,31 @@ public class SplashViewModel extends AbstractViewModel {
         if (preferences.isTokenSaved()) {
             WToken token = preferences.getLastStoredToken();
 
-            //Prima di procedere verifico che sia ancora valido.
-            if (token.isTokenValid()) {
-                ManagerUtente managerUtente = getManagerUtente();
-                managerUtente.loginWithToken(token.getToken(), new Response.Listener<WUtente>() {
-                    @Override
-                    public void onResponse(WUtente response) {
-                        myContext.login(response);
-                        loginResult.setValue(new Result<>(response, null));
-                    }
-                }, new DefaultExceptionListener<>(loginResult));
-            } else {
-                //Token non valido lo elimino.
-                preferences.clearToken();
+            //TODO: LOGIN TOKEN DISATTIVATO DA SISTEMARE
 
-                //Imposto un valore di errore
-                loginResult.setValue(new Result<>(R.string.invalid_token));
-            }
+            //Token non valido lo elimino.
+            preferences.clearToken();
+
+            //Imposto un valore di errore
+            loginResult.setValue(new Result<>(R.string.invalid_token));
+
+            //Prima di procedere verifico che sia ancora valido.
+//            if (token.isTokenValid()) {
+//                ManagerUtente managerUtente = getManagerUtente();
+//                managerUtente.loginWithToken(preferences. token.getToken(), new Response.Listener<WUtente>() {
+//                    @Override
+//                    public void onResponse(WUtente response) {
+//                        myContext.login(response);
+//                        loginResult.setValue(new Result<>(response, null));
+//                    }
+//                }, new DefaultExceptionListener<>(loginResult));
+//            } else {
+//                //Token non valido lo elimino.
+//                preferences.clearToken();
+//
+//                //Imposto un valore di errore
+//                loginResult.setValue(new Result<>(R.string.invalid_token));
+//            }
         } else {
             loginResult.setValue(new Result<>(R.string.no_token));
         }

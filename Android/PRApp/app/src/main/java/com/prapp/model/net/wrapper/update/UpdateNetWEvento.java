@@ -36,16 +36,9 @@ public class UpdateNetWEvento implements Twinned, NetWrapper, JSONSerializable {
 
     public static UpdateNetWEvento getEmpty()
     {
-        return new UpdateNetWEvento(0, "", null, new DateTime("1970-01-01T00:00:00.000Z"), new DateTime("1970-01-01T00:00:00.000Z"), "", StatoEvento.VALIDO);
+        return new UpdateNetWEvento(null, new DateTime("1970-01-01T00:00:00.000Z"), new DateTime("1970-01-01T00:00:00.000Z"), "", StatoEvento.VALIDO);
     }
 
-    @SerializedName("idEvento")
-    private Integer idEvento;
-
-    @SerializedName("nome")
-    private String nome;
-
-    //Optional
     @SerializedName("descrizione")
     private String descrizione;
 
@@ -60,30 +53,20 @@ public class UpdateNetWEvento implements Twinned, NetWrapper, JSONSerializable {
     @SerializedName("indirizzo")
     private String indirizzo;
 
-    @SerializedName("statoEvento")
+    @SerializedName("stato")
     @JsonAdapter(StatoEventoAdapter.class)
-    private StatoEvento statoEvento;
+    private StatoEvento stato;
 
-    public UpdateNetWEvento(Integer idEvento, String nome, String descrizione, DateTime inizio, DateTime fine, String indirizzo, StatoEvento statoEvento) {
-        this.idEvento = idEvento;
-        this.nome = nome;
+    public UpdateNetWEvento(String descrizione, DateTime inizio, DateTime fine, String indirizzo, StatoEvento stato) {
         this.descrizione = descrizione;
         this.inizio = inizio;
         this.fine = fine;
         this.indirizzo = indirizzo;
-        this.statoEvento = statoEvento;
+        this.stato = stato;
     }
 
-    public UpdateNetWEvento(Integer idEvento, String nome, String descrizione, String inizio, String fine, String indirizzo, StatoEvento statoEvento) {
-        this(idEvento, nome, descrizione, new DateTime(inizio), new DateTime(fine), indirizzo, statoEvento);
-    }
-
-    public Integer getIdEvento() {
-        return idEvento;
-    }
-
-    public String getNome() {
-        return nome;
+    public UpdateNetWEvento(String descrizione, String inizio, String fine, String indirizzo, StatoEvento stato) {
+        this(descrizione, new DateTime(inizio), new DateTime(fine), indirizzo, stato);
     }
 
     public String getDescrizione() {
@@ -102,8 +85,8 @@ public class UpdateNetWEvento implements Twinned, NetWrapper, JSONSerializable {
         return indirizzo;
     }
 
-    public StatoEvento getStatoEvento() {
-        return statoEvento;
+    public StatoEvento getStato() {
+        return stato;
     }
 
     public boolean isDescrizionePresent()

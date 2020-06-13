@@ -25,7 +25,7 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.prapp.model.db.enums.Diritto;
+import com.prapp.model.db.enums.Ruolo;
 import com.prapp.model.db.enums.StatoEvento;
 import com.prapp.model.db.enums.StatoPrevendita;
 
@@ -83,27 +83,24 @@ public class PRAppApplication extends Application {
 
     private void initEnumsResources(){
         //StatoPrevendita
-        StatoPrevendita.CONSEGNATA.setResId(R.string.statoPrevendita_consegnata);
-        StatoPrevendita.CONSEGNATA.setResValue(getString(StatoPrevendita.CONSEGNATA.getResId()));
-
-        StatoPrevendita.PAGATA.setResId(R.string.statoPrevendita_pagata);
-        StatoPrevendita.PAGATA.setResValue(getString(StatoPrevendita.PAGATA.getResId()));
+        StatoPrevendita.VALIDA.setResId(R.string.statoPrevendita_consegnata);
+        StatoPrevendita.VALIDA.setResValue(getString(StatoPrevendita.VALIDA.getResId()));
 
         StatoPrevendita.ANNULLATA.setResId(R.string.statoPrevendita_annullata);
         StatoPrevendita.ANNULLATA.setResValue(getString(StatoPrevendita.ANNULLATA.getResId()));
 
-        StatoPrevendita.RIMBORSATA.setResId(R.string.statoPrevendita_rimborsata);
-        StatoPrevendita.RIMBORSATA.setResValue(getString(StatoPrevendita.RIMBORSATA.getResId()));
+        StatoPrevendita.ANNULLATA_NON_RIMBORSATA.setResId(R.string.statoPrevendita_rimborsata);
+        StatoPrevendita.ANNULLATA_NON_RIMBORSATA.setResValue(getString(StatoPrevendita.ANNULLATA_NON_RIMBORSATA.getResId()));
 
         //Diritto
-        Diritto.PR.setResId(R.string.diritto_pr);
-        Diritto.PR.setResValue(getString(Diritto.PR.getResId()));
+        Ruolo.PR.setResId(R.string.diritto_pr);
+        Ruolo.PR.setResValue(getString(Ruolo.PR.getResId()));
 
-        Diritto.CASSIERE.setResId(R.string.diritto_cassiere);
-        Diritto.CASSIERE.setResValue(getString(Diritto.CASSIERE.getResId()));
+        Ruolo.CASSIERE.setResId(R.string.diritto_cassiere);
+        Ruolo.CASSIERE.setResValue(getString(Ruolo.CASSIERE.getResId()));
 
-        Diritto.AMMINISTRATORE.setResId(R.string.diritto_amministratore);
-        Diritto.AMMINISTRATORE.setResValue(getString(Diritto.AMMINISTRATORE.getResId()));
+        Ruolo.AMMINISTRATORE.setResId(R.string.diritto_amministratore);
+        Ruolo.AMMINISTRATORE.setResValue(getString(Ruolo.AMMINISTRATORE.getResId()));
 
         //StatoEvento
         StatoEvento.VALIDO.setResId(R.string.statoEvento_valido);
@@ -111,12 +108,6 @@ public class PRAppApplication extends Application {
 
         StatoEvento.ANNULLATO.setResId(R.string.statoEvento_annullato);
         StatoEvento.ANNULLATO.setResValue(getString(StatoEvento.ANNULLATO.getResId()));
-
-        StatoEvento.RIMBORSATO.setResId(R.string.statoEvento_rimborsato);
-        StatoEvento.RIMBORSATO.setResValue(getString(StatoEvento.RIMBORSATO.getResId()));
-
-        StatoEvento.PAGATO.setResId(R.string.statoEvento_pagato);
-        StatoEvento.PAGATO.setResValue(getString(StatoEvento.PAGATO.getResId()));
     }
 
     public RequestQueue getRequestQueue() {

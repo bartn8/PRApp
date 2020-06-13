@@ -20,18 +20,18 @@
 package com.prapp.model.db.wrapper;
 
 import com.google.gson.Gson;
-import com.prapp.model.db.enums.Diritto;
+import com.prapp.model.db.enums.Ruolo;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class WDirittiUtenteTest {
+public class WRuoliMembroTest {
 
     @Test
     public void jsonSerializeTest()
     {
-        WDirittiUtente obj = WDirittiUtente.getEmpty();
+        WRuoliMembro obj = WRuoliMembro.getEmpty();
         Gson gson = new Gson();
         assertEquals("{\"idUtente\":0,\"idStaff\":0,\"diritti\":[]}", gson.toJson(obj));
     }
@@ -42,13 +42,13 @@ public class WDirittiUtenteTest {
     {
         String jsonObj = "{\"idUtente\":0,\"idStaff\":1,\"diritti\":[0,1]}";
         Gson gson = new Gson();
-        WDirittiUtente obj = gson.fromJson(jsonObj, WDirittiUtente.class);
+        WRuoliMembro obj = gson.fromJson(jsonObj, WRuoliMembro.class);
 
         assertEquals(0, obj.getIdUtente().intValue());
         assertEquals(1, obj.getIdStaff().intValue());
-        assertTrue(obj.getDiritti().contains(Diritto.PR));
-        assertTrue(obj.getDiritti().contains(Diritto.CASSIERE));
-        assertFalse(obj.getDiritti().contains(Diritto.AMMINISTRATORE));
+        assertTrue(obj.getRuoli().contains(Ruolo.PR));
+        assertTrue(obj.getRuoli().contains(Ruolo.CASSIERE));
+        assertFalse(obj.getRuoli().contains(Ruolo.AMMINISTRATORE));
     }
 
 }

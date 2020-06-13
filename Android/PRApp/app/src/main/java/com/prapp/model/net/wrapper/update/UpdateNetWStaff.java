@@ -30,22 +30,14 @@ public class UpdateNetWStaff  implements Twinned, NetWrapper, JSONSerializable {
 
     public static UpdateNetWStaff getEmpty()
     {
-        return new UpdateNetWStaff(0, "");
+        return new UpdateNetWStaff("");
     }
-
-    @SerializedName("idStaff")
-    private Integer idStaff;
 
     @SerializedName("codiceAccesso")
     private String codiceAccesso;
 
-    public UpdateNetWStaff(Integer idStaff, String codiceAccesso) {
-        this.idStaff = idStaff;
+    public UpdateNetWStaff(String codiceAccesso) {
         this.codiceAccesso = codiceAccesso;
-    }
-
-    public Integer getIdStaff() {
-        return idStaff;
     }
 
     public String getCodiceAccesso() {

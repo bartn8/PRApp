@@ -159,10 +159,10 @@ public class ManagerUtente extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void loginWithToken(String token, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void loginWithToken(String username, String token, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_UTENTE_LOGIN_TOKEN;
         Richiesta richiesta = new Richiesta(comando);
-        NetWToken loginData = new NetWToken(token);
+        NetWToken loginData = new NetWToken(username, token);
         richiesta.aggiungiArgomento(new Argomento(LOGIN_TOKEN_ARG_TOKEN, loginData.getRemoteClassPath(), loginData));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WUtente.class)), onException, errorListener);

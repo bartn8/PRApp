@@ -26,22 +26,22 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.prapp.model.db.enums.Diritto;
+import com.prapp.model.db.enums.Ruolo;
 
 import java.lang.reflect.Type;
 
-public class DirittoAdapter implements JsonSerializer<Diritto>, JsonDeserializer<Diritto> {
+public class DirittoAdapter implements JsonSerializer<Ruolo>, JsonDeserializer<Ruolo> {
     @Override
-    public JsonElement serialize(Diritto src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(Ruolo src, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(src.getId());
     }
 
     @Override
-    public Diritto deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        Diritto diritto = Diritto.parseId(json.getAsInt());
+    public Ruolo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        Ruolo ruolo = Ruolo.parseId(json.getAsInt());
 
-        if(diritto == null) throw new JsonParseException("Diritto non valido (parse exception)");
+        if(ruolo == null) throw new JsonParseException("Diritto non valido (parse exception)");
 
-        return diritto;
+        return ruolo;
     }
 }

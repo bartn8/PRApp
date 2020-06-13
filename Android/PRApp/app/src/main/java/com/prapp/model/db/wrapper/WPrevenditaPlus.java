@@ -61,19 +61,11 @@ public class WPrevenditaPlus implements DatabaseWrapper, Twinned, JSONDeserializ
     @Expose
     private String cognomePR;
 
-    //Optional
-    //Optional perchè il cliente può cancellarsi.
-    @SerializedName("idCliente")
-    @Expose
-    private Integer idCliente;
-
-    //Optional
     //Optional perchè il cliente può cancellarsi.
     @SerializedName("nomeCliente")
     @Expose
     private String nomeCliente;
 
-    //Optional
     //Optional perchè il cliente può cancellarsi.
     @SerializedName("cognomeCliente")
     @Expose
@@ -100,14 +92,14 @@ public class WPrevenditaPlus implements DatabaseWrapper, Twinned, JSONDeserializ
     @JsonAdapter(StatoPrevenditaAdapter.class)
     private StatoPrevendita stato;
 
-    public WPrevenditaPlus(Integer id, int idEvento, String nomeEvento, Integer idPR, String nomePR, Integer idCliente, String nomeCliente, Integer idTipoPrevendita, String nomeTipoPrevendita, Float prezzoTipoPrevendita, String codice, StatoPrevendita stato) {
+    public WPrevenditaPlus(Integer id, int idEvento, String nomeEvento, Integer idPR, String nomePR, String nomeCliente, String cognomeCliente, Integer idTipoPrevendita, String nomeTipoPrevendita, Float prezzoTipoPrevendita, String codice, StatoPrevendita stato) {
         this.id = id;
         this.idEvento = idEvento;
         this.nomeEvento = nomeEvento;
         this.idPR = idPR;
         this.nomePR = nomePR;
-        this.idCliente = idCliente;
         this.nomeCliente = nomeCliente;
+        this.cognomeCliente = cognomeCliente;
         this.idTipoPrevendita = idTipoPrevendita;
         this.nomeTipoPrevendita = nomeTipoPrevendita;
         this.prezzoTipoPrevendita = prezzoTipoPrevendita;
@@ -115,8 +107,8 @@ public class WPrevenditaPlus implements DatabaseWrapper, Twinned, JSONDeserializ
         this.stato = stato;
     }
 
-    public WPrevenditaPlus(Integer id, int idEvento, String nomeEvento, Integer idPR, String nomePR, Integer idCliente, String nomeCliente, Integer idTipoPrevendita, String nomeTipoPrevendita, Float prezzoTipoPrevendita, String codice, int stato) throws ParseException {
-        this(id, idEvento, nomeEvento, idPR, nomePR, idCliente, nomeCliente, idTipoPrevendita, nomeTipoPrevendita, prezzoTipoPrevendita, codice, StatoPrevendita.parseId(stato));
+    public WPrevenditaPlus(Integer id, int idEvento, String nomeEvento, Integer idPR, String nomePR, String nomeCliente, String cognomeCliente, Integer idTipoPrevendita, String nomeTipoPrevendita, Float prezzoTipoPrevendita, String codice, int stato) throws ParseException {
+        this(id, idEvento, nomeEvento, idPR, nomePR, nomeCliente, cognomeCliente, idTipoPrevendita, nomeTipoPrevendita, prezzoTipoPrevendita, codice, StatoPrevendita.parseId(stato));
     }
 
     public Integer getId() {
@@ -137,10 +129,6 @@ public class WPrevenditaPlus implements DatabaseWrapper, Twinned, JSONDeserializ
 
     public String getNomePR() {
         return nomePR;
-    }
-
-    public Integer getIdCliente() {
-        return idCliente;
     }
 
     public String getNomeCliente() {
@@ -182,7 +170,7 @@ public class WPrevenditaPlus implements DatabaseWrapper, Twinned, JSONDeserializ
 
 
     public WPrevendita getWPrevendita(){
-        return new WPrevendita(id, idEvento, idPR, idCliente, idTipoPrevendita, codice, stato, new DateTime());
+        return new WPrevendita(id, idEvento, idPR, nomeCliente, cognomeCliente, idTipoPrevendita, codice, stato, new DateTime());
     }
 
     @Override

@@ -29,7 +29,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Card view per visualizzare il cliente. -->
+        <!-- Parte in cui imposto la prevendita. -->
+        <!-- Uso sempre una cardview -->
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -42,15 +43,14 @@
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/fragment_pr_cliente_toolbar"
+                    android:id="@+id/fragment_pr_prevendita_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     app:titleTextColor="@color/black" />
 
-                <!-- Roba per aggiungere cliente. -->
 
                 <LinearLayout
-                    android:id="@+id/fragment_pr_aggiungiCliente_layout"
+                    android:id="@+id/fragment_pr_selezionaPrevendita_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -96,78 +96,6 @@
                             tools:ignore="Autofill" />
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/fragment_pr_add_cliente_dataDiNascita_label" />
-
-                        <EditText
-                            android:id="@+id/fragment_pr_aggiungiCliente_dataDiNascita_editText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:focusable="false"
-                            android:hint="@string/fragment_pr_add_cliente_dataDiNascita_editText_label"
-                            android:inputType="date"
-                            android:selectAllOnFocus="true"
-                            tools:ignore="Autofill" />
-
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/fragment_pr_aggiungiCliente_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fragment_pr_add_cliente_button_label" />
-
-
-                </LinearLayout>
-
-
-                <!-- Roba per ricerca cliente. -->
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fragment_pr_clienti_recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:scrollbars="vertical" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Parte in cui imposto la prevendita. -->
-        <!-- Uso sempre una cardview -->
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/primaryColorGrey">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/fragment_pr_prevendita_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    app:titleTextColor="@color/black" />
-
-
-                <LinearLayout
-                    android:id="@+id/fragment_pr_selezionaPrevendita_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"

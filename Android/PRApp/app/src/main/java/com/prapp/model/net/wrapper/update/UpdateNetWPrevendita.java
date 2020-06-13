@@ -33,7 +33,7 @@ public class UpdateNetWPrevendita implements Twinned, NetWrapper, JSONSerializab
 
     public static UpdateNetWPrevendita getEmpty()
     {
-        return new UpdateNetWPrevendita(0,StatoPrevendita.CONSEGNATA);
+        return new UpdateNetWPrevendita(0,StatoPrevendita.VALIDA);
     }
 
     @SerializedName("id")

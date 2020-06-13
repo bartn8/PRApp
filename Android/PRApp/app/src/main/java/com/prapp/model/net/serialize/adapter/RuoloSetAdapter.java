@@ -26,22 +26,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.prapp.model.db.enums.Diritto;
+import com.prapp.model.db.enums.Ruolo;
 
 import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class DirittoSetAdapter implements JsonSerializer<Set<Diritto>>, JsonDeserializer<Set<Diritto>> {
+public class RuoloSetAdapter implements JsonSerializer<Set<Ruolo>>, JsonDeserializer<Set<Ruolo>> {
     @Override
-    public JsonElement serialize(Set<Diritto> src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(Set<Ruolo> src, Type typeOfSrc, JsonSerializationContext context) {
         JsonArray array = new JsonArray();
 
-        Iterator<Diritto> iterator = src.iterator();
+        Iterator<Ruolo> iterator = src.iterator();
 
         while (iterator.hasNext()) {
-            Diritto next = iterator.next();
+            Ruolo next = iterator.next();
             array.add(next.getId());
         }
 
@@ -50,18 +50,18 @@ public class DirittoSetAdapter implements JsonSerializer<Set<Diritto>>, JsonDese
 
 
     @Override
-    public Set<Diritto> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        TreeSet<Diritto> set = new TreeSet<>();
+    public Set<Ruolo> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        TreeSet<Ruolo> set = new TreeSet<>();
         JsonArray array = json.getAsJsonArray();
         Iterator<JsonElement> iterator = array.iterator();
 
         while (iterator.hasNext()) {
             JsonElement next = iterator.next();
-            Diritto diritto = Diritto.parseId(next.getAsInt());
+            Ruolo ruolo = Ruolo.parseId(next.getAsInt());
 
-            if(diritto == null) throw new JsonParseException("Diritto non valido (parse exception)");
+            if(ruolo == null) throw new JsonParseException("Ruolo non valido (parse exception)");
 
-            set.add(diritto);
+            set.add(ruolo);
         }
 
         return set;

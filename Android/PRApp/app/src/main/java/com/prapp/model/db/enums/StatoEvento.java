@@ -26,9 +26,7 @@ import androidx.annotation.Nullable;
 public enum StatoEvento {
 
     VALIDO(0, "VALIDO"),
-    ANNULLATO(1, "ANNULLATO"),
-    RIMBORSATO(2, "RIMBORSATO"),
-    PAGATO(3, "PAGATO");
+    ANNULLATO(1, "ANNULLATO"),;
 
     private static final SparseArray<StatoEvento> mappaId = new SparseArray<>();
 
@@ -36,8 +34,6 @@ public enum StatoEvento {
         //Inizializzo le mappe
         mappaId.put(StatoEvento.VALIDO.getId(), StatoEvento.VALIDO);
         mappaId.put(StatoEvento.ANNULLATO.getId(), StatoEvento.ANNULLATO);
-        mappaId.put(StatoEvento.RIMBORSATO.getId(), StatoEvento.RIMBORSATO);
-        mappaId.put(StatoEvento.PAGATO.getId(), StatoEvento.PAGATO);
     }
 
     @Nullable

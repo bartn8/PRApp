@@ -20,11 +20,9 @@
 package com.prapp.model.net.wrapper;
 
 
+import com.google.gson.annotations.SerializedName;
 import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONSerializable;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class NetWStaffAccess implements Twinned, NetWrapper, JSONSerializable {
 
@@ -35,7 +33,9 @@ public class NetWStaffAccess implements Twinned, NetWrapper, JSONSerializable {
         return new NetWStaffAccess(0, "");
     }
 
+    @SerializedName("idStaff")
     private Integer idStaff;
+    @SerializedName("codiceAccesso")
     private String codiceAccesso;
 
     public NetWStaffAccess(Integer idStaff, String codiceAccesso) {
