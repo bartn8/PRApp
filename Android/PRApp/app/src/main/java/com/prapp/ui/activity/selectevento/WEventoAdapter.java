@@ -47,12 +47,12 @@ public class WEventoAdapter extends RecyclerView.Adapter<WEventoAdapter.WEventoV
      * The interface that receives onClick messages.
      */
     public interface ItemClickListener {
-        void onListItemClick(int clickedItemId);
+        void onListItemClick(WEvento evento);
     }
 
     public class WEventoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public Integer eventoId;
+        public WEvento evento;
 
         @BindView(R.id.wevento_list_item_nome)
         public TextView textViewNome;
@@ -71,7 +71,7 @@ public class WEventoAdapter extends RecyclerView.Adapter<WEventoAdapter.WEventoV
 
         @Override
         public void onClick(View view) {
-            mOnClickListener.onListItemClick(eventoId);
+            mOnClickListener.onListItemClick(evento);
         }
     }
 
@@ -84,13 +84,13 @@ public class WEventoAdapter extends RecyclerView.Adapter<WEventoAdapter.WEventoV
     private WEvento[] dataset;
 
     public WEventoAdapter(WEvento[] dataset) {
-        this(dataset, clickedItemId -> {
+        this(dataset, evento -> {
 
         });
     }
 
     public WEventoAdapter(List<WEvento> dataset) {
-        this(dataset, clickedItemId -> {
+        this(dataset, evento -> {
 
         });
     }
@@ -125,7 +125,7 @@ public class WEventoAdapter extends RecyclerView.Adapter<WEventoAdapter.WEventoV
         String periodoText = parentContex.getString(R.string.select_evento_date_placeholder, evento.getInizio().toString(DATE_FORMATTER), evento.getFine().toString(DATE_FORMATTER));
         holder.textViewPeriodo.setText(periodoText);
 
-        holder.eventoId = evento.getId();
+        holder.evento = evento;
     }
 
     @Override

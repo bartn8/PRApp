@@ -203,10 +203,8 @@ public class PRViewModel extends AbstractViewModel {
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerMembro managerMembro = getManagerMembro();
-            Integer idEvento = getEvento().getId();
 
-            managerMembro.restituisciListaTipiPrevenditaEvento(idEvento, new DefaultSuccessListener<>(listaTipoPrevenditaResult), new DefaultExceptionListener<>(listaTipoPrevenditaResult));
-
+            managerMembro.restituisciListaTipiPrevenditaEvento(new DefaultSuccessListener<>(listaTipoPrevenditaResult), new DefaultExceptionListener<>(listaTipoPrevenditaResult));
         } else {
             listaTipoPrevenditaResult.setValue(new Result<>(R.string.no_login));
         }
@@ -252,9 +250,8 @@ public class PRViewModel extends AbstractViewModel {
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerPR managerPR = getManagerPR();
-            Integer idEvento = getEvento().getId();
-           managerPR.resitituisciPrevenditeEvento(idEvento, new DefaultSuccessListener<>(listaPrevenditeResult), new DefaultExceptionListener<>(listaPrevenditeResult));
 
+            managerPR.resitituisciPrevenditeEvento(new DefaultSuccessListener<>(listaPrevenditeResult), new DefaultExceptionListener<>(listaPrevenditeResult));
         } else {
             listaPrevenditeResult.setValue(new Result<>(R.string.no_login));
         }

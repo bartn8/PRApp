@@ -84,6 +84,35 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
         }
     };
 
+    private Observer<Result<WEvento, Void>> scegliEventoResultObserver = new Observer<Result<WEvento, Void>>() {
+        @Override
+        public void onChanged(Result<WEvento, Void> scegliStaffResult) {
+            if (scegliStaffResult == null) {
+                return;
+            }
+
+            Integer integerError = scegliStaffResult.getIntegerError();
+            List<Exception> error = scegliStaffResult.getError();
+            WEvento success = scegliStaffResult.getSuccess();
+
+            if (integerError != null)
+                uiUtil.showError(integerError);
+
+            if (error != null)
+                uiUtil.showError(error);
+
+            if (success != null) {
+                //Posso passare alla view successiva
+                //Posso chiudere l'activity
+                //Si ritorna allo splash...
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            popupUtil.hideLoadingPopup();
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,34 +133,17 @@ public class SelectEventoActivity extends AppCompatActivity implements WEventoAd
 
         selectEventoViewModel = ViewModelProviders.of(this, new SelectEventoViewModelFactory()).get(SelectEventoViewModel.class);
         selectEventoViewModel.getListEventiResult().observe(this, listEventiResultObserver);
+        selectEventoViewModel.getScegliEventoResult().observe(this, scegliEventoResultObserver);
 
         //Non verifico login: lo fa il viewModel.
-        if (searchPreferences) {
-            //Carico lo staff già aperto in precedenza.
-            if (selectEventoViewModel.caricaEventoSalvato()) {
-                //Posso chiudere l'activity
-                //Si ritorna allo splash...
-                setResult(RESULT_OK);
-                finish();
-            } else {
-                popupUtil.showLoadingPopup();
-                //Carico gli staff e procedo normalmente
-                selectEventoViewModel.getEventiStaff();
-            }
-        } else {
-            popupUtil.showLoadingPopup();
-            //Carico gli staff e procedo normalmente
-            selectEventoViewModel.getEventiStaff();
-        }
+        popupUtil.showLoadingPopup();
+        //Carico gli staff e procedo normalmente
+        selectEventoViewModel.getEventiStaff();
     }
 
     @Override
-    public void onListItemClick(int idEvento) {
-        selectEventoViewModel.selectEvento(idEvento);
-
-        //Posso chiudere l'activity
-        //Si ritorna allo splash...
-        setResult(RESULT_OK);
-        finish();
+    public void onListItemClick(WEvento evento) {
+        popupUtil.showLoadingPopup();
+        selectEventoViewModel.selectEvento(evento);
     }
 }

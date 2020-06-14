@@ -35,7 +35,6 @@ import com.prapp.model.net.RichiestaVolley;
 import com.prapp.model.net.Risultato;
 import com.prapp.model.net.enums.Comando;
 import com.prapp.model.net.wrapper.NetWFiltriStatoPrevendita;
-import com.prapp.model.net.wrapper.NetWId;
 import com.prapp.model.net.wrapper.insert.InsertNetWPrevendita;
 import com.prapp.model.net.wrapper.update.UpdateNetWPrevendita;
 
@@ -128,11 +127,9 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheStaff(int idStaff, final Response.Listener<WStatistichePRStaff> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciStatisticheStaff(final Response.Listener<WStatistichePRStaff> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_RESTITUISCI_STATISTICHE_PR_STAFF;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idStaff);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_STAFF_ARG_STAFF, netWId.getRemoteClassPath(), netWId));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WStatistichePRStaff.class)), onException, errorListener);
 
@@ -141,11 +138,9 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheEvento(int idEvento, final Response.Listener<WStatistichePREvento> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciStatisticheEvento(final Response.Listener<WStatistichePREvento> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_RESTITUISCI_STATISTICHE_PR_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_EVENTO_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WStatistichePREvento.class)), onException, errorListener);
 
@@ -154,11 +149,9 @@ public class ManagerPR extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciPrevenditeEvento(int idEvento, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciPrevenditeEvento(final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_PR_RESTITUISCI_PREVENDITE_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_PREVENDITE_EVENTO_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
 
         ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
             List<WPrevenditaPlus> myList = new ArrayList<>();

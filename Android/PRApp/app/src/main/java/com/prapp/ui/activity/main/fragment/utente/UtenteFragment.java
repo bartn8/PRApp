@@ -201,7 +201,7 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
         popupUtil = new PopupUtil(getActivity());
 
         viewModel = ViewModelProviders.of(getActivity()).get(UtenteViewModel.class);
-        viewModel.getLogoutResult().observe(this, logoutResultObserver);
+        viewModel.getLogoutResult().observe(getViewLifecycleOwner(), logoutResultObserver);
 
         if (viewModel.isLoggato()) {
             WUtente utente = viewModel.getUtente();
@@ -212,7 +212,7 @@ public class UtenteFragment extends Fragment implements InterfaceHolder<MainActi
 
             if (viewModel.isStaffScelto()) {
                 WStaff staff = viewModel.getStaff();
-                WRuoliMembro dirittiUtente = viewModel.getDirittiUtente();
+                WRuoliMembro dirittiUtente = viewModel.getRuoliMembro();
 
                 textViewNomeStaff.setText(staff.getNome());
                 textViewDiritti.setText(dirittiUtente.getRuoli().toString());

@@ -21,7 +21,6 @@ package com.prapp.model.net.wrapper.insert;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.prapp.model.db.enums.StatoEvento;
 import com.prapp.model.net.Twinned;
 import com.prapp.model.net.serialize.JSONSerializable;
 import com.prapp.model.net.serialize.adapter.DateTimeAdapter;
@@ -39,11 +38,8 @@ public class InsertNetWTipoPrevendita implements Twinned, NetWrapper, JSONSerial
     @org.jetbrains.annotations.Contract(" -> new")
     public static InsertNetWTipoPrevendita getEmpty()
     {
-        return new InsertNetWTipoPrevendita(0, "", "", 0.00f, new DateTime("1970-01-01T00:00:00.000Z"), new DateTime("1970-01-01T00:00:00.000Z"));
+        return new InsertNetWTipoPrevendita("", "", 0.00f, new DateTime("1970-01-01T00:00:00.000Z"), new DateTime("1970-01-01T00:00:00.000Z"));
     }
-
-    @SerializedName("idEvento")
-    private Integer idEvento;
 
     @SerializedName("nome")
     private String nome;
@@ -62,8 +58,7 @@ public class InsertNetWTipoPrevendita implements Twinned, NetWrapper, JSONSerial
     @JsonAdapter(DateTimeAdapter.class)
     private DateTime chiusuraPrevendite;
 
-    public InsertNetWTipoPrevendita(Integer idEvento, String nome, String descrizione, Float prezzo, DateTime aperturaPrevendite, DateTime chiusuraPrevendite) {
-        this.idEvento = idEvento;
+    public InsertNetWTipoPrevendita(String nome, String descrizione, Float prezzo, DateTime aperturaPrevendite, DateTime chiusuraPrevendite) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.prezzo = prezzo;
@@ -71,12 +66,8 @@ public class InsertNetWTipoPrevendita implements Twinned, NetWrapper, JSONSerial
         this.chiusuraPrevendite = chiusuraPrevendite;
     }
 
-    public InsertNetWTipoPrevendita(Integer idEvento, String nome, String descrizione, Float prezzo, String aperturaPrevendite, String chiusuraPrevendite) {
-        this(idEvento, nome, descrizione, prezzo, new DateTime(aperturaPrevendite), new DateTime(chiusuraPrevendite));
-    }
-
-    public Integer getIdEvento() {
-        return idEvento;
+    public InsertNetWTipoPrevendita(String nome, String descrizione, Float prezzo, String aperturaPrevendite, String chiusuraPrevendite) {
+        this(nome, descrizione, prezzo, new DateTime(aperturaPrevendite), new DateTime(chiusuraPrevendite));
     }
 
     public String getNome() {

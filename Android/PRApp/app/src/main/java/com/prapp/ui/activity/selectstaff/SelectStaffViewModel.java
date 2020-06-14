@@ -30,16 +30,12 @@ import com.prapp.model.preferences.ApplicationPreferences;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class SelectStaffViewModel extends AbstractViewModel {
 
     private MutableLiveData<Result<List<WStaff>, Void>> listStaffResult = new MutableLiveData<>();
-
-    private List<WStaff> staffList = new ArrayList<>();
+    private MutableLiveData<Result<WStaff, Void>> scegliStaffResult = new MutableLiveData<>();
 
     public SelectStaffViewModel() {
         super();
@@ -49,56 +45,28 @@ public class SelectStaffViewModel extends AbstractViewModel {
         return listStaffResult;
     }
 
-
-    //Ricerca lo staff giusto le lo restituisce
-    @Nullable
-    private WStaff getStaff(Integer idStaff) {
-        for (WStaff staff : staffList) {
-            if (staff.getId().intValue() == idStaff.intValue()) {
-                return staff;
-            }
-        }
-
-        return null;
+    public LiveData<Result<WStaff, Void>> getScegliStaffResult() {
+        return scegliStaffResult;
     }
 
-    public void selectStaff(int idStaff) {
+
+    public void selectStaff(WStaff staff) {
         MyContext myContext = getMyContext();
-        ApplicationPreferences preferences = getPreferences();
 
-        //Seleziono lo staff come default:
-        //1) lo salvo nelle preferenze.
-        //2) lo sparo nel contesto.
+        if (myContext.isLoggato()) {
+            ManagerUtente managerUtente = getManagerUtente();
 
-        //Staff fortunato.
-        WStaff staff = getStaff(idStaff);
-        //1)
-        preferences.saveStaff(staff);
-        //2)
-        myContext.setStaff(staff);
+            managerUtente.scegliStaff(staff, (WStaff response) -> {
+                myContext.setStaff(response);
+
+                scegliStaffResult.setValue(new Result<>(response, null));
+            }, new DefaultExceptionListener<>(scegliStaffResult));
+        } else {
+            scegliStaffResult.setValue(new Result<>(R.string.no_login));
+        }
 
         //Devo resettare l'evento scelto
-        preferences.clearEvento();
         myContext.clearEvento();
-    }
-
-    public boolean caricaStaffSalvato() {
-        MyContext myContext = getMyContext();
-        ApplicationPreferences preferences = getPreferences();
-
-        if (preferences.isStaffSaved()) {
-            WStaff staff = preferences.getStaff();
-
-            staffList = new ArrayList<>();
-            staffList.add(staff);
-            listStaffResult.setValue(new Result<>(staffList, null));
-
-            myContext.setStaff(staff);
-
-            return true;
-        }
-
-        return false;
     }
 
 
@@ -110,7 +78,6 @@ public class SelectStaffViewModel extends AbstractViewModel {
             ManagerUtente managerUtente = getManagerUtente();
 
             managerUtente.restituisciListaStaffMembri(response -> {
-                staffList = response;
                 listStaffResult.setValue(new Result<>(response, null));
             }, new DefaultExceptionListener<>(listStaffResult));
         } else {

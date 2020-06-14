@@ -150,10 +150,10 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void modificaDirittiUtente(UpdateNetWRuoliMembro tipoPrevendita, final Response.Listener<WRuoliMembro> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void modificaRuoliMembro(UpdateNetWRuoliMembro ruoliMembro, final Response.Listener<WRuoliMembro> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_MODIFICA_DIRITTI_UTENTE;
         final Richiesta richiesta = new Richiesta(comando);
-        richiesta.aggiungiArgomento(new Argomento(MODIFICA_DIRITTI_UTENTE_ARG_DIRITTI, tipoPrevendita.getRemoteClassPath(), tipoPrevendita));
+        richiesta.aggiungiArgomento(new Argomento(MODIFICA_DIRITTI_UTENTE_ARG_DIRITTI, ruoliMembro.getRemoteClassPath(), ruoliMembro));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WRuoliMembro.class)), onException, errorListener);
 
@@ -162,13 +162,11 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatistichePRStaff(int idPR, int idStaff, final Response.Listener<WStatistichePRStaff> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciStatistichePRStaff(int idPR, final Response.Listener<WStatistichePRStaff> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_RESTITUISCI_STATISTICHE_PR;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWIdPR = new NetWId(idPR);
         richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_PR_STAFF_ARG_PR, netWIdPR.getRemoteClassPath(), netWIdPR));
-        NetWId netWIdStaff = new NetWId(idStaff);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_PR_STAFF_ARG_STAFF, netWIdStaff.getRemoteClassPath(), netWIdStaff));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WStatistichePRStaff.class)), onException, errorListener);
 
@@ -177,13 +175,11 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheCassiereStaff(int idCassiere, int idStaff, final Response.Listener<WStatisticheCassiereStaff> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciStatisticheCassiereStaff(int idCassiere, final Response.Listener<WStatisticheCassiereStaff> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_RESTITUISCI_STATISTICHE_CASSIERE;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWIdCassiere = new NetWId(idCassiere);
         richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_CASSIERE_STAFF_ARG_CASSIERE, netWIdCassiere.getRemoteClassPath(), netWIdCassiere));
-        NetWId netWIdStaff = new NetWId(idStaff);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_CASSIERE_STAFF_ARG_STAFF, netWIdStaff.getRemoteClassPath(), netWIdStaff));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WStatisticheCassiereStaff.class)), onException, errorListener);
 
@@ -192,11 +188,9 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheEvento(int idEvento, final Response.Listener<List<WStatisticheEvento>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciStatisticheEvento(final Response.Listener<List<WStatisticheEvento>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_RESTITUISCI_STATISTICHE_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_EVENTO_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
 
         ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
             List<WStatisticheEvento> list = new ArrayList<>();
@@ -213,11 +207,9 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciPrevenditeEvento(int idEvento, final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciPrevenditeEvento(final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_RESTITUISCI_PREVENDITE;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_PREVENDITE_EVENTO_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
 
         ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
             List<WPrevendita> list = new ArrayList<>();
@@ -234,13 +226,11 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void rimuoviMembroStaff(int idMembro, int idStaff, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void rimuoviMembroStaff(int idMembro, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_RIMUOVI_MEMBRO;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWIdMembro = new NetWId(idMembro);
         richiesta.aggiungiArgomento(new Argomento(RIMUOVI_MEMBRO_ARG_MEMBRO, netWIdMembro.getRemoteClassPath(), netWIdMembro));
-        NetWId netWIdStaff = new NetWId(idStaff);
-        richiesta.aggiungiArgomento(new Argomento(RIMUOVI_MEMBRO_ARG_STAFF, netWIdStaff.getRemoteClassPath(), netWIdStaff));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WUtente.class)), onException, errorListener);
 
@@ -249,6 +239,7 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
+    //TODO: da rivedere
     public void modificaCodiceAccesso(UpdateNetWStaff update, final Response.Listener<Void> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_MODIFICA_CODICE_ACCESSO;
         final Richiesta richiesta = new Richiesta(comando);
@@ -263,13 +254,11 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatistichePREvento(int idPR, int idEvento, final Response.Listener<List<WStatistichePREvento>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciStatistichePREvento(int idPR, final Response.Listener<List<WStatistichePREvento>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_RESTITUISCI_STATISTICHE_PR_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWIdPR = new NetWId(idPR);
         richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_PR_EVENTO_ARG_PR, netWIdPR.getRemoteClassPath(), netWIdPR));
-        NetWId netWIdEvento = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_PR_EVENTO_ARG_EVENTO, netWIdEvento.getRemoteClassPath(), netWIdEvento));
 
         ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
             List<WStatistichePREvento> list = new ArrayList<>();
@@ -286,13 +275,11 @@ public class ManagerAmministratore extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheCassiereEvento(int idCassiere, int idEvento, final Response.Listener<WStatisticheCassiereEvento> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void resitituisciStatisticheCassiereEvento(int idCassiere, final Response.Listener<WStatisticheCassiereEvento> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_AMMINISTRATORE_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
         NetWId netWIdCassiere = new NetWId(idCassiere);
         richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_CASSIERE_EVENTO_ARG_CASSIERE, netWIdCassiere.getRemoteClassPath(), netWIdCassiere));
-        NetWId netWIdEvento = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_CASSIERE_EVENTO_ARG_EVENTO, netWIdEvento.getRemoteClassPath(), netWIdEvento));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 0 || element.intValue() == 1, element -> {
             if (!element.isEmpty())

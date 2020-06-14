@@ -93,11 +93,9 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheStaff(int idStaff, final Response.Listener<WStatisticheCassiereStaff> onSuccess, final Response.Listener<List<Eccezione>> onException) {
+    public void resitituisciStatisticheStaff(final Response.Listener<WStatisticheCassiereStaff> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_STATISTICHE_CASSIERE_STAFF;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idStaff);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_STAFF_ARG_STAFF, netWId.getRemoteClassPath(), netWId));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WStatisticheCassiereStaff.class)), onException, errorListener);
 
@@ -106,11 +104,9 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void resitituisciStatisticheEvento(int idEvento, final Response.Listener<WStatisticheCassiereEvento> onSuccess, final Response.Listener<List<Eccezione>> onException) {
+    public void resitituisciStatisticheEvento(final Response.Listener<WStatisticheCassiereEvento> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_STATISTICHE_EVENTO_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
 
         ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WStatisticheCassiereEvento.class)), onException, errorListener);
 
@@ -119,12 +115,9 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciEntrateEvento(int idEvento, final Response.Listener<List<WEntrata>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
+    public void restituisciEntrateEvento(final Response.Listener<List<WEntrata>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_ENTRATE_SVOLTE;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(ENTRATE_SVOLTE_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
-
 
         ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
             List<WEntrata> myList = new ArrayList<>();
@@ -141,12 +134,9 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaPrevendite(int idEvento, final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
+    public void restituisciListaPrevendite(final Response.Listener<List<WPrevendita>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_PREVENDITE_EVENTO;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_PREVENDTITE_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
-
 
         ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
             List<WPrevendita> myList = new ArrayList<>();
@@ -177,12 +167,9 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaPrevenditeTimbrate(int idEvento, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
+    public void restituisciListaPrevenditeTimbrate(final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException) {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_LISTA_PREVENDITE_TIMBRATE;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_LISTA_PREVENDITE_TIMBRATE_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
-
 
         ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
             List<WPrevenditaPlus> myList = new ArrayList<>();
@@ -199,12 +186,9 @@ public class ManagerCassiere extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void restituisciListaPrevenditeNonTimbrate(int idEvento, final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+    public void restituisciListaPrevenditeNonTimbrate(final Response.Listener<List<WPrevenditaPlus>> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
         Comando comando = Comando.COMANDO_CASSIERE_RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE;
         final Richiesta richiesta = new Richiesta(comando);
-        NetWId netWId = new NetWId(idEvento);
-        richiesta.aggiungiArgomento(new Argomento(RESTITUISCI_LISTA_PREVENDITE_NON_TIMBRATE_ARG_EVENTO, netWId.getRemoteClassPath(), netWId));
-
 
         ResponseListener listener = new ResponseListener(comando, element -> true, element -> {
             List<WPrevenditaPlus> myList = new ArrayList<>();

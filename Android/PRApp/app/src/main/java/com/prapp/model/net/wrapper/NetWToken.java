@@ -30,21 +30,21 @@ public class NetWToken implements Twinned, NetWrapper, JSONSerializable {
 
     public static NetWToken getEmpty()
     {
-        return new NetWToken("", "");
+        return new NetWToken(0, "");
     }
 
-    @SerializedName("username")
-    private String username;
+    @SerializedName("id")
+    private Integer id;
     @SerializedName("token")
     private String token;
 
-    public NetWToken(String username, String token) {
-        this.username = username;
+    public NetWToken(Integer id, String token) {
+        this.id = id;
         this.token = token;
     }
 
-    public String getUsername() {
-        return username;
+    public Integer getId() {
+        return id;
     }
 
     public String getToken() {

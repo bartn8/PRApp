@@ -24,8 +24,6 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.prapp.PRAppApplication;
-import com.prapp.model.db.wrapper.WEvento;
-import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WToken;
 
 import java.nio.charset.StandardCharsets;
@@ -37,11 +35,7 @@ public class ApplicationPreferences {
     private static final String IS_TOKEN_SAVED_KEY = "is_token_saved";
     private static final String TOKEN_KEY = "token";
 
-    private static final String IS_STAFF_SAVED_KEY = "is_staff_saved";
-    private static final String STAFF_KEY = "staff";
-
-    private static final String IS_EVENTO_SAVED_KEY = "is_evento_saved";
-    private static final String EVENTO_KEY = "evento";
+    //Non ha più senso salvare nelle preferenze evento e staff: vengono chiesti ogni volta dal server.
 
     private static final Gson GSON_OBJECT = new Gson();
 
@@ -95,13 +89,9 @@ public class ApplicationPreferences {
     public void logout()
     {
         clearToken();
-        clearStaff();
-        clearEvento();
     }
 
     public void clearSelected(){
-        clearStaff();
-        clearEvento();
     }
 
     public void clearToken() {
@@ -113,92 +103,6 @@ public class ApplicationPreferences {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(IS_TOKEN_SAVED_KEY, isEnabled);
         editor.apply();
-    }
-
-    public boolean isStaffSaved()
-    {
-        return preferences.getBoolean(IS_STAFF_SAVED_KEY, false);
-    }
-
-    public void setStaffSaved(boolean isEnabled)
-    {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(IS_STAFF_SAVED_KEY, isEnabled);
-        editor.apply();
-    }
-
-    public void clearStaff()
-    {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(IS_STAFF_SAVED_KEY, false);
-        editor.remove(STAFF_KEY);
-        editor.apply();
-    }
-
-    public void saveStaff(WStaff staff)
-    {
-        String staffJson = GSON_OBJECT.toJson(staff, WStaff.class);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(STAFF_KEY, staffJson);
-        editor.putBoolean(IS_STAFF_SAVED_KEY, true);
-        editor.apply();
-    }
-
-    public WStaff getStaff()
-    {
-        if(isStaffSaved())
-        {
-            String staffJson = preferences.getString(STAFF_KEY, "");
-            return GSON_OBJECT.fromJson(staffJson, WStaff.class);
-        }
-
-        //return WStaff.getEmpty();
-        throw new RuntimeException("No data");
-    }
-
-    //-----------------------
-
-    public boolean isEventoSaved()
-    {
-        return preferences.getBoolean(IS_EVENTO_SAVED_KEY, false);
-    }
-
-    public void setEventoSaved(boolean isEnabled)
-    {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(IS_EVENTO_SAVED_KEY, isEnabled);
-        editor.apply();
-    }
-
-    public void clearEvento()
-    {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(IS_EVENTO_SAVED_KEY, false);
-        editor.remove(EVENTO_KEY);
-        editor.apply();
-    }
-
-    public void saveEvento(WEvento staff)
-    {
-        String staffJson = GSON_OBJECT.toJson(staff, WEvento.class);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(EVENTO_KEY, staffJson);
-        editor.putBoolean(IS_EVENTO_SAVED_KEY, true);
-        editor.apply();
-    }
-
-    public WEvento getEvento()
-    {
-        if(isEventoSaved())
-        {
-            String staffJson = preferences.getString(EVENTO_KEY, "");
-            return GSON_OBJECT.fromJson(staffJson, WEvento.class);
-        }
-
-        //return WStaff.getEmpty();
-        throw new RuntimeException("No data");
     }
 
 

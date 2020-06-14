@@ -161,6 +161,30 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:text="@string/fragment_cassiere_entrata_manuale_idEvento_label"
+                        android:textColor="@color/primaryTextColor"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+
+                    <EditText
+                        android:id="@+id/fragment_cassiere_entrata_manuale_idEvento"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="number" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="@string/fragment_cassiere_entrata_manuale_idPrevendita_label"
                         android:textColor="@color/primaryTextColor"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>

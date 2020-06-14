@@ -85,6 +85,35 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
         }
     };
 
+    private Observer<Result<WStaff, Void>> scegliStaffResultObserver = new Observer<Result<WStaff, Void>>() {
+        @Override
+        public void onChanged(Result<WStaff, Void> scegliStaffResult) {
+            if (scegliStaffResult == null) {
+                return;
+            }
+
+            Integer integerError = scegliStaffResult.getIntegerError();
+            List<Exception> error = scegliStaffResult.getError();
+            WStaff success = scegliStaffResult.getSuccess();
+
+            if (integerError != null)
+                uiUtil.showError(integerError);
+
+            if (error != null)
+                uiUtil.showError(error);
+
+            if (success != null) {
+                //Posso passare alla view successiva
+                //Posso chiudere l'activity
+                //Si ritorna allo splash...
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            popupUtil.hideLoadingPopup();
+        }
+    };
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,34 +134,17 @@ public class SelectStaffActivity extends AppCompatActivity implements WStaffAdap
 
         selectStaffViewModel = ViewModelProviders.of(this, new SelectStaffViewModelFactory()).get(SelectStaffViewModel.class);
         selectStaffViewModel.getListStaffResult().observe(this, listStaffResultObserver);
+        selectStaffViewModel.getScegliStaffResult().observe(this, scegliStaffResultObserver);
 
         //Non verifico login: lo fa il viewModel.
-        if (searchPreferences) {
-            //Carico lo staff già aperto in precedenza.
-            if (selectStaffViewModel.caricaStaffSalvato()) {
-                //Posso chiudere l'activity
-                //Si ritorna allo splash...
-                setResult(RESULT_OK);
-                finish();
-            } else {
-                popupUtil.showLoadingPopup();
-                //Carico gli staff e procedo normalmente
-                selectStaffViewModel.getStaffMembri();
-            }
-        } else {
-            popupUtil.showLoadingPopup();
-            //Carico gli staff e procedo normalmente
-            selectStaffViewModel.getStaffMembri();
-        }
+        popupUtil.showLoadingPopup();
+        //Carico gli staff e procedo normalmente
+        selectStaffViewModel.getStaffMembri();
     }
 
     @Override
-    public void onListItemClick(int idStaff) {
-        selectStaffViewModel.selectStaff(idStaff);
-
-        //Posso chiudere l'activity
-        //Si ritorna allo splash...
-        setResult(RESULT_OK);
-        finish();
+    public void onListItemClick(WStaff staff) {
+        popupUtil.showLoadingPopup();
+        selectStaffViewModel.selectStaff(staff);
     }
 }

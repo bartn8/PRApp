@@ -24,7 +24,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.prapp.R;
 import com.prapp.model.MyContext;
-import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.model.net.manager.ManagerMembro;
 import com.prapp.ui.AbstractViewModel;
@@ -51,9 +50,8 @@ public class MembroViewModel extends AbstractViewModel {
 
         if (myContext.isStaffScelto() && myContext.isLoggato()) {
             ManagerMembro managerMembro = getManagerMembro();
-            WStaff staff = getStaff();
 
-            managerMembro.restituisciListaUtentiStaff(staff.getId(), new DefaultSuccessListener<>(membriStaffResult), new DefaultExceptionListener<>(membriStaffResult));
+            managerMembro.restituisciListaMembriStaff(new DefaultSuccessListener<>(membriStaffResult), new DefaultExceptionListener<>(membriStaffResult));
         } else {
             membriStaffResult.setValue(new Result<>(R.string.no_staff));
         }

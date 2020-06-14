@@ -251,7 +251,7 @@ public class CassiereSubFragmentLista extends Fragment implements InterfaceHolde
 
         //View model per richiamare il server.
         viewModel = ViewModelProviders.of(getActivity()).get(CassiereViewModel.class);
-        viewModel.getPrevenditeResult().observe(this, this.getPrevenditeResultObserver);
+        viewModel.getPrevenditeResult().observe(getViewLifecycleOwner(), this.getPrevenditeResultObserver);
 
         //Richiedo al server i dati.
         if(mode == MODE_LIST_TIMBRATE){

@@ -110,9 +110,7 @@ public class CassiereViewModel extends AbstractViewModel {
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerCassiere managerCassiere = getManagerCassiere();
-            Integer idEvento = myContext.getEvento().getId();
-
-            managerCassiere.restituisciListaPrevenditeTimbrate(idEvento, new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
+            managerCassiere.restituisciListaPrevenditeTimbrate(new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
         } else {
             prevenditeResult.setValue(new Result<>(R.string.no_login));
         }
@@ -123,9 +121,7 @@ public class CassiereViewModel extends AbstractViewModel {
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerCassiere managerCassiere = getManagerCassiere();
-            Integer idEvento = myContext.getEvento().getId();
-
-            managerCassiere.restituisciListaPrevenditeNonTimbrate(idEvento, new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
+            managerCassiere.restituisciListaPrevenditeNonTimbrate(new DefaultSuccessListener<>(prevenditeResult), new DefaultExceptionListener<>(prevenditeResult));
         } else {
             prevenditeResult.setValue(new Result<>(R.string.no_login));
         }

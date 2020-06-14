@@ -11,6 +11,7 @@ Get Token(9)
 Login Token(10): [{"name":"token", "type":"com\\model\\net\\wrapper\\NetWToken", "value":{"token": "xfKcdN6dauiGPr2QMu778K3IQfpjgiZD"}}]
 Restituisci Utente(11)
 Scegli Staff (12) :  [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 5}}]
+Get Staff Scelto (13)
 
 -Membro-
 
@@ -19,6 +20,7 @@ Diritti personali Staff(103)
 Lista eventi staff(105) 
 Lista tipi prevendita evento(106)
 Scegli evento(108): [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}]
+Get evento Scelto (109)
 
 -PR-
 
@@ -38,7 +40,9 @@ Restituisci statistiche cassiere staff(305)
 Restituisci statistiche cassiere evento(306)
 Restituisci entrate svolte evento(307)
 Restituisci prevendite evento(308)
-Restituisci informazioni prevendita(309)
+Restituisci informazioni prevendita(309): [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}]
+Restituisci lista prevendita timbrate(310)
+Restituisci lista prevendita non timbrate(311)
 
 -Amministratore-
 Aggiungi evento(403): [{"name":"evento", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWEvento", "value":{"nome": "Evento Uno", "descrizione": "Piacevole ma non troppo...", "inizio": "2019-07-14T00:00Z", "fine": "2019-07-12T23:00Z", "indirizzo": "Via della domenica, 2", "stato": 0}}]
@@ -50,6 +54,7 @@ Modifica diritti utente(408): [{"name":"dirittiUtente", "type":"com\\model\\net\
 Restituisci statistiche PR(409): [{"name":"pr", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
 Restituisci statistiche Cassiere(410): [{"name":"cassiere", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]
 Restituisci statistiche Evento(411)
-Restituisci prevendite Evento(412): 
+Restituisci prevendite Evento(412):
 Rimuovi membro(413): [{"name":"membro", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 2}}]
 Modifica codice accesso(414): [{"name":"staff", "type":"com\\model\\net\\wrapper\\update\\UpdateNetWStaff", "value":{"nome": "prova 123", "codiceAccesso":"ciao"}}]
+Restituisci statistiche PR evento(415): [{"name":"pr", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 1}}]

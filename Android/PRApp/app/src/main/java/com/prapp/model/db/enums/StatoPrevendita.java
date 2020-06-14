@@ -26,8 +26,8 @@ import androidx.annotation.Nullable;
 public enum StatoPrevendita {
 
     VALIDA(0, "VALIDA"),
-    ANNULLATA(2, "ANNULLATA"),
-    ANNULLATA_NON_RIMBORSATA(3, "ANNULLATA_NON_RIMBORSATA");
+    ANNULLATA(1, "ANNULLATA"),
+    ANNULLATA_NON_RIMBORSATA(2, "ANNULLATA_NON_RIMBORSATA");
 
     private static final int LENGTH = 4;
 

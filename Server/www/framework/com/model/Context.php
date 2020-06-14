@@ -209,8 +209,12 @@ class Context
         if (session_status() != PHP_SESSION_ACTIVE)
             throw new Exception("Sessione non attiva");
 
-        if($this->isValid())
+        if($this->isValid()){
             $_SESSION["context"] = $this;
+        }else{
+            throw new Exception("Contesto non valido");
+        }
+            
     }
 
 }

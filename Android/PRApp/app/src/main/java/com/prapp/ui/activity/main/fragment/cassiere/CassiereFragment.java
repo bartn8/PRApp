@@ -167,6 +167,9 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
 
     //-----------------------------------------------------------
 
+    @BindView(R.id.fragment_cassiere_entrata_manuale_idEvento)
+    public EditText editTextIdEvento;
+
     @BindView(R.id.fragment_cassiere_entrata_manuale_idPrevendita)
     public EditText editTextIdPrevendita;
 
@@ -389,8 +392,8 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
 
         //View model per richiamare il server.
         viewModel = ViewModelProviders.of(getActivity()).get(CassiereViewModel.class);
-        viewModel.getInfoPrevenditaResult().observe(this, getInfoPrevenditaObserver);
-        viewModel.getEntrataResult().observe(this, timbraEntrataObserver);
+        viewModel.getInfoPrevenditaResult().observe(getViewLifecycleOwner(), getInfoPrevenditaObserver);
+        viewModel.getEntrataResult().observe(getViewLifecycleOwner(), timbraEntrataObserver);
 
         //Imposto il recyler view. Quello che fa vedere le entrate.
         entrateRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -523,7 +526,7 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
     public void onEntrataManualeClick() {
         try{
             Integer idPrevendita = Integer.parseInt(editTextIdPrevendita.getText().toString());
-            Integer idEvento = viewModel.getEvento().getId();
+            Integer idEvento = Integer.parseInt(editTextIdEvento.getText().toString());
             String codice = editTextCodice.getText().toString();
 
             NetWEntrata netWEntrata = new NetWEntrata(idPrevendita, idEvento, codice);
@@ -531,6 +534,7 @@ public class CassiereFragment extends Fragment implements DecoratedBarcodeView.T
             viewModel.getInformazioniPrevendita(netWEntrata);
 
             //Pulisco i campi
+            editTextIdEvento.getText().clear();
             editTextIdPrevendita.getText().clear();
             editTextCodice.getText().clear();
         }catch (NumberFormatException ex){

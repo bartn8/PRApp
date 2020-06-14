@@ -89,40 +89,52 @@ abstract class Controller
 
         if(!$context->isValid()){
             Context::createContext();
+            //TRE ore di debug per sta linea fanculo
+            $context = Context::getContext();
         }
 
         //Prima devo verificare se devo aggiornare il contesto.
         if($context->isWatchdogTriggered() && $context->isLogged()){
-            //Devo aggiornare il trigger!
-
             $utente = $context->getUserSession()->getUtente();
-            $staffScelto = $context->getUserSession()->getStaffScelto();
-            $eventoScelto = $context->getUserSession()->getEventoScelto();
 
             //Per prima cosa guardo se sono ancora dentro lo staff.
-            $richiestaStaff = Utente::getStaff($utente->getId(), $staffScelto->getId());
+            //Dopo aver controllato che abbia scelto uno staff
 
-            if($richiestaStaff == NULL){
-                //Sessione da aggiornare
-                $context->logout();
-                throw new SessionExpiredException("La sessione è scaduta (staff non disponibile)");
+            if($context->getUserSession()->isStaffScelto()){
+                $staffScelto = $context->getUserSession()->getStaffScelto();
+                $richiestaStaff = Utente::getStaff($utente->getId(), $staffScelto->getId());
+
+                if($richiestaStaff == NULL){
+                    //Sessione da aggiornare
+                    $context->logout();
+                    throw new SessionExpiredException("La sessione è scaduta (staff non disponibile)");
+                }
+
+                //Adesso controllo i ruoli: qui non è necessario rimuovere la sessione
+                $ruoliAggiornati = Membro::getRuoliPersonali($utente->getId(), $staffScelto->getId());
+                $context->getUserSession()->setRuoliMembro($ruoliAggiornati);
+
+
+                //Poi controllo l'evento.
+                //Dopo aver controllato che abbia scelto un evento
+
+                if($context->getUserSession()->isEventoScelto()){
+                    $eventoScelto = $context->getUserSession()->getEventoScelto();
+                    $richiestaEvento = Membro::getEvento($utente->getId(), $staffScelto->getId(), $eventoScelto->getId());
+
+                    if($richiestaEvento == NULL){
+                        //Sessione da aggiornare
+                        $context->logout();
+                        throw new SessionExpiredException("La sessione è scaduta (evento non disponibile)");
+                    }
+                }
             }
-
-            //Poi controllo l'evento.
-            $richiestaEvento = Membro::getEvento($utente->getId(), $staffScelto->getId(), $eventoScelto->getId());
-
-            if($richiestaEvento == NULL){
-                //Sessione da aggiornare
-                $context->logout();
-                throw new SessionExpiredException("La sessione è scaduta (evento non disponibile)");
-            }
-
-            //Adesso controllo i ruoli: qui non è necessario rimuovere la sessione
-            $ruoliAggiornati = Membro::getRuoliPersonali($utente->getId(), $staffScelto->getId());
-            $context->getUserSession()->setRuoliMembro($ruoliAggiornati);
-
+            
             //Applico le modifiche.
             $context->apply();
+
+            //Reset trigger
+            $context->resetWatchdog();
         }
 
         $this->internalHandle($command, $context);

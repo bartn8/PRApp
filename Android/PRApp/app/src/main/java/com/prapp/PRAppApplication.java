@@ -71,14 +71,14 @@ public class PRAppApplication extends Application {
 
     private void initCookieManager(){
         //Devo eliminare i cookie: Rimane PHPSESSID.
-        if(manager == null)
+        if(manager == null){
+            //https://stackoverflow.com/questions/16680701/using-cookies-with-android-volley-library
+//            CookieStore cookieStore = new MySimpleCookieStore();
+//            manager = new CookieManager( cookieStore, CookiePolicy.ACCEPT_ALL );
             manager = new CookieManager();
+        }
 
         CookieHandler.setDefault(manager);
-
-        android.webkit.CookieManager cookieManager = android.webkit.CookieManager.getInstance();
-        cookieManager.setAcceptCookie(true);
-        cookieManager.removeAllCookies(null);
     }
 
     private void initEnumsResources(){
@@ -92,7 +92,7 @@ public class PRAppApplication extends Application {
         StatoPrevendita.ANNULLATA_NON_RIMBORSATA.setResId(R.string.statoPrevendita_rimborsata);
         StatoPrevendita.ANNULLATA_NON_RIMBORSATA.setResValue(getString(StatoPrevendita.ANNULLATA_NON_RIMBORSATA.getResId()));
 
-        //Diritto
+        //Ruolo
         Ruolo.PR.setResId(R.string.diritto_pr);
         Ruolo.PR.setResValue(getString(Ruolo.PR.getResId()));
 

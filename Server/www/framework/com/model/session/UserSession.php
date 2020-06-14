@@ -115,14 +115,14 @@ class UserSession {
      * Indica se l'utente ha scelto l'evento di sessione.
      */
     public function isEventoScelto(){
-        return $this->eventoScelto != NULL;
+        return  !is_null($this->eventoScelto);
     }
     
     /**
      * Indica se l'utente ha scelto lo staff di sessione
      */
     public function isStaffScelto(){
-        return $this->staffScelto != NULL;
+        return !is_null($this->staffScelto);
     }
     
 }

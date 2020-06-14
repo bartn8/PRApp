@@ -48,6 +48,8 @@ class ControllerMembro extends Controller
 
     public const CMD_SCEGLI_EVENTO = 108;	
 
+    public const CMD_GET_EVENTO_SCELTO = 109;	
+
     public function __construct($printer, $retriver)
     {
         parent::__construct($printer, $retriver);
@@ -75,8 +77,12 @@ class ControllerMembro extends Controller
             				
             case ControllerMembro::CMD_SCEGLI_EVENTO:
                 $this->cmd_scegli_evento($command, $context);
-                break;				
-            
+                break;	
+                			
+            case ControllerMembro::CMD_GET_EVENTO_SCELTO:
+                $this->cmd_get_evento_scelto($command, $context);
+                break;	            
+
             default:
                 break;
         }
@@ -86,7 +92,8 @@ class ControllerMembro extends Controller
             case ControllerMembro::CMD_RESTITUISCI_RUOLI_PERSONALI:
             case ControllerMembro::CMD_RESTITUISCI_LISTA_EVENTI:
             case ControllerMembro::CMD_RESTITUISCI_TIPI_PREVENDITA:
-			case ControllerMembro::CMD_SCEGLI_EVENTO:
+            case ControllerMembro::CMD_SCEGLI_EVENTO:
+            case ControllerMembro::CMD_GET_EVENTO_SCELTO:                
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
             
@@ -200,6 +207,21 @@ class ControllerMembro extends Controller
             $context->getUserSession()->setEventoScelto($eventoScelto);
             parent::getPrinter()->addresult($eventoScelto);
         }
+    }
+
+    
+	private function cmd_get_evento_scelto(Command $command, Context $context){        
+        // Verifico che si è loggati nel sistema.
+        if(!$context->isLogged()) {
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+            
+        if (! $context->getUserSession()->isEventoScelto()){
+            throw new NotAvailableOperationException("Non hai scelto l'evento");
+        }
+            
+        $eventoScelto = $context->getUserSession()->getEventoScelto();           
+        parent::getPrinter()->addResult($eventoScelto);   
     }
 }
 

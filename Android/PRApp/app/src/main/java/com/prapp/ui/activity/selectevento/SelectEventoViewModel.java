@@ -30,9 +30,6 @@ import com.prapp.model.preferences.ApplicationPreferences;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class SelectEventoViewModel extends AbstractViewModel {
@@ -40,8 +37,7 @@ public class SelectEventoViewModel extends AbstractViewModel {
     private static final String TAG = SelectEventoViewModel.class.getSimpleName();
 
     private MutableLiveData<Result<List<WEvento>, Void>> listEventiResult = new MutableLiveData<>();
-
-    private List<WEvento> eventiList = new ArrayList<>();
+    private MutableLiveData<Result<WEvento, Void>> scegliEventoResult = new MutableLiveData<>();
 
     SelectEventoViewModel() {
         super();
@@ -50,55 +46,26 @@ public class SelectEventoViewModel extends AbstractViewModel {
     public LiveData<Result<List<WEvento>, Void>> getListEventiResult() {
         return listEventiResult;
     }
+    public LiveData<Result<WEvento, Void>> getScegliEventoResult() {
+        return scegliEventoResult;
+    }
 
+    public void selectEvento(WEvento evento) {
+        MyContext myContext = getMyContext();
 
-    //Ricerca lo staff giusto le lo restituisce
-    @Nullable
-    private WEvento getEvento(Integer idEvento) {
-        for (WEvento evento : eventiList) {
-            if (evento.getId().intValue() == idEvento.intValue()) {
-                return evento;
-            }
+        if (myContext.isLoggato() && myContext.isStaffScelto()) {
+            ManagerMembro managerMembro = getManagerMembro();
+
+            managerMembro.scegliEvento(evento, response -> {
+                myContext.setEvento(evento);
+
+                scegliEventoResult.setValue(new Result<>(evento, null));
+            }, new DefaultExceptionListener<>(scegliEventoResult));
+        } else {
+            scegliEventoResult.setValue(new Result<>(R.string.no_staff));
         }
 
-        return null;
     }
-
-    public void selectEvento(int idEvento) {
-        MyContext myContext = getMyContext();
-        ApplicationPreferences preferences = getPreferences();
-
-        //Seleziono lo staff come default:
-        //1) lo salvo nelle preferenze.
-        //2) lo sparo nel contesto.
-
-        //Staff fortunato.
-        WEvento evento = getEvento(idEvento);
-        //1)
-        preferences.saveEvento(evento);
-        //2)
-        myContext.setEvento(evento);
-    }
-
-    public boolean caricaEventoSalvato() {
-        MyContext myContext = getMyContext();
-        ApplicationPreferences preferences = getPreferences();
-
-        if (preferences.isEventoSaved()) {
-            WEvento evento = preferences.getEvento();
-
-            eventiList = new ArrayList<>();
-            eventiList.add(evento);
-            listEventiResult.setValue(new Result<>(eventiList, null));
-
-            myContext.setEvento(evento);
-
-            return true;
-        }
-
-        return false;
-    }
-
 
     public void getEventiStaff() {
         MyContext myContext = getMyContext();
@@ -106,10 +73,8 @@ public class SelectEventoViewModel extends AbstractViewModel {
 
         if (myContext.isLoggato() && myContext.isStaffScelto()) {
             ManagerMembro managerMembro = getManagerMembro();
-            Integer idStaff = myContext.getStaff().getId();
 
-            managerMembro.restituisciListaEventiStaff(idStaff, response -> {
-                eventiList = response;
+            managerMembro.restituisciListaEventiStaff(response -> {
                 listEventiResult.setValue(new Result<>(response, null));
             }, new DefaultExceptionListener<>(listEventiResult));
         } else {

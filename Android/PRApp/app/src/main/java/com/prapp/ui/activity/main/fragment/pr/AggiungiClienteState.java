@@ -29,22 +29,17 @@ public class AggiungiClienteState {
     @Nullable
     private Integer cognomeClienteError;
 
-    @Nullable
-    private Integer dataDiNascitaClienteError;
-
     private boolean isDataValid;
 
     public AggiungiClienteState(@Nullable Integer nomeClienteError, @Nullable Integer cognomeClienteError, @Nullable Integer dataDiNascitaClienteError) {
         this.nomeClienteError = nomeClienteError;
         this.cognomeClienteError = cognomeClienteError;
-        this.dataDiNascitaClienteError = dataDiNascitaClienteError;
         this.isDataValid = false;
     }
 
     public AggiungiClienteState(boolean isDataValid) {
         nomeClienteError = null;
         cognomeClienteError = null;
-        dataDiNascitaClienteError = null;
         this.isDataValid = isDataValid;
     }
 
@@ -56,11 +51,6 @@ public class AggiungiClienteState {
     @Nullable
     public Integer getCognomeClienteError() {
         return cognomeClienteError;
-    }
-
-    @Nullable
-    public Integer getDataDiNascitaClienteError() {
-        return dataDiNascitaClienteError;
     }
 
     public boolean isDataValid() {

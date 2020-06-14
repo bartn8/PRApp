@@ -235,7 +235,7 @@
 
     <!-- CardView Seleziona Tipo Prevendita -->
     <string name="fragment_pr_tipoPrevendita_label">Tipo Prevendita:</string>
-    <string name="fragment_pr_tipoPrevendita_editText_label">(seleziona)</string>
+    <string name="fragment_pr_tipoPrevendita_editText_label">(Cerca nella barra)</string>
     <string name="fragment_pr_statoPrevendita_label">Stato Prevendita:</string>
 
     <string name="fragment_pr_aggiungiPrevendita_button_label">Aggiungi Prevendita</string>
@@ -259,9 +259,9 @@
     <string name="fragment_pr_qr_share_text">
         Ciao <xliff:g example="Piero" id="nome">%1$s</xliff:g> <xliff:g example="Marconi" id="cognome">%2$s</xliff:g>\n
         Ecco il tuo QR Code\n
-        ID: <xliff:g example="123" id="idPrevendita">%3$d</xliff:g> Codice: <xliff:g example="bob" id="codice">%4$s</xliff:g>\n
-        Evento: <xliff:g example="Evento" id="evento">%5$s</xliff:g>\n
-        Stato Prevendita: <xliff:g example="Consegnata" id="statoPrevendita">%6$s</xliff:g>\n
+        ID: <xliff:g example="123" id="idPrevendita">%3$d</xliff:g> ID Evento: <xliff:g example="123" id="idEvento">%4$d</xliff:g> Codice: <xliff:g example="bob" id="codice">%5$s</xliff:g>\n
+        Evento: <xliff:g example="Evento" id="evento">%6$s</xliff:g>\n
+        Stato Prevendita: <xliff:g example="Consegnata" id="statoPrevendita">%7$s</xliff:g>\n
         -PRApp-
     </string>
 
@@ -293,10 +293,11 @@
     <string name="fragment_cassiere_switch_flash_on">FLASH Acceso</string>
 
     <!-- Card View Entrata Manuale -->
+
     <string name="fragment_cassiere_entrata_manuale_label">Effettua Entrata Manuale</string>
+    <string name="fragment_cassiere_entrata_manuale_idEvento_label">ID evento:</string>
     <string name="fragment_cassiere_entrata_manuale_idPrevendita_label">Numero Prevendita:</string>
     <string name="fragment_cassiere_entrata_manuale_codice_label">Codice:</string>
-    <string name="fragment_cassiere_entrata_manuale_idEvento_label">Numero Evento:</string>
     <string name="fragment_cassiere_entrata_manuale_dati_non_validi">Hai inserito dati non validi</string>
 
     <string name="fragment_cassiere_approva_label">APPROVA</string>

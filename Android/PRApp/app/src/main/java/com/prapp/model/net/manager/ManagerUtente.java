@@ -24,7 +24,6 @@ import android.content.Context;
 import com.android.volley.Response;
 import com.prapp.PRAppApplication;
 import com.prapp.model.db.wrapper.WStaff;
-import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.model.net.Argomento;
 import com.prapp.model.net.Eccezione;
@@ -32,8 +31,8 @@ import com.prapp.model.net.Richiesta;
 import com.prapp.model.net.RichiestaVolley;
 import com.prapp.model.net.Risultato;
 import com.prapp.model.net.enums.Comando;
+import com.prapp.model.net.wrapper.NetWId;
 import com.prapp.model.net.wrapper.NetWLogin;
-import com.prapp.model.net.wrapper.NetWToken;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ public class ManagerUtente extends Manager {
 
     private static final String LOGIN_ARG_LOGIN = "login";
     private static final String LOGIN_TOKEN_ARG_TOKEN = "token";
+    private static final String SCEGLI_STAFF_ARG_STAFF = "staff";
 
     private static ManagerUtente singleton;
 
@@ -135,38 +135,52 @@ public class ManagerUtente extends Manager {
         PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
     }
 
-    public void renewToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
-        Comando comando = Comando.COMANDO_UTENTE_RENEW_TOKEN;
+//    public void renewToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+//        Comando comando = Comando.COMANDO_UTENTE_RENEW_TOKEN;
+//        Richiesta richiesta = new Richiesta(comando);
+//
+//        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WToken.class)), onException, errorListener);
+//
+//
+//        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
+//
+//        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
+//    }
+//
+//    public void getToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+//        Comando comando = Comando.COMANDO_UTENTE_GET_TOKEN;
+//        Richiesta richiesta = new Richiesta(comando);
+//
+//        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WToken.class)), onException, errorListener);
+//
+//
+//        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
+//
+//        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
+//    }
+//
+//    public void loginWithToken(Integer idUtente, String token, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+//        Comando comando = Comando.COMANDO_UTENTE_LOGIN_TOKEN;
+//        Richiesta richiesta = new Richiesta(comando);
+//        NetWToken loginData = new NetWToken(idUtente, token);
+//        richiesta.aggiungiArgomento(new Argomento(LOGIN_TOKEN_ARG_TOKEN, loginData.getRemoteClassPath(), loginData));
+//
+//        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WUtente.class)), onException, errorListener);
+//
+//
+//        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
+//
+//        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
+//    }
+
+    public void scegliStaff(WStaff staff, final Response.Listener<WStaff> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
+        Comando comando = Comando.COMANDO_UTENTE_SCEGLI_STAFF;
         Richiesta richiesta = new Richiesta(comando);
 
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WToken.class)), onException, errorListener);
+        NetWId idStaff = new NetWId(staff.getId());
+        richiesta.aggiungiArgomento(new Argomento(SCEGLI_STAFF_ARG_STAFF, idStaff.getRemoteClassPath(), idStaff));
 
-
-        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
-
-        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
-    }
-
-    public void getToken(final Response.Listener<WToken> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
-        Comando comando = Comando.COMANDO_UTENTE_GET_TOKEN;
-        Richiesta richiesta = new Richiesta(comando);
-
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WToken.class)), onException, errorListener);
-
-
-        RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
-
-        PRAppApplication.getInstance().addToRequestQueue(richiestaVolley);
-    }
-
-    public void loginWithToken(String username, String token, final Response.Listener<WUtente> onSuccess, final Response.Listener<List<Eccezione>> onException)  {
-        Comando comando = Comando.COMANDO_UTENTE_LOGIN_TOKEN;
-        Richiesta richiesta = new Richiesta(comando);
-        NetWToken loginData = new NetWToken(username, token);
-        richiesta.aggiungiArgomento(new Argomento(LOGIN_TOKEN_ARG_TOKEN, loginData.getRemoteClassPath(), loginData));
-
-        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WUtente.class)), onException, errorListener);
-
+        ResponseListener listener = new ResponseListener(comando, element -> element.intValue() == 1, element -> onSuccess.onResponse(element.get(0).castRisultato(WStaff.class)), onException, errorListener);
 
         RichiestaVolley richiestaVolley = new RichiestaVolley(indirizzo.toString(), richiesta, listener, errorListener);
 

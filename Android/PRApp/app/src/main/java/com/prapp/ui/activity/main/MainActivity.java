@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         mainViewModel = ViewModelProviders.of(this, new MainViewModelFactory()).get(MainViewModel.class);
 
         //Recupero i diritti dell'utente.
-        WRuoliMembro dirittiUtente = mainViewModel.getDirittiUtente();
+        WRuoliMembro dirittiUtente = mainViewModel.getRuoliMembro();
 
         diritti = dirittiUtente.getRuoli();
 

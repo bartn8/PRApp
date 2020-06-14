@@ -86,6 +86,8 @@ class ControllerUtente extends Controller
     public const CMD_SCEGLI_STAFF = 12;
     public const CMD_SCEGLI_STAFF_ARG_0 = "staff";
 
+    public const CMD_GET_STAFF_SCELTO = 13;
+
     public function __construct($printer, $retriver)
     {
         parent::__construct($printer, $retriver);
@@ -143,6 +145,10 @@ class ControllerUtente extends Controller
                 $this->cmd_scegli_staff($command, $context);
                 break;
 
+            case ControllerUtente::CMD_GET_STAFF_SCELTO:
+                $this->cmd_get_staff_scelto($command, $context);
+                break;
+
             default:
                 break;
         }
@@ -160,7 +166,8 @@ class ControllerUtente extends Controller
             case ControllerUtente::CMD_GET_TOKEN:
             case ControllerUtente::CMD_LOGIN_TOKEN:
             case ControllerUtente::CMD_RESTITUISCI_UTENTE:
-			case ControllerUtente::CMD_SCEGLI_STAFF:
+            case ControllerUtente::CMD_SCEGLI_STAFF:
+            case ControllerUtente::CMD_GET_STAFF_SCELTO:
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
             
@@ -392,10 +399,25 @@ class ControllerUtente extends Controller
 
             $context->getUserSession()->setRuoliMembro($ruoliPersonali);
             
-            parent::getPrinter()->addResults([$staffScelto, $ruoliPersonali]);
+            parent::getPrinter()->addResult($staffScelto);
         }
         
     }
+
+	private function cmd_get_staff_scelto(Command $command, Context $context){        
+        // Verifico che si è loggati nel sistema.
+        if(!$context->isLogged()) {
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+            
+        if (! $context->getUserSession()->isStaffScelto()){
+            throw new NotAvailableOperationException("Non hai scelto lo staff");            
+        }
+            
+        $staffScelto = $context->getUserSession()->getStaffScelto();               
+        parent::getPrinter()->addResult($staffScelto);   
+    }
+
 	
 }
 

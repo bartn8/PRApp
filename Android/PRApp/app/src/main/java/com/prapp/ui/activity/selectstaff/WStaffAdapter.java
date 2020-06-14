@@ -48,12 +48,12 @@ public class WStaffAdapter extends RecyclerView.Adapter<WStaffAdapter.WStaffView
      * The interface that receives onClick messages.
      */
     public interface ItemClickListener {
-        void onListItemClick(int clickedItemId);
+        void onListItemClick(WStaff clickedItemId);
     }
 
     public class WStaffViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public Integer staffId;
+        public WStaff staff;
 
         @BindView(R.id.wstaff_list_item_nome)
         public TextView textViewNome;
@@ -69,7 +69,7 @@ public class WStaffAdapter extends RecyclerView.Adapter<WStaffAdapter.WStaffView
 
         @Override
         public void onClick(View view) {
-            mOnClickListener.onListItemClick(staffId);
+            mOnClickListener.onListItemClick(staff);
         }
     }
 
@@ -108,7 +108,7 @@ public class WStaffAdapter extends RecyclerView.Adapter<WStaffAdapter.WStaffView
 
         holder.textViewNome.setText(wStaff.getNome());
         holder.textViewData.setText(wStaff.getTimestampCreazione().toString(DATE_FORMATTER));
-        holder.staffId = wStaff.getId();
+        holder.staff = wStaff;
     }
 
     // Return the size of your dataset (invoked by the layout manager)

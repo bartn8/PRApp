@@ -165,7 +165,7 @@ public class MembroFragment extends Fragment implements InterfaceHolder<MainActi
         membriRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         viewModel = ViewModelProviders.of(getActivity()).get(MembroViewModel.class);
-        viewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
+        viewModel.getMembriStaffResult().observe(getViewLifecycleOwner(), membriStaffResultObserver);
         viewModel.getMembriStaff();
 
         popupUtil.showLoadingPopup();

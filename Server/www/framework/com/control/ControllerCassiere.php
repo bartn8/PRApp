@@ -302,7 +302,7 @@ class ControllerCassiere extends Controller
             throw new NotAvailableOperationException("Prevendita richiesta non corrisponde con l'evento selezionato");
         }
 
-        parent::getPrinter()->addResult();
+        parent::getPrinter()->addResult($infoPrevendita);
     }
 
     private function cmd_restituisci_lista_prevendite_entrate(Command $command, Context $context){

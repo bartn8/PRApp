@@ -24,7 +24,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.prapp.R;
 import com.prapp.model.MyContext;
-import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WStatisticheCassiereEvento;
 import com.prapp.model.db.wrapper.WStatisticheEvento;
 import com.prapp.model.db.wrapper.WStatistichePREvento;
@@ -71,9 +70,7 @@ public class AmministratoreViewModel extends AbstractViewModel {
 
         if (myContext.isStaffScelto() && myContext.isLoggato()) {
             ManagerMembro managerMembro = getManagerMembro();
-            WStaff staff = getStaff();
-
-            managerMembro.restituisciListaUtentiStaff(staff.getId(), new DefaultSuccessListener<>(membriStaffResult), new DefaultExceptionListener<>(membriStaffResult));
+            managerMembro.restituisciListaMembriStaff(new DefaultSuccessListener<>(membriStaffResult), new DefaultExceptionListener<>(membriStaffResult));
         } else {
             membriStaffResult.setValue(new Result<>(R.string.no_staff));
         }
@@ -84,9 +81,8 @@ public class AmministratoreViewModel extends AbstractViewModel {
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerAmministratore managerAmministratore = getManagerAmministratore();
-            Integer idEvento = myContext.getEvento().getId();
 
-            managerAmministratore.resitituisciStatisticheEvento(idEvento, new DefaultSuccessListener<>(statisticheAmministratoreEventoResult), new DefaultExceptionListener<>(statisticheAmministratoreEventoResult));
+            managerAmministratore.resitituisciStatisticheEvento(new DefaultSuccessListener<>(statisticheAmministratoreEventoResult), new DefaultExceptionListener<>(statisticheAmministratoreEventoResult));
         } else {
             statisticheAmministratoreEventoResult.setValue(new Result<>(R.string.no_login));
         }
@@ -97,9 +93,8 @@ public class AmministratoreViewModel extends AbstractViewModel {
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerAmministratore managerAmministratore = getManagerAmministratore();
-            Integer idEvento = myContext.getEvento().getId();
 
-            managerAmministratore.resitituisciStatistichePREvento(idPR, idEvento, new DefaultSuccessListener<>(statistichePREventoResult, idPR), new DefaultExceptionListener<>(statistichePREventoResult, idPR));
+            managerAmministratore.resitituisciStatistichePREvento(idPR, new DefaultSuccessListener<>(statistichePREventoResult, idPR), new DefaultExceptionListener<>(statistichePREventoResult, idPR));
         } else {
             statistichePREventoResult.setValue(new Result<>(R.string.no_evento));
         }
@@ -110,9 +105,8 @@ public class AmministratoreViewModel extends AbstractViewModel {
 
         if (myContext.isLoggato() && myContext.isStaffScelto() && myContext.isEventoScelto()) {
             ManagerAmministratore managerAmministratore = getManagerAmministratore();
-            Integer idEvento = myContext.getEvento().getId();
 
-            managerAmministratore.resitituisciStatisticheCassiereEvento(idCassiere, idEvento, new DefaultSuccessListener<>(statisticheCassiereEventoResult, idCassiere), new DefaultExceptionListener<>(statisticheCassiereEventoResult, idCassiere));
+            managerAmministratore.resitituisciStatisticheCassiereEvento(idCassiere, new DefaultSuccessListener<>(statisticheCassiereEventoResult, idCassiere), new DefaultExceptionListener<>(statisticheCassiereEventoResult, idCassiere));
         } else {
             statisticheCassiereEventoResult.setValue(new Result<>(R.string.no_evento));
         }

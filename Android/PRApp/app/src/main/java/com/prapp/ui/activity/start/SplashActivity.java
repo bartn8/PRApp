@@ -138,13 +138,13 @@ public class SplashActivity extends AppCompatActivity {
         uiUtil.makeToast(welcome);
     }
 
-    private void creaToken() {
-        splashViewModel.renewToken();
-    }
-
-    private void verificaToken() {
-        splashViewModel.loginToken();
-    }
+//    private void creaToken() {
+//        splashViewModel.renewToken();
+//    }
+//
+//    private void verificaToken() {
+//        splashViewModel.loginToken();
+//    }
 
     private void recuperoInformazioniUtente() {
         splashViewModel.getInfoUtente();
@@ -188,7 +188,9 @@ public class SplashActivity extends AppCompatActivity {
         splashViewModel.getRenewTokenResult().observe(this, renewTokenResultObserver);
 
         //Non serve setContentLayout: c'è il tema.
-        verificaToken();
+//        verificaToken();
+
+        passaggioAllaPaginaDiLogin();
     }
 
     @Override
@@ -204,7 +206,7 @@ public class SplashActivity extends AppCompatActivity {
                     //Login effettuato.
 
                     //Creo il token.
-                    creaToken();
+//                    creaToken();
 
                     //Devo riselezionare staff ed evento: Se ho cambiato username?
                     splashViewModel.clearSelected();

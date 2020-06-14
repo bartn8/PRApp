@@ -83,7 +83,6 @@ public class Result<T, K> {
         this.extra = extra;
     }
 
-
     public boolean isSuccessPresent()
     {
         return success != null;

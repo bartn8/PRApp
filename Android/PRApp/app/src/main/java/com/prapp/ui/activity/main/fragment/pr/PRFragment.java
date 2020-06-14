@@ -318,9 +318,9 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
         unbinder = ButterKnife.bind(this, view);
 
         viewModel = ViewModelProviders.of(getActivity()).get(PRViewModel.class);
-        viewModel.getPrevenditaModeLiveData().observe(this, prevenditaModeObserver);
-        viewModel.getListaTipoPrevenditaResult().observe(this, getListaTipoPrevenditaResultObserver);
-        viewModel.getAggiungiPrevenditaResult().observe(this, aggiungiPrevenditaResultObserver);
+        viewModel.getPrevenditaModeLiveData().observe(getViewLifecycleOwner(), prevenditaModeObserver);
+        viewModel.getListaTipoPrevenditaResult().observe(getViewLifecycleOwner(), getListaTipoPrevenditaResultObserver);
+        viewModel.getAggiungiPrevenditaResult().observe(getViewLifecycleOwner(), aggiungiPrevenditaResultObserver);
 
         //Imposto l'item di ricerca:
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -511,7 +511,7 @@ public class PRFragment extends Fragment implements InterfaceHolder<MainActivity
 
     private void onCondividiButtonClick(View view){
         //Creo un testo di condivisone.
-        String shareText = getString(R.string.fragment_pr_qr_share_text, nuovaPrevendita.getNomeCliente(), nuovaPrevendita.getCognomeCliente(), nuovaPrevendita.getId(), nuovaPrevendita.getCodice(), viewModel.getEvento().getNome(), nuovaPrevendita.getStato());
+        String shareText = getString(R.string.fragment_pr_qr_share_text, nuovaPrevendita.getNomeCliente(), nuovaPrevendita.getCognomeCliente(), nuovaPrevendita.getId(), nuovaPrevendita.getIdEvento(), nuovaPrevendita.getCodice(), viewModel.getEvento().getNome(), nuovaPrevendita.getStato());
         viewModel.shareImage(getActivity(), qrCode, shareText);
     }
 

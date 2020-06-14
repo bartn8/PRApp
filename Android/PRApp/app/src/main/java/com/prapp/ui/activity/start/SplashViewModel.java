@@ -25,11 +25,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.prapp.R;
 import com.prapp.model.MyContext;
 import com.prapp.model.db.wrapper.WRuoliMembro;
-import com.prapp.model.db.wrapper.WStaff;
 import com.prapp.model.db.wrapper.WToken;
 import com.prapp.model.db.wrapper.WUtente;
 import com.prapp.model.net.manager.ManagerMembro;
-import com.prapp.model.net.manager.ManagerUtente;
 import com.prapp.model.preferences.ApplicationPreferences;
 import com.prapp.ui.AbstractViewModel;
 import com.prapp.ui.Result;
@@ -106,12 +104,10 @@ public class SplashViewModel extends AbstractViewModel {
         MyContext myContext = getMyContext();
 
         if (myContext.isLoggato() && myContext.isStaffScelto()) {
-            WStaff staff = myContext.getStaff();
-
             ManagerMembro managerMembro = getManagerMembro();
 
-            managerMembro.restituisciDirittiPersonaliStaff(staff.getId(), response -> {
-                myContext.setDirittiUtente(response);
+            managerMembro.restituisciRuoliMembro(response -> {
+                myContext.setRuoliMembro(response);
                 getInfoUtenteResult.setValue(new Result<>(response, null));
             }, new DefaultExceptionListener<>(getInfoUtenteResult));
 
@@ -120,20 +116,20 @@ public class SplashViewModel extends AbstractViewModel {
         }
     }
 
-    public void renewToken() {
-        MyContext myContext = getMyContext();
-        ApplicationPreferences preferences = getPreferences();
-
-        if (myContext.isLoggato()) {
-            ManagerUtente managerUtente = getManagerUtente();
-
-            managerUtente.renewToken(response -> {
-                preferences.saveToken(response);
-                renewTokenResult.setValue(new Result<>(response, null));
-            }, new DefaultExceptionListener<>(renewTokenResult));
-        } else {
-            renewTokenResult.setValue(new Result<>(R.string.no_login));
-        }
-    }
+//    public void renewToken() {
+//        MyContext myContext = getMyContext();
+//        ApplicationPreferences preferences = getPreferences();
+//
+//        if (myContext.isLoggato()) {
+//            ManagerUtente managerUtente = getManagerUtente();
+//
+//            managerUtente.renewToken(response -> {
+//                preferences.saveToken(response);
+//                renewTokenResult.setValue(new Result<>(response, null));
+//            }, new DefaultExceptionListener<>(renewTokenResult));
+//        } else {
+//            renewTokenResult.setValue(new Result<>(R.string.no_login));
+//        }
+//    }
 
 }

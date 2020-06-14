@@ -372,8 +372,8 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
 
         //View model per richiamare il server.
         viewModel = ViewModelProviders.of(getActivity()).get(PRViewModel.class);
-        viewModel.getListaPrevenditeResult().observe(this, this.listaPrevenditeResultObserver);
-        viewModel.getModificaPrevenditaResult().observe(this, this.modificaPrevenditaResultObserver);
+        viewModel.getListaPrevenditeResult().observe(getViewLifecycleOwner(), this.listaPrevenditeResultObserver);
+        viewModel.getModificaPrevenditaResult().observe(getViewLifecycleOwner(), this.modificaPrevenditaResultObserver);
 
         label.setText(R.string.subfragment_lista_pr_listaPrevendite_label);
         viewModel.getListaPrevenditeEvento();
@@ -398,9 +398,7 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
 
         String serialObj = GSON.toJson(entrata);
 
-        String dataDiNascita = getString(R.string.default_dataDiNascita);
-
-        String rigaPersona = getString(R.string.fragment_pr_qr_text_persona, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente(), dataDiNascita);
+        String rigaPersona = getString(R.string.fragment_pr_qr_text_persona, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente());
         String rigaWarning = getString(R.string.fragment_pr_qr_text_warning);
         String rigaInfoPrev = getString(R.string.fragment_pr_qr_text_infoPrevendita, prevenditaPlus.getId(), prevenditaPlus.getIdEvento(), prevenditaPlus.getCodice());
         String rigaNomeTipoPrev = prevenditaPlus.getNomeTipoPrevendita();
@@ -416,7 +414,7 @@ public class PRSubFragmentLista extends Fragment implements InterfaceHolder<Main
             Bitmap qrCode = barcodeEncoder.encodeBitmap(serialObj, BarcodeFormat.QR_CODE, 400, 400);
             popupUtil.showQRPopup(getActivity(), qrCode, view -> {
                 //Creo un testo di condivisone.
-                String shareText = getString(R.string.fragment_pr_qr_share_text, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente(), prevenditaPlus.getId(), prevenditaPlus.getCodice(), viewModel.getEvento().getNome(), prevenditaPlus.getStato());
+                String shareText = getString(R.string.fragment_pr_qr_share_text, prevenditaPlus.getNomeCliente(), prevenditaPlus.getCognomeCliente(), prevenditaPlus.getId(), prevenditaPlus.getIdEvento(), prevenditaPlus.getCodice(), viewModel.getEvento().getNome(), prevenditaPlus.getStato());
                 viewModel.shareImage(getActivity(), qrCode, shareText);
             }, R.string.fragment_pr_popup_condividi);
         } catch (WriterException e) {

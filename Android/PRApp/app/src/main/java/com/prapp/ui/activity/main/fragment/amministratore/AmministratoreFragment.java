@@ -274,10 +274,10 @@ public class AmministratoreFragment extends Fragment implements InterfaceHolder<
 
         //View model per richiamare il server.
         viewModel = ViewModelProviders.of(getActivity()).get(AmministratoreViewModel.class);
-        viewModel.getStatisticheAmministratoreEventoResult().observe(this, statisticheEventoResultObserver);
-        viewModel.getMembriStaffResult().observe(this, membriStaffResultObserver);
-        viewModel.getStatistichePREventoResult().observe(this, statistichePREventoResultObserver);
-        viewModel.getStatisticheCassiereEventoResult().observe(this, statisticheCassiereEventoResultObserver);
+        viewModel.getStatisticheAmministratoreEventoResult().observe(getViewLifecycleOwner(), statisticheEventoResultObserver);
+        viewModel.getMembriStaffResult().observe(getViewLifecycleOwner(), membriStaffResultObserver);
+        viewModel.getStatistichePREventoResult().observe(getViewLifecycleOwner(), statistichePREventoResultObserver);
+        viewModel.getStatisticheCassiereEventoResult().observe(getViewLifecycleOwner(), statisticheCassiereEventoResultObserver);
 
         viewModel.getStatisticheAmministratoreEvento();
         viewModel.getMembriStaff();
