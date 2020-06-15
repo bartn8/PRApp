@@ -1,0 +1,37 @@
+utente:utente
+
+[{"id":5,"nome":"staffTest","timestampCreazione":"2020-06-04T17:58:47+00:00"}]
+
+
+[{"id":4,"idStaff":5,"idCreatore":17,"nome":"Evento Uno","descrizione":"Test","inizio":"2020-07-12T00:00:00+00:00","fine":"2020-07-12T23:00:00+00:00","indirizzo":"Via della domenica, 2","stato":0,"idModificatore":17,"timestampUltimaModifica":"2020-06-04T18:19:17+00:00"}]
+[{"id":5,"idStaff":5,"idCreatore":17,"nome":"Evento Due","descrizione":"Test","inizio":"2020-06-16T00:00:00+00:00","fine":"2020-06-16T23:00:00+00:00","indirizzo":"Via della domenica, 2","stato":0,"idModificatore":17,"timestampUltimaModifica":"2020-06-04T18:19:17+00:00"}]
+[{"id":6,"idStaff":5,"idCreatore":17,"nome":"Evento Tre","descrizione":"Test","inizio":"2020-06-17T00:00:00+00:00","fine":"2020-06-17T23:00:00+00:00","indirizzo":"Via della domenica, 2","stato":0,"idModificatore":17,"timestampUltimaModifica":"2020-06-04T18:19:17+00:00"}]
+[{"id":7,"idStaff":5,"idCreatore":17,"nome":"Evento Quattro","descrizione":"Test","inizio":"2020-06-18T00:00:00+00:00","fine":"2020-06-18T23:00:00+00:00","indirizzo":"Via della domenica, 2","stato":0,"idModificatore":17,"timestampUltimaModifica":"2020-06-04T18:19:17+00:00"}]
+
+
+[{"name":"tipoPrevendita", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWTipoPrevendita", "value":{"idEvento":4, "nome": "Prevendita per Evento Uno", "descrizione": "Test", "aperturaPrevendite": "2020-06-04T20:27:00+02:00", "chiusuraPrevendite": "2020-06-30T20:25:00+02:00", "prezzo": 12.22}}]
+[{"name":"tipoPrevendita", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWTipoPrevendita", "value":{"idEvento":5, "nome": "Prevendita per Evento Due", "descrizione": "Test", "aperturaPrevendite": "2020-06-04T20:27:00+02:00", "chiusuraPrevendite": "2020-06-12T20:25:00+02:00", "prezzo": 12.22}}]
+[{"name":"tipoPrevendita", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWTipoPrevendita", "value":{"idEvento":6, "nome": "Prevendita per Evento Tre", "descrizione": "Test", "aperturaPrevendite": "2020-06-04T20:27:00+02:00", "chiusuraPrevendite": "2020-06-12T20:25:00+02:00", "prezzo": 12.22}}]
+[{"name":"tipoPrevendita", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWTipoPrevendita", "value":{"idEvento":7, "nome": "Prevendita per Evento Quattro", "descrizione": "Test", "aperturaPrevendite": "2020-06-04T20:27:00+02:00", "chiusuraPrevendite": "2020-06-12T20:25:00+02:00", "prezzo": 12.22}}]
+
+
+
+2: [{"name":"login", "type":"com\\model\\net\\wrapper\\NetWLogin", "value": {"username": "utente", "password": "utente"}}]
+[{"id":17,"nome":"Mario","cognome":"Rossi","telefono":"+398745854"}]
+
+12: [{"name":"staff", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 5}}]
+[{"id":5,"idCreatore":17,"nome":"staffTest","timestampCreazione":"2020-06-04T17:58:47+00:00"},{"idUtente":17,"idStaff":5,"ruoli":[0,1,2]}]
+
+106:
+[{"id":6,"idEvento":4,"nome":"Prevendita per Evento Uno","descrizione":"Test","prezzo":12.22,"aperturaPrevendite":"2020-06-04T18:27:00+00:00","chiusuraPrevendite":"2020-06-30T18:25:00+00:00","idModificatore":17,"timestampUltimaModifica":"2020-06-04T18:25:33+00:00"}]
+
+108: [{"name":"evento", "type":"com\\model\\net\\wrapper\\NetWId", "value":{"id": 4}}]
+[{"id":4,"idStaff":5,"idCreatore":17,"nome":"Evento Uno","descrizione":"Test","inizio":"2020-07-12T00:00:00+00:00","fine":"2020-07-12T23:00:00+00:00","indirizzo":"Via della domenica, 2","stato":0,"idModificatore":17,"timestampUltimaModifica":"2020-06-04T18:19:17+00:00"}]
+
+203: [{"name":"prevendita", "type":"com\\model\\net\\wrapper\\insert\\InsertNetWPrevendita", "value":{"nomeCliente":"Franco", "cognomeCliente":"Fanti", "idTipoPrevendita":6, "codice":"123", "stato":0}}]
+
+[{"id":10,"idEvento":8,"nome":"Prevendita per Evento Test","descrizione":"Piacevole ma non troppo...","prezzo":12.22,"aperturaPrevendite":"2020-06-13T09:47:00+00:00","chiusuraPrevendite":"2020-06-13T09:55:00+00:00","idModificatore":17,"timestampUltimaModifica":"2020-06-13T09:46:14+00:00"}]
+[{"id":678,"idEvento":8,"idPR":17,"nomeCliente":"Franco","cognomeCliente":"Fanti","idTipoPrevendita":10,"codice":"123","stato":0,"timestampUltimaModifica":"2020-06-13T09:47:21+00:00"}]
+
+
+302: [{"name":"entrata", "type":"com\\model\\net\\wrapper\\NetWEntrata", "value":{"idPrevendita":678, "idEvento":8, "codiceAccesso":"123"}}]

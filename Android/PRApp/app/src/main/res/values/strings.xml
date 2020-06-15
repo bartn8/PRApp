@@ -26,8 +26,7 @@
     <string name="default_dataDiNascita">XX-XX-XXXX</string>
 
     <!-- Riferimenti agli stati -->
-    <string name="statoPrevendita_consegnata">Consegnata</string>
-    <string name="statoPrevendita_pagata">Pagata</string>
+    <string name="statoPrevendita_valida">Valida</string>
     <string name="statoPrevendita_annullata">Annullata</string>
     <string name="statoPrevendita_rimborsata">Rimborsata</string>
 

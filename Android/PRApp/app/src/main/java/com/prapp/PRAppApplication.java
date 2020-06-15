@@ -83,13 +83,13 @@ public class PRAppApplication extends Application {
 
     private void initEnumsResources(){
         //StatoPrevendita
-        StatoPrevendita.VALIDA.setResId(R.string.statoPrevendita_consegnata);
+        StatoPrevendita.VALIDA.setResId(R.string.statoPrevendita_valida);
         StatoPrevendita.VALIDA.setResValue(getString(StatoPrevendita.VALIDA.getResId()));
 
-        StatoPrevendita.ANNULLATA.setResId(R.string.statoPrevendita_annullata);
+        StatoPrevendita.ANNULLATA.setResId(R.string.statoPrevendita_rimborsata);
         StatoPrevendita.ANNULLATA.setResValue(getString(StatoPrevendita.ANNULLATA.getResId()));
 
-        StatoPrevendita.ANNULLATA_NON_RIMBORSATA.setResId(R.string.statoPrevendita_rimborsata);
+        StatoPrevendita.ANNULLATA_NON_RIMBORSATA.setResId(R.string.statoPrevendita_annullata);
         StatoPrevendita.ANNULLATA_NON_RIMBORSATA.setResValue(getString(StatoPrevendita.ANNULLATA_NON_RIMBORSATA.getResId()));
 
         //Ruolo
