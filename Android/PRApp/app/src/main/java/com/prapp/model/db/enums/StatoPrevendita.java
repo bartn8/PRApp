@@ -29,7 +29,7 @@ public enum StatoPrevendita {
     ANNULLATA(1, "ANNULLATA"),
     ANNULLATA_NON_RIMBORSATA(2, "ANNULLATA_NON_RIMBORSATA");
 
-    private static final int LENGTH = 4;
+    private static final int LENGTH = 3;
 
     private static final SparseArray<StatoPrevendita> mappaId = new SparseArray<>(LENGTH);
 
