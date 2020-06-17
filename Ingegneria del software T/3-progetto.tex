@@ -11,6 +11,7 @@
 \usepackage{listings}
 \usepackage{adjustbox}
 \usepackage{svg}
+\usepackage[italian]{babel}
 
 \lstset{
 tabsize = 4, %% set tab space width
@@ -122,6 +123,8 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 	
 	\item \hypertarget{R23F}{R23F} - Ogni prevedita è nominativa.
 	
+	\item \hypertarget{R23Fbis}{R23Fbis} - Il software prevede la possibilità di gestire più staff.
+	
 	%Requisiti rimossi o spostati nell'analisi del rischio ----------------------------------------
 	
 	%Si deduce dalla precedente
@@ -146,7 +149,6 @@ Il progetto riguarda la creazione di un applicativo software gestionale per prev
 \subsubsection{Requisiti non funzionali}
 
 \begin{itemize}
-    \item \hypertarget{R1NF}{R1NF} - Il software prevede la possibilità di gestire più staff.
     \item \hypertarget{R2NF}{R2NF} - La password degli utenti deve essere lunga almeno 8 caratteri.
 	\item \hypertarget{R3NF}{R3NF} - Il codice di accesso allo staff deve essere lungo almeno 4 caratteri.
 	\item \hypertarget{R4NF}{R4NF} - Ogni utente registrato può creare al massimo uno staff.
@@ -374,19 +376,17 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	%\textbf{Relazioni} & Login, Registrazione utente \\
 	\textbf{Relazioni} & Login \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Precondizioni} & L'utente deve essere registato nel sistema \\
 	\hline
-	\textbf{Postcondizioni} &  \\
+	\textbf{Postcondizioni} & L'utente è autenticato nel sistema \\
 	\hline
-	\textbf{Scenario principale} & 1. L'Amministratore di sistema risulta già autenticato.\\
+	\textbf{Scenario principale} & 1. Login.\\
 	                             & 2. Viene mostrata una schermata con le azioni possibili:\\
 								 & \quad a. Registrazione utente\\
 								 & 3. L'Amministratore di sistema sceglie l'operazione desiderata.\\
 								 & 4. Il sistema cambia vista a seconda della scelta.\\
 	\hline
-	\textbf{Scenari alternativi} & A) L'Amministratore di sistema non è autenticato: \\
-								 & \quad 1. Notifica all'Amministratore di sistema.\\
-								 & \quad 2. Passaggio al login.\\
+	\textbf{Scenari alternativi} & \\
 	\hline
 	\textbf{Requisiti non funzionali} & \\
 	\hline
@@ -492,11 +492,11 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 	%\textbf{Relazioni} & Login, Cambia password, Accedi staff, Crea staff \\
 	\textbf{Relazioni} & Login \\
 	\hline
-	\textbf{Precondizioni} &  \\
+	\textbf{Precondizioni} & L'utente deve essere registato nel sistema \\
 	\hline
-	\textbf{Postcondizioni} &  \\
+	\textbf{Postcondizioni} & L'utente è autenticato nel sistema \\
 	\hline
-	\textbf{Scenario principale} & 1. L'utente risulta già autenticato.\\
+	\textbf{Scenario principale} & 1. Login.\\
 	                             & 2. Viene mostrata una schermata con le azioni possibili:\\
 								 & \quad a. Cambia Password.\\
 								 & \quad b. Accedi staff.\\
@@ -505,9 +505,7 @@ L'utilizzo del login (frecce \textcolor{orange}{arancioni}) è necessario per i 
 								 & 3. L'utente sceglie l'operazione desiderata.\\
 								 & 4. Il sistema cambia vista a seconda della scelta.\\
 	\hline
-	\textbf{Scenari alternativi} & A) L'utente non è autenticato: \\
-								 & \quad 1. Notifica all'utente.\\
-								 & \quad 2. Passaggio al login.\\
+	\textbf{Scenari alternativi} & \\
 	\hline
 	\textbf{Requisiti non funzionali} & \\
 	\hline
@@ -1525,9 +1523,9 @@ Vengono aggiunti due casi d'uso: Gestione log e Sblocco utente. Entrambi casi d'
         \hline
         Gestione utente & Gestione dei dati, memorizzazione dei dati, interazione con l'esterno & Complesso & \\
         \hline
-        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R1NF}{R1NF}, \hyperlink{R3F}{R3F}, \hyperlink{R21NFbis}{R21NFbis}\\
+        Crea staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Complesso & \hyperlink{R23Fbis}{R23Fbis}, \hyperlink{R3F}{R3F}, \hyperlink{R21NFbis}{R21NFbis}\\
         \hline
-        Accedi staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R1NF}{R1NF}, \hyperlink{R3F}{R3F}, \hyperlink{R10F}{R10F} \\
+        Accedi staff & Gestione dei dati, memorizzazione di dati, interazione con l'esterno & Semplice & \hyperlink{R23Fbis}{R23Fbis}, \hyperlink{R3F}{R3F}, \hyperlink{R10F}{R10F} \\
         \hline
         Cambia password & Gestione dei dati, interazione con l'esterno & Semplice & \hyperlink{R2F}{R2F}, \hyperlink{R5F}{R5F} \\
         \hline
