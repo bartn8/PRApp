@@ -35,7 +35,7 @@ class Command
             throw new InvalidArgumentException("Parametri non validi.");
         }
         
-        return new Command($command, Argument::ofs($args));
+        return new Command($command, Argument::ofs($command, $args));
     }
 
     /**

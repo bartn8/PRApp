@@ -29,10 +29,36 @@ use com\model\net\wrapper\NetWrapper;
 class Argument
 {
 
-    public static function of($arg)
+    public const CLASS_TABLE = array(
+        1 => array("utente" => "com\\model\\net\\wrapper\\insert\\InsertNetWUtente"),
+        2 => array("login" => "com\\model\\net\\wrapper\\NetWLogin"),
+        4 => array("staff" => "com\\model\\net\\wrapper\\insert\\InsertNetWStaff"),
+        5 => array("staff" => "com\\model\\net\\wrapper\\NetWStaffAccess"),
+        10 => array("token" => "com\\model\\net\\wrapper\\NetWToken"),
+        12 => array("staff" => "com\\model\\net\\wrapper\\NetWId"),
+        108 => array("evento" => "com\\model\\net\\wrapper\\NetWId"),
+        203 => array("prevendita" => "com\\model\\net\\wrapper\\insert\\InsertNetWPrevendita"),
+        204 => array("prevendita" => "com\\model\\net\\wrapper\\update\\UpdateNetWPrevendita"),
+        205 => array("filtri" => "com\\model\\net\\wrapper\\NetWFiltriStatoPrevendita"),
+        302 => array("entrata" => "com\\model\\net\\wrapper\\NetWEntrata"),
+        309 => array("prevendita" => "com\\model\\net\\wrapper\\NetWId"),
+        403 => array("evento" => "com\\model\\net\\wrapper\\insert\\InsertNetWEvento"),
+        404 => array("evento" => "com\\model\\net\\wrapper\\update\\UpdateNetWEvento"),
+        405 => array("tipoPorevendita" => "com\\model\\net\\wrapper\\insert\\InsertNetWTipoPrevendita"),
+        406 => array("tipoPorevendita" => "com\\model\\net\\wrapper\\update\\UpdateNetWTipoPrevendita"),
+        407 => array("tipoPorevendita" => "com\\model\\net\\wrapper\\NetWId"),
+        408 => array("dirittiUtente" => "com\\model\\net\\wrapper\\update\\UpdateNetWRuoliMembro"),
+        409 => array("pr" => "com\\model\\net\\wrapper\\NetWId"),
+        410 => array("cassiere" => "com\\model\\net\\wrapper\\NetWId"),
+        413 => array("membro" => "com\\model\\net\\wrapper\\NetWId"),
+        414 => array("staff" => "com\\model\\net\\wrapper\\update\\UpdateNetWStaff"),
+        415 => array("pr" => "com\\model\\net\\wrapper\\NetWId"),
+    );
+
+    public static function of($command, $arg)
     {
-        if (! is_string($arg)) {
-            throw new InvalidArgumentException("Errore argomento non è stringa");
+        if (!is_int($command) || !is_string($arg)) {
+            throw new InvalidArgumentException("Errore argomento non è stringa o comando non valido");
         }
 
         $decoded = \json_decode($arg, true, 512, \JSON_UNESCAPED_UNICODE);
@@ -41,32 +67,38 @@ class Argument
             throw new InvalidArgumentException("Errore argomento non è JSON");
         }
 
-        $name = $decoded['name'];
-        $type = $decoded['type'];
-        $value = $decoded['value'];
+        if(array_key_exists($command, Argument::CLASS_TABLE)){
+            $name = $decoded['name'];
 
-        if (! is_string($name) || ! is_string($type) || ! is_array($value)) {
-            throw new InvalidArgumentException("Errore parametri non del tipo giusto");
-        }
+            if(array_key_exists($name, Argument::CLASS_TABLE[$command])){
+                //$type = $decoded['type'];
+                $type = Argument::CLASS_TABLE[$command][$name];
+                $value = $decoded['value'];
 
-        try {
-            $rClass = new ReflectionClass($type);
+                if (! is_string($name) || ! is_array($value)) {
+                    throw new InvalidArgumentException("Errore parametri non del tipo giusto");
+                }
 
-            if ($rClass->implementsInterface(NetWrapper::NAME)) {
-                $rOf = $rClass->getMethod(NetWrapper::METHOD);
-                return new Argument($name, $type, $rOf->invoke(null, $value));
+                try {
+                    $rClass = new ReflectionClass($type);
+
+                    if ($rClass->implementsInterface(NetWrapper::NAME)) {
+                        $rOf = $rClass->getMethod(NetWrapper::METHOD);
+                        return new Argument($name, $type, $rOf->invoke(null, $value));
+                    }
+
+                    throw new InvalidArgumentException("Tipo non valido");
+                } catch (ReflectionException $ex) {
+                    throw new InvalidArgumentException("Tipo non esistente");
+                }
             }
-
-            throw new InvalidArgumentException("Tipo non valido");
-        } catch (ReflectionException $ex) {
-            throw new InvalidArgumentException("Tipo non esistente");
         }
     }
 
-    public static function ofs($args)
+    public static function ofs($command, $args)
     {
-        if (! is_string($args))
-            throw new InvalidArgumentException("Errore argomento non è stringa");
+        if (!is_int($command) || ! is_string($args))
+            throw new InvalidArgumentException("Errore argomenti non è stringa o comando non valido");
 
         //Se stringa vuota non ci sono argomenti
         if($args === "")
@@ -75,32 +107,38 @@ class Argument
         $decoded = \json_decode($args, true, 512, \JSON_UNESCAPED_UNICODE);
 
         if ($decoded === NULL || $decoded === TRUE || $decoded === FALSE)
-            throw new InvalidArgumentException("Errore argomento non è JSON");
+            throw new InvalidArgumentException("Errore argomenti non è JSON");
 
         $cache = array();
 
-        foreach ($decoded as $element) {
-            $name = $element['name'];
-            $type = $element['type'];
-            $value = $element['value'];
+        if(array_key_exists($command, Argument::CLASS_TABLE)){
+            foreach ($decoded as $element) {
+                $name = $element['name'];
 
-            if (! is_string($name) || ! is_string($type) || ! is_array($value)) {
-                throw new InvalidArgumentException("Errore parametri non del tipo giusto");
-            }
-
-            try {
-                $rClass = new ReflectionClass($type);
-
-                if ($rClass->implementsInterface(NetWrapper::NAME)) {
-                    $rOf = $rClass->getMethod(NetWrapper::METHOD);
-
-                    $tmpArg = new Argument($name, $type, $rOf->invoke(null, $value));
-                    $cache[$tmpArg->getName()] = $tmpArg;
-                } else {
-                    throw new InvalidArgumentException("Tipo non valido");
+                if(array_key_exists($name, Argument::CLASS_TABLE[$command])){
+                    //$type = $element['type'];
+                    $type = Argument::CLASS_TABLE[$command][$name];
+                    $value = $element['value'];
+        
+                    if (! is_string($name) || ! is_array($value)) {
+                        throw new InvalidArgumentException("Errore parametri non del tipo giusto");
+                    }
+        
+                    try {
+                        $rClass = new ReflectionClass($type);
+        
+                        if ($rClass->implementsInterface(NetWrapper::NAME)) {
+                            $rOf = $rClass->getMethod(NetWrapper::METHOD);
+        
+                            $tmpArg = new Argument($name, $type, $rOf->invoke(null, $value));
+                            $cache[$tmpArg->getName()] = $tmpArg;
+                        } else {
+                            throw new InvalidArgumentException("Tipo non valido");
+                        }
+                    } catch (ReflectionException $ex) {
+                        throw new InvalidArgumentException("Tipo non esistente");
+                    }
                 }
-            } catch (ReflectionException $ex) {
-                throw new InvalidArgumentException("Tipo non esistente");
             }
         }
 
