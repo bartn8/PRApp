@@ -22,13 +22,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "com.prapp"
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -58,8 +57,8 @@ dependencies {
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     //My implementations.
     //GSON: https://github.com/google/gson
@@ -69,7 +68,7 @@ dependencies {
     implementation 'net.danlew:android.joda:2.10.3'
 
     //VOLLEY: https://github.com/google/volley
-    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.android.volley:volley:1.2.1'
 
     //BUTTERKNIKE: https://github.com/JakeWharton/butterknife
     implementation 'com.jakewharton:butterknife:10.2.0'
@@ -89,7 +88,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.2'
 
     //Selezione multipla nel recyclerview
-    implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview-selection:1.1.0'
 
     //Animazione di loading
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
