@@ -150,7 +150,26 @@
 
   <div class="container">
     <img src="../logo.png" class="img-fluid mx-auto d-block" alt="logo">
-    <p id="text">Scegli un'opzione.</p>
+    <p id="text">Effettua il login.</p>
+
+    <form action="login.html" method="POST" id="loginForm">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" name="username" class="form-control" id="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" name="password" class="form-control" id="password">
+        </div>
+        <!-- Sarebbe utile metterlo per token....
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox"> Remember me
+            </label>
+        </div>
+        -->
+        <button type="button" class="btn btn-primary btn-block" id="loginButton">Login</button>
+    </form>
   </div>
 
 
@@ -162,7 +181,7 @@
   <!-- my JS -->
   <script type="text/javascript" src="js/AjaxRequest.js?22"></script>
   <script type="text/javascript" src="js/GeneralUiUtils.js?22"></script>
-  <script type="text/javascript" src="js/index.js?22"></script>
+  <script type="text/javascript" src="js/login.js?22"></script>
 
 </body>
 

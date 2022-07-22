@@ -149,8 +149,57 @@
   </nav>
 
   <div class="container">
-    <img src="../logo.png" class="img-fluid mx-auto d-block" alt="logo">
-    <p id="text">Scegli un'opzione.</p>
+    <div class="row">
+        <div class="col">
+            <img src="../logo.png" class="img-fluid mx-auto d-block" alt="logo">
+            <p id="text">Scegli un'opzione.</p>
+            <form action="pr_aggiungi_prevendita.html" method="POST" id="aggiungiPrevenditaForm">
+                <div class="form-group">
+                    <label for="nomeCliente">Nome Cliente:</label>
+                    <input type="text" name="nomeCliente" class="form-control" id="nomeCliente">
+                </div>
+                <div class="form-group">
+                    <label for="cognomeCliente">Cognome Cliente:</label>
+                    <input type="text" name="cognomeCliente" class="form-control" id="cognomeCliente">
+                </div>
+                <div class="form-group">
+                    <label for="tipoPrevendita">Tipo Prevendita:</label>
+                    <select class="form-control" id="tipoPrevendita"></select>
+                </div>
+                <button type="button" class="btn btn-primary btn-block" id="creaPrevenditaButton">Aggiungi
+                    Prevendita</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col">
+            <canvas id="myCanvas" class="mx-auto d-block" width="320" height="410"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <a href="#" class="btn btn-success btn-block" id="condividiWhatsAppButton">Condividi via WhatsApp</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <a href="#" class="btn btn-info btn-block" id="scaricaQRCodeButton">Scarica QR Code</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="myLink">Link:</label>
+                <input type="text" class="form-control" id="myLink" readonly>
+            </div>
+            <button class="btn btn-info btn-block" onclick="onCopiaLinkClick()">Copia Link</button>
+        </div>
+    </div>
+
   </div>
 
 
@@ -159,10 +208,13 @@
   <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
 
+    <script type="text/javascript" src="../node_modules/qrcode-generator/qrcode.js"></script>
+    <script type="text/javascript" src="../node_modules/jcanvas/dist/min/jcanvas.min.js"></script>
+
   <!-- my JS -->
   <script type="text/javascript" src="js/AjaxRequest.js?22"></script>
   <script type="text/javascript" src="js/GeneralUiUtils.js?22"></script>
-  <script type="text/javascript" src="js/index.js?22"></script>
+  <script type="text/javascript" src="js/pr_aggiungi_prevendita.js?22"></script>
 
 </body>
 
