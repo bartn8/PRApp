@@ -140,7 +140,7 @@ class ControllerAmministratore extends Controller
                 break;
                 
             case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_MEMBRO:
-                $this->cmd_restituisci_ruoli_utente($command, $context);
+                $this->cmd_restituisci_ruoli_membro($command, $context);
                 break;
 
             default:
@@ -608,7 +608,7 @@ class ControllerAmministratore extends Controller
     {
         //Prima richiedeva lo staff: ora uso quello selezionato
 
-        if(!array_key_exists("utente", $command->getArgs())){
+        if(!array_key_exists("membro", $command->getArgs())){
             throw new InvalidArgumentException("Argomenti non validi");
         }
 
@@ -628,7 +628,7 @@ class ControllerAmministratore extends Controller
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }      
 
-        $membro = $command->getArgs()['utente']->getValue();
+        $membro = $command->getArgs()['membro']->getValue();
 
         if (! ($membro instanceof NetWId)){
             throw new InvalidArgumentException("Parametri non validi.");

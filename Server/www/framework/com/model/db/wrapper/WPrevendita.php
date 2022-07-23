@@ -119,8 +119,6 @@ class WPrevendita implements DatabaseWrapper
         if (! array_key_exists("timestampUltimaModifica", $array))
             throw new InvalidArgumentException("Dato timestampUltimaModifica non trovato.");
 
-        $idCliente = is_null($array["idCliente"]) ? NULL : (int) $array["idCliente"];
-
         return self::make((int) $array["id"], (int) $array["idEvento"], (int) $array["idPR"], $array["nomeCliente"], $array["cognomeCliente"], (int) $array["idTipoPrevendita"], $array["codice"], StatoPrevendita::parse($array["stato"]), new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampUltimaModifica"])));
     }
 

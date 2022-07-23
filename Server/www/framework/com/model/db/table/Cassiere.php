@@ -107,7 +107,7 @@ class Cassiere extends Table
             $conn = NULL;
 
             if ($ex->getCode() == Cassiere::UNIQUE_CODE || $ex->getCode() == Cassiere::INTEGRITY_CODE) // Codice di integrità.
-                throw new InsertUpdateException("Prevendita già timbrata.");
+                throw new InsertUpdateException("Prevendita già timbrata (".$ex->getCode().").");
 
                 if ($ex->getCode() == Cassiere::DATA_NON_VALIDA_CODE || $ex->getCode() == Cassiere::STATO_NON_VALIDO_CODE) // Codice di integrità.
                 throw new InsertUpdateException($ex->getMessage());

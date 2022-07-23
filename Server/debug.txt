@@ -58,3 +58,5 @@ Restituisci prevendite Evento(412):
 Rimuovi membro(413): [{"name":"membro", "value":{"id": 2}}]
 Modifica codice accesso(414): [{"name":"staff", "value":{"nome": "prova 123", "codiceAccesso":"ciao"}}]
 Restituisci statistiche PR evento(415): [{"name":"pr", "value":{"id": 1}}]
+Restituisci statistiche Cassiere evento(416): [{"name":"cassiere", "value":{"id": 1}}]
+Restituisci ruoli membro(417): [{"name":"membro", "value":{"id": 1}}]
