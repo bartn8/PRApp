@@ -1,6 +1,6 @@
 <!--
 /*
- * PRApp  Copyright (C) 2019  Luca Bartolomei
+ * PRApp  Copyright (C) 2022  Luca Bartolomei
  *
  * This file is part of PRApp.
  *
@@ -92,14 +92,14 @@
 
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav">
-        <li class="nav-item dropdown">
+        <!--<li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbardropUtente" data-toggle="dropdown">
             Utente
           </a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="utente_info.html">Informazioni utente</a>
           </div>
-        </li>
+        </li>-->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbardropMembro" data-toggle="dropdown">
             Membro
@@ -115,7 +115,7 @@
           </a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="pr_aggiungi_prevendita.html">Aggiungi prevendita</a>
-            <a class="dropdown-item" href="pr_modifica_prevendita.html">Modifica prevendita</a>
+            <a class="dropdown-item" href="pr_modifica_prevendita.html">Annulla prevendita</a>
             <a class="dropdown-item" href="pr_lista_prevendite.html">Lista prevendite</a>
             <a class="dropdown-item" href="pr_statistiche_evento.html">Statistiche evento</a>
           </div>
@@ -125,7 +125,7 @@
             Cassiere
           </a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="cassiere_timbra_entrata_manuale.html">Timbra entrata manuale</a>
+            <a class="dropdown-item" href="cassiere_timbra_entrata.html">Timbra entrata</a>
             <a class="dropdown-item" href="cassiere_lista_gente_entrata.html">Lista gente entrata</a>
             <a class="dropdown-item" href="cassiere_lista_gente_non_entrata.html">Lista gente non entrata</a>
             <a class="dropdown-item" href="cassiere_statistiche_evento.html">Statistiche evento</a>
@@ -136,12 +136,15 @@
             Amministratore
           </a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="amm_aggiungi_tipo_prevendita.html">Aggiungi tipo prevendita</a>
-            <a class="dropdown-item" href="amm_modifica_tipo_prevendita.html">Modifica tipo prevendita</a>
-            <a class="dropdown-item" href="amm_elimina_tipo_prevendita.html">Elimina tipo prevendita</a>
+            <!--<a class="dropdown-item" href="amm_aggiungi_tipo_prevendita.html">Aggiungi tipo prevendita</a>-->
+            <!--<a class="dropdown-item" href="amm_modifica_tipo_prevendita.html">Modifica tipo prevendita</a>-->
+            <!--<a class="dropdown-item" href="amm_elimina_tipo_prevendita.html">Elimina tipo prevendita</a>-->
             <a class="dropdown-item" href="amm_statistiche_evento.html">Statistiche evento</a>
-            <a class="dropdown-item" href="amm_rimuovi_membro.html">Rimuovi membro</a>
-            <a class="dropdown-item" href="amm_cambia_codice_accesso.html">Cambia codice accesso</a>
+            <a class="dropdown-item" href="amm_statistiche_pr.html">Statistiche PR</a>
+            <a class="dropdown-item" href="amm_statistiche_cassiere.html">Statistiche cassiere</a>
+            <a class="dropdown-item" href="amm_prevendite_evento.html">Prevendite evento</a>
+            <!--<a class="dropdown-item" href="amm_rimuovi_membro.html">Rimuovi membro</a>-->
+            <!--<a class="dropdown-item" href="amm_cambia_codice_accesso.html">Cambia codice accesso</a>-->
           </div>
         </li>
       </ul>
@@ -161,9 +164,9 @@
   <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
 
   <!-- my JS -->
-  <script type="text/javascript" src="js/AjaxRequest.js?22"></script>
-  <script type="text/javascript" src="js/GeneralUiUtils.js?22"></script>
-  <script type="text/javascript" src="js/utente_scegli_evento.js?22"></script>
+  <script type="text/javascript" src="js/AjaxRequest.js?46"></script>
+  <script type="text/javascript" src="js/GeneralUiUtils.js?46"></script>
+  <script type="text/javascript" src="js/utente_scegli_evento.js?46"></script>
 
 </body>
 

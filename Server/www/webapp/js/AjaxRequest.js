@@ -1,5 +1,5 @@
 /*
- * PRApp  Copyright (C) 2019  Luca Bartolomei
+ * PRApp  Copyright (C) 2022  Luca Bartolomei
  *
  * This file is part of PRApp.
  *
@@ -171,6 +171,60 @@ class AjaxRequest {
         return this.evento.id !== 0;
     }
 
+    generalRequest(checkLoggato, checkStaff, checkEvento, cmd, args, onSuccess, onError){
+        if(checkLoggato !== undefined){
+            if(checkLoggato && this.utente.id === 0)
+                return;
+            if(!checkLoggato && this.utente.id !== 0)
+                return;
+        }
+
+        if(checkStaff !== undefined){
+            if(checkStaff && this.staff.id === 0)
+                return;
+            if(!checkStaff && this.staff.id !== 0)
+                return;
+        }
+        
+        if(checkEvento !== undefined){
+            if(checkEvento && this.evento.id === 0)
+                return;
+            if(!checkEvento && this.evento.id !== 0)
+                return;
+        }
+
+        var data = {
+            command: cmd,
+            args: JSON.stringify(args)
+        };
+
+        var context = {
+            context: this,
+            onSuccess: onSuccess,
+            onError: onError
+        };
+
+        $.ajax({
+            type: "POST",
+            url: this.url,
+            data: data,
+            context: context,
+            success: function (response) {
+                switch (response.status) {
+                    case 0:
+                        this.onSuccess(response);
+                        break;
+                    case 2:
+                        this.onError(response);
+                        break;
+                    default:
+                        break;
+                }
+            },
+            dataType: "json"
+        });        
+    }
+
     login(myUsername, myPassword, onSuccess, onError) {
         //Devo essere non loggato.
         if(this.utente.id !== 0)
@@ -258,40 +312,7 @@ class AjaxRequest {
     }
 
     getListaStaffMembri(onSuccess, onError) {
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-        
-        var data = {
-            command: 7,
-            args: JSON.stringify([])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, undefined, undefined, 7, [], onSuccess, onError);
     }
 
     restituisciUtente(onSuccess, onError) {
@@ -375,169 +396,20 @@ class AjaxRequest {
     //getStaffScelto(onSuccess, onError){}
 
     getMembriStaff(onSuccess, onError) {
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-
-        //Devo aver scelto lo staff.
-        if(this.staff.id === 0)
-            return;
-
-        var data = {
-            command: 102,
-            args: JSON.stringify([])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, true, undefined, 102, [], onSuccess, onError);
     }
 
     getDirittiUtenteStaff(onSuccess, onError) {
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-
-        //Devo aver scelto lo staff.
-        if(this.staff.id === 0)
-            return;
-
-        var data = {
-            command: 103,
-            args: JSON.stringify([])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, true, undefined, 103, [], onSuccess, onError);
     }
 
     getListaEventiStaff(onSuccess, onError) {
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-
-        //Devo aver scelto lo staff.
-        if(this.staff.id === 0)
-            return;
-
-        var data = {
-            command: 105,
-            args: JSON.stringify([])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, true, undefined, 105, [], onSuccess, onError);
     }
 
     getListaTipoPrevenditaEvento(onSuccess, onError) {
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-        
-        //Devo aver scelto l'evento.
-        if(this.evento.id === 0)
-            return;
-
-        var data = {
-            command: 106,
-            args: JSON.stringify([])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, true, true, 106, [], onSuccess, onError);
     }
-
 
     scegliEvento(idEvento, onSuccess, onError){
         //Devo essere loggato.
@@ -586,129 +458,63 @@ class AjaxRequest {
     }
 
     aggiungiPrevendita(myNomeCliente, myCognomeCliente, myTipoPrevenditaId, myCodice, onSuccess, onError) {
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-        
-        //Devo aver scelto l'evento.
-        if(this.evento.id === 0)
-            return;
-
-        var data = {
-            command: 203,
-            args: JSON.stringify([{
-                name: "prevendita",
-                value: {nomeCliente: myNomeCliente, cognomeCliente: myCognomeCliente,
-                     idTipoPrevendita: parseInt(myTipoPrevenditaId), codice: myCodice, stato: 0}
-            }])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, true, true, 203, [{
+            name: "prevendita",
+            value: {nomeCliente: myNomeCliente, cognomeCliente: myCognomeCliente,
+                 idTipoPrevendita: parseInt(myTipoPrevenditaId), codice: myCodice, stato: 0}
+        }], onSuccess, onError);
     }
 
     modificaPrevendita(myIdPrevendita, myStato, onSuccess, onError){
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
+        this.generalRequest(true, undefined, undefined, 204, [{
+            name: "prevendita",
+            value: {id: parseInt(myIdPrevendita), stato: parseInt(myStato)}
+        }], onSuccess, onError);
+    }
 
-        var data = {
-            command: 204,
-            args: JSON.stringify([{
-                name: "prevendita",
-                value: {id: parseInt(myIdPrevendita), stato: parseInt(myStato)}
-            }])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+    restituisciStatistichePREvento(onSuccess, onError) {
+        this.generalRequest(true, true, true, 208, [], onSuccess, onError);
     }
 
     restituisciPrevendite(onSuccess, onError) {
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-        
-        //Devo aver scelto l'evento.
-        if(this.evento.id === 0)
-            return;
+        this.generalRequest(true, true, true, 209, [], onSuccess, onError);
+    }
 
-        var data = {
-            command: 209,
-            args: JSON.stringify([])
-        };
+    timbraEntrata(myIdPrevendita, myIdEvento, myCodice, onSuccess, onError) {
+        this.generalRequest(true, true, true, 302, [{"name":"entrata", 
+        "value":{"idPrevendita":parseInt(myIdPrevendita), "idEvento":parseInt(myIdEvento), "codiceAccesso":myCodice}}], onSuccess, onError);
+    }
 
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
+    restituisciStatisticheCassiereEvento(onSuccess, onError){
+        this.generalRequest(true, true, true, 306, [], onSuccess, onError);
+    }
 
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+    restituisciInfoPrevendita(myIdPrevendita, onSuccess, onError) {
+        this.generalRequest(true, true, true, 309, [{"name":"prevendita", "value":{"id": parseInt(myIdPrevendita)}}], onSuccess, onError);
+    }
+
+    restituisciListaEntrate(onSuccess, onError) {
+        this.generalRequest(true, true, true, 310, [], onSuccess, onError);
+    }
+
+    restituisciListaNonEntrate(onSuccess, onError) {
+        this.generalRequest(true, true, true, 311, [], onSuccess, onError);
+    }
+
+    restituisciStatisticheEventoAmm(onSuccess, onError) {
+        this.generalRequest(true, true, true, 411, [], onSuccess, onError);
+    }
+
+    restituisciPrevenditeEventoAmm(onSuccess, onError) {
+        this.generalRequest(true, true, true, 412, [], onSuccess, onError);
+    }
+
+    restituisciStatistichePREventoAmm(myIdPR, onSuccess, onError) {
+        this.generalRequest(true, true, true, 415, [{"name":"pr", "value":{"id": parseInt(myIdPR)}}], onSuccess, onError);
+    }
+
+    restituisciStatisticheCassiereEventoAmm(myIdCassiere,onSuccess, onError) {
+        this.generalRequest(true, true, true, 416, [{"name":"cassiere", "value":{"id": parseInt(myIdCassiere)}}], onSuccess, onError);
     }
 
 }

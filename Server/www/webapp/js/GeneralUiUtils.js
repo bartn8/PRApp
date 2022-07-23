@@ -1,5 +1,5 @@
 /*
- * PRApp  Copyright (C) 2019  Luca Bartolomei
+ * PRApp  Copyright (C) 2022  Luca Bartolomei
  *
  * This file is part of PRApp.
  *
