@@ -45,32 +45,22 @@ class UiUtils extends GeneralUiUtils {
     }
 
     compilaModulo(nome, cognome, nomePR, cognomePR, nomeTipoPrevendita, codice, stato, confirmFunction){
-        var $modulo = $("#moduloConferma");
+        var $tabBody = $("#bodyTabella");
+        var $containerConferma = $("#containerConferma");
 
-        var $header = $("<div class=\"row\"><div class=\"col\">Nome</div>"+
-                        "<div class=\"col\">Nome PR</div>"+
-                        "<div class=\"col\">Tipo Prevendita</div>"+
-                        "<div class=\"col\">Codice</div>"+
-                        "<div class=\"col\">Stato</div></div>");
 
-        var $body =   $("<div class=\"row\"><div class=\"col\">"+nome+" "+cognome+"</div>"+
-                        "<div class=\"col\">"+nomePR+" "+cognomePR+"</div>"+
-                        "<div class=\"col\">"+nomeTipoPrevendita+"</div>"+
-                        "<div class=\"col\">"+codice+"</div>"+
-                        "<div class=\"col\">"+(stato == 0 ? "VALIDA" : "ANNULLATA")+"</div></div>");
+        var $body =   $("<td>"+nome+" "+cognome+"</td>"+
+                        "<td>"+nomePR+" "+cognomePR+"</td>"+
+                        "<td>"+nomeTipoPrevendita+"</td>"+
+                        "<td>"+codice+"</td>"+
+                        "<td>"+(stato == 0 ? "VALIDA" : "ANNULLATA")+"</td>");
 
-        var $footer = $('<div class="row"></row>');
-        var $footerCol = $('<div class="col"></row>');
 
         var $confirmButton = $('<button type="button" class="btn btn-primary btn-block">Conferma</button>');
         $confirmButton.click(confirmFunction);
 
-        $footerCol.append($confirmButton);
-        $footer.append($footerCol);
-
-        $modulo.append($header);
-        $modulo.append($body);
-        $modulo.append($footer);
+        $tabBody.append($body);
+        $containerConferma.append($confirmButton);
     }
 
     cleanModulo(){
@@ -151,7 +141,7 @@ if (ajax.isStorageEnabled()) {
                 });
             }
         },
-        {highlightScanRegion: true, returnDetailedScanResult: true});
+        {highlightScanRegion: true, maxScansPerSecond: 5, returnDetailedScanResult: true});
         
         const updateFlashAvailability = () => {
             scanner.hasFlash().then(hasFlash => {

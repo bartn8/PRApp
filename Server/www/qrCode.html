@@ -50,8 +50,8 @@
 
     <script type="text/javascript">
 
-        var disegnaCanvas = function (idPrevendita, idEvento, nome, cognome, data, codice, nomeTipoPrevendita, image) {
-            var myPerson = nome + " " + cognome + " - " + data;
+        var disegnaCanvas = function (idPrevendita, idEvento, nome, cognome, codice, nomeTipoPrevendita, image) {
+            var myPerson = nome + " " + cognome;
             var myPrevendita = idPrevendita + " - " + idEvento + " - " + codice;
 
             $("#myCanvas").removeLayers();
@@ -152,13 +152,6 @@
             var nome = decodeURIComponent(url.searchParams.get("nome"));
             var cognome = decodeURIComponent(url.searchParams.get("cognome"));
 
-            var tmpData = url.searchParams.get("data");
-            var data = 'null';
-
-            if (tmpData != null) {
-                data = decodeURIComponent(tmpData);
-            }
-
             var codice = decodeURIComponent(url.searchParams.get("cod"));
             var nomeTipoPrevendita = decodeURIComponent(url.searchParams.get("nTipoP"));
 
@@ -185,7 +178,6 @@
             idEvento = isNaN(idEvento) ? -1 : idEvento;
             nome = nome === 'null' ? 'ND' : nome;
             cognome = cognome === 'null' ? 'ND' : cognome;
-            data = data == 'null' ? 'XX-XX-XXXX' : data;
             codice = codice === 'null' ? 'ND' : codice;
             nomeTipoPrevendita = nomeTipoPrevendita === 'null' ? 'ND' : nomeTipoPrevendita;
 
@@ -199,7 +191,7 @@
             qr.addData(JSON.stringify(netWEntrata));
             qr.make();
 
-            disegnaCanvas(idPrevendita, idEvento, nome, cognome, data, codice, nomeTipoPrevendita, qr.createDataURL(8, 36));
+            disegnaCanvas(idPrevendita, idEvento, nome, cognome, codice, nomeTipoPrevendita, qr.createDataURL(8, 36));
         });
 
     </script>

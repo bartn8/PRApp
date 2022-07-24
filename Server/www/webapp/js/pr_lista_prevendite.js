@@ -28,8 +28,8 @@ class UiUtils extends GeneralUiUtils {
         for (let index = 0; index < listaPrevendite.length; index++) {
             const prevendita = listaPrevendite[index];
             var $elementoLi = $("<li class=\"list-group-item "+(prevendita.stato == 0 ? "list-group-item-success" : "list-group-item-danger")+"\"></li>");
-            var $elementoSpan = $("<span>"+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente + (prevendita.stato == 1 ? " (ANNULLATA) " : "") + "</span>");
-                        
+            var $elementoSpan = $("<a href=\""+generaLink(prevendita)+"\">"+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente + (prevendita.stato == 1 ? " (ANNULLATA) " : "") + "</span>");
+            
             $elementoLi.append($elementoSpan);
             $lista.append($elementoLi);
         }
@@ -39,6 +39,31 @@ class UiUtils extends GeneralUiUtils {
 
 var uiUtils = new UiUtils();
 var ajax = new AjaxRequest();
+
+var generaLink = function (prevendita) {
+    //Vecchio formato
+    //var url_string = "https://prapp.altervista.org/qrCode.html?idPrevendita=1&idEvento=1&nome=Nome&cognome=Cognome&data=02%2F05%2F1990&codice=ifg453";
+    //Nuovo formato
+    //var url_string = "https://prapp.altervista.org/qrCode.html?idPrev=1&idEv=1&nome=Nome&cognome=Cognome&data=02%2F05%2F1990&cod=ifg453&nTipoP=OMAGGIO";
+
+    var defaultUrl = "https://prapp.altervista.org/qrCode.html";
+
+    var idPrevendita = prevendita.id;
+    var idEvento = prevendita.idEvento;
+    var nome = prevendita.nomeCliente;
+    var cognome = prevendita.cognomeCliente;
+    var codice = prevendita.codice;
+    var nomeTipoPrevendita = "Duplicato";
+
+    var idPrevenditaEncoded = encodeURIComponent(idPrevendita);
+    var idEventoEncoded = encodeURIComponent(idEvento);
+    var nomeEncoded = encodeURIComponent(nome);
+    var cognomeEncoded = encodeURIComponent(cognome);
+    var codiceEncoded = encodeURIComponent(codice);
+    var nomeTipoPrevenditaEncoded = encodeURIComponent(nomeTipoPrevendita);
+
+    return defaultUrl + "?idPrev=" + idPrevenditaEncoded + "&idEv=" + idEventoEncoded + "&nome=" + nomeEncoded + "&cognome=" + cognomeEncoded + "&cod=" + codiceEncoded + "&nTipoP=" + nomeTipoPrevenditaEncoded;
+}
 
 if (ajax.isStorageEnabled()) {
 
