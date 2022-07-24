@@ -473,7 +473,7 @@ class ControllerAmministratore extends Controller
             throw new AuthorizationException("L'utente non è Amministratore dello staff.");
         }
         
-        parent::getPrinter()->addResult(Amministratore::getPrevendite($eventoScelto->getId()));
+        parent::getPrinter()->addResults(Amministratore::getPrevendite($eventoScelto->getId()));
     }
     
     private function cmd_rimuovi_membro(Command $command, Context $context)
