@@ -43,7 +43,7 @@ if (ajax.isStorageEnabled()) {
         if (ajax.isLogged()) {
             ajax.logout(function (response) {
                 console.log("Logout ok");        
-                uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+                uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
                 uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Logout fallito!", "Logout completato: effettua il login per continuare.");
         
             }, function (response) {

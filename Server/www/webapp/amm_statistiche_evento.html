@@ -152,43 +152,28 @@
   </nav>
 
   <div class="container">
+    
     <div class="row">
         <div class="col">
             <img src="../logo.png" class="img-fluid mx-auto d-block" alt="logo">
-            <p id="text">Scegli un'opzione.</p>        
+            <p id="text">Scegli un'opzione.</p>
         </div>
     </div>
 
     <div class="row">
         <div class="col">
-            <video style="border: 1px solid black;outline:none; width:100%; height:100%;" id="scanVideo"></video>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-        <div class="col">
-            <button type="button" class="btn btn-primary btn-block" id="toggleScan">Avvia scansione</button>
-        </div>
-        <div class="col">
-            <button type="button" class="btn btn-primary btn-block" id="toggleFlash">Flash</button>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-      <div class="col">
-          <div class="container" id="moduloConferma"></div>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-        <div class="col">
-            <ul class="list-group" id="listaTimbri"></ul>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Prevendita</th>
+                    <th scope="col">Quantità</th>
+                    <th scope="col">Ricavo</th>
+                    <th scope="col">Entrate</th>
+                    <th scope="col">Non entrate</th>
+                </tr>
+                </thead>
+                <tbody id="bodyTabella"></tbody>
+            </table>
         </div>
     </div>
 
@@ -200,12 +185,11 @@
   <script type="text/javascript" src="../node_modules/popper.js/dist/popper.min.js"></script>
   <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
-  <script type="text/javascript" src="../node_modules/qr-scanner/qr-scanner.umd.min.js"></script>
 
   <!-- my JS -->
   <script type="text/javascript" src="js/AjaxRequest.js?55"></script>
   <script type="text/javascript" src="js/GeneralUiUtils.js?55"></script>
-  <script type="text/javascript" src="js/cassiere_timbra_entrata.js?55"></script>
+  <script type="text/javascript" src="js/amm_statistiche_evento.js?55"></script>
 
 </body>
 

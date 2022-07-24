@@ -51,7 +51,7 @@ if (ajax.isStorageEnabled()) {
 
         //UI
         uiUtils.disattivaMenu();
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Persone non ancora entrate all'evento "+ajax.getEvento().nome, "Effettua il login prima di continuare.");
 
         if (ajax.isLogged()) {

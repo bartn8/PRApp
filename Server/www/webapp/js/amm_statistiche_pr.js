@@ -22,10 +22,28 @@ class UiUtils extends GeneralUiUtils {
         super();
     }
 
+    impostaSelezione(funzione){
+        $('#inputIdPR').on('change', ()=>{
+            funzione($("#inputIdPR option:selected").val());
+        });
+    }
+
+    popolaSelezione(listaMembri){
+        var $lista = $("#inputIdPR");
+
+        for (let index = 0; index < listaMembri.length; index++) {
+            const membro = listaMembri[index];
+            let $option = $("<option value=\""+membro.id+"\">"+membro.nome + " " + membro.cognome+"</option>");
+            $lista.append($option);
+        }
+    }
+
     popolaStatistiche(statisticheEvento) {
         var $bodyTab = $("#bodyTabella");
         var ricaviTot = 0;
         var ventuteTot = 0;
+
+        $bodyTab.empty();
 
         for (let index = 0; index < statisticheEvento.length; index++) {
             const statisticaTipoPrevendita = statisticheEvento[index];
@@ -75,11 +93,20 @@ if (ajax.isStorageEnabled()) {
 
         if (ajax.isLogged()) {
             if (ajax.isStaffSelected()) {
-                ajax.restituisciStatistichePREvento(function(response){
-                    uiUtils.popolaStatistiche(response.results);
+                ajax.getMembriStaff(function(response){
+                    uiUtils.popolaSelezione(response.results);
+                    uiUtils.impostaSelezione((id)=>{
+                        ajax.restituisciStatistichePREventoAmm(id,function(response){
+                            uiUtils.popolaStatistiche(response.results);
+                        }, function(response){
+                            uiUtils.impostaErrore("Impossibile recuperare le statistiche: "+ response.exceptions[0].msg);
+                        });
+                    })
                 }, function(response){
-                    uiUtils.impostaErrore("Impossibile recuperare le statistiche: "+ response.exceptions[0].msg);
+                    uiUtils.impostaErrore("Impossibile recuperare i membri dello staff: "+ response.exceptions[0].msg);
                 });
+
+                
             }
         }
 

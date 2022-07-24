@@ -38,7 +38,7 @@ class UiUtils extends GeneralUiUtils {
             $elemento.click(function () {
                 //Seleziono l'evento nel server
                 ajax.scegliEvento(evento.id, function(response){
-                    uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+                    uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
                     uiUtils.impostaScritta("Hai scelto: " + evento.nome);
                     $lista.children().removeClass("active");    //Devo rimuovere la classe active da tutti i figli di lista.
                     $elemento.addClass("active");               //Aggiungo la classe active solo a quello selezionato.
@@ -68,7 +68,7 @@ if (ajax.isStorageEnabled()) {
 
         //Disattivo temporaneamente i menu.
         uiUtils.disattivaMenu();
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Complimenti! sei loggato: Scegli un evento", "Effettua il login prima di continuare.");
 
         //Se sono loggato allora disattivo il login e attivo le altre pagine.

@@ -21,6 +21,20 @@ class UiUtils extends GeneralUiUtils {
     constructor() {
         super();
     }
+
+    popolaLista(listaPrevendite) {
+        var $lista = $("#listaPrevendite");
+
+        for (let index = 0; index < listaPrevendite.length; index++) {
+            const prevendita = listaPrevendite[index];
+            var $elementoLi = $("<li class=\"list-group-item "+(prevendita.stato == 0 ? "list-group-item-success" : "list-group-item-danger")+"\"></li>");
+            var $elementoSpan = $("<span>"+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente + " " + prevendita.codice + (prevendita.stato == 1 ? " (ANNULLATA) " : "") + "</span>");
+                        
+            $elementoLi.append($elementoSpan);
+            $lista.append($elementoLi);
+        }
+    }
+
 }
 
 var uiUtils = new UiUtils();
@@ -38,7 +52,18 @@ if (ajax.isStorageEnabled()) {
         //UI
         uiUtils.disattivaMenu();
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
-        uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Complimenti! sei loggato: Scegli un'opzione", "Effettua il login prima di continuare.");
+        uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Prevendite dell'evento", "Effettua il login prima di continuare.");
+
+        if (ajax.isLogged()) {
+            if (ajax.isStaffSelected()) {
+                ajax.restituisciPrevenditeEventoAmm(function(response){
+                    uiUtils.popolaLista(response.results);
+                }, function(response){
+                    uiUtils.impostaErrore("Impossibile recuperare le prevendite: "+ response.exceptions[0].msg);
+                });
+            }
+        }
+
     });
 } else {
     $(document).ready(function () {

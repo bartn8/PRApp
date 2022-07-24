@@ -116,7 +116,7 @@ if (ajax.isStorageEnabled()) {
 
         //UI
         uiUtils.disattivaMenu();
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Effettua una scansione", "Effettua il login prima di continuare.");
 
         var scanner = new QrScanner(uiUtils.getElementoVideo(), result => {

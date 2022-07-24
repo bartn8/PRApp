@@ -52,7 +52,7 @@ var loginButtonClick = function () {
         if (ajax.isLogged()) {
             uiUtils.impostaScritta("Complimenti! sei loggato: Scegli un'opzione");
             uiUtils.impostaLogout();
-            uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+            uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
             uiUtils.disattivaFormLogin();
             uiUtils.effettuaSubmit();
         }
@@ -72,7 +72,7 @@ if (ajax.isStorageEnabled()) {
 
         //Disattivo temporaneamente i menu.
         uiUtils.disattivaMenu();
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Complimenti! sei loggato: Scegli un'opzione", "Effettua il login prima di continuare.");
 
         //Se sono loggato allora disattivo il login e attivo le altre pagine.

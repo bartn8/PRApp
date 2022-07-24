@@ -29,6 +29,8 @@ class AjaxRequest {
         this.utente = Object.assign({}, this.defaultUtente);
         this.staff = Object.assign({}, this.defaultStaff);
         this.evento = Object.assign({}, this.defaultEvento);
+
+        this.dirittiMembro = [];
     }
 
     isStorageEnabled(){
@@ -46,12 +48,13 @@ class AjaxRequest {
         var requestUtente = sessionStorage.ajaxRequestUtente;
         var requestStaff = sessionStorage.ajaxRequestStaff;
         var requestEvento = sessionStorage.ajaxRequestEvento;
+        var requestDiritti = sessionStorage.ajaxRequestDiritti;
 
-        if(requestUtente !== undefined && requestStaff !== undefined && requestEvento !== undefined)
+        if(requestUtente !== undefined && requestStaff !== undefined && requestEvento !== undefined && requestDiritti !== undefined)
         {
-            if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "")
+            if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "" && requestDiritti !== undefined)
             {
-                this.initFromJson(requestUtente, requestStaff, requestEvento);
+                this.initFromJson(requestUtente, requestStaff, requestEvento, requestDiritti);
             }
         }
     }
@@ -63,12 +66,13 @@ class AjaxRequest {
         var requestUtente = Cookies.get("ajaxRequestUtente");
         var requestStaff = Cookies.get("ajaxRequestStaff");
         var requestEvento = Cookies.get("ajaxRequestEvento");
+        var requestDiritti = Cookies.get("ajaxRequestDiritti");
 
-        if(requestUtente !== undefined && requestStaff !== undefined && requestEvento !== undefined)
+        if(requestUtente !== undefined && requestStaff !== undefined && requestEvento !== undefined && requestDiritti !== undefined)
         {
-            if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "")
+            if(requestUtente !== "" && requestStaff !== "" && requestEvento !== "" && requestDiritti !== undefined)
             {
-                this.initFromJson(requestUtente, requestStaff, requestEvento);
+                this.initFromJson(requestUtente, requestStaff, requestEvento, requestDiritti);
             }
         }
     }
@@ -80,10 +84,11 @@ class AjaxRequest {
      * @param {string} myStaff 
      * @param {string} myEvento 
      */
-    initFromJson(myUtente, myStaff, myEvento){
+    initFromJson(myUtente, myStaff, myEvento, myDiritti){
         this.utente = JSON.parse(myUtente);
         this.staff = JSON.parse(myStaff);
         this.evento = JSON.parse(myEvento);
+        this.dirittiMembro = JSON.parse(myDiritti);
     }
 
     /**
@@ -95,6 +100,7 @@ class AjaxRequest {
         sessionStorage.ajaxRequestUtente = JSON.stringify(this.utente);
         sessionStorage.ajaxRequestStaff = JSON.stringify(this.staff);
         sessionStorage.ajaxRequestEvento = JSON.stringify(this.evento);
+        sessionStorage.ajaxRequestDiritti = JSON.stringify(this.dirittiMembro);
     }
 
     /**
@@ -104,6 +110,7 @@ class AjaxRequest {
         Cookies.set("ajaxRequestUtente", JSON.stringify(this.utente), { expires: 7 });
         Cookies.set("ajaxRequestStaff", JSON.stringify(this.staff), { expires: 7 });
         Cookies.set("ajaxRequestEvento", JSON.stringify(this.evento), { expires: 7 });
+        Cookies.set("ajaxRequestDiritti", JSON.stringify(this.dirittiMembro), { expires: 7 });
     }
 
     restoreDefaultUtente()
@@ -127,6 +134,16 @@ class AjaxRequest {
         //this.saveToCookies();
     }
 
+    restoreDefaultDiritti(){
+        this.dirittiMembro = [];
+        this.saveToSessionStorage();
+    }
+
+    setUtente(myUtente){
+        this.utente = myUtente;
+        this.saveToSessionStorage();
+    }
+
     setStaff(myStaff){
         this.staff = myStaff;
         this.saveToSessionStorage();
@@ -137,6 +154,11 @@ class AjaxRequest {
         this.evento = myEvento;
         this.saveToSessionStorage();
         //this.saveToCookies();
+    }
+
+    setDiritti(myDiritti){
+        this.dirittiMembro = myDiritti;
+        this.saveToSessionStorage();
     }
 
     getUtente(){
@@ -151,12 +173,20 @@ class AjaxRequest {
         return this.evento;
     }
 
+    getDirittiMembro(){
+        return this.dirittiMembro;
+    }
+
     getDefaultEvento(){
         return Object.assign({}, this.defaultEvento);
     }
 
     getDefaultStaff(){
         return Object.assign({}, this.defaultStaff);
+    }
+
+    getDefaultDirittiMembro(){
+        return [];
     }
 
     isLogged(){
@@ -226,89 +256,27 @@ class AjaxRequest {
     }
 
     login(myUsername, myPassword, onSuccess, onError) {
-        //Devo essere non loggato.
-        if(this.utente.id !== 0)
-            return;
-
-        var data = {
-            command: 2,
-            args: JSON.stringify([{
-                name: "login",
-                value: {username: myUsername, password: myPassword}
-            }])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        //Imposto l'utente corrente.
-                        this.context.restoreDefaultUtente();
-                        this.context.restoreDefaultStaff();
-                        this.context.restoreDefaultEvento();
-                        this.context.utente = response.results[0];
-                        this.context.saveToSessionStorage();
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(false, undefined, undefined, 2, [{
+            name: "login",
+            value: {username: myUsername, password: myPassword}
+        }], (response) => {
+            this.restoreDefaultUtente();
+            this.restoreDefaultStaff();
+            this.restoreDefaultEvento();
+            this.restoreDefaultDiritti();
+            this.setUtente(response.results[0]);
+            onSuccess(response);
+        }, onError);
     }
 
     logout(onSuccess, onError) {
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-
-        var data = {
-            command: 3,
-            args: JSON.stringify([])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.context.restoreDefaultUtente();
-                        this.context.restoreDefaultStaff();
-                        this.context.restoreDefaultEvento();
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, undefined, undefined, 3, [], (response) => {
+            this.restoreDefaultUtente();
+            this.restoreDefaultStaff();
+            this.restoreDefaultEvento();
+            this.restoreDefaultDiritti();
+            onSuccess(response);
+        }, onError);
     }
 
     getListaStaffMembri(onSuccess, onError) {
@@ -316,81 +284,20 @@ class AjaxRequest {
     }
 
     restituisciUtente(onSuccess, onError) {
-        var data = {
-            command: 11,
-            args: JSON.stringify([])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        //Imposto l'utente corrente.
-                        this.context.utente = response.results[0];
-                        this.context.saveToSessionStorage();
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, undefined, undefined, 11, [], (response) => {
+            this.setUtente(response.results[0]);
+            onSuccess(response);
+        }, onError);
     }
 
     scegliStaff(idStaff, onSuccess, onError){
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-
-        var data = {
-            command: 12,
-            args: JSON.stringify([
-                {name:"staff", 
-                 value:{"id": idStaff}}
-            ])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.context.staff = response.results[0];
-                        this.context.saveToSessionStorage();
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, undefined, undefined, 12, [
+            {name:"staff", 
+             value:{"id": idStaff}}
+        ], (response) => {
+            this.setStaff(response.results[0]);
+            onSuccess(response);
+        }, onError);        
     }
 
     //getStaffScelto(onSuccess, onError){}
@@ -400,7 +307,10 @@ class AjaxRequest {
     }
 
     getDirittiUtenteStaff(onSuccess, onError) {
-        this.generalRequest(true, true, undefined, 103, [], onSuccess, onError);
+        this.generalRequest(true, true, undefined, 103, [], (response) => {
+            this.setDiritti(response.results[0]["ruoli"]);
+            onSuccess(response);
+        }, onError);
     }
 
     getListaEventiStaff(onSuccess, onError) {
@@ -412,49 +322,13 @@ class AjaxRequest {
     }
 
     scegliEvento(idEvento, onSuccess, onError){
-        //Devo essere loggato.
-        if(this.utente.id === 0)
-            return;
-
-        //Devo aver scelto lo staff.
-        if(this.staff.id === 0)
-            return;
-
-        var data = {
-            command: 108,
-            args: JSON.stringify([
-                {name:"evento", 
-                 value:{"id": idEvento}}
-            ])
-        };
-
-        var context = {
-            context: this,
-            onSuccess: onSuccess,
-            onError: onError
-        };
-
-        $.ajax({
-            type: "POST",
-            url: this.url,
-            data: data,
-            context: context,
-            success: function (response) {
-                switch (response.status) {
-                    case 0:
-                        this.context.evento = response.results[0];
-                        this.context.saveToSessionStorage();
-                        this.onSuccess(response);
-                        break;
-                    case 2:
-                        this.onError(response);
-                        break;
-                    default:
-                        break;
-                }
-            },
-            dataType: "json"
-        });
+        this.generalRequest(true, true, undefined, 108, [
+            {name:"evento", 
+             value:{"id": idEvento}}
+        ], (response) => {
+            this.setEvento(response.results[0]);
+            onSuccess(response);
+        }, onError);
     }
 
     aggiungiPrevendita(myNomeCliente, myCognomeCliente, myTipoPrevenditaId, myCodice, onSuccess, onError) {

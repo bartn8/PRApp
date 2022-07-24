@@ -1,5 +1,5 @@
 /*
- * PRApp  Copyright (C) 2022  Luca Bartolomei
+ * PRApp  Copyright (C) 2019  Luca Bartolomei
  *
  * This file is part of PRApp.
  *
@@ -17,8 +17,8 @@
  *     along with PRApp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class UiUtils extends GeneralUiUtils {
-    constructor() {
+class UiUtils extends GeneralUiUtils{
+    constructor(){
         super();
     }
 }
@@ -33,15 +33,37 @@ if (ajax.isStorageEnabled()) {
     ajax.initFromSessionStorage();
 
     //Quando la pagina è pronta:
-    $(document).ready(function () {
+    $(document).ready(function(){
 
-        //UI
+        //Disattivo temporaneamente i menu.
         uiUtils.disattivaMenu();
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
-        uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Complimenti! sei loggato: Scegli un'opzione", "Effettua il login prima di continuare.");
+
+        //Imposto un messaggio.
+        uiUtils.impostaScritta("Sto resettando l'applicazione...");
+
+        //Forzo il logout e faccio il reset dell'AjaxRequest.
+        ajax.getUtente().id = -1;
+        ajax.logout(function(response){
+            console.log("Logout ok");
+        }, function(response){
+            console.log("Error: "+ response.exceptions[0].msg);
+        });
+
+        //Rimuovo i cookies.
+        Cookies.remove("PHPSESSID");
+        Cookies.remove("token");
+        
+        //Ripristino l'oggetto AjaxRequest.
+        ajax.restoreDefaultUtente();
+        ajax.restoreDefaultStaff();
+        ajax.restoreDefaultEvento();
+        ajax.restoreDefaultDiritti();
+
+        //Ora vado in modalità login.
+        uiUtils.impostaScritta("Applicazione resettata. Torna al menu principale.");
     });
-} else {
-    $(document).ready(function () {
+  } else {
+    $(document).ready(function(){
         //Il browser non supporta i cookies:
         uiUtils.disattivaMenu();
         //Invio un messaggio.

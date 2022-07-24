@@ -23,25 +23,34 @@ class UiUtils extends GeneralUiUtils {
     }
 
     popolaStatistiche(statisticheEvento) {
-        var $bodyTab = $("#bodyTabella");
+        var $tab = $("#bodyTabella");
         var ricaviTot = 0;
         var ventuteTot = 0;
+        var entrateTot = 0;
+        var nonEntrateTot = 0;
+
 
         for (let index = 0; index < statisticheEvento.length; index++) {
             const statisticaTipoPrevendita = statisticheEvento[index];
             ventuteTot += statisticaTipoPrevendita.prevenditeVendute;
             ricaviTot += statisticaTipoPrevendita.ricavo;
+            entrateTot += statisticaTipoPrevendita.prevenditeEntrate;
+            nonEntrateTot += statisticaTipoPrevendita.prevenditeNonEntrate;
 
             let $row = $("<tr></tr>");
             let $colNome = $("<td>"+statisticaTipoPrevendita.nomeTipoPrevendita+"</td>");
             let $colQuantita = $("<td>"+statisticaTipoPrevendita.prevenditeVendute+"</td>");
             let $colRicavo = $("<td>"+statisticaTipoPrevendita.ricavo+"</td>");
+            let $colEntrate = $("<td>"+statisticaTipoPrevendita.prevenditeEntrate+"</td>");
+            let $colNonEntrate = $("<td>"+statisticaTipoPrevendita.prevenditeNonEntrate+"</td>");
             
             $row.append($colNome);
             $row.append($colQuantita);
             $row.append($colRicavo);
+            $row.append($colEntrate);
+            $row.append($colNonEntrate);
 
-            $bodyTab.append($row);
+            $tab.append($row);
         }
 
         //$container.append("<hr/>");
@@ -50,8 +59,10 @@ class UiUtils extends GeneralUiUtils {
         $row.append("<th scope=\"row\">Totale</th>");
         $row.append("<td>"+ventuteTot+"</td>");
         $row.append("<td>"+ricaviTot+"</td>");
+        $row.append("<td>"+entrateTot+"</td>");
+        $row.append("<td>"+nonEntrateTot+"</td>");
 
-        $bodyTab.append($row);
+        $tab.append($row);
     }
 
 }
@@ -71,11 +82,11 @@ if (ajax.isStorageEnabled()) {
         //UI
         uiUtils.disattivaMenu();
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
-        uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Statistiche evento del PR", "Effettua il login prima di continuare.");
+        uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Statistiche evento", "Effettua il login prima di continuare.");
 
         if (ajax.isLogged()) {
             if (ajax.isStaffSelected()) {
-                ajax.restituisciStatistichePREvento(function(response){
+                ajax.restituisciStatisticheEventoAmm(function(response){
                     uiUtils.popolaStatistiche(response.results);
                 }, function(response){
                     uiUtils.impostaErrore("Impossibile recuperare le statistiche: "+ response.exceptions[0].msg);

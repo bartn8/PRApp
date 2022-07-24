@@ -61,7 +61,7 @@ class GeneralUiUtils {
         $("#text").css('color', 'red');
     }
 
-    attivaMenu(isLoggato, isStaffScelto, isEventoScelto){
+    attivaMenu(isLoggato, isStaffScelto, isEventoScelto, ruoli){
         if(isLoggato){
             $("#scegliStaff").removeClass("disabled");
             $("#scegliStaff").attr("href", "utente_scegli_staff.html");
@@ -74,9 +74,13 @@ class GeneralUiUtils {
             
                 if(isEventoScelto){
                     $("#navbardropMembro").removeClass("disabled");
-                    $("#navbardropPR").removeClass("disabled");
-                    $("#navbardropCassiere").removeClass("disabled");
-                    $("#navbardropAmministratore").removeClass("disabled");
+
+                    if(ruoli.includes(0) || ruoli == undefined)
+                        $("#navbardropPR").removeClass("disabled");
+                    if(ruoli.includes(1) || ruoli == undefined)
+                        $("#navbardropCassiere").removeClass("disabled");
+                    if(ruoli.includes(2) || ruoli == undefined)
+                        $("#navbardropAmministratore").removeClass("disabled");
                 }
             }
         }

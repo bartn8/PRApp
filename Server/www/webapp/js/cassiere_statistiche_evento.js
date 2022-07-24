@@ -21,39 +21,6 @@ class UiUtils extends GeneralUiUtils {
     constructor() {
         super();
     }
-
-    popolaStatistiche(statisticheEvento) {
-        var $container = $("#containerStatistiche");
-        var ricaviTot = 0;
-        var ventuteTot = 0;
-
-        for (let index = 0; index < statisticheEvento.length; index++) {
-            const statisticaTipoPrevendita = statisticheEvento[index];
-            ventuteTot += statisticaTipoPrevendita.prevenditeVendute;
-            ricaviTot += statisticaTipoPrevendita.ricavo;
-
-            let $row = $("<div class=\"row\"></div>");
-            let $colNome = $("<div class=\"col\">"+statisticaTipoPrevendita.nomeTipoPrevendita+"</div>");
-            let $colQuantita = $("<div class=\"col\">"+statisticaTipoPrevendita.prevenditeVendute+"</div>");
-            let $colRicavo = $("<div class=\"col\">"+statisticaTipoPrevendita.ricavo+"</div>");
-            
-            $row.append($colNome);
-            $row.append($colQuantita);
-            $row.append($colRicavo);
-
-            $container.append($row);
-        }
-
-        $container.append("<hr/>");
-
-        let $row = $("<div class=\"row\"></div>");
-        $row.append("<div class=\"col\"></div>");
-        $row.append("<div class=\"col\">"+ventuteTot+"</div>");
-        $row.append("<div class=\"col\">"+ricaviTot+"</div>");
-
-        $container.append($row);
-    }
-
 }
 
 var uiUtils = new UiUtils();
@@ -70,13 +37,16 @@ if (ajax.isStorageEnabled()) {
 
         //UI
         uiUtils.disattivaMenu();
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Statistiche evento del PR", "Effettua il login prima di continuare.");
 
         if (ajax.isLogged()) {
             if (ajax.isStaffSelected()) {
-                ajax.restituisciStatistichePREvento(function(response){
-                    uiUtils.popolaStatistiche(response.results);
+                ajax.restituisciStatisticheCassiereEvento(function(response){
+                    if(response.results.length > 0)
+                        uiUtils.impostaScritta("Per l'evento "+ ajax.getEvento().nome + " hai fatto entrare " + response.results[0].entrate+ "persone");
+                    else
+                        uiUtils.impostaScritta("Per l'evento "+ ajax.getEvento().nome + " hai fatto entrare 0 persone");
                 }, function(response){
                     uiUtils.impostaErrore("Impossibile recuperare le statistiche: "+ response.exceptions[0].msg);
                 });

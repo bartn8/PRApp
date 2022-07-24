@@ -39,10 +39,16 @@ class UiUtils extends GeneralUiUtils {
                 //Seleziono lo staff lato server
                 ajax.scegliStaff(staff.id, function(response){
                     ajax.restoreDefaultEvento();    //Devo resettare l'evento scelto.
-                    uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+                    uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
                     uiUtils.impostaScritta("Hai scelto: " + staff.nome);
                     $lista.children().removeClass("active");    //Devo rimuovere la classe active da tutti i figli di lista.
                     $elemento.addClass("active");               //Aggiungo la classe active solo a quello selezionato.
+
+                    //Aggiorno i diritti dell'utente
+                    ajax.getDirittiUtenteStaff((response) => console.log(response.results[0]), () =>{
+                        uiUtils.impostaErrore("Errore: " + response.exceptions[0].msg);
+                    });
+
                 },function(response){
                     uiUtils.impostaErrore("Selezione staff fallita: "+ response.exceptions[0].msg);
                 })
@@ -69,7 +75,7 @@ if (ajax.isStorageEnabled()) {
 
         //Disattivo temporaneamente i menu.
         uiUtils.disattivaMenu();
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Complimenti! sei loggato: Scegli uno staff", "Effettua il login prima di continuare.");
 
         //Se sono loggato allora disattivo il login e attivo le altre pagine.

@@ -324,7 +324,7 @@ if (ajax.isStorageEnabled()) {
         uiUtils.disattivaButtonScaricaQrCode();
         uiUtils.disattivaFormCreaPrevendita();
 
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected());
+        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Aggiungi una prevendita", "Effettua il login prima di continuare.");
         
         if (ajax.isLogged()) {

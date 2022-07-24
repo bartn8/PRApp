@@ -23,24 +23,35 @@
 <html>
 
 <head>
-  <title>PRApp Web App PR</title>
+  <title>PRApp Web App</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+  <!-- My CSS -->
   <link href="css/main.css" rel="stylesheet">
+
 </head>
 
 <body class="primaryColorBackground">
 
+  <!-- A grey horizontal navbar that becomes vertical on small screens -->
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 
-    <a class="navbar-brand" id="homepage" href="index.html">PRApp</a>
+    <a class="navbar-brand" href="index.html">PRApp</a>
 
     <!-- Pulsante login/logout -->
     <ul class="navbar-nav">
-      <li class="nav-item" id="login_logout">
-        <a class="nav-link" href="#">Accedi/Logout</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardropSessione" data-toggle="dropdown">
+          Sessione
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="login.html" id="login_logout">Accedi/Logout</a>
+          <a class="dropdown-item" href="utente_scegli_staff.html" id="scegliStaff">Scegli Staff</a>
+          <a class="dropdown-item" href="utente_scegli_evento.html" id="scegliEvento">Scegli Evento</a>
+        </div>
       </li>
     </ul>
 
@@ -50,24 +61,94 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Links -->
+
+    <!-- Navbar links -->
+    <!-- Mi serve un sotto menu (Dropdown) per utente, membro, pr, cassiere, amministratore -->
+
+    <!-- Utente -->
+    <!-- Informazioni sullo staff e sull'evento selezionato -->
+
+    <!-- Membro -->
+    <!-- Lista Membri (Rimuovi membro se amministratore) -->
+    <!-- Lista clienti (Rimuovi cliente se amministratore) -->
+    <!-- Lista tipo prevendite (Modifica/Rimuovi se amministratore) -->
+
+    <!-- PR -->
+    <!-- Aggiungi prevendita -->
+    <!-- Lista prevendite (Modifica prevendita) -->
+    <!-- Statistiche evento -->
+
+    <!-- Cassiere -->
+    <!-- Timbra entrata manuale -->
+    <!-- Lista prevendite timbrate -->
+    <!-- Lista prevendite non timbrate -->
+    <!-- Statistiche evento -->
+
+    <!-- Amministratore -->
+    <!-- Aggiungi tipo prevendita -->
+    <!-- Cambia codice accesso -->
+    <!-- Statistiche evento -->
+    
+
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav">
-        <li class="nav-item" id="scegliStaff">
-          <a class="nav-link" href="#">Scegli Staff</a>
+        <!--<li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropUtente" data-toggle="dropdown">
+            Utente
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="utente_info.html">Informazioni utente</a>
+          </div>
+        </li>-->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropMembro" data-toggle="dropdown">
+            Membro
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="membro_info_membri.html">Informazioni membri</a>
+            <a class="dropdown-item" href="membro_lista_tipo_prevendite.html">Lista tipo prevendite</a>
+          </div>
         </li>
-        <li class="nav-item" id="scegliEvento">
-          <a class="nav-link" href="#">Scegli Evento</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropPR" data-toggle="dropdown">
+            PR
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="pr_aggiungi_prevendita.html">Aggiungi prevendita</a>
+            <a class="dropdown-item" href="pr_modifica_prevendita.html">Annulla prevendita</a>
+            <a class="dropdown-item" href="pr_lista_prevendite.html">Lista prevendite</a>
+            <a class="dropdown-item" href="pr_statistiche_evento.html">Statistiche evento</a>
+          </div>
         </li>
-        <li class="nav-item" id="creaPrevendita">
-          <a class="nav-link" href="#">Crea Prevendita</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropCassiere" data-toggle="dropdown">
+            Cassiere
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="cassiere_timbra_entrata.html">Timbra entrata</a>
+            <a class="dropdown-item" href="cassiere_lista_gente_entrata.html">Lista gente entrata</a>
+            <a class="dropdown-item" href="cassiere_lista_gente_non_entrata.html">Lista gente non entrata</a>
+            <a class="dropdown-item" href="cassiere_statistiche_evento.html">Statistiche evento</a>
+          </div>
         </li>
-        <li class="nav-item" id="listaPrevendite">
-          <a class="nav-link" href="#">Lista Prevendite</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardropAmministratore" data-toggle="dropdown">
+            Amministratore
+          </a>
+          <div class="dropdown-menu">
+            <!--<a class="dropdown-item" href="amm_aggiungi_tipo_prevendita.html">Aggiungi tipo prevendita</a>-->
+            <!--<a class="dropdown-item" href="amm_modifica_tipo_prevendita.html">Modifica tipo prevendita</a>-->
+            <!--<a class="dropdown-item" href="amm_elimina_tipo_prevendita.html">Elimina tipo prevendita</a>-->
+            <a class="dropdown-item" href="amm_statistiche_evento.html">Statistiche evento</a>
+            <a class="dropdown-item" href="amm_statistiche_pr.html">Statistiche PR</a>
+            <a class="dropdown-item" href="amm_statistiche_cassiere.html">Statistiche cassiere</a>
+            <a class="dropdown-item" href="amm_prevendite_evento.html">Prevendite evento</a>
+            <!--<a class="dropdown-item" href="amm_rimuovi_membro.html">Rimuovi membro</a>-->
+            <!--<a class="dropdown-item" href="amm_cambia_codice_accesso.html">Cambia codice accesso</a>-->
+          </div>
         </li>
       </ul>
     </div>
-
   </nav>
 
   <div class="container">
@@ -75,16 +156,16 @@
     <p id="text">Scegli un'opzione.</p>
   </div>
 
+
   <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="../node_modules/popper.js/dist/popper.min.js"></script>
   <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../node_modules/js-cookie/src/js.cookie.js"></script>
 
   <!-- my JS -->
-  <script type="text/javascript" src="js/AjaxRequest.js?46"></script>
-  <script type="text/javascript" src="js/GeneralUiUtils.js?46"></script>
-  <script type="text/javascript" src="js/reset.js?46"></script>
-
+  <script type="text/javascript" src="js/AjaxRequest.js?55"></script>
+  <script type="text/javascript" src="js/GeneralUiUtils.js?55"></script>
+  <script type="text/javascript" src="js/reset.js?55"></script>
 
 </body>
 
