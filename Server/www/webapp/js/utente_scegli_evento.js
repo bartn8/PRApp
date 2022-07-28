@@ -29,19 +29,23 @@ class UiUtils extends GeneralUiUtils {
 
         for (let index = 0; index < listaEventi.length; index++) {
             const evento = listaEventi[index];
-            var $elemento = $("<a href=\"#\" class=\"list-group-item list-group-item-action\">" + evento.nome + "</>");
+            let $elemento = $("<a href=\"#\" class=\"list-group-item list-group-item-action\">" + evento.nome + "</>");
 
             if(evento.id === selectedEvento.id){
                 $elemento.addClass("active");   //Ho già scelto l'evento.
             }
 
             $elemento.click(function () {
+                //Serve il riferimento all'elemento giusto
+                var $this = $(this);
                 //Seleziono l'evento nel server
                 ajax.scegliEvento(evento.id, function(response){
                     uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
                     uiUtils.impostaScritta("Hai scelto: " + evento.nome);
                     $lista.children().removeClass("active");    //Devo rimuovere la classe active da tutti i figli di lista.
-                    $elemento.addClass("active");               //Aggiungo la classe active solo a quello selezionato.
+                    $this.addClass("active");               //Aggiungo la classe active solo a quello selezionato.
+                    //Posso passare alla finestra richiesta precedentemente
+                    redirect(getRedirectURL());
                 }, function(response){
                     uiUtils.impostaErrore("Selezione evento fallita: "+ response.exceptions[0].msg);
                 });                                 
@@ -90,7 +94,12 @@ if (ajax.isStorageEnabled()) {
             } else {
                 //Devi scegliere prima lo staff:
                 uiUtils.impostaErrore("Devi scegliere lo staff per continuare.");
+                //Redirect automatico alla pagina di login
+                passRedirect("login.html", "index.html");
             }
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "index.html");
         }
     });
 } 

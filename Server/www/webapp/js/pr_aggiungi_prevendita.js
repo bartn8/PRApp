@@ -24,18 +24,20 @@ class UiUtils extends GeneralUiUtils {
 
     popolaTipoPrevendita(listaTipoPrevendita) {
         var $select = $("#tipoPrevendita");
+        var ora = new Date();
 
         for (let index = 0; index < listaTipoPrevendita.length; index++) {
             const tipoPrevendita = listaTipoPrevendita[index];
 
-            var aperturaPrevendite = new Date(tipoPrevendita.aperturaPrevendite).toLocaleString();
-            var chiusuraPrevendite = new Date(tipoPrevendita.chiusuraPrevendite).toLocaleString();
-
-            $select.append($('<option>', {
-                value: tipoPrevendita.id,
-                text: tipoPrevendita.nome + "(Da " + aperturaPrevendite + " a " + chiusuraPrevendite
-            }));
-
+            var aperturaPrevendite = new Date(tipoPrevendita.aperturaPrevendite);
+            var chiusuraPrevendite = new Date(tipoPrevendita.chiusuraPrevendite);
+            
+            if(aperturaPrevendite <= ora && ora <= chiusuraPrevendite){
+                $select.append($('<option>', {
+                    value: tipoPrevendita.id,
+                    text: tipoPrevendita.nome + "(Da " + aperturaPrevendite.toLocaleString() + " a " + chiusuraPrevendite.toLocaleString()
+                }));
+            }
         }
     }
 
@@ -327,25 +329,24 @@ if (ajax.isStorageEnabled()) {
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Aggiungi una prevendita", "Effettua il login prima di continuare.");
         
-        if (ajax.isLogged()) {
-            if(ajax.isStaffSelected()){
-                if (ajax.isEventoSelected()) {
-                    //Carico le prevenidite.
-                    ajax.getListaTipoPrevenditaEvento(function (response) {
+        if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) { 
+            //Carico le prevenidite.
+            ajax.getListaTipoPrevenditaEvento(function (response) {
 
-                        //popolo il select
-                        uiUtils.popolaTipoPrevendita(response.results);
+                //popolo il select
+                uiUtils.popolaTipoPrevendita(response.results);
 
-                        //Posso attivare il form
-                        uiUtils.attivaFormCreaPrevendita(creaPrevenditaButtonClick);
+                //Posso attivare il form
+                uiUtils.attivaFormCreaPrevendita(creaPrevenditaButtonClick);
 
-                    }, function (response) {
-                        console.log("Error: " + response.exceptions[0].msg);
-                        uiUtils.impostaErrore("Impossibile recuperare i tipi prevendita.");
+            }, function (response) {
+                console.log("Error: " + response.exceptions[0].msg);
+                uiUtils.impostaErrore("Impossibile recuperare i tipi prevendita.");
 
-                    });
-                }
-            }
+            });
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "pr_aggiungi_prevendita.html");
         }
 
     });

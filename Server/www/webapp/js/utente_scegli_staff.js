@@ -29,23 +29,28 @@ class UiUtils extends GeneralUiUtils {
 
         for (let index = 0; index < listaStaff.length; index++) {
             const staff = listaStaff[index];
-            var $elemento = $("<a href=\"#\" class=\"list-group-item list-group-item-action\">" + staff.nome + "</>");
+            let $elemento = $("<a href=\"#\" class=\"list-group-item list-group-item-action\">" + staff.nome + "</>");
 
             if(staff.id === selectedStaff.id){
                 $elemento.addClass("active");   //Ho già scelto lo staff.
             }
 
             $elemento.click(function () {
+                //Serve il riferimento all'elemento giusto
+                var $this = $(this);
                 //Seleziono lo staff lato server
                 ajax.scegliStaff(staff.id, function(response){
                     ajax.restoreDefaultEvento();    //Devo resettare l'evento scelto.
                     uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
                     uiUtils.impostaScritta("Hai scelto: " + staff.nome);
                     $lista.children().removeClass("active");    //Devo rimuovere la classe active da tutti i figli di lista.
-                    $elemento.addClass("active");               //Aggiungo la classe active solo a quello selezionato.
+                    $this.addClass("active");               //Aggiungo la classe active solo a quello selezionato.
 
                     //Aggiorno i diritti dell'utente
-                    ajax.getDirittiUtenteStaff((response) => console.log(response.results[0]), () =>{
+                    ajax.getDirittiUtenteStaff((response) => {
+                        console.log("Diritti impostati:"+response.results[0]);
+                        passRedirect("utente_scegli_evento.html", getRedirectURL());
+                    }, () =>{
                         uiUtils.impostaErrore("Errore: " + response.exceptions[0].msg);
                     });
 
@@ -91,6 +96,9 @@ if (ajax.isStorageEnabled()) {
                 uiUtils.impostaErrore("Errore: " + response.exceptions[0].msg);
                 console.log("Get list staff failed: " + response.exceptions[0].msg);
             });
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "index.html");
         }
     });
 } else {

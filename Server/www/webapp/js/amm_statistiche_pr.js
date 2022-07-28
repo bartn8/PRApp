@@ -91,23 +91,22 @@ if (ajax.isStorageEnabled()) {
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Statistiche evento del PR", "Effettua il login prima di continuare.");
 
-        if (ajax.isLogged()) {
-            if (ajax.isStaffSelected()) {
-                ajax.getMembriStaff(function(response){
-                    uiUtils.popolaSelezione(response.results);
-                    uiUtils.impostaSelezione((id)=>{
-                        ajax.restituisciStatistichePREventoAmm(id,function(response){
-                            uiUtils.popolaStatistiche(response.results);
-                        }, function(response){
-                            uiUtils.impostaErrore("Impossibile recuperare le statistiche: "+ response.exceptions[0].msg);
-                        });
-                    })
-                }, function(response){
-                    uiUtils.impostaErrore("Impossibile recuperare i membri dello staff: "+ response.exceptions[0].msg);
-                });
-
-                
-            }
+        if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) {
+            ajax.getMembriStaff(function(response){
+                uiUtils.popolaSelezione(response.results);
+                uiUtils.impostaSelezione((id)=>{
+                    ajax.restituisciStatistichePREventoAmm(id,function(response){
+                        uiUtils.popolaStatistiche(response.results);
+                    }, function(response){
+                        uiUtils.impostaErrore("Impossibile recuperare le statistiche: "+ response.exceptions[0].msg);
+                    });
+                })
+            }, function(response){
+                uiUtils.impostaErrore("Impossibile recuperare i membri dello staff: "+ response.exceptions[0].msg);
+            });
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "amm_statistiche_pr.html");
         }
 
     });

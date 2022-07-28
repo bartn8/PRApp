@@ -39,6 +39,11 @@ if (ajax.isStorageEnabled()) {
         uiUtils.disattivaMenu();
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Complimenti! sei loggato: Scegli un'opzione", "Effettua il login prima di continuare.");
+
+        if(!ajax.isLogged()){
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "index.html");
+        }
     });
 } else {
     $(document).ready(function () {

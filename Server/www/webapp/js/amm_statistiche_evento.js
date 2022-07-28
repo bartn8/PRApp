@@ -84,16 +84,16 @@ if (ajax.isStorageEnabled()) {
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Statistiche evento", "Effettua il login prima di continuare.");
 
-        if (ajax.isLogged()) {
-            if (ajax.isStaffSelected()) {
-                ajax.restituisciStatisticheEventoAmm(function(response){
-                    uiUtils.popolaStatistiche(response.results);
-                }, function(response){
-                    uiUtils.impostaErrore("Impossibile recuperare le statistiche: "+ response.exceptions[0].msg);
-                });
-            }
+        if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) {
+            ajax.restituisciStatisticheEventoAmm(function(response){
+                uiUtils.popolaStatistiche(response.results);
+            }, function(response){
+                uiUtils.impostaErrore("Impossibile recuperare le statistiche: "+ response.exceptions[0].msg);
+            });
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "amm_statistiche_evento.html");
         }
-
     });
 } else {
     $(document).ready(function () {

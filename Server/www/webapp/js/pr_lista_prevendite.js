@@ -79,14 +79,15 @@ if (ajax.isStorageEnabled()) {
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Prevendite del PR", "Effettua il login prima di continuare.");
 
-        if (ajax.isLogged()) {
-            if (ajax.isStaffSelected()) {
-                ajax.restituisciPrevendite(function(response){
-                    uiUtils.popolaLista(response.results);
-                }, function(response){
-                    uiUtils.impostaErrore("Impossibile recuperare le prevendite: "+ response.exceptions[0].msg);
-                });
-            }
+        if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) {
+            ajax.restituisciPrevendite(function(response){
+                uiUtils.popolaLista(response.results);
+            }, function(response){
+                uiUtils.impostaErrore("Impossibile recuperare le prevendite: "+ response.exceptions[0].msg);
+            });
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "pr_lista_prevendite.html");
         }
 
     });

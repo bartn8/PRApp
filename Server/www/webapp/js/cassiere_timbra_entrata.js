@@ -48,7 +48,6 @@ class UiUtils extends GeneralUiUtils {
         var $tabBody = $("#bodyTabella");
         var $containerConferma = $("#containerConferma");
 
-
         var $body =   $("<td>"+nome+" "+cognome+"</td>"+
                         "<td>"+nomePR+" "+cognomePR+"</td>"+
                         "<td>"+nomeTipoPrevendita+"</td>"+
@@ -64,8 +63,10 @@ class UiUtils extends GeneralUiUtils {
     }
 
     cleanModulo(){
-        var $modulo = $("#moduloConferma");
-        $modulo.empty();
+        var $tabBody = $("#bodyTabella");
+        var $confirmButton = $("#containerConferma > button");
+        $tabBody.empty();
+        $confirmButton.remove();
     }
 
     appendListaTimbri(qrData, timbro, valido, motivo){
@@ -95,6 +96,92 @@ var scanActive = false;
 var camHasFlash = false;
 var scansioniValide = [];
 
+var main = () => {
+    var scanner = new QrScanner(uiUtils.getElementoVideo(), result => {
+        scanner.stop();
+        const obj = JSON.parse(result.data);
+        
+        if(!scansioniValide.includes(obj.idPrevendita)){
+            ajax.restituisciInfoPrevendita(obj.idPrevendita, (response) => {
+                const prevendita = response.results[0];
+                uiUtils.compilaModulo(prevendita.nomeCliente, prevendita.cognomeCliente, prevendita.nomePR, prevendita.cognomePR, prevendita.nomeTipoPrevendita, prevendita.codice, prevendita.stato, () =>{
+                    ajax.timbraEntrata(obj.idPrevendita, obj.idEvento, obj.codiceAccesso, (response2) => {
+                        let scritta = "(VALIDA) Timbrata: "+ obj.idPrevendita+ " "+prevendita.nomeCliente+" "+prevendita.cognomeCliente;
+                        uiUtils.impostaScritta(scritta);
+                        uiUtils.cleanModulo();
+                        uiUtils.appendListaTimbri(obj, response2.results[0], true);
+                        scansioniValide.push(obj.idPrevendita);
+                        scanner.start();
+                    }, (response2) => {
+                        let scritta = "(ERRORE) Impossibile timbrare ("+obj.idPrevendita+ " "+prevendita.nomeCliente+" "+prevendita.cognomeCliente+"): "+ response2.exceptions[0].msg;
+                        uiUtils.impostaErrore(scritta);
+                        uiUtils.cleanModulo();
+                        uiUtils.appendListaTimbri(obj, undefined, false, response2.exceptions[0].msg);
+                        scanner.start();
+                    });
+                });
+            }, (response) => {
+                let scritta = "(ERRORE) Impossibile leggere info: "+ response.exceptions[0].msg;
+                alert(scritta);
+                uiUtils.impostaErrore(scritta);
+                uiUtils.appendListaTimbri(obj, undefined, false, response.exceptions[0].msg);
+                scanner.start();
+            });
+        }
+    },
+    {highlightScanRegion: true, maxScansPerSecond: 5, returnDetailedScanResult: true});
+    
+    const updateFlashAvailability = () => {
+        scanner.hasFlash().then(hasFlash => {
+            camHasFlash = hasFlash;
+            if(!camHasFlash){
+                uiUtils.disabilitaFlash();
+            }
+        });
+    };
+
+    const startScan = () => {
+        if(!scanActive){
+            scanner.start().then(() => {
+                updateFlashAvailability();
+                scanActive = true;
+                uiUtils.scrittaPulsanteScansione("Ferma scansione");
+            });
+        }
+    };
+
+    const stopScan = () => {
+        if(scanActive){
+            scanner.stop();
+            scanActive = false;
+            uiUtils.scrittaPulsanteScansione("Avvia scansione");
+        }
+    };
+
+    uiUtils.impostaClickBtnScansione(function(){
+        if(!scanActive){
+              startScan();
+        }
+        else{
+            stopScan();
+        } 
+    });
+
+    uiUtils.impostaClickBtnFlash(function(){
+         if(scanActive){
+            if(camHasFlash){
+                if(scanner.isFlashOn()){
+                    scanner.turnFlashOff();
+                }else{
+                    scanner.turnFlashOn();
+                }
+            }else{
+                disabilitaFlash();
+            }
+         }
+    });
+};
+
 if (ajax.isStorageEnabled()) {
 
     //Ricavo l'oggetto AjaxRequest.
@@ -109,90 +196,12 @@ if (ajax.isStorageEnabled()) {
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Effettua una scansione", "Effettua il login prima di continuare.");
 
-        var scanner = new QrScanner(uiUtils.getElementoVideo(), result => {
-            scanner.stop();
-            const obj = JSON.parse(result.data);
-            
-            if(!scansioniValide.includes(obj.idPrevendita)){
-                ajax.restituisciInfoPrevendita(obj.idPrevendita, (response) => {
-                    const prevendita = response.results[0];
-                    uiUtils.compilaModulo(prevendita.nomeCliente, prevendita.cognomeCliente, prevendita.nomePR, prevendita.cognomePR, prevendita.nomeTipoPrevendita, prevendita.codice, prevendita.stato, () =>{
-                        ajax.timbraEntrata(obj.idPrevendita, obj.idEvento, obj.codiceAccesso, (response2) => {
-                            let scritta = "(VALIDA) Timbrata: "+ obj.idPrevendita+ " "+prevendita.nomeCliente+" "+prevendita.cognomeCliente;
-                            uiUtils.impostaScritta(scritta);
-                            uiUtils.cleanModulo();
-                            uiUtils.appendListaTimbri(obj, response2.results[0], true);
-                            scansioniValide.push(obj.idPrevendita);
-                            scanner.start();
-                        }, (response2) => {
-                            let scritta = "(ERRORE) Impossibile timbrare ("+obj.idPrevendita+ " "+prevendita.nomeCliente+" "+prevendita.cognomeCliente+"): "+ response2.exceptions[0].msg;
-                            uiUtils.impostaErrore(scritta);
-                            uiUtils.cleanModulo();
-                            uiUtils.appendListaTimbri(obj, undefined, false, response2.exceptions[0].msg);
-                            scanner.start();
-                        });
-                    });
-                }, (response) => {
-                    let scritta = "(ERRORE) Impossibile leggere info: "+ response.exceptions[0].msg;
-                    alert(scritta);
-                    uiUtils.impostaErrore(scritta);
-                    uiUtils.appendListaTimbri(obj, undefined, false, response.exceptions[0].msg);
-                    scanner.start();
-                });
-            }
-        },
-        {highlightScanRegion: true, maxScansPerSecond: 5, returnDetailedScanResult: true});
-        
-        const updateFlashAvailability = () => {
-            scanner.hasFlash().then(hasFlash => {
-                camHasFlash = hasFlash;
-                if(!camHasFlash){
-                    uiUtils.disabilitaFlash();
-                }
-            });
-        };
-
-        const startScan = () => {
-            if(!scanActive){
-                scanner.start().then(() => {
-                    updateFlashAvailability();
-                    scanActive = true;
-                    uiUtils.scrittaPulsanteScansione("Ferma scansione");
-                });
-            }
-        };
-
-        const stopScan = () => {
-            if(scanActive){
-                scanner.stop();
-                scanActive = false;
-                uiUtils.scrittaPulsanteScansione("Avvia scansione");
-            }
-        };
-
-        uiUtils.impostaClickBtnScansione(function(){
-            if(!scanActive){
-                  startScan();
-            }
-            else{
-                stopScan();
-            } 
-        });
-
-        uiUtils.impostaClickBtnFlash(function(){
-             if(scanActive){
-                if(camHasFlash){
-                    if(scanner.isFlashOn()){
-                        scanner.turnFlashOff();
-                    }else{
-                        scanner.turnFlashOn();
-                    }
-                }else{
-                    disabilitaFlash();
-                }
-             }
-        });
-
+        if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) {
+            main();
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "cassiere_timbra_entrata.html");
+        }
     });
 } else {
     $(document).ready(function () {

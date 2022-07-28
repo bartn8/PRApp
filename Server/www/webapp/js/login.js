@@ -33,10 +33,6 @@ class UiUtils extends GeneralUiUtils {
             return false;
         });
     }
-
-    effettuaSubmit() {
-        $('#loginForm').submit();
-    }
 }
 
 var uiUtils = new UiUtils();
@@ -54,7 +50,9 @@ var loginButtonClick = function () {
             uiUtils.impostaLogout();
             uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
             uiUtils.disattivaFormLogin();
-            uiUtils.effettuaSubmit();
+
+            //Passo a scegli staff.
+            passRedirect("utente_scegli_staff.html", getRedirectURL());
         }
     }, function (response) {
         uiUtils.impostaErrore("Errore:" + response.exceptions[0].msg);
@@ -72,16 +70,46 @@ if (ajax.isStorageEnabled()) {
 
         //Disattivo temporaneamente i menu.
         uiUtils.disattivaMenu();
-        uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
-        uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Complimenti! sei loggato: Scegli un'opzione", "Effettua il login prima di continuare.");
 
-        //Se sono loggato allora disattivo il login e attivo le altre pagine.
-        if (ajax.isLogged()) {
-            uiUtils.disattivaFormLogin();
-        }
-        else {
-            uiUtils.attivaFormLogin(loginButtonClick);
-        }
+        //Check intermedio con get utente.
+        ajax.restituisciUtente((responseUtente)=>{
+            console.log("Login già effettuato: "+responseUtente.results[0]);
+            //Posso passare direttamente alla scelta staff/evento: 
+            //1) Se restitusce staff scelto allora passo a scegli evento
+            //2) Se restituisce anche evento scelto allora passo a index.
+            //Se volesse cambiare staff/evento basta che va su scegli bla bla bla
+
+            ajax.restituisciStaff((responseStaff) => {
+                console.log("Staff già scelto: "+ responseStaff.results[0]);
+
+                ajax.restituisciEvento((responseEvento) => {
+                    console.log("Evento già scelto: "+ responseEvento.results[0]);
+                    redirect(getRedirectURL());
+                    
+                },(responseEvento) => {
+                    console.log("Evento non scelto: "+responseEvento.exceptions[0].msg);
+                    passRedirect("utente_scegli_evento.html", getRedirectURL());
+                });
+            },(responseStaff) => {
+                console.log("Staff non scelto: "+responseStaff.exceptions[0].msg);
+                passRedirect("utente_scegli_staff.html", getRedirectURL());
+            });
+
+        },(response)=>{
+            console.log("Login precedente non trovato: "+response.exceptions[0].msg);
+
+            //Avvio la schermata di login.
+            uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
+            uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Complimenti! sei loggato: Scegli un'opzione", "Effettua il login prima di continuare.");
+
+            //Se sono loggato allora disattivo il login e attivo le altre pagine.
+            if (ajax.isLogged()) {
+                uiUtils.disattivaFormLogin();
+            }
+            else {
+                uiUtils.attivaFormLogin(loginButtonClick);
+            }
+        });
     });
 } else {
     $(document).ready(function () {

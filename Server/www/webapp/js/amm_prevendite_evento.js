@@ -54,16 +54,16 @@ if (ajax.isStorageEnabled()) {
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Prevendite dell'evento", "Effettua il login prima di continuare.");
 
-        if (ajax.isLogged()) {
-            if (ajax.isStaffSelected()) {
-                ajax.restituisciPrevenditeEventoAmm(function(response){
-                    uiUtils.popolaLista(response.results);
-                }, function(response){
-                    uiUtils.impostaErrore("Impossibile recuperare le prevendite: "+ response.exceptions[0].msg);
-                });
-            }
+        if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) {
+            ajax.restituisciPrevenditeEventoAmm(function(response){
+                uiUtils.popolaLista(response.results);
+            }, function(response){
+                uiUtils.impostaErrore("Impossibile recuperare le prevendite: "+ response.exceptions[0].msg);
+            });
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "amm_prevendite_evento.html");
         }
-
     });
 } else {
     $(document).ready(function () {

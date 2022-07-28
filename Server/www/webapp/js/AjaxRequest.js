@@ -284,7 +284,8 @@ class AjaxRequest {
     }
 
     restituisciUtente(onSuccess, onError) {
-        this.generalRequest(true, undefined, undefined, 11, [], (response) => {
+        //login non controllato perché mi serve per aggiornare lo storage
+        this.generalRequest(undefined, undefined, undefined, 11, [], (response) => {
             this.setUtente(response.results[0]);
             onSuccess(response);
         }, onError);
@@ -295,6 +296,14 @@ class AjaxRequest {
             {name:"staff", 
              value:{"id": idStaff}}
         ], (response) => {
+            this.setStaff(response.results[0]);
+            onSuccess(response);
+        }, onError);        
+    }
+
+    restituisciStaff(onSuccess, onError){
+        //staff non controllato perché mi serve per aggiornare lo storage
+        this.generalRequest(true, undefined, undefined, 13, [], (response) => {
             this.setStaff(response.results[0]);
             onSuccess(response);
         }, onError);        
@@ -331,6 +340,14 @@ class AjaxRequest {
         }, onError);
     }
 
+    restituisciEvento(onSuccess, onError){
+        //evento non controllato perché mi serve per aggiornare lo storage
+        this.generalRequest(true, true, undefined, 109, [], (response) => {
+            this.setEvento(response.results[0]);
+            onSuccess(response);
+        }, onError);        
+    }
+    
     aggiungiPrevendita(myNomeCliente, myCognomeCliente, myTipoPrevenditaId, myCodice, onSuccess, onError) {
         this.generalRequest(true, true, true, 203, [{
             name: "prevendita",

@@ -54,14 +54,15 @@ if (ajax.isStorageEnabled()) {
         uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Entrate all'evento "+ajax.getEvento().nome, "Effettua il login prima di continuare.");
 
-        if (ajax.isLogged()) {
-            if (ajax.isStaffSelected()) {
-                ajax.restituisciListaEntrate(function(response){
-                    uiUtils.popolaLista(response.results);
-                }, function(response){
-                    uiUtils.impostaErrore("Impossibile recuperare le entrate: "+ response.exceptions[0].msg);
-                });
-            }
+        if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) {
+            ajax.restituisciListaEntrate(function(response){
+                uiUtils.popolaLista(response.results);
+            }, function(response){
+                uiUtils.impostaErrore("Impossibile recuperare le entrate: "+ response.exceptions[0].msg);
+            });
+        }else{
+            //Redirect automatico alla pagina di login
+            passRedirect("login.html", "cassiere_lista_gente_entrata.html");
         }
 
     });
