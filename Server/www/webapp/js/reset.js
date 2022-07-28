@@ -61,6 +61,8 @@ if (ajax.isStorageEnabled()) {
 
         //Ora vado in modalità login.
         uiUtils.impostaScritta("Applicazione resettata. Torna al menu principale.");
+
+        redirect("index.html");
     });
   } else {
     $(document).ready(function(){

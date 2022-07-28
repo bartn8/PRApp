@@ -44,29 +44,38 @@ class UiUtils extends GeneralUiUtils {
         return $("#scanVideo")[0];
     }
 
-    compilaModulo(nome, cognome, nomePR, cognomePR, nomeTipoPrevendita, codice, stato, confirmFunction){
-        var $tabBody = $("#bodyTabella");
-        var $containerConferma = $("#containerConferma");
+    compilaModulo(nome, cognome, nomePR, cognomePR, nomeTipoPrevendita, codice, stato, confirmFunction, cancelFunction){
+        let $tabBody = $("#bodyTabella");
+        let $containerConferma = $("#containerConferma");
 
-        var $body =   $("<td>"+nome+" "+cognome+"</td>"+
+        let $body =   $("<td>"+nome+" "+cognome+"</td>"+
                         "<td>"+nomePR+" "+cognomePR+"</td>"+
                         "<td>"+nomeTipoPrevendita+"</td>"+
                         "<td>"+codice+"</td>"+
                         "<td>"+(stato == 0 ? "VALIDA" : "ANNULLATA")+"</td>");
 
 
-        var $confirmButton = $('<button type="button" class="btn btn-primary btn-block">Conferma</button>');
+        let $confirmButton = $('<button type="button" class="btn btn-primary btn-block">Conferma</button>');
+        let $cancelButton = $('<button type="button" class="btn btn-danger btn-block">Annulla</button>');
+        
         $confirmButton.click(confirmFunction);
+        $cancelButton.click(cancelFunction);
+
+        let $colConfirm = $("#colConfirm");
+        let $colCancel = $("#colCancel");
 
         $tabBody.append($body);
-        $containerConferma.append($confirmButton);
+        $colConfirm.append($confirmButton);
+        $colCancel.append($cancelButton);
     }
 
     cleanModulo(){
         var $tabBody = $("#bodyTabella");
-        var $confirmButton = $("#containerConferma > button");
+        var $confirmButton = $("#colConfirm > button");
+        var $cancelButton = $("#colCancel > button");
         $tabBody.empty();
         $confirmButton.remove();
+        $cancelButton.remove();
     }
 
     appendListaTimbri(qrData, timbro, valido, motivo){
@@ -83,7 +92,7 @@ class UiUtils extends GeneralUiUtils {
 
         var $lista = $("#listaTimbri");
         var $elementoLi = $("<li class=\"list-group-item "+(valido ? "list-group-item-success" : "list-group-item-danger")+"\"></li>");
-        var $elementoSpan = $("<span>ID: "+ qrData.idPrevendita + ", Codice: " + qrData.codiceAccesso + " (" + timestamp.toLocaleString() + ") ("+(motivo !== undefined ? motivo : "")+")</span>");
+        var $elementoSpan = $("<span>ID: "+ qrData.idPrevendita + ", Codice: " + qrData.codiceAccesso + " (" + timestamp.toLocaleString() + ")"+(motivo !== undefined && motivo !== "" ? " (" + motivo + ")" : "")+"</span>");
                     
         $elementoLi.append($elementoSpan);
         $lista.append($elementoLi);
@@ -95,6 +104,35 @@ var ajax = new AjaxRequest();
 var scanActive = false;
 var camHasFlash = false;
 var scansioniValide = [];
+var listaScansioni = [];
+
+var updateScansioniValide = (idPrevendita) => {
+    scansioniValide.push(idPrevendita);
+    sessionStorage.cassiere_scansioni_valide = JSON.stringify(scansioniValide);
+}
+
+var restoreScansioniValide = () => {
+    let tmpScansioniValide = sessionStorage.cassiere_scansioni_valide;
+    if(tmpScansioniValide !== undefined && tmpScansioniValide !== ""){
+        scansioniValide = JSON.parse(tmpScansioniValide);
+    }
+};
+
+var updateListaScansioni = (qrData, timbro, valido, motivo) =>{
+    listaScansioni.push([qrData, timbro, valido, motivo]);
+    sessionStorage.cassiere_lista_scansioni = JSON.stringify(listaScansioni);
+};
+
+var restoreListaScansioni = () => {
+    let tmpListaScansioni = sessionStorage.cassiere_lista_scansioni;
+    if(tmpListaScansioni !== undefined && tmpListaScansioni !== ""){
+        listaScansioni = JSON.parse(tmpListaScansioni);
+        for(let i = 0; i < listaScansioni.length; i++){
+            let scansione = listaScansioni[i];
+            uiUtils.appendListaTimbri(scansione[0], scansione[1], scansione[2], scansione[3]);
+        }
+    }
+};
 
 var main = () => {
     var scanner = new QrScanner(uiUtils.getElementoVideo(), result => {
@@ -107,26 +145,40 @@ var main = () => {
                 uiUtils.compilaModulo(prevendita.nomeCliente, prevendita.cognomeCliente, prevendita.nomePR, prevendita.cognomePR, prevendita.nomeTipoPrevendita, prevendita.codice, prevendita.stato, () =>{
                     ajax.timbraEntrata(obj.idPrevendita, obj.idEvento, obj.codiceAccesso, (response2) => {
                         let scritta = "(VALIDA) Timbrata: "+ obj.idPrevendita+ " "+prevendita.nomeCliente+" "+prevendita.cognomeCliente;
+                        //Update grafica: pulizia modulo e aggiunta alla lista timbri
                         uiUtils.impostaScritta(scritta);
                         uiUtils.cleanModulo();
                         uiUtils.appendListaTimbri(obj, response2.results[0], true);
-                        scansioniValide.push(obj.idPrevendita);
+                        //Aggiunga ad array per logica
+                        updateListaScansioni(obj, response2.results[0], true, "");
+                        updateScansioniValide(obj.idPrevendita);
                         scanner.start();
                     }, (response2) => {
                         let scritta = "(ERRORE) Impossibile timbrare ("+obj.idPrevendita+ " "+prevendita.nomeCliente+" "+prevendita.cognomeCliente+"): "+ response2.exceptions[0].msg;
+                        //Update grafica: pulizia modulo e aggiunta alla lista timbri
                         uiUtils.impostaErrore(scritta);
                         uiUtils.cleanModulo();
                         uiUtils.appendListaTimbri(obj, undefined, false, response2.exceptions[0].msg);
+                        //Aggiunga ad array per logica
+                        updateListaScansioni(obj, undefined, false, response2.exceptions[0].msg);
                         scanner.start();
                     });
+                }, () => {
+                    //Prevendita non confermata pulisco e riattivo
+                    uiUtils.cleanModulo();
+                    scanner.start();
                 });
             }, (response) => {
                 let scritta = "(ERRORE) Impossibile leggere info: "+ response.exceptions[0].msg;
                 alert(scritta);
                 uiUtils.impostaErrore(scritta);
                 uiUtils.appendListaTimbri(obj, undefined, false, response.exceptions[0].msg);
+                updateListaScansioni(obj, undefined, false, response.exceptions[0].msg);
                 scanner.start();
             });
+        }else{
+            alert("Prevendita già scannerizzata: "+ obj.idPrevendita);
+            scanner.start();
         }
     },
     {highlightScanRegion: true, maxScansPerSecond: 5, returnDetailedScanResult: true});
@@ -197,6 +249,9 @@ if (ajax.isStorageEnabled()) {
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Effettua una scansione", "Effettua il login prima di continuare.");
 
         if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) {
+            //restore della lista e funzione main
+            restoreListaScansioni();
+            restoreScansioniValide();
             main();
         }else{
             //Redirect automatico alla pagina di login
