@@ -333,7 +333,7 @@ FOR EACH ROW BEGIN
 	ELSEIF ((NEW.token IS NULL AND NEW.scadenzaToken IS NOT NULL) OR (NEW.token IS NOT NULL AND NEW.scadenzaToken IS NULL)) THEN
 		SIGNAL SQLSTATE '70003'
 		SET MESSAGE_TEXT = 'Inserimento token non valido';
-	ELSEIF (NEW.scadenzaToken < CURRENT_TIMESTAMP) THEN
+	ELSEIF (NEW.scadenzaToken < CURRENT_TIMESTAMP AND OLD.token <> NEW.token) THEN
 		SIGNAL SQLSTATE '70000'
 		SET MESSAGE_TEXT = 'La scadenza del token deve avvenire nel futuro.';	
 	END IF;
@@ -672,8 +672,6 @@ FOR EACH ROW BEGIN
 	
 	SELECT COUNT(id) INTO conteggioStaff FROM staff WHERE idCreatore = NEW.idCreatore;
     
-	/* Se i conteggi sono uguali allora l'unico amministratore rimasto è quello da eliminare */
-	
 	IF (conteggioStaff > 0) THEN
 		SIGNAL SQLSTATE '70003'
 		SET MESSAGE_TEXT = 'Impossibile aggiungere staff: limite raggiunto';
