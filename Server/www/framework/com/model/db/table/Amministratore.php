@@ -25,6 +25,7 @@ use PDO;
 use com\model\Hash;
 use com\model\db\enum\Ruolo;
 use com\model\db\table\Table;
+use com\model\db\wrapper\WEvento;
 use com\model\db\wrapper\WUtente;
 use com\model\db\wrapper\WPrevendita;
 use com\model\db\table\Amministratore;
