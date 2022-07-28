@@ -558,9 +558,27 @@ EOT;
             INNER JOIN prevendita ON prevendita.idEvento = evento.id 
             INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita 
             LEFT JOIN entrata ON entrata.idPrevendita = prevendita.id
+            WHERE prevendita.stato = 'VALIDA'
             GROUP BY evento.id, prevendita.idTipoPrevendita) AS T
         WHERE T.idEvento = :idEvento
 EOT;
+
+        /* TODO: mostra anche le prev annullate. Da aggiornare il wrapperone
+                SELECT T.idEvento, T.idTipoPrevendita, T.nomeTipoPrevendita, T.prevenditeVendute, T.ricavo, T.prevenditeEntrate, T.prevenditeNonEntrate, IFNULL(K.prevenditeAnnullate,0) as prevenditeAnnullate
+        FROM (SELECT evento.id AS idEvento, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, COUNT(prevendita.id) AS prevenditeVendute, SUM(tipoPrevendita.prezzo) AS ricavo, COUNT(entrata.seq) AS prevenditeEntrate, COUNT(prevendita.id)-COUNT(entrata.seq) AS prevenditeNonEntrate
+            FROM evento 
+            INNER JOIN prevendita ON prevendita.idEvento = evento.id 
+            INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita 
+            LEFT JOIN entrata ON entrata.idPrevendita = prevendita.id
+            WHERE prevendita.stato = 'VALIDA'
+            GROUP BY evento.id, prevendita.idTipoPrevendita) AS T
+        LEFT JOIN (SELECT prevendita.idTipoPrevendita AS idTipoPrevendita, COUNT(prevendita.id) AS prevenditeAnnullate
+            FROM prevendita
+            WHERE prevendita.stato = 'ANNULLATA'
+            GROUP BY prevendita.idTipoPrevendita) AS K ON T.idTipoPrevendita = K.idTipoPrevendita
+        WHERE T.idEvento = :idEvento
+        */
+
 
         $stmtSelezione = $conn->prepare($query);
         $stmtSelezione->bindValue(":idEvento", $idEvento, PDO::PARAM_INT);

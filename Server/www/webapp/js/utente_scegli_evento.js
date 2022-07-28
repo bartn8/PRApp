@@ -37,7 +37,7 @@ class UiUtils extends GeneralUiUtils {
 
             $elemento.click(function () {
                 //Serve il riferimento all'elemento giusto
-                var $this = $(this);
+                const $this = $(this);
                 //Seleziono l'evento nel server
                 ajax.scegliEvento(evento.id, function(response){
                     uiUtils.attivaMenu(ajax.isLogged(), ajax.isStaffSelected(), ajax.isEventoSelected(), ajax.getDirittiMembro());

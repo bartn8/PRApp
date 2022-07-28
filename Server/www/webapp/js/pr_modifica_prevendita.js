@@ -23,28 +23,29 @@ class UiUtils extends GeneralUiUtils {
     }
 
     popolaLista(listaPrevendite) {
-        var $lista = $("#listaPrevendite");
+        let $lista = $("#listaPrevendite");
 
         for (let index = 0; index < listaPrevendite.length; index++) {
             const prevendita = listaPrevendite[index];
-            var $elementoLi = $("<li class=\"list-group-item "+(prevendita.stato == 0 ? "list-group-item-success" : "list-group-item-danger")+"\"></li>");
-            var $elementoSpan = $("<span>"+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente + (prevendita.stato == 1 ? " (ANNULLATA) " : " ") + "</span>");
-            var $elementoButton = $("<button type=\"button\" class=\"btn btn-primary\">Annulla</button>");
+            let $elementoLi = $("<li class=\"list-group-item "+(prevendita.stato == 0 ? "list-group-item-success" : "list-group-item-danger")+"\"></li>");
+            let $elementoSpan = $("<span>"+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente + (prevendita.stato == 1 ? " (ANNULLATA) " : " ") + "</span>");
+            let $elementoButton = $("<button type=\"button\" class=\"btn btn-primary\">Annulla</button>");
 
             if(prevendita.stato == 0){
                 $elementoButton.click(function(){
-                    ajax.modificaPrevendita(prevendita.id, 1, function(response){
-                        $(this).addClass("disabled");
-                        uiUtils.impostaScritta("Prevendita "+prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente+ " annullata.");
-                    }, function(response){
-                        uiUtils.impostaErrore("Impossibile annullare la prevendita: "+response.exceptions[0].msg);
-                    });
+                    const $this = $(this);
+                    if(confirm("Vuoi davvero eliminare la prevendita "+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente+"?")){
+                        ajax.modificaPrevendita(prevendita.id, 1, function(response){
+                            $this.addClass("disabled");
+                            uiUtils.impostaScritta("Prevendita "+prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente+ " annullata.");
+                        }, function(response){
+                            uiUtils.impostaErrore("Impossibile annullare la prevendita: "+response.exceptions[0].msg);
+                        });
+                    }
                 });
             }else{
                 $elementoButton.addClass("disabled");
             }
-
-            
 
             $elementoLi.append($elementoSpan);
             $elementoLi.append($elementoButton);

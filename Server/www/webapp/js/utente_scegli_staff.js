@@ -37,7 +37,7 @@ class UiUtils extends GeneralUiUtils {
 
             $elemento.click(function () {
                 //Serve il riferimento all'elemento giusto
-                var $this = $(this);
+                const $this = $(this);
                 //Seleziono lo staff lato server
                 ajax.scegliStaff(staff.id, function(response){
                     ajax.restoreDefaultEvento();    //Devo resettare l'evento scelto.
