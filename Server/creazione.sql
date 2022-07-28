@@ -372,6 +372,7 @@ DELIMITER ;
 
 /*
 Verifica l'aggiornamento di un evento:
+  0)ID non modificabile
   1)La data di apertura e chiusura deve formare un intervallo temporale.
   2)Questo intervallo deve essere in una data presente o futura.
   3)Lo stato deve seguire il relativo grafo (stati.png).
@@ -394,6 +395,9 @@ FOR EACH ROW BEGIN
 	ELSEIF (NEW.stato = 'VALIDO' AND (OLD.stato <> 'VALIDO')) THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = "Stato non valido: un evento NON VALIDO rimane tale";
+    ELSEIF (OLD.id <> NEW.id) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = "ID non modificabile, ricrea evento";
     END IF;
 END$$
 
@@ -404,6 +408,7 @@ Verifica l'inserimento di un tipo prevendita:
   1)La data di apertura e chiusura deve formare un intervallo temporale.
   2)Questo intervallo deve essere in una data presente o futura.
   3)Questo intervallo NON deve superare la data dell'evento.
+  4)Prezzo >= 0
 */
 
 DELIMITER $$
@@ -432,6 +437,9 @@ FOR EACH ROW BEGIN
 	ELSEIF (statoEvento <> 'VALIDO') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'L\'evento non è valido!';	
+    ELSEIF (NEW.prezzo < 0) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'Prezzo negativo';	
     END IF;
 END$$
 
@@ -439,6 +447,7 @@ DELIMITER ;
 
 /*
 Verifica l'aggiornamento di un tipo prevendita:
+  0)id non modificabile
   1)La data di apertura e chiusura deve formare un intervallo temporale.
   2)Questo intervallo deve essere in una data presente o futura.
   3)Questo intervallo NON deve superare la data dell'evento.
@@ -476,6 +485,9 @@ FOR EACH ROW BEGIN
 	ELSEIF (conteggio > 0 AND OLD.prezzo <> NEW.prezzo) THEN
 		SIGNAL SQLSTATE '70003'
         SET MESSAGE_TEXT = 'Non puoi modificare il prezzo se hai venduto prevendite';
+    ELSEIF (OLD.id <> NEW.id) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'ID non modificabile, ricrea tipo prevendita';
     END IF;
 END$$
 
@@ -515,7 +527,7 @@ Verifica che la prevendita appena inserita sia effettivamente vendibile, cioè:
   1)I dati devono essere congruenti: evento e tipo prevendita compatibile.
   2)La data della vendita deve rientrare nel periodo di vendita.
   3)L'evento deve essere VALIDO.
-  4)La prevendita deve essere consegnata o pagata.
+  4)La prevendita deve essere VALIDA.
 */
 
 DELIMITER $$
@@ -556,11 +568,11 @@ END$$
 DELIMITER ;
 
 /*
-Verifica che la prevendita è aggiornabile:
-  1)Il nuovo tipo prevendita è compatibile.
-  2)Il nuovo tipo prevendita si puù modificare solo se rispetta il periodo di vendita
-  3)TODO: La prevendita non è timbrata
-  4)Lo stato deve seguire il relativo grafo (stati.png).
+Verifica che la prevendita è annullabile (Pattern Immutable):
+  0)Non ho modificato l'id
+  1)Non ho modificato dataCreazione, tipoPrevendita
+  2)La prevendita non è timbrata
+  3)Lo stato deve seguire il relativo grafo (stati.png).
 */
 
 DELIMITER $$
@@ -568,27 +580,31 @@ DELIMITER $$
 CREATE TRIGGER verificaAggiornamentoPrevendita
 BEFORE UPDATE ON prevendita
 FOR EACH ROW BEGIN
-	DECLARE apertura timestamp;
-    DECLARE chiusura timestamp;
 	DECLARE statoEvento varchar(20);
-	DECLARE verificaConteggio1 int;
+	DECLARE verificaEntrata int;
 	
-	SELECT COUNT(t.id) INTO verificaConteggio1 FROM tipoPrevendita t, prevendita p WHERE p.idEvento = t.idEvento AND p.id = OLD.id AND t.id = NEW.idTipoPrevendita;
-  	SELECT aperturaPrevendite, chiusuraPrevendite INTO apertura, chiusura FROM tipoPrevendita WHERE id = NEW.idTipoPrevendita;
     SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
+	SELECT COUNT(e.seq) INTO verificaEntrata FROM entrata e WHERE e.idPrevendita = OLD.id;
 	
-	IF (verificaConteggio1 <> 1) THEN
-		SIGNAL SQLSTATE '70001'
-        SET MESSAGE_TEXT = 'Dati non congruenti!';
-	ELSEIF ((NEW.timestampCreazione < apertura OR NEW.timestampCreazione > chiusura) AND OLD.timestampCreazione <> NEW.timestampCreazione) THEN
+	IF (OLD.idTipoPrevendita <> NEW.idTipoPrevendita) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'Tipo prevendita non modificabile: ricrea la prevendita';
+	ELSEIF (OLD.id <> NEW.id) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'ID non modificabile: ricrea la prevendita';
+    ELSEIF (OLD.timestampCreazione <> NEW.timestampCreazione) THEN
 		SIGNAL SQLSTATE '70000'
-        SET MESSAGE_TEXT = 'Data non valida: non puoi vendere in questo momento!';
-    ELSEIF (statoEvento <> 'VALIDO' AND NEW.stato = 'VALIDA')  THEN
+        SET MESSAGE_TEXT = 'Data non modificabile: ricrea la prevendita';
+    ELSEIF (statoEvento <> 'VALIDO' AND NEW.stato <> OLD.stato AND NEW.stato = 'VALIDA')  THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'L\'Evento è scaduto: la prevendita non può essere valida';
 	ELSEIF (NEW.stato = 'VALIDA' AND OLD.stato <> 'VALIDA')  THEN
 		SIGNAL SQLSTATE '70002'
-        SET MESSAGE_TEXT = 'Ormai hai annullato la prevendita: fanne un\'altra';		
+        SET MESSAGE_TEXT = 'Ormai hai annullato la prevendita: fanne un\'altra';	
+	ELSEIF (verificaEntrata > 0) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'Non puoi modificare la prevendita, è timbrata';	
+		
     END IF;
 END$$
 
