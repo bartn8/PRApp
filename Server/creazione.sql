@@ -583,7 +583,7 @@ FOR EACH ROW BEGIN
 	DECLARE statoEvento varchar(20);
 	DECLARE verificaEntrata int;
 	
-    SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
+  SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
 	SELECT COUNT(e.seq) INTO verificaEntrata FROM entrata e WHERE e.idPrevendita = OLD.id;
 	
 	IF (OLD.idTipoPrevendita <> NEW.idTipoPrevendita) THEN
@@ -627,8 +627,8 @@ FOR EACH ROW BEGIN
 	
 	DECLARE ora timestamp;
 	DECLARE inizioEvento timestamp;
-    DECLARE fineEvento timestamp;
-    DECLARE statoEvento varchar(20);
+  DECLARE fineEvento timestamp;
+  DECLARE statoEvento varchar(20);
 	DECLARE statoPrevendita varchar(20);
     
 	SET ora := CURRENT_TIMESTAMP;
@@ -646,6 +646,22 @@ FOR EACH ROW BEGIN
 	ELSEIF (statoPrevendita <> 'VALIDA') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Prevendita annullata!'; 
+    END IF;
+END$$
+
+DELIMITER ;
+
+/*Negare UPDATE entrata*/
+
+DELIMITER $$
+
+CREATE TRIGGER freezeEntrata
+BEFORE UPDATE ON entrata
+FOR EACH ROW BEGIN
+	
+	IF (OLD.seq <> NEW.seq OR OLD.idCassiere <> NEW.idCassiere OR OLD.idPrevendita <> NEW.idPrevendita OR OLD.timestampEntrata <> NEW.timestampEntrata) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'entrata non modificabile';
     END IF;
 END$$
 
