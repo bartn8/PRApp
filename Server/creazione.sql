@@ -13,7 +13,7 @@ CREATE TABLE staff (
 CREATE TABLE utente (
   id int NOT NULL AUTO_INCREMENT,
   /*Si potrebbe fare una tabella simile a membro*/
-  tipologiaUtente ENUM('NORMALE', 'AMMINISTRATORE_SISTEMA') NOT NULL DEFAULT 'NORMALE',
+  /*tipologiaUtente ENUM('NORMALE', 'AMMINISTRATORE_SISTEMA') NOT NULL DEFAULT 'NORMALE',*/
   nome varchar(150) NOT NULL,
   cognome varchar(150) NOT NULL,
   telefono varchar(80) /* facciamo opzionale*/,
@@ -28,14 +28,13 @@ CREATE TABLE utente (
   CONSTRAINT chkTokenEScadenza CHECK ((token IS NOT NULL AND scadenzaToken IS NOT NULL) OR token IS NULL)
 );
 
-/*
-CREATE TABLE registro (
+CREATE TABLE tabellaLog (
   seq int NOT NULL AUTO_INCREMENT,
   livello ENUM('INFO', 'WARNING', 'IMPORTANT') NOT NULL DEFAULT 'INFO',
   timestampInserimento timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  
+  messaggio varchar(50) NOT NULL,
+  PRIMARY KEY(seq)
 );
-*/
 
 CREATE TABLE membro (
   idUtente int NOT NULL,

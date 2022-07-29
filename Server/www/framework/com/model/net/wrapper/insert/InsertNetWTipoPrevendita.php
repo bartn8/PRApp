@@ -38,15 +38,16 @@ class InsertNetWTipoPrevendita implements NetWrapper
      * @param float $prezzo
      * @param DateTimeImmutableAdapterJSON $aperturaVendite
      * @param DateTimeImmutableAdapterJSON $chiusuraVendite
+     * @param int quantitaMax
      * @throws InvalidArgumentException
      * @return InsertNetWTipoPrevendita
      */
-    private static function make($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite)
+    private static function make($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite, $quantitaMax)
     {
-        if (is_null($nome) || is_null($prezzo) || is_null($aperturaVendite) || is_null($chiusuraVendite))
+        if (is_null($nome) || is_null($prezzo) || is_null($aperturaVendite) || is_null($chiusuraVendite) || is_null($quantitaMax))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_string($nome) || ! is_string($descrizione) || ! is_float($prezzo) || ! ($aperturaVendite instanceof DateTimeImmutableAdapterJSON) || ! ($chiusuraVendite instanceof DateTimeImmutableAdapterJSON))
+        if (! is_string($nome) || ! is_string($descrizione) || ! is_float($prezzo) || ! is_int($quantitaMax) || ! ($aperturaVendite instanceof DateTimeImmutableAdapterJSON) || ! ($chiusuraVendite instanceof DateTimeImmutableAdapterJSON))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if (strlen($nome) > WTipoPrevendita::NOME_MAX)
@@ -60,7 +61,10 @@ class InsertNetWTipoPrevendita implements NetWrapper
         if (strlen($descrizione) > WTipoPrevendita::DESCRIZIONE_MAX)
             throw new InvalidArgumentException("Descrizione non valida (MAX)");
 
-        return new InsertNetWTipoPrevendita($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite);
+        if ($quantitaMax < 0)
+            throw new InvalidArgumentException("quantitaMax negativa");
+
+        return new InsertNetWTipoPrevendita($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite, $quantitaMax);
     }
 
     public static function of($array)
@@ -83,10 +87,14 @@ class InsertNetWTipoPrevendita implements NetWrapper
         if (! array_key_exists("chiusuraPrevendite", $array))
             throw new InvalidArgumentException("Dato chiusuraPrevendite non trovato.");
 
+        //TODO:Robustness principle
+        if (! array_key_exists("quantitaMax", $array))
+            $array["quantitaMax"] = 0;
+
         $aperturaPrevendite = new DateTimeImmutableAdapterJSON(new \DateTimeImmutable($array["aperturaPrevendite"]));   //ISO8061
         $chiusuraVendite = new DateTimeImmutableAdapterJSON(new \DateTimeImmutable($array["chiusuraPrevendite"]));      //ISO8061
 
-        return self::make($array["nome"], $array["descrizione"], (float) $array["prezzo"], $aperturaPrevendite, $chiusuraVendite);
+        return self::make($array["nome"], $array["descrizione"], (float) $array["prezzo"], $aperturaPrevendite, $chiusuraVendite, (int)$array["quantitaMax"]);
     }
 
     //Prima c'era idEvento: ora sostituito da evento selezionato.
@@ -126,13 +134,21 @@ class InsertNetWTipoPrevendita implements NetWrapper
      */
     private $chiusuraVendite;
 
-    private function __construct($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite)
+    /**
+     * Quantità massima di prevendite vendibili.
+     *
+     * @var int
+     */
+    private $quantitaMax;
+
+    private function __construct($nome, $descrizione, $prezzo, $aperturaVendite, $chiusuraVendite, $quantitaMax)
     {
         $this->nome = $nome;
         $this->descrizione = $descrizione;
         $this->prezzo = $prezzo;
         $this->aperturaVendite = $aperturaVendite;
         $this->chiusuraVendite = $chiusuraVendite;
+        $this->quantitaMax = $quantitaMax;
     }
 
     /**
@@ -178,6 +194,15 @@ class InsertNetWTipoPrevendita implements NetWrapper
     public function getChiusuraVendite()
     {
         return $this->chiusuraVendite;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getChiusuraVendite()
+    {
+        return $this->quantitaMax;
     }
 
     public function getWTipoPrevendita($id, $idEvento, $idModificatore, $timestampUltimaModifica): WTipoPrevendita

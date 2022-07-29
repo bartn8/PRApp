@@ -189,9 +189,9 @@ class ControllerUtente extends Controller
             throw new NotAvailableOperationException("Utente non loggato.");
         }
 
-        if(! $context->getUserSession()->isAmministratoreSistema()){
-            throw new AuthorizationException("Non sei amministratore di sistema");
-        }
+        //if(! $context->getUserSession()->isAmministratoreSistema()){
+        //    throw new AuthorizationException("Non sei amministratore di sistema");
+        //}
 
         $utente = $context->getUserSession()->getUtente();
     
@@ -202,7 +202,7 @@ class ControllerUtente extends Controller
             throw new InvalidArgumentException("Parametro non valido.");
 
         //eccezione in caso di errore.
-        parent::getPrinter()->addResult($Utente::registrazione($registrazione));
+        parent::getPrinter()->addResult(Utente::registrazione($registrazione));
     }
 
     private function cmd_login(Command $command, Context $context)

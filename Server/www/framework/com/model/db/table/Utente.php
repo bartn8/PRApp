@@ -30,6 +30,7 @@ use DateTimeImmutable;
 use com\model\db\table\Table;
 use \InvalidArgumentException;
 use com\model\db\table\Utente;
+use com\model\db\enum\StatoLog;
 use com\model\db\wrapper\WStaff;
 use com\model\db\wrapper\WToken;
 use com\model\db\wrapper\WUtente;
@@ -62,8 +63,8 @@ class Utente extends Table
 
         $conn = parent::getConnection();
 
-        $stmtInserimentoUtente = $conn->prepare("INSERT INTO utente (tipologiaUtente, nome, cognome, telefono, username, hash) VALUES (:tipologiaUtente, :nome, :cognome, :telefono, :username, :hash)");
-        $stmtInserimentoUtente->bindValue(":tipologiaUtente", $utente->getTipologiaUtente()->toString(), PDO::PARAM_STR);
+        $stmtInserimentoUtente = $conn->prepare("INSERT INTO utente (nome, cognome, telefono, username, hash) VALUES (:nome, :cognome, :telefono, :username, :hash)");
+        //$stmtInserimentoUtente->bindValue(":tipologiaUtente", $utente->getTipologiaUtente()->toString(), PDO::PARAM_STR);
         $stmtInserimentoUtente->bindValue(":nome", $utente->getNome(), PDO::PARAM_STR);
         $stmtInserimentoUtente->bindValue(":cognome", $utente->getCognome(), PDO::PARAM_STR);
         $stmtInserimentoUtente->bindValue(":telefono", $utente->getTelefono(), PDO::PARAM_STR);
@@ -110,6 +111,7 @@ class Utente extends Table
     public static function login(NetWLogin $login, int $tentativiLogin) : WUtente
     {
         // Prima devo recuperare tutti i dati dell'utente, la password dell'utente.
+        $msgError = "Dati di login non corretti.";
 
         $conn = parent::getConnection();
 
@@ -127,17 +129,23 @@ class Utente extends Table
                 // Controllo della password.
                 if (Hash::getSingleton()->evalutatePassword($login->getPassword(), $riga["hash"])) {
 
-                    //TODO: pulizia tentativi login
+                    //Pulizia tentativi login
+                    $stmtUpdate = $conn->prepare("UPDATE utente SET tentativiLogin = 0 WHERE username = :username");
+                    $stmtUpdate->bindValue(":username", $login->getUsername(), PDO::PARAM_STR);
+                    $stmtUpdate->execute();
 
                     // Pulisco i campi di login.
                     $login->clear();
 
                     return WUtente::of($riga);
-                }else{
-                    //TODO: incremento tentativi login
                 }
             }else{
-                //TODO:Devo aggiornare i log
+                $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
+                $stmtInserimentoLog->bindValue(":livello", StatoLog::of(StatoLog::WARNING)->toString(), PDO::PARAM_STR);
+                $stmtInserimentoLog->bindValue(":messaggio", "Troppi tentativi per ".$login->getUsername(), PDO::PARAM_STR);
+                $stmtInserimentoLog->execute();
+                
+                $msgError = "Troppi tentativi di login: contatta un amministratore";
             }
         }
 
@@ -152,7 +160,7 @@ class Utente extends Table
         // Pulisco i campi di login.
         $login->clear();
 
-        throw new AuthorizationException("Dati di login non corretti.");
+        throw new AuthorizationException($msgError);
     }
 
     /**
