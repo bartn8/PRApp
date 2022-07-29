@@ -108,6 +108,7 @@ CREATE TABLE tipoPrevendita (
   prezzo float NOT NULL,
   aperturaPrevendite timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   chiusuraPrevendite timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  quantitaMax int NOT NULL DEFAULT 0,
   idModificatore int,
   timestampUltimaModifica timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -440,6 +441,9 @@ FOR EACH ROW BEGIN
     ELSEIF (NEW.prezzo < 0) THEN
 		SIGNAL SQLSTATE '70003'
         SET MESSAGE_TEXT = 'Prezzo negativo';	
+    ELSEIF (NEW.quantitaMax < 0) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'Quantita negativa';	
     END IF;
 END$$
 
@@ -452,6 +456,7 @@ Verifica l'aggiornamento di un tipo prevendita:
   2)Questo intervallo deve essere in una data presente o futura.
   3)Questo intervallo NON deve superare la data dell'evento.
   4)Se sono state vendute prevendite allora non posso modificarne il prezzo.
+  5)Se modifico la quantità verifico che ho venduto meno prevendite.
 */
 
 DELIMITER $$
@@ -465,7 +470,7 @@ FOR EACH ROW BEGIN
 
 	SELECT inizio INTO inizioEvento FROM evento WHERE id = OLD.idEvento;
 	SELECT stato INTO statoEvento FROM evento WHERE id = OLD.idEvento;
-	SELECT COUNT(*) INTO conteggio FROM prevendita WHERE idTipoPrevendita = OLD.id;
+	SELECT COUNT(*) INTO conteggio FROM prevendita WHERE idTipoPrevendita = OLD.id AND stato = 'VALIDA';
 
 	IF (NEW.aperturaPrevendite > NEW.chiusuraPrevendite) THEN
 		SIGNAL SQLSTATE '70000'
@@ -488,6 +493,12 @@ FOR EACH ROW BEGIN
     ELSEIF (OLD.id <> NEW.id) THEN
 		SIGNAL SQLSTATE '70003'
         SET MESSAGE_TEXT = 'ID non modificabile, ricrea tipo prevendita';
+    ELSEIF (NEW.quantitaMax < 0) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'Quantita negativa';	
+    ELSEIF (NEW.quantitaMax <> OLD.quantitaMax AND NEW.quantitaMax < conteggio AND NEW.quantitaMax > 0) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'Hai sforato la quantita di vendute';	
     END IF;
 END$$
 
@@ -528,6 +539,7 @@ Verifica che la prevendita appena inserita sia effettivamente vendibile, cioè:
   2)La data della vendita deve rientrare nel periodo di vendita.
   3)L'evento deve essere VALIDO.
   4)La prevendita deve essere VALIDA.
+  5)Sotto quantita max
 */
 
 DELIMITER $$
@@ -536,19 +548,22 @@ CREATE TRIGGER verificaPrevendita
 BEFORE INSERT ON prevendita
 FOR EACH ROW BEGIN
 	DECLARE apertura timestamp;
-    DECLARE chiusura timestamp;
-    DECLARE statoEvento varchar(20);
+  DECLARE chiusura timestamp;
+	DECLARE qMax int;
+  DECLARE statoEvento varchar(20);
 	DECLARE verificaConteggio1 int;
 	DECLARE verificaConteggio2 int;
-    DECLARE ora timestamp;
+	DECLARE verificaConteggio3 int;
+  DECLARE ora timestamp;
         
 	SELECT COUNT(t.id) INTO verificaConteggio1 FROM tipoPrevendita t WHERE t.idEvento = NEW.idEvento AND t.id = NEW.idTipoPrevendita;
 	SELECT COUNT(e.id) INTO verificaConteggio2 FROM evento e WHERE e.id = NEW.idEvento;
+	SELECT COUNT(p.id) INTO verificaConteggio3 FROM prevendita p WHERE p.idTipoPrevendita = NEW.idTipoPrevendita AND p.stato = 'VALIDA';
 	
-  	SELECT aperturaPrevendite, chiusuraPrevendite INTO apertura, chiusura FROM tipoPrevendita WHERE id = NEW.idTipoPrevendita;
-    SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
+  SELECT aperturaPrevendite, chiusuraPrevendite, quantitaMax INTO apertura, chiusura, qMax FROM tipoPrevendita WHERE id = NEW.idTipoPrevendita;
+  SELECT stato INTO statoEvento FROM evento WHERE id = NEW.idEvento;
     
-    SET ora := CURRENT_TIMESTAMP;
+  SET ora := CURRENT_TIMESTAMP;
     
 	IF (verificaConteggio1 <> 1 OR verificaConteggio2 <> 1) THEN
 		SIGNAL SQLSTATE '70001'
@@ -556,12 +571,15 @@ FOR EACH ROW BEGIN
 	ELSEIF (ora < apertura OR ora > chiusura) THEN
 		SIGNAL SQLSTATE '70000'
         SET MESSAGE_TEXT = 'Data non valida: non puoi vendere in questo momento!';
-    ELSEIF (statoEvento <> 'VALIDO') THEN
+  ELSEIF (statoEvento <> 'VALIDO') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'Evento non valido!';    
 	ELSEIF (NEW.stato <> 'VALIDA') THEN
 		SIGNAL SQLSTATE '70002'
         SET MESSAGE_TEXT = 'La prevendita deve essere valida!';    
+  ELSEIF ((verificaConteggio3 + 1) > qMax AND qMax > 0) THEN
+		SIGNAL SQLSTATE '70003'
+        SET MESSAGE_TEXT = 'Hai raggiunto la soglia massima di prevendite.';    
     END IF;
 END$$
 
