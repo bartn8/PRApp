@@ -101,33 +101,43 @@ class PR extends Table
      *
      * @param UpdateNetWPrevendita $prevendita prevendita già provvista delle modifiche.
      * @param int $idPR
+     * @param bool $isAmministratore
      * @throws PDOException problemi del database (errore di connessione, errore nel database)
      * @throws AuthorizationException prevendita non del pr
      * @throws InsertUpdateException la prevendita non è valida per la modifica
      * 
      * @return WPrevendita prevendita modificata.
      */
-    public static function modificaPrevendita(UpdateNetWPrevendita $prevendita, int $idPR) : WPrevendita
+    public static function modificaPrevendita(UpdateNetWPrevendita $prevendita, int $idPR, bool $isAmministratore) : WPrevendita
     {
         $conn = parent::getConnection(true);
 
         //Devo fare un check per vedere il pr è abilitato per la prevendita.
-        $stmtVerifica = $conn->prepare("SELECT idPR FROM prevendita WHERE id = :idPrevendita");
-        $stmtVerifica->bindValue(":idPrevendita", $prevendita->getId(), PDO::PARAM_INT);
-        $stmtVerifica->execute();
+        //Devo fare il check se non ho chiuso la finestra di vendita.
+        //Almeno che non sia amministratore
+        if(!$isAmministratore){     
+             
+            $stmtVerifica = $conn->prepare("SELECT p.idPR, (CURRENT_TIMESTAMP <= t.chiusuraPrevendite) AS modificabile FROM prevendita p, tipoPrevendita t WHERE p.idTipoPrevendita = t.id AND p.id = :idPrevendita");
+            $stmtVerifica->bindValue(":idPrevendita", $prevendita->getId(), PDO::PARAM_INT);
+            $stmtVerifica->execute();
 
+            if ($stmtVerifica->rowCount() > 0) {
+                $riga = $stmtVerifica->fetch(PDO::FETCH_ASSOC);
+                $idPRDB = $riga["idPR"];
+                $modificabile = $riga["modificabile"];
 
+                if($idPR != $idPRDB){
+                    throw new AuthorizationException("Non puoi modificare una prevendita non tua.");
+                }
 
-        if ($stmtVerifica->rowCount() > 0) {
-            $idPRDB = $stmtVerifica->fetch(PDO::FETCH_ASSOC)["idPR"];
-
-            if($idPR != $idPRDB){
-                throw new AuthorizationException("Non puoi modificare una prevendita non tua.");
+                if(!$modificabile){
+                    throw new AuthorizationException("Periodo di vendita chiuso: solo l'amministratore può modificare");
+                }
+            }else{
+                throw new NotAvailableOperationException("Non puoi modificare una prevendita non tua.");
             }
-        }else{
-            throw new NotAvailableOperationException("Non puoi modificare una prevendita non tua.");
         }
-
+        
         // posso inserire i nuovi dati.
         $stmtModifica = $conn->prepare("UPDATE prevendita SET stato = :stato, timestampUltimaModifica = CURRENT_TIMESTAMP WHERE id = :idPrevendita");
         $stmtModifica->bindValue(":stato", $prevendita->getStato()->toString(), PDO::PARAM_STR);

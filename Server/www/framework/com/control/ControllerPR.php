@@ -174,7 +174,7 @@ class ControllerPR extends Controller
             throw new InvalidArgumentException("Parametri non validi.");
         }
 
-        parent::getPrinter()->addResult(PR::modificaPrevendita($prevendita, $utente->getId()));
+        parent::getPrinter()->addResult(PR::modificaPrevendita($prevendita, $utente->getId(), $ruoliMembro->isAmministratore()));
     }
 
     private function cmd_restituisci_prevedite(Command $command, Context $context)
