@@ -253,7 +253,7 @@ var creaPrevenditaButtonClick = function () {
     //Prima controllo che si siano inseriti nome e cognome diversi:
     //Se uguali invio un messaggio di conferma:
     if (nomeCliente == nomeClientePrecedente && cognomeCliente == cognomeClientePrecedente) {
-        var conferma = confirm("La prevendita in creazione ha gli stessi dati di quella precedente (" + nomeCliente + " " + cognomeCliente + ") Continuo?");
+        let conferma = confirm("La prevendita in creazione ha gli stessi dati di quella precedente (" + nomeCliente + " " + cognomeCliente + ") Continuo?");
 
         //Se l'utente preme annulla non faccio la prevendita.
         if (!conferma) {
@@ -261,6 +261,14 @@ var creaPrevenditaButtonClick = function () {
             return;
         }
     }
+
+    let conferma = confirm("Confermare "+ nomeCliente + " " + cognomeCliente+" ?");
+
+    if(!conferma){
+        alert("PREVENDITA ANNULLATA");
+        return;
+    }
+
     ajax.aggiungiPrevendita(nomeCliente, cognomeCliente, idTipoPrevendita, codice, function (response) {
         //ho aggiunto la prevendita, pulisco i campi.
         uiUtils.pulisciCampi();
