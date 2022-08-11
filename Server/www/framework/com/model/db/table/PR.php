@@ -27,6 +27,7 @@ use com\model\Context;
 use com\model\db\table\PR;
 use com\model\db\table\Table;
 use InvalidArgumentException;
+use com\model\db\enum\StatoLog;
 use com\model\net\wrapper\NetWId;
 use com\model\db\wrapper\WCliente;
 use com\model\db\wrapper\WPrevendita;
@@ -89,6 +90,12 @@ class PR extends Table
         }
 
         $id = (int) $conn->lastInsertId();
+
+        //Messaggio di log
+        $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
+        $stmtInserimentoLog->bindValue(":livello", StatoLog::of(StatoLog::INFO)->toString(), PDO::PARAM_STR);
+        $stmtInserimentoLog->bindValue(":messaggio", "Utente ".$idUtente." ha inserito prevendita ".$id, PDO::PARAM_STR);
+        $stmtInserimentoLog->execute();
 
         $conn = NULL;
 
@@ -165,6 +172,12 @@ class PR extends Table
         if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
             $result = WPrevendita::of($riga);
         }
+
+        //Messaggio di log
+        $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
+        $stmtInserimentoLog->bindValue(":livello", StatoLog::of(StatoLog::INFO)->toString(), PDO::PARAM_STR);
+        $stmtInserimentoLog->bindValue(":messaggio", "Utente ".$idPR." (".($isAmministratore ? "AMMINISTRATORE" : "PR").") ha modificato prevendita ".$prevendita->getId(), PDO::PARAM_STR);
+        $stmtInserimentoLog->execute();
 
         $conn = NULL;
 

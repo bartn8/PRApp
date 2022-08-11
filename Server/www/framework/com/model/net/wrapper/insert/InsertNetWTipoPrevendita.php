@@ -200,7 +200,7 @@ class InsertNetWTipoPrevendita implements NetWrapper
      *
      * @return int
      */
-    public function getChiusuraVendite()
+    public function getQuantitaMax()
     {
         return $this->quantitaMax;
     }

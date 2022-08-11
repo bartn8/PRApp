@@ -26,6 +26,7 @@ use PDOException;
 use com\model\Context;
 use com\model\db\table\Table;
 use InvalidArgumentException;
+use com\model\db\enum\StatoLog;
 use com\model\db\table\Cassiere;
 use com\model\db\wrapper\WStaff;
 use com\model\db\wrapper\WEvento;
@@ -114,6 +115,12 @@ class Cassiere extends Table
 
             throw $ex;
         }
+
+        //Messaggio di log
+        $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
+        $stmtInserimentoLog->bindValue(":livello", StatoLog::of(StatoLog::INFO)->toString(), PDO::PARAM_STR);
+        $stmtInserimentoLog->bindValue(":messaggio", "Utente ".$utente." ha timbrato prevendita ".$entrata->getIdPrevendita(), PDO::PARAM_STR);
+        $stmtInserimentoLog->execute();
 
         $conn = NULL;
 
