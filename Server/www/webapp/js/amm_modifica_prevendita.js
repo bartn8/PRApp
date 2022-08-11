@@ -81,7 +81,7 @@ if (ajax.isStorageEnabled()) {
             });
         }else{
             //Redirect automatico alla pagina di login
-            passRedirect("login.html", "pr_modifica_prevendita.html");
+            passRedirect("login.html", "amm_modifica_prevendita.html");
         }
 
     });
