@@ -145,8 +145,15 @@ EOT;
     public static function getTipiPrevendita(int $evento) : array
     {
         $conn = parent::getConnection();
+        
+        $query = <<<EOT
+        SELECT t.id, t.idEvento, t.nome, t.descrizione, t.prezzo, t.aperturaPrevendite, t.chiusuraPrevendite, t.quantitaMax, t.idModificatore, t.timestampUltimaModifica, COALESCE(q.quantita, 0) AS quantita
+        FROM tipoPrevendita t
+        LEFT JOIN (SELECT idTipoPrevendita, COUNT(id) AS quantita FROM prevendita WHERE stato = 'VALIDA' GROUP BY idTipoPrevendita) q ON q.idTipoPrevendita = t.id
+        WHERE idEvento = :idEvento 
+EOT;
 
-        $stmtSelezione = $conn->prepare("SELECT id, idEvento, nome, descrizione, prezzo, aperturaPrevendite, chiusuraPrevendite, idModificatore, timestampUltimaModifica FROM tipoPrevendita WHERE idEvento = :idEvento");
+        $stmtSelezione = $conn->prepare($query);
         $stmtSelezione->bindValue(":idEvento", $evento, PDO::PARAM_INT);
         $stmtSelezione->execute();
 

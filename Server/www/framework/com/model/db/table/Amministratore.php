@@ -181,7 +181,7 @@ class Amministratore extends Table
         // Devo essere sincronizzato con il database riguardo il fuso orario: aperturaVendite e chiusuraVendite sono influenzate dal fuso orario.
         $conn = parent::getConnection(TRUE);
 
-        $stmtInserimento = $conn->prepare("INSERT INTO tipoPrevendita (idEvento, nome, descrizione, prezzo, aperturaPrevendite, chiusuraPrevendite, idModificatore) VALUES (:idEvento, :nome, :descrizione, :prezzo, :aperturaPrevendite, :chiusuraPrevendite, :idModificatore)");
+        $stmtInserimento = $conn->prepare("INSERT INTO tipoPrevendita (idEvento, nome, descrizione, prezzo, aperturaPrevendite, chiusuraPrevendite, quantitaMax, idModificatore) VALUES (:idEvento, :nome, :descrizione, :prezzo, :aperturaPrevendite, :chiusuraPrevendite, :qtMax, :idModificatore)");
         $stmtInserimento->bindValue(":idEvento", $idEvento, PDO::PARAM_INT);
         $stmtInserimento->bindValue(":nome", $tipoPrevendita->getNome(), PDO::PARAM_STR);
         $stmtInserimento->bindValue(":descrizione", $tipoPrevendita->getDescrizione(), PDO::PARAM_STR);
@@ -192,6 +192,7 @@ class Amministratore extends Table
         $stmtInserimento->bindValue(":chiusuraPrevendite", $tipoPrevendita->getChiusuraVendite()
             ->getDateTimeImmutable()
             ->format(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP), PDO::PARAM_STR);
+        $stmtInserimento->bindValue(":qtMax", $tipoPrevendita->getQuantitaMax(), PDO::PARAM_INT);    
         $stmtInserimento->bindValue(":idModificatore", $idUtente);
 
         try {
@@ -246,7 +247,7 @@ class Amministratore extends Table
             throw new NotAvailableOperationException("Non puoi modificare un tipo prevendita di un evento non selezionato.");
         }
 
-        $stmtModifica = $conn->prepare("UPDATE tipoPrevendita SET nome = :nome, descrizione = :descrizione, prezzo = :prezzo, aperturaPrevendite = :aperturaPrevendite, chiusuraPrevendite = :chiusuraPrevendite, idModificatore = :idModificatore, timestampUltimaModifica = CURRENT_TIMESTAMP WHERE id = :id");
+        $stmtModifica = $conn->prepare("UPDATE tipoPrevendita SET nome = :nome, descrizione = :descrizione, prezzo = :prezzo, aperturaPrevendite = :aperturaPrevendite, chiusuraPrevendite = :chiusuraPrevendite, quantitaMax = :qtMax, idModificatore = :idModificatore, timestampUltimaModifica = CURRENT_TIMESTAMP WHERE id = :id");
         $stmtModifica->bindValue(":id", $tipoPrevendita->getId(), PDO::PARAM_INT);
         $stmtModifica->bindValue(":nome", $tipoPrevendita->getNome(), PDO::PARAM_STR);
         $stmtModifica->bindValue(":descrizione", $tipoPrevendita->getDescrizione(), PDO::PARAM_STR);
@@ -257,6 +258,7 @@ class Amministratore extends Table
         $stmtModifica->bindValue(":chiusuraPrevendite", $tipoPrevendita->getChiusuraPrevendite()
             ->getDateTimeImmutable()
             ->format(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP), PDO::PARAM_STR);
+        $stmtModifica->bindValue(":qtMax", $tipoPrevendita->getQuantitaMax(), PDO::PARAM_INT);
         $stmtModifica->bindValue(":idModificatore", $idUtente);
 
         try {
@@ -327,7 +329,7 @@ class Amministratore extends Table
         // Fatto un trigger per evitare
 
         //Ricavo i dati del tipo prevendita.
-        $stmtSelezione = $conn->prepare("SELECT id, idEvento, nome, descrizione, prezzo, aperturaPrevendite, chiusuraPrevendite, idModificatore, timestampUltimaModifica FROM tipoPrevendita WHERE id = :idTipoPrevendita");
+        $stmtSelezione = $conn->prepare("SELECT id, idEvento, nome, descrizione, prezzo, aperturaPrevendite, chiusuraPrevendite, quantitaMax, idModificatore, timestampUltimaModifica FROM tipoPrevendita WHERE id = :idTipoPrevendita");
         $stmtSelezione->bindValue(":idTipoPrevendita", $idTipoPrevendita, PDO::PARAM_INT);
         $stmtSelezione->execute();
 

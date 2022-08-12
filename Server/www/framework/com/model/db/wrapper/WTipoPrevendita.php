@@ -72,13 +72,20 @@ class WTipoPrevendita implements DatabaseWrapper
         if (! array_key_exists("timestampUltimaModifica", $array))
             throw new InvalidArgumentException("Dato timestampUltimaModifica non trovato.");
 
+        if (! array_key_exists("quantitaMax", $array))
+            $array["quantitaMax"] = 0;
+        
+        if (! array_key_exists("quantita", $array))
+            $array["quantita"] = -1;
+        
+
         $aperturaPrevendite = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["aperturaPrevendite"]));
         $chiusuraPrevendite = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["chiusuraPrevendite"]));
         $timestampUltimaModifica = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $array["timestampUltimaModifica"]));
         $idModificatore = !is_null($array["idModificatore"]) ? (int) $array["idModificatore"] : NULL;
 
-
-        return self::make((int) $array["id"], (int) $array["idEvento"], $array["nome"], $array["descrizione"], (float) $array["prezzo"], $aperturaPrevendite, $chiusuraPrevendite, $idModificatore, $timestampUltimaModifica);
+        return self::make((int) $array["id"], (int) $array["idEvento"], $array["nome"], $array["descrizione"], (float) $array["prezzo"],
+         $aperturaPrevendite, $chiusuraPrevendite, (int) $array["quantita"], (int) $array["quantitaMax"], $idModificatore, $timestampUltimaModifica);
     }
 
     /**
@@ -94,12 +101,15 @@ class WTipoPrevendita implements DatabaseWrapper
      * @throws InvalidArgumentException
      * @return WTipoPrevendita
      */
-    public static function make($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $idModificatore, $timestampUltimaModifica)
+    public static function make($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $quantita, $quantitaMax, $idModificatore, $timestampUltimaModifica)
     {
         if (is_null($id) || is_null($idEvento) || is_null($nome) || is_null($prezzo) || is_null($aperturaPrevendite) || is_null($chiusuraPrevendite) || is_null($timestampUltimaModifica))
             throw new InvalidArgumentException("Uno o più parametri nulli");
 
-        if (! is_int($id) || ! is_int($idEvento) || ! is_string($nome) || ! is_string($descrizione) || ! is_float($prezzo) || ! ($aperturaPrevendite instanceof DateTimeImmutableAdapterJSON) || ! ($chiusuraPrevendite instanceof DateTimeImmutableAdapterJSON) || ! ($timestampUltimaModifica instanceof DateTimeImmutableAdapterJSON) || (! is_null($idModificatore) && ! is_int($idModificatore)))
+        if (! is_int($id) || ! is_int($idEvento) || ! is_string($nome) || ! is_string($descrizione) || ! is_float($prezzo)
+         || ! ($aperturaPrevendite instanceof DateTimeImmutableAdapterJSON) || ! ($chiusuraPrevendite instanceof DateTimeImmutableAdapterJSON)
+          || ! ($timestampUltimaModifica instanceof DateTimeImmutableAdapterJSON) || (! is_null($idModificatore) && ! is_int($idModificatore))
+           || !is_int($quantita) || !is_int($quantitaMax))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
 
         if ($id <= 0)
@@ -122,15 +132,21 @@ class WTipoPrevendita implements DatabaseWrapper
         if ($aperturaPrevendite->getDateTimeImmutable() >= $chiusuraPrevendite->getDateTimeImmutable())
             throw new InvalidArgumentException("L'apertura e la chisura delle prevendite non rispettanon i vincoli di tempo.");
 
+        //if ($quantita < 0)
+        //    throw new InvalidArgumentException("Quantita non valido");
+
+        if ($quantitaMax < 0)
+            throw new InvalidArgumentException("Quantita max non valido");
+
         if (is_int($idModificatore) && $idModificatore <= 0)
             throw new InvalidArgumentException("ID Modificatore non valido");
 
-        return new WTipoPrevendita($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $idModificatore, $timestampUltimaModifica);
+        return new WTipoPrevendita($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $quantita, $quantitaMax, $idModificatore, $timestampUltimaModifica);
     }
 
-    public static function makeNoChecks($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $idModificatore, $timestampUltimaModifica)
+    public static function makeNoChecks($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $quantita, $quantitaMax, $idModificatore, $timestampUltimaModifica)
     {
-        return new WTipoPrevendita($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $idModificatore, $timestampUltimaModifica);
+        return new WTipoPrevendita($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $quantita, $quantitaMax, $idModificatore, $timestampUltimaModifica);
     }
 
     /**
@@ -185,6 +201,21 @@ class WTipoPrevendita implements DatabaseWrapper
     private $chiusuraPrevendite;
 
     /**
+     * Quantita di prevendite vendute
+     * Se non specificato -1 (PATCH)
+     *
+     * @var int
+     */
+    private $quantita;
+    
+    /**
+     * Quantita di prevendite vendibili
+     *
+     * @var int
+     */
+    private $quantitaMax;
+
+    /**
      * Id del modificatore.
      *
      * @var int|NULL
@@ -198,7 +229,7 @@ class WTipoPrevendita implements DatabaseWrapper
      */
     private $timestampUltimaModifica;
 
-    private function __construct($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $idModificatore, $timestampUltimaModifica)
+    private function __construct($id, $idEvento, $nome, $descrizione, $prezzo, $aperturaPrevendite, $chiusuraPrevendite, $quantita, $quantitaMax, $idModificatore, $timestampUltimaModifica)
     {
         $this->id = $id;
         $this->idEvento = $idEvento;
@@ -207,6 +238,8 @@ class WTipoPrevendita implements DatabaseWrapper
         $this->prezzo = $prezzo;
         $this->aperturaPrevendite = $aperturaPrevendite;
         $this->chiusuraPrevendite = $chiusuraPrevendite;
+        $this->quantita = $quantita;
+        $this->quantitaMax = $quantitaMax;
         $this->idModificatore = $idModificatore;
         $this->timestampUltimaModifica = $timestampUltimaModifica;
     }
@@ -306,6 +339,24 @@ class WTipoPrevendita implements DatabaseWrapper
     public function getTimestampUltimaModifica()
     {
         return $this->timestampUltimaModifica;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getQuantita()
+    {
+        return $this->quantita;
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function getQuantitaMax()
+    {
+        return $this->quantitaMax;
     }
 
 }

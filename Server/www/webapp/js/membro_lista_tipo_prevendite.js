@@ -27,10 +27,11 @@ class UiUtils extends GeneralUiUtils {
 
         for (let index = 0; index < listaTipiPrevendite.length; index++) {
             const tipoPrevendita = listaTipiPrevendite[index];
-            var aperturaPrevendite = new Date(tipoPrevendita.aperturaPrevendite).toLocaleString();
-            var chiusuraPrevendite = new Date(tipoPrevendita.chiusuraPrevendite).toLocaleString();
+            let aperturaPrevendite = new Date(tipoPrevendita.aperturaPrevendite).toLocaleString();
+            let chiusuraPrevendite = new Date(tipoPrevendita.chiusuraPrevendite).toLocaleString();
+            let qtVend = tipoPrevendita.quantitaMax == 0 ? "infinita" : (tipoPrevendita.quantitaMax - tipoPrevendita.quantita);
             var $elemento = $("<a href=\"#\" class=\"list-group-item list-group-item-action\">" + tipoPrevendita.nome + ", " +
-             tipoPrevendita.descrizione + ", Prezzo: " + tipoPrevendita.prezzo + "€, Apertura: " + aperturaPrevendite + ", Chiusura: " + chiusuraPrevendite +  "</>");
+             tipoPrevendita.descrizione + ", Prezzo: " + tipoPrevendita.prezzo + "€, Apertura: " + aperturaPrevendite + ", Chiusura: " + chiusuraPrevendite + ", Quantità vendibile: " + qtVend + "</>");
             $lista.append($elemento);
         }
     }

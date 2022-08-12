@@ -207,7 +207,7 @@ class InsertNetWTipoPrevendita implements NetWrapper
 
     public function getWTipoPrevendita($id, $idEvento, $idModificatore, $timestampUltimaModifica): WTipoPrevendita
     {
-        return WTipoPrevendita::make($id, $idEvento, self::getNome(), self::getDescrizione(), self::getPrezzo(), self::getAperturaVendite(), self::getChiusuraVendite(), $idModificatore, $timestampUltimaModifica);
+        return WTipoPrevendita::make($id, $idEvento, self::getNome(), self::getDescrizione(), self::getPrezzo(), self::getAperturaVendite(), self::getChiusuraVendite(), 0, self::getQuantitaMax(),  $idModificatore, $timestampUltimaModifica);
     }
 }
 

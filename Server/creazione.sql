@@ -32,7 +32,7 @@ CREATE TABLE tabellaLog (
   seq int NOT NULL AUTO_INCREMENT,
   livello ENUM('INFO', 'WARNING', 'IMPORTANT') NOT NULL DEFAULT 'INFO',
   timestampInserimento timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  messaggio varchar(50) NOT NULL,
+  messaggio varchar(150) NOT NULL,
   PRIMARY KEY(seq)
 );
 
