@@ -31,11 +31,12 @@ class UiUtils extends GeneralUiUtils {
 
             var aperturaPrevendite = new Date(tipoPrevendita.aperturaPrevendite);
             var chiusuraPrevendite = new Date(tipoPrevendita.chiusuraPrevendite);
+            var qtVend = tipoPrevendita.quantitaMax == 0 ? "infinita" : (tipoPrevendita.quantitaMax - tipoPrevendita.quantita);
             
-            if(aperturaPrevendite <= ora && ora <= chiusuraPrevendite){
+            if(aperturaPrevendite <= ora && ora <= chiusuraPrevendite &&  (qtVend === "infinita" || qtVend > 0)){
                 $select.append($('<option>', {
                     value: tipoPrevendita.id,
-                    text: tipoPrevendita.nome + "(Da " + aperturaPrevendite.toLocaleString() + " a " + chiusuraPrevendite.toLocaleString()
+                    text: tipoPrevendita.nome + " (Da " + aperturaPrevendite.toLocaleString() + " a " + chiusuraPrevendite.toLocaleString() + ") (Vendibili: " + qtVend + ")"
                 }));
             }
         }
