@@ -36,7 +36,7 @@ class UiUtils extends GeneralUiUtils {
             if(aperturaPrevendite <= ora && ora <= chiusuraPrevendite &&  (qtVend === "infinita" || qtVend > 0)){
                 $select.append($('<option>', {
                     value: tipoPrevendita.id,
-                    text: tipoPrevendita.nome + " (Da " + aperturaPrevendite.toLocaleString() + " a " + chiusuraPrevendite.toLocaleString() + ") (Vendibili: " + qtVend + ")"
+                    text: tipoPrevendita.nome + " (Fino a: " + chiusuraPrevendite.toLocaleString() + ") (Vendibili: " + qtVend + ")"
                 }));
             }
         }
