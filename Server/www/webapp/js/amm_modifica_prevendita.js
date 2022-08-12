@@ -35,7 +35,7 @@ class UiUtils extends GeneralUiUtils {
                 $elementoButton.click(function(){
                     const $this = $(this);
                     if(confirm("Vuoi davvero eliminare la prevendita "+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente+"?")){
-                        ajax.modificaPrevendita(prevendita.id, 1, function(response){
+                        ajax.modificaPrevenditaAmm(prevendita.id, 1, function(response){
                             $this.addClass("disabled");
                             uiUtils.impostaScritta("Prevendita "+prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente+ " annullata.");
                         }, function(response){

@@ -55,6 +55,7 @@ class Argument
         415 => array("pr" => "com\\model\\net\\wrapper\\NetWId"),
         416 => array("cassiere" => "com\\model\\net\\wrapper\\NetWId"),
         417 => array("membro" => "com\\model\\net\\wrapper\\NetWId"),
+        418 => array("prevendita" => "com\\model\\net\\wrapper\\update\\UpdateNetWPrevendita"),
     );
 
     public static function of($command, $arg)

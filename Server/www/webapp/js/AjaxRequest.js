@@ -408,4 +408,11 @@ class AjaxRequest {
         this.generalRequest(true, true, true, 416, [{"name":"cassiere", "value":{"id": parseInt(myIdCassiere)}}], onSuccess, onError);
     }
 
+    modificaPrevenditaAmm(myIdPrevendita, myStato, onSuccess, onError){
+        this.generalRequest(true, undefined, undefined, 418, [{
+            name: "prevendita",
+            value: {id: parseInt(myIdPrevendita), stato: parseInt(myStato)}
+        }], onSuccess, onError);
+    }
+
 }

@@ -32,6 +32,7 @@ use com\control\ControllerAmministratore;
 use com\model\db\exception\AuthorizationException;
 use com\model\net\wrapper\insert\InsertNetWEvento;
 use com\model\net\wrapper\update\UpdateNetWEvento;
+use com\model\net\wrapper\update\UpdateNetWPrevendita;
 use com\model\net\wrapper\update\UpdateNetWRuoliMembro;
 use com\model\db\exception\NotAvailableOperationException;
 use com\model\net\wrapper\insert\InsertNetWTipoPrevendita;
@@ -74,6 +75,8 @@ class ControllerAmministratore extends Controller
     public const CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO = 416;
 
     public const CMD_RESTITUISCI_RUOLI_MEMBRO = 417;
+
+    public const CMD_MODIFICA_PREVENDITA = 418;
 
     public function __construct($printer, $retriver)
     {
@@ -143,6 +146,10 @@ class ControllerAmministratore extends Controller
                 $this->cmd_restituisci_ruoli_membro($command, $context);
                 break;
 
+            case ControllerAmministratore::CMD_MODIFICA_PREVENDITA:
+                $this->cmd_modifica_prevendita($command, $context);
+                break;
+
             default:
                 break;
         }
@@ -161,7 +168,8 @@ class ControllerAmministratore extends Controller
             case ControllerAmministratore::CMD_MODIFICA_CODICE_ACCESSO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_PR_EVENTO:
             case ControllerAmministratore::CMD_RESTITUISCI_STATISTICHE_CASSIERE_EVENTO:
-            case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_MEMBRO:                
+            case ControllerAmministratore::CMD_RESTITUISCI_RUOLI_MEMBRO:   
+            case ControllerAmministratore::CMD_MODIFICA_PREVENDITA:             
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
                 
@@ -635,6 +643,35 @@ class ControllerAmministratore extends Controller
         }  
         
         parent::getPrinter()->addResult(Amministratore::getRuoli($membro->getId(), $staffScelto->getId()));
+    }
+
+    private function cmd_modifica_prevendita(Command $command, Context $context)
+    {
+        if(!array_key_exists("prevendita", $command->getArgs())) {
+            throw new InvalidArgumentException("Argomenti non validi");
+        }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isLogged()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+
+        //Controllo i ruoli dell'utente.
+        $utente = $context->getUserSession()->getUtente();
+        $eventoScelto = $context->getUserSession()->getEventoScelto();
+        $ruoliMembro = $context->getUserSession()->getRuoliMembro();
+
+        if(! $ruoliMembro->isAmministratore()){
+            throw new AuthorizationException("L'utente non è Amministratore dello staff.");
+        }  
+
+        $prevendita = $command->getArgs()['prevendita']->getValue();
+
+        if (! ($prevendita instanceof UpdateNetWPrevendita)){
+            throw new InvalidArgumentException("Parametri non validi.");
+        }
+
+        parent::getPrinter()->addResult(Amministratore::modificaPrevendita($prevendita, $utente->getId(), $eventoScelto->getId()));
     }
 
 }

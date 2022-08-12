@@ -72,7 +72,7 @@ class ControllerPR extends Controller
                 break;
             
             case ControllerPR::CMD_MODIFICA_PREVENDITA:
-                $this->cmd_modifica_prevendita($command, $context);
+                //$this->cmd_modifica_prevendita($command, $context);
                 break;
             
             case ControllerPR::CMD_RESTITUISCI_PREVENDITE:
@@ -101,7 +101,7 @@ class ControllerPR extends Controller
         
         switch ($command->getCommand()) {
             case ControllerPR::CMD_AGGIUNGI_PREVENDITA:
-            case ControllerPR::CMD_MODIFICA_PREVENDITA:
+            //case ControllerPR::CMD_MODIFICA_PREVENDITA:
             case ControllerPR::CMD_RESTITUISCI_PREVENDITE:
             case ControllerPR::CMD_RESTITUISCI_STATISTICHE_PR_TOTALI:
             case ControllerPR::CMD_RESTITUISCI_STATISTICHE_PR_STAFF:
@@ -174,7 +174,7 @@ class ControllerPR extends Controller
             throw new InvalidArgumentException("Parametri non validi.");
         }
 
-        parent::getPrinter()->addResult(PR::modificaPrevendita($prevendita, $utente->getId(), $ruoliMembro->isAmministratore()));
+        parent::getPrinter()->addResult(PR::modificaPrevendita($prevendita, $utente->getId()));
     }
 
     private function cmd_restituisci_prevedite(Command $command, Context $context)

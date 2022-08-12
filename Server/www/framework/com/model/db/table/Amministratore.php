@@ -25,6 +25,7 @@ use PDO;
 use com\model\Hash;
 use com\model\db\enum\Ruolo;
 use com\model\db\table\Table;
+use com\model\db\enum\StatoLog;
 use com\model\db\wrapper\WEvento;
 use com\model\db\wrapper\WUtente;
 use com\model\db\wrapper\WPrevendita;
@@ -41,6 +42,7 @@ use com\model\net\wrapper\insert\InsertNetWEvento;
 use com\model\net\wrapper\update\UpdateNetWEvento;
 use com\model\db\wrapper\WStatisticheCassiereStaff;
 use com\model\db\wrapper\WStatisticheCassiereEvento;
+use com\model\net\wrapper\update\UpdateNetWPrevendita;
 use com\model\net\wrapper\update\UpdateNetWRuoliMembro;
 use com\model\db\exception\NotAvailableOperationException;
 use com\model\net\wrapper\insert\InsertNetWTipoPrevendita;
@@ -862,6 +864,79 @@ EOT;
 
         return $wrapper;
     }
+
+
+    /**
+     * Modifica una prevendita già creata.
+     * Si possono modificare lo stato e il tipo di prevendita.
+     *
+     * @param UpdateNetWPrevendita $prevendita prevendita già provvista delle modifiche.
+     * @param int $idUtente
+     * @param int $idEvento
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     * @throws AuthorizationException prevendita non del pr
+     * @throws InsertUpdateException la prevendita non è valida per la modifica
+     * 
+     * @return WPrevendita prevendita modificata.
+     */
+    public static function modificaPrevendita(UpdateNetWPrevendita $prevendita, $idUtente, $idEvento) : WPrevendita
+    {
+        $conn = parent::getConnection(true);
+
+        $stmtVerifica = $conn->prepare("SELECT idEvento FROM prevendita where id = :idPrevendita");
+        $stmtVerifica->bindValue(":idPrevendita", $prevendita->getId(), PDO::PARAM_INT);
+        $stmtVerifica->execute();
+
+        if ($stmtVerifica->rowCount() > 0) {
+            $riga = $stmtVerifica->fetch(PDO::FETCH_ASSOC);
+            $idEventoDB = $riga["idEvento"];
+
+            if($idEvento != $idEventoDB){
+                throw new NotAvailableOperationException("Non puoi modificare una prevendita che non è dell'evento selezionato.");
+            }
+        }else{
+            throw new NotAvailableOperationException("La prevendita non esiste.");
+        }        
+        
+        // posso inserire i nuovi dati.
+        $stmtModifica = $conn->prepare("UPDATE prevendita SET stato = :stato, timestampUltimaModifica = CURRENT_TIMESTAMP WHERE id = :idPrevendita");
+        $stmtModifica->bindValue(":stato", $prevendita->getStato()->toString(), PDO::PARAM_STR);
+        $stmtModifica->bindValue(":idPrevendita", $prevendita->getId(), PDO::PARAM_INT);
+
+        try {
+            $stmtModifica->execute();
+        } catch (PDOException $ex) {
+            // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
+            $conn = NULL;
+
+            if ($ex->getCode() == Amministratore::DATI_INCONGRUENTI_CODE || $ex->getCode() == Amministratore::DATA_NON_VALIDA_CODE || $ex->getCode() == Amministratore::STATO_NON_VALIDO_CODE) // Codici di integrità.
+                throw new InsertUpdateException($ex->getMessage());
+
+            throw $ex;
+        }
+
+        //Restituisco la prevendita modificata.
+        $stmtSelezione = $conn->prepare("SELECT id, idEvento, idPR, nomeCliente, cognomeCliente, idTipoPrevendita, codice, stato, timestampUltimaModifica FROM prevendita WHERE id = :idPrevendita");
+        $stmtSelezione->bindValue(":idPrevendita", $prevendita->getId(), PDO::PARAM_INT);
+        $stmtSelezione->execute();
+
+        $result = NULL;
+
+        if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
+            $result = WPrevendita::of($riga);
+        }
+
+        //Messaggio di log
+        $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
+        $stmtInserimentoLog->bindValue(":livello", StatoLog::of(StatoLog::INFO)->toString(), PDO::PARAM_STR);
+        $stmtInserimentoLog->bindValue(":messaggio", "Utente ".$idUtente." (AMMINISTRATORE) ha modificato prevendita ".$prevendita->getId(), PDO::PARAM_STR);
+        $stmtInserimentoLog->execute();
+
+        $conn = NULL;
+
+        return $result;
+    }
+
 
     private function __construct()
     {}
