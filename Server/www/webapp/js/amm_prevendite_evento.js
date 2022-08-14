@@ -22,13 +22,13 @@ class UiUtils extends GeneralUiUtils {
         super();
     }
 
-    popolaLista(listaPrevendite) {
+    popolaLista(listaPrevendite, listaMembri) {
         var $lista = $("#listaPrevendite");
 
         for (let index = 0; index < listaPrevendite.length; index++) {
             const prevendita = listaPrevendite[index];
             var $elementoLi = $("<li class=\"list-group-item "+(prevendita.stato == 0 ? "list-group-item-success" : "list-group-item-danger")+"\"></li>");
-            var $elementoSpan = $("<span>"+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente + " " + prevendita.codice + (prevendita.stato == 1 ? " (ANNULLATA) " : "") + "</span>");
+            var $elementoSpan = $("<span>"+ prevendita.id + " " + prevendita.nomeCliente + " " + prevendita.cognomeCliente + " " + prevendita.codice + (prevendita.stato == 1 ? " (ANNULLATA) " : "") + " (PR: "+listaMembri[prevendita.idPR]+")" + "</span>");
                         
             $elementoLi.append($elementoSpan);
             $lista.append($elementoLi);
@@ -55,11 +55,23 @@ if (ajax.isStorageEnabled()) {
         uiUtils.impostaLoginConMessaggio(ajax.isLogged(), "Prevendite dell'evento", "Effettua il login prima di continuare.");
 
         if (ajax.isLogged() && ajax.isStaffSelected() && ajax.isEventoSelected()) {
-            ajax.restituisciPrevenditeEventoAmm(function(response){
-                uiUtils.popolaLista(response.results);
+            ajax.getMembriStaff(function(response){
+                var listaMembri = {};
+
+                for(let i = 0; i < response.results.length; i++){
+                    let membro = response.results[i];
+                    listaMembri[membro.id] = membro.nome + " " + membro.cognome;
+                }
+
+                ajax.restituisciPrevenditeEventoAmm(function(response){
+                    uiUtils.popolaLista(response.results, listaMembri);
+                }, function(response){
+                    uiUtils.impostaErrore("Impossibile recuperare le prevendite: "+ response.exceptions[0].msg);
+                });
             }, function(response){
-                uiUtils.impostaErrore("Impossibile recuperare le prevendite: "+ response.exceptions[0].msg);
+                uiUtils.impostaErrore("Impossibile recuperare i membri dello staff: "+ response.exceptions[0].msg);
             });
+            
         }else{
             //Redirect automatico alla pagina di login
             passRedirect("login.html", "amm_prevendite_evento.html");
