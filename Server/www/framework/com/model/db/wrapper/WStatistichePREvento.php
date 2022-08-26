@@ -60,8 +60,14 @@ class WStatistichePREvento implements DatabaseWrapper
         
         if (! array_key_exists("ricavo", $array))
             throw new InvalidArgumentException("Dato ricavo non trovato.");
+
+        if (! array_key_exists("entrate", $array))
+            $array["entrate"] = 0;
         
-        return self::make((int) $array["idUtente"], (int) $array["idStaff"], (int) $array["idEvento"], (int) $array["idTipoPrevendita"], $array["nomeTipoPrevendita"],  (int) $array["prevenditeVendute"], (float) $array["ricavo"]);
+        if (! array_key_exists("nonEntrate", $array))
+            $array["nonEntrate"] = 0;
+
+        return self::make((int) $array["idUtente"], (int) $array["idStaff"], (int) $array["idEvento"], (int) $array["idTipoPrevendita"], $array["nomeTipoPrevendita"],  (int) $array["prevenditeVendute"], (float) $array["ricavo"], (int) $array["entrate"], (int) $array["nonEntrate"]);
     }
 
     /**
@@ -77,12 +83,12 @@ class WStatistichePREvento implements DatabaseWrapper
      * @throws InvalidArgumentException
      * @return \com\model\db\wrapper\WStatistichePREvento
      */
-    public static function make($idUtente, $idStaff, $idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo)
+    public static function make($idUtente, $idStaff, $idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo, $entrate, $nonEntrate)
     {
-        if (is_null($idUtente) || is_null($idStaff) || is_null($idEvento) || is_null($idTipoPrevendita) || is_null($nomeTipoPrevendita) || is_null($prevenditeVendute) || is_null($ricavo))
+        if (is_null($idUtente) || is_null($idStaff) || is_null($idEvento) || is_null($idTipoPrevendita) || is_null($nomeTipoPrevendita) || is_null($prevenditeVendute) || is_null($ricavo) || is_null($entrate) || is_null($nonEntrate))
             throw new InvalidArgumentException("Uno o più parametri nulli");
         
-        if (! is_int($idUtente) || ! is_int($idStaff) || ! is_int($idEvento) || ! is_int($idTipoPrevendita) || !is_string($nomeTipoPrevendita) || ! is_int($prevenditeVendute) || ! is_float($ricavo))
+        if (! is_int($idUtente) || ! is_int($idStaff) || ! is_int($idEvento) || ! is_int($idTipoPrevendita) || !is_string($nomeTipoPrevendita) || ! is_int($prevenditeVendute) || ! is_float($ricavo) || !is_int($entrate) || !is_int($nonEntrate))
             throw new InvalidArgumentException("Uno o più parametri non del tipo giusto");
         
         if ($idUtente <= 0)
@@ -102,8 +108,14 @@ class WStatistichePREvento implements DatabaseWrapper
         
         if ($ricavo < 0.0)
             throw new InvalidArgumentException("Ricavo non valido");
+
+        if ($entrate < 0)
+            throw new InvalidArgumentException("entrate non valido");
+    
+        if ($nonEntrate < 0 || $nonEntrate > $prevenditeVendute)
+            throw new InvalidArgumentException("nonEntrate non valido");
         
-        return new WStatistichePREvento($idUtente, $idStaff, $idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo);
+        return new WStatistichePREvento($idUtente, $idStaff, $idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo, $entrate, $nonEntrate);
     }
 
     /**
@@ -160,7 +172,23 @@ class WStatistichePREvento implements DatabaseWrapper
      */
     private $ricavo;
 
-    protected function __construct($idUtente, $idStaff, $idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo)
+    /**
+     * Quantità di prevendite entrate.
+     * (>=0).
+     *
+     * @var int
+     */
+    private $entrate;
+
+    /**
+     * Quantità di prevendite non entrate.
+     * (>=0).
+     *
+     * @var int
+     */
+    private $nonEntrate;
+
+    protected function __construct($idUtente, $idStaff, $idEvento, $idTipoPrevendita, $nomeTipoPrevendita, $prevenditeVendute, $ricavo, $entrate, $nonEntrate)
     {
         $this->idUtente = $idUtente;
         $this->idStaff = $idStaff;
@@ -169,6 +197,8 @@ class WStatistichePREvento implements DatabaseWrapper
         $this->nomeTipoPrevendita = $nomeTipoPrevendita;
         $this->prevenditeVendute = $prevenditeVendute;
         $this->ricavo = $ricavo;
+        $this->entrate = $entrate;
+        $this->nonEntrate = $nonEntrate;
     }
 
     /**
@@ -249,5 +279,24 @@ class WStatistichePREvento implements DatabaseWrapper
     {
         return $this->ricavo;
     }
+
+    /**
+     *
+     * @return number
+     */
+    public function getEntrate()
+    {
+        return $this->entrate;
+    }
+
+    /**
+     *
+     * @return number
+     */
+    public function getNonEntrate()
+    {
+        return $this->nonEntrate;
+    }
+
 }
 

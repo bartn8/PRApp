@@ -732,12 +732,13 @@ EOT;
 
         //Query ALTERVISTA:
         $query = <<<EOT
-        SELECT T.idUtente, T.idStaff, T.idEvento, T.idTipoPrevendita, T.nomeTipoPrevendita, T.prevenditeVendute, T.ricavo 
-        FROM (SELECT pr.idUtente as idUtente, pr.idStaff AS idStaff, prevendita.idEvento AS idEvento, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, COUNT(prevendita.id) AS prevenditeVendute, SUM(tipoPrevendita.prezzo) AS ricavo
+        SELECT T.idUtente, T.idStaff, T.idEvento, T.idTipoPrevendita, T.nomeTipoPrevendita, T.prevenditeVendute, T.ricavo, T.entrate, T.nonEntrate
+        FROM (SELECT pr.idUtente AS idUtente, pr.idStaff AS idStaff, prevendita.idEvento AS idEvento, prevendita.idTipoPrevendita AS idTipoPrevendita, tipoPrevendita.nome AS nomeTipoPrevendita, COUNT(prevendita.id) AS prevenditeVendute, SUM(tipoPrevendita.prezzo) AS ricavo, COUNT(entrata.seq) AS entrate, (COUNT(prevendita.id)-COUNT(entrata.seq)) AS nonEntrate
             FROM pr
             INNER JOIN evento ON evento.idStaff = pr.idStaff
             INNER JOIN prevendita ON prevendita.idEvento = evento.id AND prevendita.idPR = pr.idUtente
             INNER JOIN tipoPrevendita ON tipoPrevendita.idEvento = evento.id AND tipoPrevendita.id = prevendita.idTipoPrevendita
+            LEFT JOIN entrata ON entrata.idPrevendita = prevendita.id
             WHERE prevendita.stato = 'VALIDA'
             GROUP BY pr.idUtente, pr.idStaff, prevendita.idEvento, prevendita.idTipoPrevendita) AS T
         WHERE T.idUtente = :idUtente AND T.idEvento = :idEvento

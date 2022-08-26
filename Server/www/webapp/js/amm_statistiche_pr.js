@@ -42,6 +42,8 @@ class UiUtils extends GeneralUiUtils {
         var $bodyTab = $("#bodyTabella");
         var ricaviTot = 0;
         var ventuteTot = 0;
+        var entrateTot = 0;
+        var nonEntrateTot = 0;
 
         $bodyTab.empty();
 
@@ -49,15 +51,21 @@ class UiUtils extends GeneralUiUtils {
             const statisticaTipoPrevendita = statisticheEvento[index];
             ventuteTot += statisticaTipoPrevendita.prevenditeVendute;
             ricaviTot += statisticaTipoPrevendita.ricavo;
+            entrateTot += statisticaTipoPrevendita.entrate;
+            nonEntrateTot += statisticaTipoPrevendita.nonEntrate;
 
             let $row = $("<tr></tr>");
             let $colNome = $("<td>"+statisticaTipoPrevendita.nomeTipoPrevendita+"</td>");
             let $colQuantita = $("<td>"+statisticaTipoPrevendita.prevenditeVendute+"</td>");
             let $colRicavo = $("<td>"+statisticaTipoPrevendita.ricavo+"</td>");
+            let $colEntrate = $("<td>"+statisticaTipoPrevendita.entrate+"</td>");
+            let $colNonEntrate = $("<td>"+statisticaTipoPrevendita.nonEntrate+"</td>");
             
             $row.append($colNome);
             $row.append($colQuantita);
             $row.append($colRicavo);
+            $row.append($colEntrate);
+            $row.append($colNonEntrate);
 
             $bodyTab.append($row);
         }
@@ -68,6 +76,8 @@ class UiUtils extends GeneralUiUtils {
         $row.append("<th scope=\"row\">Totale</th>");
         $row.append("<td>"+ventuteTot+"</td>");
         $row.append("<td>"+ricaviTot+"</td>");
+        $row.append("<td>"+entrateTot+"</td>");
+        $row.append("<td>"+nonEntrateTot+"</td>");
 
         $bodyTab.append($row);
     }
