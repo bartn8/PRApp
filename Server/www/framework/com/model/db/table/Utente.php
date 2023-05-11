@@ -34,6 +34,7 @@ use com\model\db\enum\StatoLog;
 use com\model\db\wrapper\WStaff;
 use com\model\db\wrapper\WToken;
 use com\model\db\wrapper\WUtente;
+use com\model\net\wrapper\NetWPwd;
 use com\model\net\wrapper\NetWLogin;
 use com\model\net\wrapper\NetWToken;
 use com\model\net\wrapper\NetWStaffAccess;
@@ -126,18 +127,28 @@ class Utente extends Table
         if ($riga !== FALSE) {
             //Controllo tentativi
             if($riga["tentativiLogin"] < $tentativiLogin){
-                // Controllo della password.
-                if (Hash::getSingleton()->evalutatePassword($login->getPassword(), $riga["hash"])) {
+                //Controllo se l'utente è attivo.
+                if($riga["hash"] !== ""){
+                    // Controllo della password.
+                    if (Hash::getSingleton()->evalutatePassword($login->getPassword(), $riga["hash"])) {
 
-                    //Pulizia tentativi login
-                    $stmtUpdate = $conn->prepare("UPDATE utente SET tentativiLogin = 0 WHERE username = :username");
-                    $stmtUpdate->bindValue(":username", $login->getUsername(), PDO::PARAM_STR);
-                    $stmtUpdate->execute();
+                        //Pulizia tentativi login
+                        $stmtUpdate = $conn->prepare("UPDATE utente SET tentativiLogin = 0 WHERE username = :username");
+                        $stmtUpdate->bindValue(":username", $login->getUsername(), PDO::PARAM_STR);
+                        $stmtUpdate->execute();
 
-                    // Pulisco i campi di login.
-                    $login->clear();
+                        // Pulisco i campi di login.
+                        $login->clear();
 
-                    return WUtente::of($riga);
+                        return WUtente::of($riga);
+                    }
+                }else{
+                    $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
+                    $stmtInserimentoLog->bindValue(":livello", StatoLog::of(StatoLog::WARNING)->toString(), PDO::PARAM_STR);
+                    $stmtInserimentoLog->bindValue(":messaggio", "Accesso a account disabilitato: ".$login->getUsername(), PDO::PARAM_STR);
+                    $stmtInserimentoLog->execute();
+                    
+                    $msgError = "Account disabilitato: contatta un amministratore";
                 }
             }else{
                 $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
@@ -159,6 +170,74 @@ class Utente extends Table
 
         // Pulisco i campi di login.
         $login->clear();
+
+        throw new AuthorizationException($msgError);
+    }
+
+    /**
+     * Effettua il cambio password.
+     *
+     * @param int $idUtente
+     * @param NetWPwd $changepwd
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     * @throws AuthorizationException login errato
+     * @return WUtente dati dell'utente.
+     */
+    public static function cambiaPassword(int $idUtente, NetWPwd $changepwd) : WUtente
+    {
+        // Prima devo recuperare tutti i dati dell'utente, la password dell'utente.
+        $msgError = "Dati di login non corretti.";
+
+        $conn = parent::getConnection();
+
+        $stmtSelezione = $conn->prepare("SELECT id, nome, cognome, telefono, hash, tentativiLogin FROM utente WHERE id = :id");
+        $stmtSelezione->bindValue(":id", $idUtente, PDO::PARAM_INT);
+        $stmtSelezione->execute();
+
+        // Prendo la prima riga, dato che username univoco.
+        $riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC);
+
+        // Se riga falsa restituisco falso.
+        if ($riga !== FALSE) {
+            //Controllo se l'utente è attivo.
+            if($riga["hash"] !== ""){
+                // Controllo della password.
+                if (Hash::getSingleton()->evalutatePassword($changepwd->getOldpwd(), $riga["hash"])) {
+
+                    // Creo l'hash relativo alla nuova password.
+                    $newhash = Hash::getSingleton()->hashPassword($changepwd->getNewpwd());
+
+                    //Pulizia tentativi login
+                    $stmtUpdate = $conn->prepare("UPDATE utente SET tentativiLogin = 0, hash = :hash WHERE id = :id");
+                    $stmtUpdate->bindValue(":id", $idUtente, PDO::PARAM_INT);
+                    $stmtUpdate->bindValue(":hash", $newhash, PDO::PARAM_STR);
+                    $stmtUpdate->execute();
+
+                    // Pulisco i campi di login.
+                    $changepwd->clear();
+
+                    $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
+                    $stmtInserimentoLog->bindValue(":livello", StatoLog::of(StatoLog::WARNING)->toString(), PDO::PARAM_STR);
+                    $stmtInserimentoLog->bindValue(":messaggio", "Utente ha cambiato password ID: ".$idUtente, PDO::PARAM_STR);
+                    $stmtInserimentoLog->execute();
+
+                    return WUtente::of($riga);
+                }
+            }else{
+                $stmtInserimentoLog = $conn->prepare("INSERT INTO tabellaLog (livello, messaggio) VALUES (:livello, :messaggio)");
+                $stmtInserimentoLog->bindValue(":livello", StatoLog::of(StatoLog::WARNING)->toString(), PDO::PARAM_STR);
+                $stmtInserimentoLog->bindValue(":messaggio", "Accesso a account disabilitato ID: ".$idUtente, PDO::PARAM_STR);
+                $stmtInserimentoLog->execute();
+                
+                $msgError = "Account disabilitato: contatta un amministratore";
+            }
+        }
+
+        // Mi assicuro di chiudere la connessione. Anche se teoricamente lo scope cancellerebbe comunque i riferimenti.
+        $conn = NULL;
+
+        // Pulisco i campi di login.
+        $changepwd->clear();
 
         throw new AuthorizationException($msgError);
     }

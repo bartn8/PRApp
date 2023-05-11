@@ -36,6 +36,7 @@ class Argument
         5 => array("staff" => "com\\model\\net\\wrapper\\NetWStaffAccess"),
         10 => array("token" => "com\\model\\net\\wrapper\\NetWToken"),
         12 => array("staff" => "com\\model\\net\\wrapper\\NetWId"),
+        14 => array("changepwd" => "com\\model\\net\\wrapper\\NetWPwd"),
         108 => array("evento" => "com\\model\\net\\wrapper\\NetWId"),
         203 => array("prevendita" => "com\\model\\net\\wrapper\\insert\\InsertNetWPrevendita"),
         204 => array("prevendita" => "com\\model\\net\\wrapper\\update\\UpdateNetWPrevendita"),

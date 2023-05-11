@@ -34,6 +34,7 @@ use com\model\db\wrapper\WToken;
 use com\control\ControllerUtente;
 use com\model\db\wrapper\WUtente;
 use com\model\net\wrapper\NetWId;
+use com\model\net\wrapper\NetWPwd;
 use com\model\net\wrapper\NetWLogin;
 use com\model\net\wrapper\NetWToken;
 use com\model\net\wrapper\NetWStaffAccess;
@@ -87,6 +88,9 @@ class ControllerUtente extends Controller
     public const CMD_SCEGLI_STAFF_ARG_0 = "staff";
 
     public const CMD_GET_STAFF_SCELTO = 13;
+
+    public const CMD_CAMBIA_PASSWORD = 14;
+    public const CMD_CAMBIA_PASSWORD_ARG_0 = "changepwd";
 
     public function __construct($printer, $retriver)
     {
@@ -149,6 +153,10 @@ class ControllerUtente extends Controller
                 $this->cmd_get_staff_scelto($command, $context);
                 break;
 
+            case ControllerUtente::CMD_CAMBIA_PASSWORD:
+                $this->cmd_cambia_password($command, $context);
+                break;
+
             default:
                 break;
         }
@@ -168,6 +176,7 @@ class ControllerUtente extends Controller
             case ControllerUtente::CMD_RESTITUISCI_UTENTE:
             case ControllerUtente::CMD_SCEGLI_STAFF:
             case ControllerUtente::CMD_GET_STAFF_SCELTO:
+            case ControllerUtente::CMD_CAMBIA_PASSWORD:
                 parent::getPrinter()->setStatus(Printer::STATUS_OK);
                 break;
             
@@ -241,6 +250,28 @@ class ControllerUtente extends Controller
 
         $context->logout();
         $context->apply();
+    }
+
+    private function cmd_cambia_password(Command $command, Context $context)
+    {
+        if(!array_key_exists(ControllerUtente::CMD_CAMBIA_PASSWORD_ARG_0, $command->getArgs())){
+            throw new InvalidArgumentException("Argomento non valido");
+        }
+
+        // Verifico che si è loggati nel sistema.
+        if (! $context->isLogged()){
+            throw new NotAvailableOperationException("Utente non loggato.");
+        }
+    
+        $changepwd = $command->getArgs()[ControllerUtente::CMD_CAMBIA_PASSWORD_ARG_0]->getValue();
+        $utente = $context->getUserSession()->getUtente();
+
+        // Verifico i parametri
+        if (! ($changepwd instanceof NetWPwd)){
+            throw new InvalidArgumentException("Parametro non valido.");
+        }
+        
+        parent::getPrinter()->addResult(Utente::cambiaPassword($utente->getId(), $changepwd));
     }
 
     private function cmd_crea_staff(Command $command, Context $context)

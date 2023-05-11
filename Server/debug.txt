@@ -12,6 +12,7 @@ Login Token(10): [{"name":"token", "value":{"token": "xfKcdN6dauiGPr2QMu778K3IQf
 Restituisci Utente(11)
 Scegli Staff (12) :  [{"name":"staff", "value":{"id": 5}}]
 Get Staff Scelto (13)
+Cambia Password (14): [{"name":"changepwd", "value":{"oldpwd":"ciao1234", "newpwd":"ciao12345"}}]
 
 -Membro-
 
