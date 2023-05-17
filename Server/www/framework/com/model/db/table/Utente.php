@@ -583,7 +583,7 @@ class Utente extends Table
      * 
      * @return WStaff staff richiesto
      */
-    public static function getStaff(int $idUtente, int $idStaff) : WStaff {
+    public static function getStaff(int $idUtente, int $idStaff) : ?WStaff {
         // Recupero i dati degli staff.
         $conn = parent::getConnection();
         

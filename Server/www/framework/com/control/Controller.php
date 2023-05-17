@@ -88,6 +88,7 @@ abstract class Controller
         $context = Context::getContext();
 
         if(!$context->isValid()){
+            Context::deleteContext();
             Context::createContext();
             //TRE ore di debug per sta linea fanculo
             $context = Context::getContext();
@@ -102,17 +103,24 @@ abstract class Controller
             $sessionStart = $context->getDataSessione();
             if($lastChange == NULL || $sessionStart == NULL){
                  //Sessione da aggiornare
-                 $context->logout();
+                 Context::deleteContext();
+                 Context::createContext();
+                 $context = Context::getContext();
                  throw new SessionExpiredException("La sessione è scaduta (ultimo cambio password e/o inizio sessione non disponibile)");
             }
+
+            $lc_str = $lastChange->jsonSerialize();
+            $st_str = $sessionStart->jsonSerialize();
 
             $lastChange = $lastChange->getDateTimeImmutable();
             $sessionStart = $sessionStart->getDateTimeImmutable();
 
             if($lastChange > $sessionStart){
                 //Sessione da aggiornare
-                $context->logout();
-                throw new SessionExpiredException("La sessione è scaduta (Password cambiata)");
+                Context::deleteContext();
+                Context::createContext();
+                $context = Context::getContext();
+                throw new SessionExpiredException("La sessione è scaduta ".$st_str." (Password cambiata: ".$lc_str.")");
             }
 
             //Per prima cosa guardo se sono ancora dentro lo staff.
@@ -124,7 +132,9 @@ abstract class Controller
 
                 if($richiestaStaff == NULL){
                     //Sessione da aggiornare
-                    $context->logout();
+                    Context::deleteContext();
+                    Context::createContext();
+                    $context = Context::getContext();
                     throw new SessionExpiredException("La sessione è scaduta (staff non disponibile)");
                 }
 
@@ -142,7 +152,9 @@ abstract class Controller
 
                     if($richiestaEvento == NULL){
                         //Sessione da aggiornare
-                        $context->logout();
+                        Context::deleteContext();
+                        Context::createContext();
+                        $context = Context::getContext();
                         throw new SessionExpiredException("La sessione è scaduta (evento non disponibile)");
                     }
                 }

@@ -429,6 +429,7 @@ class ControllerUtente extends Controller
             $ruoliPersonali = Membro::getRuoliPersonali($utente->getId(), $staffScelto->getId());
 
             $context->getUserSession()->setRuoliMembro($ruoliPersonali);
+            $context->apply();
             
             parent::getPrinter()->addResult($staffScelto);
         }

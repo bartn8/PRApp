@@ -104,8 +104,7 @@ class Context
         $context = Context::getContext();
 
         if($context->isValid()){
-            $context->invalidate();
-            $context->apply();
+            $context->logout();
         }
         
         $_SESSION['context'] = NULL;
@@ -170,10 +169,6 @@ class Context
     public function isValid()
     {
         return $this->valid;
-    }
-
-    public function invalidate(){
-        $this->valid = FALSE;
     }
 
     /**
