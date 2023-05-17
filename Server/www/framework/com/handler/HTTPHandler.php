@@ -142,7 +142,7 @@ class HTTPHandler implements Retriver
             $this->printer->setStatus(Printer::STATUS_ECCEZIONE);
             $this->printer->addException(new DatabaseException("Errore nel database"));/*$ex->getMessage()*/
             
-        } catch (ParseException | InvalidArgumentException | AuthorizationException | InsertUpdateException | NotAvailableOperationException | \PDOException $ex) {//TODO: da spostare PDO sopra!
+        } catch (SessionExpiredException | ParseException | InvalidArgumentException | AuthorizationException | InsertUpdateException | NotAvailableOperationException | \PDOException $ex) {//TODO: da spostare PDO sopra!
             $this->printer->setStatus(Printer::STATUS_ECCEZIONE);
             $this->printer->addException($ex);
             

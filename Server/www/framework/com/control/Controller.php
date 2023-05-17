@@ -97,6 +97,24 @@ abstract class Controller
         if($context->isWatchdogTriggered() && $context->isLogged()){
             $utente = $context->getUserSession()->getUtente();
 
+            //Controllo l'update della password
+            $lastChange = Utente::getUltimoCambioPassword($utente->getId());
+            $sessionStart = $context->getDataSessione();
+            if($lastChange == NULL || $sessionStart == NULL){
+                 //Sessione da aggiornare
+                 $context->logout();
+                 throw new SessionExpiredException("La sessione è scaduta (ultimo cambio password e/o inizio sessione non disponibile)");
+            }
+
+            $lastChange = $lastChange->getDateTimeImmutable();
+            $sessionStart = $sessionStart->getDateTimeImmutable();
+
+            if($lastChange > $sessionStart){
+                //Sessione da aggiornare
+                $context->logout();
+                throw new SessionExpiredException("La sessione è scaduta (Password cambiata)");
+            }
+
             //Per prima cosa guardo se sono ancora dentro lo staff.
             //Dopo aver controllato che abbia scelto uno staff
 

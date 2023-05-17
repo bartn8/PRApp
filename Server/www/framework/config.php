@@ -19,4 +19,4 @@ $GLOBALS['username'] = "prapp";
 $GLOBALS['password'] = "";
 $GLOBALS['charset'] = "utf8";
 
-$GLOBALS['watchdogThreshold'] = 20;
+$GLOBALS['watchdogThreshold'] = 5;

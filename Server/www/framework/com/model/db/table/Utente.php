@@ -208,7 +208,7 @@ class Utente extends Table
                     $newhash = Hash::getSingleton()->hashPassword($changepwd->getNewpwd());
 
                     //Pulizia tentativi login
-                    $stmtUpdate = $conn->prepare("UPDATE utente SET tentativiLogin = 0, hash = :hash WHERE id = :id");
+                    $stmtUpdate = $conn->prepare("UPDATE utente SET tentativiLogin = 0, hash = :hash, ultimoChangePwd = CURRENT_TIMESTAMP WHERE id = :id");
                     $stmtUpdate->bindValue(":id", $idUtente, PDO::PARAM_INT);
                     $stmtUpdate->bindValue(":hash", $newhash, PDO::PARAM_STR);
                     $stmtUpdate->execute();
@@ -602,6 +602,33 @@ class Utente extends Table
         
         return $result;
     }
+
+    /**
+     * Restituisce l'ultimo cambio password dell'utente
+     * 
+     * @param int $idUtente
+     * @throws PDOException problemi del database (errore di connessione, errore nel database)
+     * 
+     * @return DateTimeImmutableAdapterJSON data di ultimo cambio password
+     */
+    public static function getUltimoCambioPassword(int $idUtente) : DateTimeImmutableAdapterJSON {
+        // Recupero i dati degli staff.
+        $conn = parent::getConnection();
+        
+        $stmtSelezione = $conn->prepare("SELECT ultimoChangePwd FROM utente WHERE id = :idUtente");
+        $stmtSelezione->bindValue(":idUtente", $idUtente, PDO::PARAM_INT);
+        $stmtSelezione->execute();
+        
+        $result = NULL;
+        
+        if (($riga = $stmtSelezione->fetch(PDO::FETCH_ASSOC))) {
+            $result = new DateTimeImmutableAdapterJSON(\DateTimeImmutable::createFromFormat(DateTimeImmutableAdapterJSON::MYSQL_TIMESTAMP, $riga["ultimoChangePwd"]));
+        }
+        
+        $conn = NULL;
+        
+        return $result;
+    }    
 
     private function __construct()
     {}

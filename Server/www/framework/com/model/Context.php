@@ -21,9 +21,11 @@
 namespace com\model;
 
 use Exception;
+use DateTimeImmutable;
 use InvalidArgumentException;
 use com\model\db\wrapper\WUtente;
 use com\model\session\UserSession;
+use com\utils\DateTimeImmutableAdapterJSON;
 
 /**
  * Gestisce il contesto di un utente.
@@ -39,7 +41,7 @@ class Context
     /**
      * Indica dopo quando far entrare in funzione il watchdog.
      */
-    private static $watchdogThreshold = 20;
+    private static $watchdogThreshold = 5;
 
     public static function loadParameters(){
         if(isset($GLOBALS['watchdogThreshold']))
@@ -57,7 +59,7 @@ class Context
         if (session_status() != PHP_SESSION_ACTIVE)
             throw new Exception("Sessione non attiva");
         
-        $context = new Context(NULL, TRUE);
+        $context = new Context(NULL, TRUE, new DateTimeImmutableAdapterJSON(new DateTimeImmutable("now")));
 
         $_SESSION["context"] = $context;
     }
@@ -79,12 +81,13 @@ class Context
             if($context instanceof Context){
                 //Ogni volta che si richiede il contesto aggiorno il watchdog.
                 $context->updateWatchdog();
+                $context->apply();
 
                 return $context;
             }
         }
         
-        return new Context(NULL, FALSE);
+        return new Context(NULL, FALSE, new DateTimeImmutableAdapterJSON(new DateTimeImmutable("now")));
     }
 
     /**
@@ -97,6 +100,13 @@ class Context
     {
         if (session_status() != PHP_SESSION_ACTIVE)
             throw new Exception("Sessione non attiva");
+
+        $context = Context::getContext();
+
+        if($context->isValid()){
+            $context->invalidate();
+            $context->apply();
+        }
         
         $_SESSION['context'] = NULL;
     }
@@ -123,16 +133,23 @@ class Context
     private $watchdogCounter;
 
     /**
+     * Data di avvio della sessione
+     * @var DateTimeImmutableAdapterJSON
+     */
+    private $dataSessione;
+
+    /**
      * Genera un contesto.
      * Utilizzato solo da factory.
      *
      * @param UserSession $userSession
      * @param bool $valid
      */
-    private function __construct($userSession, $valid)
+    private function __construct($userSession, $valid, $dataSessione)
     {
         $this->userSession = $userSession;
         $this->valid = $valid;
+        $this->dataSessione = $dataSessione;
     }
 
     /**
@@ -153,6 +170,10 @@ class Context
     public function isValid()
     {
         return $this->valid;
+    }
+
+    public function invalidate(){
+        $this->valid = FALSE;
     }
 
     /**
@@ -215,6 +236,15 @@ class Context
             throw new Exception("Contesto non valido");
         }
             
+    }
+
+    /**
+     * Restituisce la data di avvio della sessione
+     * 
+     * @return DateTimeImmutableAdapterJSON
+     */
+    public function getDataSessione(){
+        return $this->dataSessione;
     }
 
 }
