@@ -331,7 +331,7 @@ FOR EACH ROW BEGIN
 			SIGNAL SQLSTATE '70003'
 			SET MESSAGE_TEXT = 'Token non ancora scaduto';
 		END IF;
-	ELSEIF ((NEW.token IS NULL AND NEW.scadenzaToken IS NOT NULL) OR (NEW.token IS NOT NULL AND NEW.scadenzaToken IS NULL)) THEN
+	ELSEIF (OLD.token <> NEW.token AND NEW.token IS NOT NULL AND NEW.scadenzaToken IS NULL) THEN
 		SIGNAL SQLSTATE '70003'
 		SET MESSAGE_TEXT = 'Inserimento token non valido';
 	ELSEIF (NEW.scadenzaToken < CURRENT_TIMESTAMP AND OLD.token <> NEW.token) THEN
