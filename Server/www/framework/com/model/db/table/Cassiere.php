@@ -432,7 +432,7 @@ EOT;
         INNER JOIN evento ON evento.id = prevendita.idEvento 
         INNER JOIN utente ON utente.id = prevendita.idPR 
         INNER JOIN tipoPrevendita ON tipoPrevendita.id = prevendita.idTipoPrevendita 
-        WHERE evento.id = :idEvento AND prevendita.id NOT IN (SELECT entrata.idPrevendita FROM entrata)
+        WHERE evento.id = :idEvento AND prevendita.id NOT IN (SELECT entrata.idPrevendita FROM entrata) AND prevendita.stato != 'ANNULLATA'
 EOT;
 
         $stmtSelezione = $conn->prepare($query);
